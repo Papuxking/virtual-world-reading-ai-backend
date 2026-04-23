@@ -1,0 +1,42 @@
+# ============================================================================
+# Docker Compose — Virtual World Reading API
+# Servicios: PostgreSQL + FastAPI + Adminer
+# ============================================================================
+
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: DB-virtual-world-reading-ai
+      POSTGRES_PASSWORD: GodotWorldAdmin
+      POSTGRES_DB: godot_readings
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./api/sql:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+
+  api:
+    image: python:3.10-slim
+    working_dir: /app
+    volumes:
+      - ./api:/app
+    command: >
+      sh -c "pip install -r requirements.txt &&
+             uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://DB-virtual-world-reading-ai:GodotWorldAdmin@db:5432/godot_readings
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  pgdata:

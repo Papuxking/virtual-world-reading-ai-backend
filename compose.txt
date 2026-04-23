@@ -1,0 +1,24 @@
+    environment:
+      POSTGRES_USER: DB-virtual-world-reading-ai
+      POSTGRES_PASSWORD: GodotWorldAdmin
+
+
+docker-compose up -d
+
+
+
+extends Node
+
+func _ready():
+    var http_request = HTTPRequest.new()
+    add_child(http_request)
+    http_request.request_completed.connect(_on_request_completed)
+
+    # Llamamos a nuestra API de FastAPI
+    var error = http_request.request("http://localhost:8000/db-check")
+    if error != OK:
+        push_error("Error al lanzar la petición HTTP")
+
+func _on_request_completed(result, response_code, headers, body):
+    var json = JSON.parse_string(body.get_string_from_utf8())
+    print("Respuesta de la API: ", json)
