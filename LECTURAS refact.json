@@ -1,0 +1,875 @@
+{
+  "readings": [
+    {
+      "typology": "Narrativo",
+      "id": 1,
+      "type": "Narrativa literaria contemporánea",
+      "title": "El primer viaje a Ambato",
+      "text": [
+        "María Fernanda miró por la ventana del bus mientras amanecía sobre la carretera que une Píllaro con Ambato. Las montañas todavía estaban cubiertas por una neblina ligera y, en algunos sembríos, las primeras luces del día parecían quedarse atrapadas entre las hojas húmedas. Ella llevaba una carpeta azul sobre las piernas y, dentro de ella, los documentos que había revisado tres veces la noche anterior: cédula, título de bachiller, comprobante de inscripción y una hoja doblada donde había escrito la dirección de la Universidad Técnica de Ambato.",
+        "A sus diecinueve años, aquel viaje parecía más importante que cualquier otro. No iba de paseo ni a visitar familiares. Iba a rendir una evaluación del curso de nivelación, paso necesario para ingresar a la carrera de Educación. Desde niña había dicho que quería ser maestra, aunque muchos pensaban que cambiaría de idea con el tiempo. Sin embargo, mientras más crecía, más admiraba a los docentes que le enseñaron a leer, a preguntar y a no rendirse.",
+        "El bus avanzó entre curvas conocidas. En cada parada subían comerciantes con canastos de fruta, estudiantes con mochilas grandes y trabajadores que desayunaban apurados. María Fernanda observó a una niña que leía en voz baja una página de su cuaderno. Sonrió al recordar que ella también repasaba así antes de una prueba.",
+        "Al llegar a Ambato, el movimiento de la ciudad la sorprendió. Las calles estaban llenas de personas que caminaban con rapidez, los locales abrían sus puertas y los vendedores acomodaban mercadería. Guardó la hoja con la dirección en el bolsillo y preguntó dos veces cómo llegar a la universidad. Aunque sintió vergüenza al inicio, comprendió que nadie conoce una ciudad nueva sin hacer preguntas.",
+        "Cuando entró al campus, vio jardines cuidados, edificios altos y grupos de jóvenes conversando.Algunos parecían seguros; otros, como ella, sostenían papeles con nerviosismo. Se sentó en una banca para respirar con calma. Pensó en su madre, que se había levantado antes de las cuatro de la mañana para prepararle café y despedirla con un abrazo silencioso.",
+        "Minutos después, una estudiante de cursos superiores se acercó para indicar el aula donde sería la evaluación. María Fernanda le agradeció y subió las escaleras repitiéndose que había llegado hasta allí por esfuerzo propio. En el salón, los aspirantes ocuparon sus puestos sin hablar mucho. Se escuchaba únicamente el sonido de hojas moviéndose y sillas arrastrándose.",
+        "La prueba comenzó. En la sección de aptitud verbal aparecieron textos breves, preguntas de vocabulario y ejercicios de comprensión lectora. Al principio, los nervios le hicieron leer demasiado rápido. Entonces recordó el consejo de su profesor de Lengua: “Leer bien no es correr; es entender”. Respiró hondo, volvió al primer texto y avanzó con paciencia.",
+        "Dos horas después, salió del aula cansada, pero tranquila. No sabía cuál sería el resultado, aunque sentía algo nuevo: confianza. Mientras caminaba hacia la salida, miró nuevamente los edificios y pensó que, pasara lo que pasara, ya había dado un paso importante. Había dejado atrás el miedo de no intentarlo.",
+        "En el regreso, el mismo camino entre montañas parecía distinto. La neblina se había levantado y el paisaje estaba claro. María Fernanda apoyó la cabeza en la ventana y sonrió. A veces, comprendió, los viajes más largos empiezan con un solo asiento de bus."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Desde qué lugar viajó María Fernanda hacia Ambato?",
+          "answers": [
+            "A) Quito",
+            "B) Píllaro",
+            "C) Latacunga",
+            "D) Riobamba"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto indica que el bus recorría la carretera que une Píllaro con Ambato."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué quería estudiar María Fernanda?",
+          "answers": [
+            "A) Medicina",
+            "B) Derecho",
+            "C) Educación",
+            "D) Ingeniería"
+          ],
+          "correct_answer": "C",
+          "justification": "Se menciona que deseaba ingresar a la carrera de Educación."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué llevaba en la carpeta azul?",
+          "answers": [
+            "A) Ropa y comida",
+            "B) Libros escolares",
+            "C) Documentos personales e inscripción",
+            "D) Dinero para matrícula"
+          ],
+          "correct_answer": "C",
+          "justification": "La carpeta contenía cédula, título de bachiller, comprobante y dirección."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué consejo recordó durante la prueba?",
+          "answers": [
+            "A) Nunca rendirse",
+            "B) Leer rápido para terminar",
+            "C) Leer bien es entender",
+            "D) Copiar con cuidado"
+          ],
+          "correct_answer": "C",
+          "justification": "El profesor de Lengua le dijo: “Leer bien no es correr; es entender”."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cuál es el tema principal del texto?",
+          "answers": [
+            "A) El turismo en Ambato",
+            "B) El esfuerzo de una joven para ingresar a la universidad",
+            "C) La economía de Tungurahua",
+            "D) El transporte interprovincial"
+          ],
+          "correct_answer": "B",
+          "justification": "Toda la narración gira en torno al viaje y esfuerzo académico de la protagonista."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué sentimiento predomina al inicio del relato?",
+          "answers": [
+            "A) Alegría absoluta",
+            "B) Seguridad total",
+            "C) Nerviosismo y expectativa",
+            "D) Enojo"
+          ],
+          "correct_answer": "C",
+          "justification": "Revisa documentos varias veces y muestra preocupación por la evaluación."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cuál de las siguientes acciones ocurrió primero?",
+          "answers": [
+            "A) Rindió la evaluación",
+            "B) Llegó al campus",
+            "C) Observó el amanecer desde el bus",
+            "D) Regresó a casa"
+          ],
+          "correct_answer": "C",
+          "justification": "Es la escena inicial del relato."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué idea resume mejor el cambio final de la protagonista?",
+          "answers": [
+            "A) Perdió interés por estudiar",
+            "B) Cambió miedo por confianza",
+            "C) Quiso mudarse de ciudad",
+            "D) Decidió no volver"
+          ],
+          "correct_answer": "B",
+          "justification": "Al final expresa tranquilidad y seguridad personal."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Por qué la autora menciona que la madre se levantó antes de las cuatro de la mañana?",
+          "answers": [
+            "A) Para ir al mercado",
+            "B) Para mostrar apoyo y sacrificio familiar",
+            "C) Para viajar con ella",
+            "D) Para estudiar también"
+          ],
+          "correct_answer": "B",
+          "justification": "Se infiere acompañamiento emocional y esfuerzo familiar."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Qué simboliza la neblina al inicio del cuento?",
+          "answers": [
+            "A) El clima normal de Ambato",
+            "B) La confusión e incertidumbre inicial",
+            "C) La contaminación urbana",
+            "D) El sueño de la protagonista"
+          ],
+          "correct_answer": "B",
+          "justification": "La neblina representa dudas que luego desaparecen."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Por qué el camino de regreso “parecía distinto”?",
+          "answers": [
+            "A) Cambiaron la carretera",
+            "B) Era otra ruta",
+            "C) María Fernanda había cambiado interiormente",
+            "D) Estaba lloviendo"
+          ],
+          "correct_answer": "C",
+          "justification": "La transformación emocional hace percibir diferente el entorno."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Cuál es el mensaje principal del texto?",
+          "answers": [
+            "A) Viajar en bus es incómodo",
+            "B) Los exámenes siempre son fáciles",
+            "C) Afrontar el miedo es parte del crecimiento",
+            "D) Las ciudades grandes asustan"
+          ],
+          "correct_answer": "C",
+          "justification": "La protagonista supera temores al intentar alcanzar su meta."
+        }
+      ]
+    },
+    {
+      "typology": "Descriptivo",
+      "id": 2,
+      "type": "texto descriptivo",
+      "title": "La biblioteca universitaria: un espacio para comenzar",
+      "text": [
+        "La biblioteca universitaria suele ser uno de los primeros lugares que descubren los estudiantes cuando ingresan a la educación superior. No tiene el ruido de los patios ni la prisa de los pasillos entre clases. Su ambiente transmite una calma particular, como si cada mesa, cada estante y cada lámpara invitaran a detenerse un momento para pensar con claridad.",
+        "Al ingresar, lo primero que llama la atención es el orden. Los libros se encuentran ubicados en estanterías altas, clasificadas por áreas del conocimiento. En una sección reposan textos de pedagogía, psicología y didáctica; en otra, obras de literatura, historia y filosofía. Más adelante aparecen volúmenes de ciencias, tecnología y metodología de la investigación. Cada ejemplar tiene una etiqueta numérica en el lomo, lo que permite encontrarlo con precisión dentro del conjunto. Para un estudiante nuevo, ese sistema puede parecer complejo al inicio, pero pronto se convierte en una guía útil.",
+        "Las mesas de estudio ocupan gran parte del salón principal. Son amplias, rectangulares y de superficie lisa. Algunas están diseñadas para el trabajo individual y otras para pequeños grupos. Sobre ellas cae una luz blanca y uniforme que facilita la lectura durante varias horas sin causar cansancio excesivo. Las sillas, aunque sencillas, están distribuidas de manera que cada usuario conserve un espacio cómodo para concentrarse.",
+        "En uno de los costados funciona el área digital. Allí se alinean computadoras conectadas a internet, utilizadas para consultar bases de datos académicas, revistas científicas y catálogos virtuales. Muchos jóvenes ingresan a este sector con audífonos, cuadernos o memorias USB. El sonido de los teclados reemplaza al paso silencioso de quienes recorren los estantes. En esta zona, la biblioteca combina lo tradicional del libro impreso con las herramientas tecnológicas actuales.",
+        "También existe un pequeño módulo de préstamo y orientación. Desde ese escritorio, el personal bibliotecario responde preguntas, registra préstamos y enseña a localizar información confiable. Su trabajo no siempre es visible, pero resulta esencial. Gracias a esa ayuda, los estudiantes aprenden a diferenciar una fuente académica seria de una página poco rigurosa en internet.",
+        "La iluminación general suele aprovechar grandes ventanales. Durante la mañana entra la claridad natural y, en ciertos momentos, se observan partículas de polvo flotando en los rayos de sol. Desde algunas ventanas puede verse el movimiento del campus: jóvenes caminando deprisa, conversaciones breves y mochilas que van de un edificio a otro. Dentro de la biblioteca, en cambio, predomina un ritmo más pausado.",
+        "Para muchos estudiantes de nivelación, este lugar representa algo más que un edificio con libros. Es el sitio donde comienzan nuevas rutinas: leer antes de clases, preparar exposiciones, estudiar para evaluaciones o descubrir temas desconocidos. Al principio algunos entran con timidez, como si no supieran si pertenecen allí. Después de unas semanas, regresan con naturalidad y hasta eligen una mesa favorita.",
+        "La biblioteca universitaria no destaca por el ruido ni por el espectáculo. Su valor está en los detalles: el silencio compartido, la información disponible y la posibilidad de construir hábitos de estudio. Para quien inicia la vida académica, ese espacio puede convertirse en una puerta abierta hacia oportunidades futuras."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Qué ambiente transmite la biblioteca universitaria?",
+          "answers": [
+            "A) Desorden y prisa",
+            "B) Calma e invitación a pensar",
+            "C) Ruido constante",
+            "D) Oscuridad total"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto señala que la biblioteca transmite calma e invita a pensar con claridad."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Cómo están organizados los libros?",
+          "answers": [
+            "A) Por colores",
+            "B) Sin orden específico",
+            "C) Clasificados por áreas del conocimiento",
+            "D) Por tamaño únicamente"
+          ],
+          "correct_answer": "C",
+          "justification": "Se menciona que los libros están ubicados en estanterías según áreas del conocimiento."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué se encuentra en el área digital?",
+          "answers": [
+            "A) Cafetería estudiantil",
+            "B) Computadoras con internet",
+            "C) Laboratorios de química",
+            "D) Canchas deportivas"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto describe computadoras conectadas a internet en esa zona."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué función cumple el módulo de préstamo y orientación?",
+          "answers": [
+            "A) Vender libros usados",
+            "B) Registrar préstamos y responder preguntas",
+            "C) Organizar eventos deportivos",
+            "D) Dar clases de matemáticas"
+          ],
+          "correct_answer": "B",
+          "justification": "Allí se atienden consultas y se gestionan préstamos."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cuál es el tema principal del texto?",
+          "answers": [
+            "A) Las bibliotecas antiguas del país",
+            "B) La descripción y utilidad de la biblioteca universitaria",
+            "C) Los problemas tecnológicos juveniles",
+            "D) La historia de Ambato"
+          ],
+          "correct_answer": "B",
+          "justification": "Todo el texto describe espacios, funciones e importancia de la biblioteca."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué relación establece el texto entre libros impresos y tecnología?",
+          "answers": [
+            "A) Son enemigos entre sí",
+            "B) La tecnología reemplaza totalmente al libro",
+            "C) La biblioteca integra ambos recursos",
+            "D) Solo se usan libros físicos"
+          ],
+          "correct_answer": "C",
+          "justification": "Se explica que la biblioteca combina libros impresos con herramientas digitales."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué sienten algunos estudiantes al inicio?",
+          "answers": [
+            "A) Exceso de confianza",
+            "B) Timidez e inseguridad",
+            "C) Indiferencia total",
+            "D) Molestia permanente"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto indica que algunos entran con timidez."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué idea resume mejor el último párrafo?",
+          "answers": [
+            "A) La biblioteca es un lugar aburrido",
+            "B) Su valor está en apoyar el aprendizaje y el futuro académico",
+            "C) Solo sirve para guardar libros",
+            "D) Es un espacio turístico"
+          ],
+          "correct_answer": "B",
+          "justification": "El cierre destaca hábitos de estudio y oportunidades futuras."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Por qué la autora menciona “una mesa favorita”?",
+          "answers": [
+            "A) Porque todas las mesas son iguales",
+            "B) Porque los estudiantes desarrollan sentido de pertenencia",
+            "C) Porque deben pagar por sentarse",
+            "D) Porque solo hay una mesa disponible"
+          ],
+          "correct_answer": "B",
+          "justification": "Se infiere adaptación y apropiación del espacio universitario."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Qué representa el silencio compartido?",
+          "answers": [
+            "A) Falta de estudiantes",
+            "B) Una norma sin importancia",
+            "C) Concentración y respeto por el estudio",
+            "D) Miedo a hablar"
+          ],
+          "correct_answer": "C",
+          "justification": "El silencio favorece la lectura y convivencia académica."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Por qué el personal bibliotecario es esencial, aunque “no siempre visible”?",
+          "answers": [
+            "A) Porque no trabaja diariamente",
+            "B) Porque su labor orienta el acceso a información confiable",
+            "C) Porque organiza fiestas estudiantiles",
+            "D) Porque escribe todos los libros"
+          ],
+          "correct_answer": "B",
+          "justification": "Ayuda a localizar fuentes serias y usar recursos académicos."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Cuál es el mensaje implícito del texto?",
+          "answers": [
+            "A) El estudio depende solo de memorizar",
+            "B) Los espacios adecuados favorecen el aprendizaje universitario",
+            "C) La universidad es demasiado difícil",
+            "D) Internet vuelve innecesarias las bibliotecas"
+          ],
+          "correct_answer": "B",
+          "justification": "Se infiere que un entorno organizado y recursos adecuados impulsan el aprendizaje"
+        }
+      ]
+    },
+    {
+      "typology": "Expositivo",
+      "id": 3,
+      "type": "texto académico-divulgativo",
+      "title": "La comprensión lectora en la educación superior",
+      "text": [
+
+        "La comprensión lectora es la capacidad de entender, interpretar y reflexionar sobre la información contenida en un texto. No consiste únicamente en reconocer palabras o leer en voz alta con fluidez, sino en construir significado a partir de lo que se lee. Esta habilidad resulta fundamental en todos los niveles educativos y adquiere especial importancia al ingresar a la universidad, donde los estudiantes deben enfrentar textos más extensos, especializados y complejos.",
+        "En la educación superior, la lectura cumple diversas funciones. En primer lugar, permite acceder al conocimiento científico y académico. Los estudiantes consultan libros, artículos, informes, reglamentos y materiales digitales para desarrollar tareas, preparar exposiciones o resolver problemas. En segundo lugar, la lectura favorece el pensamiento crítico, ya que obliga a comparar ideas, identificar argumentos y distinguir entre información confiable y opiniones sin sustento. Finalmente, también fortalece la autonomía, porque quien comprende bien un texto puede aprender sin depender totalmente de explicaciones externas.",
+        "La comprensión lectora suele analizarse en varios niveles. El nivel literal implica reconocer datos explícitos, como nombres, fechas, definiciones o secuencias de hechos. Por ejemplo, al leer una noticia, el lector identifica qué ocurrió, dónde sucedió y quiénes participaron. El nivel literal en profundidad exige organizar la información, reconocer ideas principales y resumir contenidos. En este caso, el estudiante ya no solo localiza datos, sino que comprende la estructura general del texto. El nivel inferencial va más allá de lo escrito: permite deducir causas, consecuencias, intenciones o relaciones no expresadas directamente.",
+        "Diversos factores influyen en el desarrollo de esta competencia. Uno de ellos es el vocabulario. Cuando una persona desconoce muchas palabras, su comprensión disminuye. Otro factor es el conocimiento previo, ya que resulta más fácil entender un tema familiar que uno completamente nuevo. También influyen la concentración, los hábitos de lectura y la motivación personal. Leer con frecuencia mejora la velocidad, amplía el vocabulario y fortalece la capacidad de análisis.",
+        "En el contexto universitario actual, la tecnología ha modificado las formas de leer. Muchos estudiantes consultan documentos desde teléfonos móviles, tabletas o computadoras. Esto ofrece ventajas importantes, como acceso rápido a bibliotecas virtuales y materiales actualizados. Sin embargo, también presenta desafíos, entre ellos la distracción causada por redes sociales, notificaciones o navegación simultánea en varias páginas. Por esta razón, se recomienda desarrollar estrategias de lectura digital consciente, como subrayar ideas clave, tomar notas y establecer tiempos específicos de estudio.",
+        "En Ecuador, al igual que en otros países latinoamericanos, fortalecer la comprensión lectora es una prioridad educativa. Las universidades reciben jóvenes con trayectorias escolares diversas, por lo que muchos programas de nivelación incluyen actividades orientadas a mejorar esta habilidad. Tales acciones buscan facilitar la adaptación académica y reducir dificultades en los primeros semestres.",
+        "En conclusión, la comprensión lectora es una herramienta esencial para el éxito universitario. Permite aprender con mayor profundidad, analizar información y tomar decisiones fundamentadas. Por ello, desarrollar esta competencia desde el ingreso a la educación superior beneficia no solo el rendimiento académico, sino también la formación integral del estudiante."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Qué es la comprensión lectora según el texto?",
+          "answers": [
+            "A) Leer rápido sin errores",
+            "B) Memorizar párrafos completos",
+            "C) Entender, interpretar y reflexionar sobre un texto",
+            "D) Pronunciar correctamente todas las palabras"
+          ],
+          "correct_answer": "C",
+          "justification": "El primer párrafo define la comprensión lectora de esa manera."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué nivel de comprensión permite reconocer datos explícitos?",
+          "answers": [
+            "A) Inferencial",
+            "B) Crítico",
+            "C) Literal",
+            "D) Creativo"
+          ],
+          "correct_answer": "C",
+          "justification": "El texto indica que el nivel literal identifica datos expresos."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Cuál de los siguientes factores influye en la comprensión lectora?",
+          "answers": [
+            "A) El color del cuaderno",
+            "B) El vocabulario",
+            "C) La estatura del lector",
+            "D) La moda juvenil"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto menciona el vocabulario como factor importante."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué dispositivo se menciona como medio actual de lectura?",
+          "answers": [
+            "A) Radio",
+            "B) Televisor",
+            "C) Teléfono móvil",
+            "D) Impresora"
+          ],
+          "correct_answer": "C",
+          "justification": "Se mencionan teléfonos móviles, tabletas y computadoras."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cuál es el tema principal del texto?",
+          "answers": [
+            "A) Historia de las universidades ecuatorianas",
+            "B) Importancia y niveles de la comprensión lectora en la universidad",
+            "C) Uso de redes sociales juveniles",
+            "D) Métodos para memorizar textos"
+          ],
+          "correct_answer": "B",
+          "justification": "Todo el texto desarrolla ese contenido."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué la comprensión lectora es importante en la universidad?",
+          "answers": [
+            "A) Porque evita asistir a clases",
+            "B) Porque permite acceder al conocimiento y aprender autónomamente",
+            "C) Porque reemplaza todos los exámenes",
+            "D) Porque reduce las horas de estudio"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto destaca acceso al conocimiento y autonomía."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cómo está organizado el texto?",
+          "answers": [
+            "A) Narra una historia personal",
+            "B) Describe un paisaje",
+            "C) Define el concepto, explica niveles, factores y contexto actual",
+            "D) Presenta instrucciones paso a paso"
+          ],
+          "correct_answer": "C",
+          "justification": "Esa es la estructura expositiva presentada."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué idea resume mejor la conclusión?",
+          "answers": [
+            "A) Leer solo sirve en la escuela",
+            "B) La comprensión lectora favorece el éxito académico e integral",
+            "C) Las tecnologías empeoran toda lectura",
+            "D) Solo algunos estudiantes necesitan leer"
+          ],
+          "correct_answer": "B",
+          "justification": "El último párrafo resume esa idea."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "Si un estudiante desconoce muchas palabras técnicas, probablemente:",
+          "answers": [
+            "A) Mejorará su comprensión automáticamente",
+            "B) Tendrá dificultades para entender textos especializados",
+            "C) No necesitará leer más",
+            "D) Aprenderá solo con imágenes"
+          ],
+          "correct_answer": "B",
+          "justification": "Se infiere de la relación entre vocabulario y comprensión."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Por qué los programas de nivelación trabajan comprensión lectora?",
+          "answers": [
+            "A) Porque sobra tiempo académico",
+            "B) Porque todos leen perfectamente",
+            "C) Porque ayuda a adaptarse a las exigencias universitarias",
+            "D) Porque elimina materias difíciles"
+          ],
+          "correct_answer": "C",
+          "justification": "El texto relaciona estas acciones con adaptación académica."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué se puede concluir sobre la lectura digital?",
+          "answers": [
+            "A) Siempre es mejor que la impresa",
+            "B) Requiere estrategias para evitar distracciones",
+            "C) No sirve para estudiar",
+            "D) Impide tomar apuntes"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto menciona riesgos de distracción y estrategias conscientes."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Cuál es el mensaje implícito central del texto?",
+          "answers": [
+            "A) La universidad solo exige memoria",
+            "B) Comprender lo que se lee es clave para aprender y progresar",
+            "C) Leer ya no es necesario",
+            "D) Solo los expertos pueden interpretar textos"
+          ],
+          "correct_answer": "B",
+          "justification": "Esa idea integra todo el desarrollo expositivo."
+        }
+      ]
+    },
+    {
+      "typology": "Argumentativo",
+      "id": 4,
+      "type": "Artículo de opinión académico",
+      "title": "¿Es suficiente usar tecnología para mejorar la comprensión lectora en la universidad?",
+      "text": [
+        "En los últimos años, el uso de herramientas tecnológicas en la educación superior ha crecido de manera significativa. Plataformas virtuales, aplicaciones educativas y sistemas basados en inteligencia artificial forman parte de la experiencia académica de muchos estudiantes. Sin embargo, surge una pregunta importante: ¿es suficiente incorporar tecnología para mejorar la comprensión lectora en la universidad? La respuesta, aunque pueda parecer evidente para algunos, requiere un análisis más profundo.",
+        "En primer lugar, es innegable que la tecnología ofrece múltiples ventajas. Permite acceder a una gran cantidad de información en poco tiempo, facilita la lectura de textos digitales y brinda herramientas como diccionarios en línea, traductores y asistentes inteligentes. Estas funciones pueden apoyar a los estudiantes en la identificación de ideas principales, el significado de palabras desconocidas y la organización de contenidos. En contextos como el ecuatoriano, donde muchos jóvenes acceden por primera vez a entornos académicos exigentes, estas herramientas representan una oportunidad valiosa.",
+        "No obstante, asumir que la tecnología por sí sola mejora la comprensión lectora es una idea limitada. Leer no es únicamente acceder a información, sino procesarla de manera crítica y reflexiva. Un estudiante puede tener acceso a cientos de textos digitales y, aun así, no comprenderlos adecuadamente si carece de estrategias de lectura. Por ejemplo, la falta de hábitos de estudio, la escasa concentración o la lectura superficial pueden afectar negativamente el aprendizaje, independientemente del dispositivo utilizado.",
+        "Además, el entorno digital presenta desafíos importantes. Las constantes notificaciones, el acceso simultáneo a redes sociales y la navegación entre múltiples páginas pueden generar distracciones. En lugar de favorecer la comprensión, estos elementos pueden fragmentar la atención del lector. Por esta razón, algunos especialistas sostienen que el uso inadecuado de la tecnología incluso podría dificultar la lectura profunda.",
+        "Por otro lado, es necesario considerar el papel del docente. La guía pedagógica resulta fundamental para que los estudiantes desarrollen habilidades de comprensión lectora. No basta con proporcionar herramientas tecnológicas; es indispensable enseñar cómo utilizarlas de manera efectiva. Estrategias como la identificación de ideas principales, la elaboración de resúmenes y la formulación de inferencias deben ser promovidas dentro del aula, tanto presencial como virtual.",
+        "En este sentido, la combinación de tecnología y pedagogía parece ser la alternativa más adecuada. La inteligencia artificial, por ejemplo, puede ofrecer retroalimentación inmediata, generar ejercicios personalizados y adaptar contenidos según el nivel del estudiante. Sin embargo, su efectividad depende del uso consciente y orientado que se le dé. Cuando estas herramientas se integran con metodologías activas de enseñanza, los resultados pueden ser significativamente mejores.",
+        "En conclusión, la tecnología es un recurso valioso, pero no suficiente por sí misma para mejorar la comprensión lectora en la universidad. Su impacto depende de factores como los hábitos de estudio, la motivación del estudiante y la orientación docente. Por lo tanto, más que centrarse únicamente en la incorporación de herramientas digitales, es necesario promover una formación integral que combine tecnología, estrategias de lectura y acompañamiento pedagógico."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Cuál es la pregunta central del texto?",
+          "answers": [
+            "A) ¿La universidad es obligatoria?",
+            "B) ¿La tecnología es suficiente para mejorar la comprensión lectora?",
+            "C) ¿Qué carreras existen en Ecuador?",
+            "D) ¿Cómo usar redes sociales?"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto plantea explícitamente esta pregunta en el primer párrafo."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué ventaja de la tecnología se menciona?",
+          "answers": [
+            "A) Reduce el número de estudiantes",
+            "B) Permite acceso rápido a información",
+            "C) Elimina la necesidad de estudiar",
+            "D) Sustituye a los docentes"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto indica que facilita el acceso a información."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué problema puede generar el entorno digital?",
+          "answers": [
+            "A) Falta de libros",
+            "B) Distracciones constantes",
+            "C) Ausencia de docentes",
+            "D) Menor acceso a internet"
+          ],
+          "correct_answer": "B",
+          "justification": "Se mencionan notificaciones y redes sociales como distractores."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué elemento se considera fundamental además de la tecnología?",
+          "answers": [
+            "A) El clima",
+            "B) La guía del docente",
+            "C) El transporte",
+            "D) La edad del estudiante"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto resalta el papel del docente."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cuál es la tesis del texto?",
+          "answers": [
+            "A) La tecnología debe eliminarse",
+            "B) La tecnología por sí sola no mejora la comprensión lectora",
+            "C) Leer no es importante",
+            "D) Los estudiantes no usan tecnología"
+          ],
+          "correct_answer": "B",
+          "justification": "Es la idea central defendida en todo el texto."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cómo se estructura el argumento principal?",
+          "answers": [
+            "A) Narración de una historia",
+            "B) Presentación de ventajas, limitaciones y conclusión",
+            "C) Descripción de un lugar",
+            "D) Instrucciones paso a paso"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto presenta beneficios, luego críticas y finalmente conclusión."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué la tecnología puede ser insuficiente?",
+          "answers": [
+            "A) Porque no funciona",
+            "B) Porque no desarrolla automáticamente habilidades de comprensión",
+            "C) Porque es muy costosa",
+            "D) Porque no existe en Ecuador"
+          ],
+          "correct_answer": "B",
+          "justification": "Se explica que comprender requiere estrategias."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué solución propone el texto?",
+          "answers": [
+            "A) Evitar el uso de tecnología",
+            "B) Usar solo libros físicos",
+            "C) Combinar tecnología con pedagogía",
+            "D) Eliminar evaluaciones"
+          ],
+          "correct_answer": "C",
+          "justification": "Se propone integración entre tecnología y enseñanza."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "Si un estudiante usa tecnología sin estrategias de lectura, probablemente:",
+          "answers": [
+            "A) Mejorará automáticamente",
+            "B) Tendrá dificultades para comprender",
+            "C) No necesitará estudiar",
+            "D) Aprenderá más rápido"
+          ],
+          "correct_answer": "B",
+          "justification": "Se infiere que la tecnología sola no garantiza comprensión."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Por qué se menciona el contexto ecuatoriano?",
+          "answers": [
+            "A) Para describir el clima",
+            "B) Para contextualizar el acceso educativo y tecnológico",
+            "C) Para comparar países",
+            "D) Para hablar de turismo"
+          ],
+          "correct_answer": "B",
+          "justification": "Se relaciona con la realidad educativa local."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué se puede inferir sobre el rol del docente?",
+          "answers": [
+            "A) Es innecesario",
+            "B) Es reemplazado por tecnología",
+            "C) Es clave para orientar el aprendizaje",
+            "D) Solo evalúa exámenes"
+          ],
+          "correct_answer": "C",
+          "justification": "El texto destaca su papel en el desarrollo de habilidades."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Cuál es el mensaje implícito del texto?",
+          "answers": [
+            "A) La tecnología soluciona todo",
+            "B) El aprendizaje requiere un uso consciente de herramientas y estrategias",
+            "C) Leer es una actividad secundaria",
+            "D) Solo los expertos comprenden textos"
+          ],
+          "correct_answer": "B",
+          "justification": "Se concluye que el aprendizaje depende de múltiples factores, no solo tecnología."
+        }
+      ]
+    },
+    {
+      "typology": "Instructivo",
+      "id": 5,
+      "type": "guía académica / manual de estudio",
+      "title": "Guía para mejorar la comprensión lectora en estudiantes de nivelación universitaria",
+      "text": [
+        "La comprensión lectora es una habilidad fundamental para el éxito académico en la educación superior. Muchos estudiantes que ingresan a la universidad enfrentan dificultades al leer textos extensos o especializados. Por esta razón, es importante aplicar estrategias que permitan mejorar la comprensión de manera progresiva. A continuación, se presenta una guía práctica que puede ser utilizada por estudiantes de nivelación para fortalecer esta competencia.",
+        "Paso 1: Preparar el entorno de lectura: Antes de comenzar, es necesario elegir un lugar adecuado. Se recomienda un espacio con buena iluminación, sin ruidos excesivos y libre de distracciones. Es importante evitar el uso simultáneo de redes sociales o aplicaciones que interrumpan la concentración. Tener a la mano un cuaderno, un lápiz o un dispositivo digital para tomar notas facilitará el proceso.",
+        "Paso 2: Realizar una lectura inicial: El primer contacto con el texto debe ser general. En esta etapa, el estudiante debe leer sin detenerse demasiado en palabras desconocidas. El objetivo es identificar el tema principal y obtener una idea global del contenido. También se recomienda observar títulos, subtítulos e imágenes, ya que estos elementos ayudan a anticipar la información.",
+        "Paso 3: Identificar ideas clave: En una segunda lectura, el estudiante debe subrayar o destacar las ideas principales. Estas suelen encontrarse al inicio o al final de los párrafos. Es útil escribir palabras clave en los márgenes o en un cuaderno. Esta actividad permite organizar la información y facilita su comprensión.",
+        "Paso 4: Consultar vocabulario desconocido: Cuando se encuentren palabras difíciles, es recomendable buscar su significado en un diccionario físico o digital. Comprender el vocabulario es esencial para interpretar correctamente el texto. No se debe ignorar este paso, ya que las palabras desconocidas pueden alterar el sentido general de la lectura.",
+        "Paso 5: Elaborar un resumen: Después de comprender el contenido, el estudiante debe redactar un resumen con sus propias palabras. Este ejercicio ayuda a sintetizar la información y a verificar si realmente se ha entendido el texto. El resumen debe incluir las ideas principales y evitar copiar frases textuales.",
+        "Paso 6: Realizar inferencias: Una vez comprendido el texto, se recomienda reflexionar sobre la información. El estudiante puede preguntarse: ¿qué significa esto?, ¿por qué ocurre?, ¿qué consecuencias tiene? Este paso permite desarrollar el nivel inferencial de la comprensión lectora, ya que implica ir más allá de lo explícito.",
+        "Paso 7: Revisar y reflexionar: Finalmente, es importante revisar lo aprendido. El estudiante puede comparar su resumen con el texto original o explicar el contenido a otra persona. Esta actividad fortalece la memoria y consolida el aprendizaje.",
+        "Aplicar estos pasos de manera constante permite mejorar progresivamente la comprensión lectora. Aunque al inicio el proceso puede parecer lento, con la práctica se vuelve más ágil y efectivo. En el contexto universitario ecuatoriano, desarrollar esta habilidad resulta clave para enfrentar con éxito las exigencias académicas."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Cuál es el primer paso de la guía?",
+          "answers": [
+            "A) Elaborar un resumen",
+            "B) Preparar el entorno de lectura",
+            "C) Consultar vocabulario",
+            "D) Realizar inferencias"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto indica que el primer paso es preparar el entorno."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué se debe hacer en la lectura inicial?",
+          "answers": [
+            "A) Memorizar el texto",
+            "B) Identificar la idea general",
+            "C) Escribir un resumen",
+            "D) Analizar palabras difíciles"
+          ],
+          "correct_answer": "B",
+          "justification": "Se busca una idea global del contenido."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Para qué sirve consultar el vocabulario?",
+          "answers": [
+            "A) Para copiar palabras",
+            "B) Para mejorar la escritura",
+            "C) Para comprender mejor el texto",
+            "D) Para decorar el cuaderno"
+          ],
+          "correct_answer": "C",
+          "justification": "El texto señala que es esencial para entender."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué se recomienda al final del proceso?",
+          "answers": [
+            "A) Dejar de leer",
+            "B) Revisar y reflexionar",
+            "C) Cambiar de texto",
+            "D) Memorizar sin entender"
+          ],
+          "correct_answer": "B",
+          "justification": "El último paso es revisar lo aprendido."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cuál es el objetivo principal de la guía?",
+          "answers": [
+            "A) Enseñar a escribir cuentos",
+            "B) Mejorar la comprensión lectora",
+            "C) Aprender tecnología",
+            "D) Reducir el tiempo de estudio"
+          ],
+          "correct_answer": "B",
+          "justification": "Todo el texto está orientado a ese objetivo."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cómo se organiza el contenido?",
+          "answers": [
+            "A) En forma de historia",
+            "B) En pasos secuenciales",
+            "C) En preguntas y respuestas",
+            "D) En listas desordenadas"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto presenta una secuencia de pasos."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué es importante el resumen?",
+          "answers": [
+            "A) Para copiar el texto",
+            "B) Para sintetizar la información",
+            "C) Para escribir más rápido",
+            "D) Para evitar leer"
+          ],
+          "correct_answer": "B",
+          "justification": "El resumen ayuda a verificar la comprensión."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué relación existe entre los pasos?",
+          "answers": [
+            "A) Son independientes",
+            "B) Siguen un orden lógico y progresivo",
+            "C) Son opcionales",
+            "D) No tienen conexión"
+          ],
+          "correct_answer": "B",
+          "justification": "Cada paso complementa al anterior."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "Si un estudiante no elimina distracciones, probablemente:",
+          "answers": [
+            "A) Comprenderá mejor",
+            "B) Tendrá dificultades de concentración",
+            "C) Leerá más rápido",
+            "D) No necesitará estudiar"
+          ],
+          "correct_answer": "B",
+          "justification": "Se infiere que las distracciones afectan la comprensión."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Por qué se recomienda hacer una segunda lectura?",
+          "answers": [
+            "A) Para perder tiempo",
+            "B) Para profundizar en la comprensión",
+            "C) Para repetir palabras",
+            "D) Para memorizar sin entender"
+          ],
+          "correct_answer": "B",
+          "justification": "Permite identificar ideas clave."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué se puede inferir sobre la práctica constante?",
+          "answers": [
+            "A) No tiene efecto",
+            "B) Mejora progresivamente la habilidad",
+            "C) Es innecesaria",
+            "D) Solo sirve para expertos"
+          ],
+          "correct_answer": "B",
+          "justification": "El texto indica que la práctica vuelve el proceso más efectivo."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Cuál es el mensaje implícito del texto?",
+          "answers": [
+            "A) Leer es difícil e inútil",
+            "B) La comprensión lectora se desarrolla con estrategias y disciplina",
+            "C) Solo algunos pueden aprender",
+            "D) No es necesario estudiar"
+          ],
+          "correct_answer": "B",
+          "justification": "Se concluye que el aprendizaje depende del uso adecuado de estrategias."
+        }
+      ]
+    }
+  ]
+}

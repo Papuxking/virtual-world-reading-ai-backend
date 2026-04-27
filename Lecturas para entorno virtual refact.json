@@ -1,0 +1,1459 @@
+{
+  "readings": [
+    {
+      "typology": "Argumentativo",
+      "id": 1,
+      "type": "Textos argumentativos",
+      "title": "La inteligencia artificial en la educación: ¿aliada o amenaza?",
+      "text": [
+        "En los últimos años, la inteligencia artificial (IA) ha pasado de ser una tecnología futurista a convertirse en una herramienta cotidiana. Desde asistentes virtuales hasta sistemas de recomendación, su presencia es cada vez más evidente. Sin embargo, uno de los ámbitos donde su impacto genera mayor debate es la educación.",
+        "Por un lado, numerosos especialistas sostienen que la IA puede contribuir significativamente al aprendizaje. Las plataformas educativas que incorporan algoritmos inteligentes permiten adaptar los contenidos al ritmo y estilo de cada estudiante. De este modo, quienes avanzan con mayor rapidez pueden profundizar en temas más complejos, mientras que aquellos que necesitan más tiempo reciben actividades de refuerzo personalizadas. Además, la automatización de tareas administrativas podría liberar a los docentes de cargas repetitivas, permitiéndoles concentrarse en el acompañamiento pedagógico.",
+        "No obstante, también existen voces críticas que advierten sobre los riesgos de depender excesivamente de estas tecnologías. Uno de los principales temores es que los estudiantes deleguen en la IA procesos cognitivos fundamentales, como el análisis o la redacción, lo que podría afectar el desarrollo del pensamiento crítico. Asimismo, se plantea la preocupación por la privacidad de los datos, ya que estas plataformas recopilan información sensible sobre el rendimiento y comportamiento de los usuarios.",
+        "Otro aspecto relevante es la desigualdad. No todos los centros educativos cuentan con los recursos necesarios para implementar tecnologías avanzadas. Si la IA se convierte en un elemento esencial del sistema educativo, podría ampliarse la brecha entre instituciones con mayor financiación y aquellas con menos acceso a herramientas digitales.",
+        "En definitiva, la inteligencia artificial no es, en sí misma, ni una solución mágica ni una amenaza inevitable. Su impacto dependerá del uso que se haga de ella, de la regulación que se establezca y de la formación que reciban tanto docentes como estudiantes. El desafío actual no consiste en decidir si la IA debe entrar en las aulas, sino en determinar cómo integrarla de manera responsable y equitativa."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "Según el texto, la inteligencia artificial ya forma parte de:",
+          "answers": [
+            "A) Proyectos exclusivamente científicos.",
+            "B) La vida cotidiana.",
+            "C) Únicamente del ámbito empresarial.",
+            "D) Experimentos universitarios."
+          ],
+          "correct_answer": "B",
+          "justification": "En el primer párrafo se afirma explícitamente que la IA “ha pasado de ser una tecnología futurista a convertirse en una herramienta cotidiana”. La información aparece de manera directa y textual."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "Una de las ventajas mencionadas de la IA en educación es:",
+          "answers": [
+            "A) Eliminar la figura del docente.",
+            "B) Reducir la duración de los estudios.",
+            "C) Adaptar los contenidos al ritmo del estudiante.",
+            "D) Sustituir completamente los libros impresos."
+          ],
+          "correct_answer": "C",
+          "justification": "El segundo párrafo señala que las plataformas permiten “adaptar los contenidos al ritmo y estilo de cada estudiante”. Es una ventaja mencionada de forma explícita."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué preocupación se menciona respecto a los datos de los estudiantes?",
+          "answers": [
+            "A) La falta de interés en compartirlos.",
+            "B) Su uso con fines publicitarios exclusivamente.",
+            "C) La privacidad de la información recopilada.",
+            "D) La imposibilidad de almacenarlos."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto indica claramente que existe “preocupación por la privacidad de los datos”, ya que las plataformas recopilan información sensible. La respuesta se localiza literalmente en el tercer párrafo."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el texto menciona que la IA puede “liberar a los docentes de cargas repetitivas” , se refiere principalmente a:",
+          "answers": [
+            "A) Sustituirlos por máquinas en el aula.",
+            "B) Reducir tareas administrativas automatizables.",
+            "C) Disminuir el número de estudiantes por clase.",
+            "D) Eliminar la evaluación académica."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto menciona que la automatización puede “liberar a los docentes de cargas repetitivas”. No se refiere a sustituirlos, sino a reducir tareas administrativas. El candidato debe comprender el sentido contextual de la expresión."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "Según el texto, la desigualdad podría aumentar porque:",
+          "answers": [
+            "A) Los estudiantes no desean usar tecnología.",
+            "B) La IA es demasiado compleja para todos.",
+            "C) No todos los centros tienen los mismos recursos tecnológicos.",
+            "D) Los docentes rechazan la innovación."
+          ],
+          "correct_answer": "C",
+          "justification": "En el cuarto párrafo se explica que “no todos los centros educativos cuentan con los recursos necesarios”. El lector debe relacionar esta información con el posible aumento de la desigualdad."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "El autor afirma que la IA no es “ni una solución mágica ni una amenaza inevitable” para expresar que:",
+          "answers": [
+            "A) Es completamente innecesaria.",
+            "B) Su impacto depende de cómo se utilice.",
+            "C) Debe prohibirse en todos los niveles educativos.",
+            "D) Solo beneficia a los países desarrollados."
+          ],
+          "correct_answer": "B",
+          "justification": "La frase “ni una solución mágica ni una amenaza inevitable” implica una postura intermedia. En el último párrafo se aclara que “su impacto dependerá del uso que se haga de ella”. El lector debe interpretar el sentido global de la afirmación."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "critico",
+          "question": "A partir del texto, se puede inferir que el autor adopta una postura:",
+          "answers": [
+            "A) Totalmente negativa frente a la IA.",
+            "B) Absolutamente entusiasta y sin reservas.",
+            "C) Equilibrada y crítica a la vez.",
+            "D) Indiferente ante el tema."
+          ],
+          "correct_answer": "C",
+          "justification": "El autor presenta argumentos a favor y en contra sin posicionarse de manera extrema. La postura no es explícita, sino que se infiere del equilibrio argumentativo."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "critico",
+          "question": "El texto sugiere que el pensamiento crítico podría verse afectado si:",
+          "answers": [
+            "A) Los estudiantes utilizan libros digitales.",
+            "B) Se incrementa la formación docente.",
+            "C) Los alumnos dependen excesivamente de la IA para realizar tareas cognitivas.",
+            "D) Se reduce el número de exámenes escritos."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto menciona el riesgo de que los estudiantes “deleguen en la IA procesos cognitivos fundamentales”. Se infiere que una dependencia excesiva afectaría el pensamiento crítico."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "La referencia a la “regulación” implica que:",
+          "answers": [
+            "A) El uso de la IA requiere normas y supervisión.",
+            "B) La IA funciona sin ningún tipo de control.",
+            "C) Los docentes deben programar sistemas informáticos.",
+            "D) Las escuelas privadas deben desaparecer."
+          ],
+          "correct_answer": "A",
+          "justification": "La mención de la “regulación” implica la necesidad de establecer normas que orienten su uso. No se dice explícitamente que haya ausencia de control, sino que es necesario definirlo."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "El propósito principal del texto es:",
+          "answers": [
+            "A) Informar únicamente sobre avances tecnológicos.",
+            "B) Convencer al lector de rechazar la IA.",
+            "C) Presentar argumentos a favor y en contra para reflexionar sobre su uso educativo.",
+            "D) Explicar cómo programar sistemas de inteligencia artificial."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto es claramente argumentativo y su estructura presenta beneficios, riesgos y una conclusión abierta. El propósito comunicativo es fomentar la reflexión, no imponer una postura única."
+        }
+      ]
+    },
+    {
+      "typology": "Argumentativo",
+      "id": 2,
+      "type": "Textos argumentativos",
+      "title": "¿Es suficiente el reciclaje para proteger el medio ambiente?",
+      "text": [
+        "En las últimas décadas, el reciclaje se ha convertido en una de las principales estrategias promovidas por gobiernos y organizaciones para proteger el medio ambiente. Separar residuos, reutilizar materiales y reducir el consumo de plástico son prácticas cada vez más habituales en muchas ciudades del mundo. Sin embargo, surge una pregunta relevante: ¿es el reciclaje suficiente para enfrentar la crisis ambiental actual?",
+        "Por un lado, el reciclaje permite disminuir la cantidad de residuos que terminan en vertederos y océanos. Además, contribuye al ahorro de recursos naturales, ya que reutilizar materiales reduce la necesidad de extraer nuevas materias primas. Diversos estudios han demostrado que reciclar papel, vidrio o aluminio puede disminuir considerablemente el consumo energético en los procesos industriales.",
+        "No obstante, algunos expertos señalan que centrar la responsabilidad exclusivamente en los ciudadanos puede resultar limitado e incluso injusto. Aunque las acciones individuales son importantes, gran parte de la contaminación proviene de procesos industriales a gran escala. Si las empresas no modifican sus sistemas de producción ni reducen el uso de materiales contaminantes, el impacto del reciclaje doméstico seguirá siendo insuficiente.",
+        "Otro aspecto clave es el modelo de consumo actual. Vivimos en una sociedad que fomenta la compra constante de productos de corta duración. En este contexto, reciclar no resuelve el problema de fondo, ya que la producción masiva continúa generando enormes cantidades de residuos. Por ello, algunos especialistas proponen priorizar la reducción y la reutilización antes que el reciclaje.",
+        "En definitiva, aunque el reciclaje constituye una herramienta valiosa para la protección ambiental, no puede considerarse una solución única. La transición hacia un modelo más sostenible requiere cambios estructurales en la producción, en las políticas públicas y en los hábitos de consumo. Solo mediante una responsabilidad compartida entre ciudadanos, empresas y gobiernos será posible avanzar hacia una verdadera sostenibilidad."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "Según el texto, el reciclaje es promovido principalmente por:",
+          "answers": [
+            "A) Empresas privadas únicamente.",
+            "B) Gobiernos y organizaciones.",
+            "C) Universidades internacionales.",
+            "D) Científicos independientes."
+          ],
+          "correct_answer": "B",
+          "justification": "Se menciona explícitamente en el primer párrafo que el reciclaje es promovido por “gobiernos y organizaciones”."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "Una ventaja del reciclaje mencionada en el texto es:",
+          "answers": [
+            "A) El aumento del consumo de productos.",
+            "B) La reducción del consumo energético en procesos industriales.",
+            "C) La eliminación total de la contaminación.",
+            "D) La disminución de impuestos ambientales."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto indica claramente que reciclar puede “disminuir considerablemente el consumo energético” ."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿De dónde proviene gran parte de la contaminación, según el texto?",
+          "answers": [
+            "A) De los hogares.",
+            "B) De actividades agrícolas.",
+            "C) De procesos industriales a gran escala.",
+            "D) Del transporte público."
+          ],
+          "correct_answer": "C",
+          "justification": "Se afirma de manera explícita que “gran parte de la contaminación proviene de procesos industriales a gran escala” ."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el texto afirma que centrar la responsabilidad exclusivamente en los ciudadanos puede ser “limitado e incluso injusto” , significa que:",
+          "answers": [
+            "A) Los ciudadanos no deben reciclar.",
+            "B) Las empresas también tienen responsabilidad ambiental.",
+            "C) El reciclaje es inútil.",
+            "D) El gobierno debe prohibir el consumo."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto explica que la contaminación también proviene de las empresas, por lo que no es justo responsabilizar únicamente a los ciudadanos. Implica corresponsabilidad."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "El modelo de consumo actual es criticado porque:",
+          "answers": [
+            "A) Fomenta productos duraderos y sostenibles.",
+            "B) Reduce la producción industrial.",
+            "C) Promueve la compra constante de productos de corta duración.",
+            "D) Impide el reciclaje doméstico."
+          ],
+          "correct_answer": "C",
+          "justification": "El autor critica que vivimos en una sociedad que fomenta la compra constante de productos de corta duración."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "El texto sugiere que, antes que reciclar, sería más efectivo:",
+          "answers": [
+            "A) Incrementar la producción industrial.",
+            "B) Priorizar la reducción y la reutilización.",
+            "C) Eliminar todas las fábricas.",
+            "D) Sustituir el plástico por vidrio exclusivamente."
+          ],
+          "correct_answer": "B",
+          "justification": "Se menciona que algunos especialistas proponen priorizar la reducción y la reutilización antes que el reciclaje."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Critico",
+          "question": "La postura del autor frente al reciclaje puede describirse como:",
+          "answers": [
+            "A) Totalmente crítica y negativa.",
+            "B) Absolutamente favorable sin condiciones.",
+            "C) Equilibrada y reflexiva.",
+            "D) Indiferente."
+          ],
+          "correct_answer": "C",
+          "justification": "El autor reconoce el valor del reciclaje, pero también señala sus limitaciones. No adopta una postura extrema."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Critico",
+          "question": "Se puede inferir que el autor considera que la crisis ambiental:",
+          "answers": [
+            "A) Se resolverá únicamente con campañas de reciclaje.",
+            "B) Es un problema complejo que requiere cambios estructurales.",
+            "C) Depende solo de decisiones individuales.",
+            "D) No está relacionada con el modelo económico."
+          ],
+          "correct_answer": "B",
+          "justification": "En la conclusión se menciona la necesidad de “cambios estructurales” , lo que implica que el problema es complejo."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "La expresión “responsabilidad compartida” implica que:",
+          "answers": [
+            "A) Solo los gobiernos deben actuar.",
+            "B) Las empresas deben asumir todo el cambio.",
+            "C) Todos los sectores sociales deben participar en la solución.",
+            "D) Los ciudadanos no tienen obligación."
+          ],
+          "correct_answer": "C",
+          "justification": "“Responsabilidad compartida” sugiere participación conjunta de ciudadanos, empresas y gobiernos."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "El propósito principal del texto es:",
+          "answers": [
+            "A) Informar sobre técnicas de reciclaje doméstico.",
+            "B) Convencer al lector de dejar de reciclar.",
+            "C) Analizar críticamente el alcance del reciclaje en la protección ambiental.",
+            "D) Promocionar campañas gubernamentales."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto es argumentativo y reflexivo; analiza críticamente si el reciclaje es suficiente como solución ambiental."
+        }
+      ]
+    },
+    {
+      "typology": "Argumentativo",
+      "id": 3,
+      "type": "Textos argumentativos",
+      "title": "La agenda progresista y sus desafíos en las democracias contemporáneas",
+      "text": [
+        "En los últimos años, la denominada “agenda progresista” ha ocupado un lugar central en el debate público de numerosas democracias. Bajo este concepto se agrupan propuestas orientadas a la ampliación de derechos civiles, la promoción de la igualdad de género, la protección del medio ambiente y la defensa de minorías históricamente marginadas. Para sus defensores, estas iniciativas representan una evolución necesaria de los sistemas democráticos; para sus detractores, en cambio, suponen transformaciones apresuradas que no siempre cuentan con consenso social suficiente.",
+        "Uno de los pilares de esta agenda es la búsqueda de una mayor inclusión social. Políticas de acción afirmativa, reformas educativas con enfoque de diversidad y legislación antidiscriminatoria forman parte de este marco ideológico. Sus promotores sostienen que la igualdad formal ante la ley no garantiza por sí sola condiciones equitativas, por lo que resulta imprescindible adoptar medidas correctivas que compensen desigualdades estructurales.",
+        "Sin embargo, las críticas no se han hecho esperar. Algunos sectores consideran que determinadas políticas pueden generar polarización o limitar la libertad de expresión cuando se perciben como imposiciones culturales. Otros cuestionan la viabilidad económica de ciertos programas sociales, especialmente en contextos de desaceleración financiera. Esta tensión evidencia que la implementación de cambios normativos no ocurre en un vacío ideológico, sino en sociedades plurales donde conviven visiones divergentes del bien común.",
+        "Otro elemento relevante es el papel de los medios digitales en la difusión de estas propuestas. Las redes sociales han amplificado tanto las reivindicaciones progresistas como las reacciones en su contra, intensificando el debate público. La viralización de mensajes simplificados puede dificultar la deliberación matizada, favoreciendo discursos polarizantes que reducen la complejidad de los asuntos en discusión.",
+        "A pesar de las controversias, la agenda progresista ha logrado introducir en la esfera pública temas que anteriormente permanecían relegados. La cuestión central no radica únicamente en aceptar o rechazar dichas propuestas, sino en cómo articular mecanismos de diálogo democrático que permitan evaluar sus alcances, límites y consecuencias. En definitiva, el reto consiste en compatibilizar la ampliación de derechos con la cohesión social, evitando que la confrontación sustituya al debate informado."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "Según el texto, la agenda progresista incluye propuestas relacionadas con:",
+          "answers": [
+            "A) La reducción de impuestos exclusivamente.",
+            "B) La ampliación de derechos civiles y la igualdad de género.",
+            "C) La eliminación de programas sociales.",
+            "D) La restricción del debate público."
+          ],
+          "correct_answer": "B",
+          "justification": "El primer párrafo menciona explícitamente la ampliación de derechos civiles y la igualdad de género."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué tipo de políticas se mencionan como parte de la búsqueda de inclusión social?",
+          "answers": [
+            "A) Privatizaciones masivas.",
+            "B) Políticas de acción afirmativa y legislación antidiscriminatoria.",
+            "C) Restricciones migratorias estrictas.",
+            "D) Eliminación de reformas educativas."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto señala políticas de acción afirmativa y legislación antidiscriminatoria como ejemplos concretos."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué papel desempeñan las redes sociales según el texto?",
+          "answers": [
+            "A) Reducen el debate público.",
+            "B) Amplifican tanto las propuestas como las críticas.",
+            "C) Sustituyen a las instituciones democráticas.",
+            "D) Garantizan deliberación matizada."
+          ],
+          "correct_answer": "B",
+          "justification": "Se indica que las redes sociales amplifican tanto reivindicaciones como reacciones críticas."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el texto afirma que la igualdad formal ante la ley no garantiza condiciones equitativas, implica que:",
+          "answers": [
+            "A) Las leyes no tienen valor.",
+            "B) Se requieren medidas adicionales para corregir desigualdades estructurales.",
+            "C) La igualdad jurídica es innecesaria.",
+            "D) Todas las políticas son discriminatorias."
+          ],
+          "correct_answer": "B",
+          "justification": "La frase implica que la igualdad legal no basta si persisten desigualdades estructurales, por lo que se requieren medidas correctivas."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "La referencia a la “viabilidad económica” de ciertos programas sugiere que:",
+          "answers": [
+            "A) Todos los programas sociales son inviables.",
+            "B) Las políticas deben considerar también su sostenibilidad financiera.",
+            "C) La economía no influye en la política.",
+            "D) Los programas sociales carecen de apoyo ciudadano."
+          ],
+          "correct_answer": "B",
+          "justification": "La mención de viabilidad económica sugiere la necesidad de evaluar la sostenibilidad financiera de los programas."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "El texto señala que los cambios normativos no ocurren en un “vacío ideológico” para indicar que:",
+          "answers": [
+            "A) No existe diversidad de opiniones.",
+            "B) Las reformas se implementan en sociedades con distintas visiones del bien común.",
+            "C) La ideología ha desaparecido del debate público.",
+            "D) Las leyes no generan discusión."
+          ],
+          "correct_answer": "B",
+          "justification": "La expresión indica que las reformas se desarrollan en contextos donde existen diversas ideologías y perspectivas."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Critico",
+          "question": "Se puede inferir que la postura del autor es:",
+          "answers": [
+            "A) Totalmente partidaria sin reservas.",
+            "B) Absolutamente contraria a la agenda progresista.",
+            "C) Analítica y orientada al diálogo democrático.",
+            "D) Indiferente ante el debate."
+          ],
+          "correct_answer": "C",
+          "justification": "El autor no adopta una postura extrema; promueve el análisis y el diálogo democrático."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Critico",
+          "question": "La mención de discursos polarizantes sugiere que:",
+          "answers": [
+            "A) El debate público puede simplificarse en exceso.",
+            "B) Las redes sociales fomentan siempre el análisis profundo.",
+            "C) No existe desacuerdo en la sociedad.",
+            "D) La polarización fortalece automáticamente la cohesión social."
+          ],
+          "correct_answer": "A",
+          "justification": "La viralización de mensajes simplificados puede reducir la complejidad del debate."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "Cuando el autor señala que el reto consiste en compatibilizar ampliación de derechos y cohesión social, implica que:",
+          "answers": [
+            "A) Ambos objetivos son necesariamente incompatibles.",
+            "B) Existe una tensión que debe gestionarse cuidadosamente.",
+            "C) La cohesión social carece de importancia.",
+            "D) Los derechos deben limitarse."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto sugiere una tensión entre ampliación de derechos y cohesión social que requiere equilibrio."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "El propósito principal del artículo es:",
+          "answers": [
+            "A) Imponer una postura ideológica específica.",
+            "B) Analizar críticamente los alcances y desafíos de la agenda progresista en democracias",
+            "C) Desacreditar a un grupo político concreto.",
+            "D) Defender exclusivamente la libertad de expresión."
+          ],
+          "correct_answer": "B",
+          "justification": "El artículo examina los alcances, críticas y desafíos de la agenda progresista desde una perspectiva analítica. Texto de lectura (Nivel C1)"
+        }
+      ]
+    },
+    {
+      "typology": "Argumentativo",
+      "id": 4,
+      "type": "Textos argumentativos",
+      "title": "La responsabilidad insustituible de los padres en la educación de sus hijos",
+      "text": [
+        "En las últimas décadas, el debate sobre la calidad educativa ha ocupado un lugar central en las políticas públicas y en los medios de comunicación. Se discute sobre reformas curriculares, innovación tecnológica y formación docente; sin embargo, con frecuencia se omite un elemento esencial: la responsabilidad de los padres en la educación de sus hijos. Si bien la escuela desempeña un papel fundamental en la transmisión de conocimientos y en la socialización secundaria, la familia constituye el primer y más influyente espacio formativo.",
+        "Desde los primeros años de vida, los niños aprenden valores, hábitos y actitudes en el entorno familiar. La puntualidad, el respeto, la disciplina y la perseverancia no se adquieren únicamente mediante asignaturas escolares, sino a través del ejemplo cotidiano. Diversos estudios en el ámbito de la psicología educativa señalan que el acompañamiento parental constante influye de manera decisiva en el rendimiento académico y en el desarrollo socioemocional de los estudiantes. No se trata simplemente de supervisar tareas, sino de generar un clima de apoyo, diálogo y expectativas claras.",
+        "No obstante, en la sociedad contemporánea se observa una tendencia creciente a delegar casi por completo la formación integral de los hijos en la institución escolar. Factores como las largas jornadas laborales, la sobreexposición a dispositivos digitales y la transformación de los modelos familiares han contribuido a esta situación. Algunos padres consideran que su responsabilidad se limita a garantizar la asistencia y proveer recursos materiales, olvidando que la educación implica también la orientación ética y el acompañamiento afectivo.",
+        "Es cierto que la escuela debe adaptarse a los desafíos del siglo XXI y responder a contextos sociales complejos. Sin embargo, pretender que los docentes suplan carencias formativas del hogar resulta no solo injusto, sino pedagógicamente inviable. La educación es un proceso compartido que requiere coherencia entre el discurso familiar y el institucional. Cuando los mensajes son contradictorios, el estudiante experimenta confusión y disminuye su motivación.",
+        "En consecuencia, es imprescindible revalorizar el papel de los padres como agentes activos en la educación. Esto implica participar en reuniones escolares, interesarse por los contenidos que aprenden sus hijos, establecer rutinas de estudio y, sobre todo, ejercer una autoridad basada en el diálogo y la responsabilidad. La escuela puede ofrecer herramientas; no obstante, la formación del carácter y la consolidación de principios éticos dependen, en gran medida, del compromiso familiar. Reconocer esta realidad no significa culpar a los padres, sino invitarlos a asumir un rol corresponsable y consciente en el proceso educativo."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "Según el texto, ¿qué elemento se omite con frecuencia en el debate sobre la calidad educativa?",
+          "answers": [
+            "A) La innovación tecnológica.",
+            "B) La formación docente.",
+            "C) La responsabilidad de los padres.",
+            "D) Las reformas curriculares."
+          ],
+          "correct_answer": "C",
+          "justification": "El primer párrafo indica que frecuentemente se omite “la responsabilidad de los padres” ."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Dónde se adquieren principalmente valores como el respeto y la perseverancia, según el texto?",
+          "answers": [
+            "A) En las redes sociales.",
+            "B) En el entorno familiar.",
+            "C) En actividades extracurriculares.",
+            "D) En programas gubernamentales."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto señala explícitamente que valores como el respeto y la perseverancia se adquieren en el entorno familiar."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué fenómeno social ha contribuido a delegar la educación en la escuela?",
+          "answers": [
+            "A) La disminución del número de docentes.",
+            "B) El aumento de actividades deportivas.",
+            "C) Las largas jornadas laborales.",
+            "D) La reducción del currículo escolar."
+          ],
+          "correct_answer": "C",
+          "justification": "Se mencionan “las largas jornadas laborales” como uno de los factores que han contribuido a delegar la educación."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el autor afirma que la educación es un “proceso compartido” , quiere decir que:",
+          "answers": [
+            "A) El Estado debe controlar completamente la educación.",
+            "B) La escuela y la familia deben colaborar de manera coherente.",
+            "C) Los estudiantes deben estudiar de forma autónoma.",
+            "D) Los docentes deben asumir la función de los padres."
+          ],
+          "correct_answer": "B",
+          "justification": "“Proceso compartido” implica colaboración y coherencia entre familia y escuela."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué resulta pedagógicamente inviable que los docentes suplan carencias formativas del hogar?",
+          "answers": [
+            "A) Porque no tienen formación suficiente.",
+            "B) Porque no es su responsabilidad exclusiva ni pueden reemplazar a la familia.",
+            "C) Porque el currículo es demasiado extenso.",
+            "D) Porque los estudiantes no respetan a los docentes."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto afirma que es injusto e inviable que los docentes suplan carencias del hogar porque no pueden reemplazar la función familiar."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cuál es la intención principal del autor al escribir el texto?",
+          "answers": [
+            "A) Criticar exclusivamente a los docentes.",
+            "B) Describir reformas educativas recientes.",
+            "C) Persuadir sobre la importancia del compromiso parental.",
+            "D) Analizar estadísticas internacionales."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto es un ensayo persuasivo cuyo objetivo es defender la importancia del compromiso de los padres."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué relación establece el texto entre coherencia familiar e institucional y la motivación del estudiante?",
+          "answers": [
+            "A) No existe relación alguna.",
+            "B) La coherencia fortalece la motivación del estudiante.",
+            "C) La coherencia limita la creatividad.",
+            "D) La motivación depende solo de factores económicos."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto explica que cuando los mensajes son contradictorios, disminuye la motivación; por lo tanto, la coherencia la fortalece."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Critico",
+          "question": "Se puede inferir que el autor considera insuficiente que los padres:",
+          "answers": [
+            "A) Participen activamente en reuniones escolares.",
+            "B) Ofrezcan únicamente apoyo emocional.",
+            "C) Se limiten a proveer recursos materiales y asistencia escolar.",
+            "D) Establezcan rutinas de estudio en casa."
+          ],
+          "correct_answer": "C",
+          "justification": "Se infiere que el autor considera insuficiente limitarse a garantizar asistencia y recursos materiales."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué visión subyace respecto a la autoridad parental?",
+          "answers": [
+            "A) Debe basarse exclusivamente en el castigo.",
+            "B) Debe eliminarse por completo.",
+            "C) Debe ejercerse mediante el diálogo y la responsabilidad.",
+            "D) Debe delegarse a la escuela."
+          ],
+          "correct_answer": "C",
+          "justification": "El último párrafo propone una autoridad “basada en el diálogo y la responsabilidad” ."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "El tono general del texto puede describirse como:",
+          "answers": [
+            "A) Neutral y descriptivo.",
+            "B) Irónico y satírico.",
+            "C) Persuasivo y reflexivo.",
+            "D) Narrativo y anecdótico."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto presenta argumentos y reflexiones para convencer al lector, por lo que su tono es Texto de lectura (Nivel C1)"
+        }
+      ]
+    },
+    {
+      "typology": "Argumentativo",
+      "id": 5,
+      "type": "Textos argumentativos",
+      "title": "La familia como núcleo insustituible en la formación educativa",
+      "text": [
+        "Autor: Dra. Carmen Valdivieso",
+        "En el panorama educativo contemporáneo, la discusión pública suele centrarse en la innovación metodológica, la incorporación de tecnologías digitales y la evaluación estandarizada del aprendizaje. No obstante, en medio de estas transformaciones, se diluye con frecuencia una cuestión esencial: la responsabilidad de los padres en la educación de sus hijos. La escuela constituye un espacio privilegiado de instrucción y socialización, pero no puede ni debe sustituir el papel formativo primario que corresponde a la familia.",
+        "Desde una perspectiva antropológica y pedagógica, la educación no se limita a la transmisión de contenidos académicos. Implica, ante todo, la formación del carácter, la interiorización de valores y el desarrollo de hábitos intelectuales y morales. Estos procesos se inician en el hogar, donde los niños aprenden, a través del ejemplo cotidiano, actitudes como la responsabilidad, la perseverancia y el respeto. Cuando los padres asumen una presencia activa y coherente, generan un entorno emocionalmente seguro que favorece el aprendizaje significativo.",
+        "Sin embargo, diversos factores sociales han contribuido a una progresiva delegación de responsabilidades educativas en la institución escolar. Las exigencias laborales, la fragmentación del tiempo familiar y la creciente dependencia de dispositivos tecnológicos han reducido las oportunidades de interacción formativa en el hogar. En algunos casos, los progenitores conciben la educación como un servicio contratado, cuya eficacia se mide exclusivamente por resultados académicos visibles.",
+        "Esta concepción resulta problemática. Numerosas investigaciones en psicología educativa evidencian que el rendimiento escolar no depende únicamente de la calidad docente o de los recursos institucionales, sino también del clima familiar y de las expectativas parentales. La implicación activa de los padres —manifestada en el acompañamiento académico, la comunicación constante y el establecimiento de normas claras— se correlaciona con mayores niveles de motivación intrínseca y autorregulación en los estudiantes.",
+        "Conviene subrayar que la corresponsabilidad no implica interferencia constante ni control excesivo. Más bien, exige una colaboración equilibrada entre familia y escuela, basada en el diálogo y la coherencia normativa. Cuando las normas del hogar contradicen abiertamente las del centro educativo, el estudiante experimenta ambigüedad y debilitamiento de la autoridad pedagógica.",
+        "En definitiva, la responsabilidad parental en la educación no es opcional ni subsidiaria. Constituye un compromiso ético y social que trasciende el cumplimiento de obligaciones materiales. Reconocer la centralidad de la familia no significa desvalorizar el trabajo docente, sino comprender que la educación integral solo puede alcanzarse mediante una alianza sólida y consciente entre ambos ámbitos formativos."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "Según el texto, ¿qué aspecto se diluye con frecuencia en el debate educativo actual?",
+          "answers": [
+            "A) La evaluación estandarizada.",
+            "B) La innovación metodológica.",
+            "C) La responsabilidad de los padres.",
+            "D) El uso de tecnologías digitales."
+          ],
+          "correct_answer": "C",
+          "justification": "El primer párrafo indica explícitamente que se diluye la responsabilidad de los padres."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Dónde se inician principalmente la formación del carácter y la interiorización de valores?",
+          "answers": [
+            "A) En la universidad.",
+            "B) En el hogar.",
+            "C) En las redes sociales.",
+            "D) En los exámenes estandarizados."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto señala que la formación del carácter se inicia en el hogar."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué factores han reducido la interacción formativa en el hogar?",
+          "answers": [
+            "A) La disminución de recursos escolares.",
+            "B) Las exigencias laborales y la dependencia tecnológica.",
+            "C) La falta de formación docente.",
+            "D) La ausencia de reformas curriculares."
+          ],
+          "correct_answer": "B",
+          "justification": "Se mencionan las exigencias laborales y la dependencia tecnológica como factores determinantes."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el texto afirma que la educación no puede concebirse como un “servicio contratado” , se refiere a que:",
+          "answers": [
+            "A) Debe privatizarse completamente.",
+            "B) No puede reducirse a un intercambio económico por resultados académicos.",
+            "C) Debe ser responsabilidad exclusiva del Estado.",
+            "D) Debe eliminarse la participación de los padres."
+          ],
+          "correct_answer": "B",
+          "justification": "La expresión implica que la educación no debe reducirse a un simple pago por resultados."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué relación establece el texto entre clima familiar y rendimiento escolar?",
+          "answers": [
+            "A) No existe relación significativa.",
+            "B) El clima familiar influye directamente en el rendimiento.",
+            "C) El rendimiento depende solo del docente.",
+            "D) El clima familiar afecta únicamente la disciplina."
+          ],
+          "correct_answer": "B",
+          "justification": "Se establece que el clima familiar y las expectativas parentales influyen en el rendimiento escolar."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué se entiende por “corresponsabilidad” en el texto?",
+          "answers": [
+            "A) Que la familia controle todas las decisiones escolares.",
+            "B) Que la escuela asuma la educación moral.",
+            "C) Una colaboración equilibrada entre familia y escuela.",
+            "D) Que los estudiantes decidan su propia formación."
+          ],
+          "correct_answer": "C",
+          "justification": "La corresponsabilidad implica colaboración equilibrada y diálogo entre familia y escuela."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cuál es la finalidad principal del artículo?",
+          "answers": [
+            "A) Describir estadísticas educativas recientes.",
+            "B) Defender la importancia del papel parental en la educación.",
+            "C) Criticar el sistema de evaluación estandarizada.",
+            "D) Proponer una reforma tecnológica."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto tiene como propósito persuadir sobre la importancia del rol parental."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Critico",
+          "question": "Se puede inferir que la autora considera insuficiente que los padres:",
+          "answers": [
+            "A) Dialoguen con los docentes.",
+            "B) Se limiten a cumplir obligaciones materiales.",
+            "C) Establezcan normas claras en casa.",
+            "D) Participen en actividades escolares."
+          ],
+          "correct_answer": "B",
+          "justification": "Se infiere que limitarse a cumplir obligaciones materiales es insuficiente para una formación integral."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué consecuencia puede tener la contradicción entre normas del hogar y del centro educativo?",
+          "answers": [
+            "A) Mayor autonomía estudiantil.",
+            "B) Confusión y debilitamiento de la autoridad pedagógica.",
+            "C) Incremento inmediato del rendimiento.",
+            "D) Independencia emocional del estudiante."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto afirma que la contradicción normativa genera ambigüedad y debilitamiento de la autoridad."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "El tono predominante del texto puede describirse como:",
+          "answers": [
+            "A) Narrativo y anecdótico.",
+            "B) Satírico y humorístico.",
+            "C) Argumentativo y reflexivo.",
+            "D) Técnico y exclusivamente descriptivo."
+          ],
+          "correct_answer": "C",
+          "justification": "Predomina un tono argumentativo que busca persuadir mediante reflexión fundamentada. Referencia (APA 7ª edición) Valdivieso, C. (2021). La familia como núcleo insustituible en la formación educativa. Revista Iberoamericana de Educación y Sociedad, 15(2), 45–60."
+        }
+      ]
+    },
+    {
+      "typology": "Argumentativo",
+      "id": 6,
+      "type": "Textos argumentativos",
+      "title": "La responsabilidad formativa de los padres en la sociedad contemporánea",
+      "text": [
+        "Autor: José Antonio Marina",
+        "En los debates actuales sobre educación, resulta habitual señalar las deficiencias del sistema escolar, cuestionar los métodos pedagógicos o exigir reformas curriculares. Sin embargo, con menor frecuencia se examina con igual rigor la responsabilidad que compete a los padres en la formación de sus hijos. Reducir la educación a una tarea institucional implica desconocer su dimensión ética y relacional, que se gesta primordialmente en el ámbito familiar.",
+        "La familia no solo transmite normas básicas de convivencia, sino que configura la arquitectura emocional y moral del niño. Antes de que el estudiante enfrente exámenes, evaluaciones o estándares de rendimiento, ha interiorizado modelos de conducta, actitudes frente al esfuerzo y formas de gestionar la frustración. Estas disposiciones influyen decisivamente en su trayectoria académica. Por ello, la educación no puede concebirse como un servicio que se delega completamente en manos de profesionales, por competentes que estos sean.",
+        "En la sociedad contemporánea, marcada por la inmediatez y la hiperconectividad, muchos padres experimentan dificultades para ejercer una presencia formativa constante. Las largas jornadas laborales y la fragmentación del tiempo familiar limitan el acompañamiento cotidiano. No obstante, tales condicionantes no eliminan la responsabilidad parental; más bien, exigen una mayor conciencia sobre la calidad del tiempo compartido y la coherencia entre discurso y acción.",
+        "Diversas investigaciones en psicología educativa han evidenciado que las expectativas familiares influyen de manera significativa en el rendimiento y la motivación de los estudiantes. Cuando los padres valoran el esfuerzo, fomentan la autonomía responsable y establecen límites claros, contribuyen a desarrollar en sus hijos competencias que trascienden el ámbito académico. En contraste, la ausencia de normas o la delegación absoluta en la escuela puede generar desorientación y falta de compromiso.",
+        "Conviene subrayar que asumir la responsabilidad educativa no implica ejercer un control autoritario ni sustituir la labor docente. Se trata, más bien, de establecer una alianza coherente entre familia y escuela, basada en el respeto mutuo y en objetivos compartidos. La autoridad parental, entendida como guía razonada y ejemplo consistente, constituye un referente insustituible para el desarrollo integral del estudiante.",
+        "En definitiva, la educación es una tarea compartida que requiere corresponsabilidad. Pretender que la escuela resuelva por sí sola las carencias formativas del hogar resulta pedagógicamente inviable y socialmente injusto. Reconocer la función primordial de los padres no busca culpabilizar, sino recordar que la formación del carácter y del sentido ético comienza en el espacio más cercano y determinante: la familia."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "Según el texto, ¿dónde se gesta primordialmente la dimensión ética de la educación?",
+          "answers": [
+            "A) En el sistema escolar.",
+            "B) En el ámbito familiar.",
+            "C) En los medios de comunicación.",
+            "D) En las políticas estatales."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto afirma explícitamente que la dimensión ética se gesta primordialmente en el ámbito familiar."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué factores actuales dificultan la presencia formativa constante de los padres?",
+          "answers": [
+            "A) La falta de escuelas.",
+            "B) Las reformas curriculares.",
+            "C) Las largas jornadas laborales y la fragmentación del tiempo familiar.",
+            "D) El exceso de actividades deportivas."
+          ],
+          "correct_answer": "C",
+          "justification": "Se mencionan las largas jornadas laborales y la fragmentación del tiempo familiar como obstáculos."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué influye significativamente en el rendimiento y motivación del estudiante?",
+          "answers": [
+            "A) Las instalaciones escolares.",
+            "B) Las expectativas familiares.",
+            "C) La cantidad de exámenes.",
+            "D) La competencia entre compañeros."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto señala que las expectativas familiares influyen significativamente en el rendimiento y motivación."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el autor afirma que la educación no puede concebirse como un “servicio que se delega” , significa que:",
+          "answers": [
+            "A) La educación debe privatizarse.",
+            "B) No puede transferirse totalmente a la escuela.",
+            "C) Debe depender solo del Estado.",
+            "D) Es una tarea exclusiva de los docentes."
+          ],
+          "correct_answer": "B",
+          "justification": "“Delegar” implica transferir totalmente la responsabilidad, lo cual el autor considera inadecuado."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué papel atribuye el texto a la autoridad parental?",
+          "answers": [
+            "A) Un control autoritario constante.",
+            "B) Una guía razonada y ejemplo consistente.",
+            "C) Una supervisión ocasional de tareas.",
+            "D) Una función irrelevante frente a la escuela."
+          ],
+          "correct_answer": "B",
+          "justification": "La autoridad parental se define como guía razonada y ejemplo consistente, no como control autoritario."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué consecuencia puede tener la ausencia de normas familiares claras?",
+          "answers": [
+            "A) Mayor creatividad académica.",
+            "B) Desorientación y falta de compromiso.",
+            "C) Incremento automático del rendimiento.",
+            "D) Independencia total del estudiante."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto indica que la ausencia de normas puede generar desorientación y falta de compromiso."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Cuál es la intención comunicativa principal del ensayo?",
+          "answers": [
+            "A) Describir estadísticas educativas.",
+            "B) Narrar experiencias familiares.",
+            "C) Persuadir sobre la corresponsabilidad de los padres en la educación.",
+            "D) Criticar exclusivamente a la escuela."
+          ],
+          "correct_answer": "C",
+          "justification": "El propósito central es persuadir sobre la corresponsabilidad parental en la educación."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Critico",
+          "question": "Se puede inferir que el autor considera que la escuela es insuficiente cuando:",
+          "answers": [
+            "A) Carece de recursos tecnológicos.",
+            "B) Intenta sustituir completamente la función formativa del hogar.",
+            "C) Implementa nuevas metodologías.",
+            "D) Evalúa mediante exámenes estandarizados."
+          ],
+          "correct_answer": "B",
+          "justification": "Se infiere que la escuela resulta insuficiente si intenta sustituir completamente la función formativa del hogar."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué visión subyace respecto al concepto de corresponsabilidad?",
+          "answers": [
+            "A) Que la familia debe asumir toda la carga educativa.",
+            "B) Que la escuela debe actuar de manera independiente.",
+            "C) Que familia y escuela deben colaborar con objetivos comunes.",
+            "D) Que los estudiantes deben educarse solos."
+          ],
+          "correct_answer": "C",
+          "justification": "La corresponsabilidad implica colaboración y objetivos compartidos entre familia y escuela."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "El tono general del texto puede caracterizarse como:",
+          "answers": [
+            "A) Satírico y humorístico.",
+            "B) Argumentativo y reflexivo.",
+            "C) Narrativo y autobiográfico.",
+            "D) Técnico y neutral."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto presenta argumentos y reflexiones para convencer al lector. Referencia (APA 7ª edición) Marina, J. A. (2010). La educación del talento. Ariel."
+        }
+      ]
+    },
+    {
+      "typology": "Expositivo",
+      "id": 7,
+      "type": "Textos expositivos",
+      "title": "La economía de la atención en la era digital",
+      "text": [
+        "En la actualidad, uno de los recursos más valiosos no es el petróleo ni el oro, sino la atención humana. En el contexto digital, múltiples plataformas compiten de manera constante por captar y mantener el interés de los usuarios. Este fenómeno ha dado lugar a lo que diversos analistas denominan “economía de la atención” , un modelo en el que el tiempo que las personas dedican a consumir contenidos se convierte en el principal activo comercial.",
+        "Las redes sociales, las plataformas de streaming y los medios digitales diseñan sus interfaces con el objetivo de maximizar la permanencia del usuario. Para ello, emplean algoritmos capaces de analizar patrones de comportamiento y ofrecer contenidos personalizados. Cuanto mayor es la interacción —clics, comentarios, visualizaciones—, más datos se generan y más preciso se vuelve el sistema de recomendación. Este proceso, aparentemente eficiente, plantea interrogantes éticos sobre la manipulación de preferencias y la reducción de la diversidad informativa.",
+        "Uno de los efectos más visibles de esta dinámica es la fragmentación de la atención. La exposición constante a estímulos breves e inmediatos puede dificultar la concentración prolongada en tareas complejas. Algunos estudios sugieren que la multitarea digital no solo reduce la productividad, sino que también altera la manera en que procesamos la información. Sin embargo, otros investigadores advierten que no se trata de un deterioro cognitivo irreversible, sino de una adaptación a nuevos entornos comunicativos.",
+        "Desde el punto de vista económico, la atención se traduce en ingresos publicitarios. Las empresas invierten grandes cantidades de dinero para posicionar sus mensajes en espacios donde la visibilidad está garantizada. En este sentido, el usuario no es únicamente consumidor, sino también producto, ya que sus datos y hábitos de navegación adquieren un valor mercantil.",
+        "Ante este panorama, surgen propuestas orientadas a promover un consumo digital más consciente. Algunas iniciativas abogan por la regulación de los algoritmos y la transparencia en el uso de datos, mientras que otras enfatizan la educación mediática como herramienta fundamental para fortalecer el pensamiento crítico. En cualquier caso, comprender la lógica de la economía de la atención resulta imprescindible para desenvolverse de manera autónoma en el ecosistema digital contemporáneo."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "Según el texto, en la economía de la atención el recurso más valioso es:",
+          "answers": [
+            "A) La información científica.",
+            "B) El tiempo y la atención de los usuarios.",
+            "C) La infraestructura tecnológica.",
+            "D) La publicidad impresa."
+          ],
+          "correct_answer": "B",
+          "justification": "El primer párrafo indica explícitamente que la atención humana es el recurso más valioso en este modelo económico."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué utilizan las plataformas digitales para personalizar contenidos?",
+          "answers": [
+            "A) Encuestas presenciales.",
+            "B) Algoritmos que analizan patrones de comportamiento.",
+            "C) Supervisión gubernamental.",
+            "D) Editores humanos exclusivamente."
+          ],
+          "correct_answer": "B",
+          "justification": "Se menciona claramente el uso de algoritmos que analizan patrones de comportamiento."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "Desde el punto de vista económico, la atención se traduce principalmente en:",
+          "answers": [
+            "A) Beneficios académicos.",
+            "B) Reconocimiento social.",
+            "C) Ingresos publicitarios.",
+            "D) Desarrollo cognitivo."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto afirma que la atención “se traduce en ingresos publicitarios” ."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el texto afirma que el usuario también es “producto” , significa que:",
+          "answers": [
+            "A) Las plataformas venden dispositivos electrónicos.",
+            "B) Los usuarios pagan por usar internet.",
+            "C) Los datos y hábitos del usuario tienen valor comercial.",
+            "D) El usuario diseña la publicidad."
+          ],
+          "correct_answer": "C",
+          "justification": "El autor explica que los datos y hábitos del usuario adquieren valor mercantil; por ello, el usuario también se convierte en “producto” ."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "La “fragmentación de la atención” se relaciona con:",
+          "answers": [
+            "A) La imposibilidad de usar redes sociales.",
+            "B) La dificultad para mantener concentración prolongada.",
+            "C) El aumento del tiempo de lectura académica.",
+            "D) La reducción del acceso a internet."
+          ],
+          "correct_answer": "B",
+          "justification": "La fragmentación de la atención se describe como la dificultad para concentrarse en tareas prolongadas debido a estímulos constantes."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "El texto presenta dos posturas sobre los efectos cognitivos del entorno digital para mostrar que:",
+          "answers": [
+            "A) Existe consenso absoluto entre investigadores.",
+            "B) La tecnología provoca daños irreversibles.",
+            "C) Hay debate sobre si se trata de deterioro o adaptación.",
+            "D) La multitarea digital es siempre beneficiosa."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto expone dos perspectivas: deterioro cognitivo o adaptación, lo que evidencia debate académico."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Critico",
+          "question": "Se puede inferir que el autor adopta una postura:",
+          "answers": [
+            "A) Alarmista frente a la tecnología.",
+            "B) Crítica pero equilibrada.",
+            "C) Totalmente optimista.",
+            "D) Indiferente al impacto digital."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto presenta riesgos y oportunidades sin adoptar una postura extrema, lo que refleja equilibrio crítico."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Critico",
+          "question": "La necesidad de “educación mediática” implica que los usuarios deben:",
+          "answers": [
+            "A) Evitar completamente las redes sociales.",
+            "B) Aprender a analizar y gestionar críticamente el consumo digital.",
+            "C) Estudiar programación avanzada.",
+            "D) Reducir el uso de dispositivos electrónicos a cero."
+          ],
+          "correct_answer": "B",
+          "justification": "La educación mediática se plantea como herramienta para fortalecer el pensamiento crítico y la autonomía digital."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "La mención de la regulación de algoritmos sugiere que:",
+          "answers": [
+            "A) Los algoritmos son neutrales y transparentes.",
+            "B) No existe ningún control sobre las plataformas.",
+            "C) Puede haber implicaciones éticas en su funcionamiento.",
+            "D) La publicidad digital debe eliminarse."
+          ],
+          "correct_answer": "C",
+          "justification": "La referencia a interrogantes éticos y regulación implica posibles problemas en el funcionamiento de los algoritmos."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "El propósito principal del texto es:",
+          "answers": [
+            "A) Denunciar legalmente a las empresas tecnológicas.",
+            "B) Explicar el funcionamiento y las implicaciones de la economía de la atención.",
+            "C) Convencer al lector de abandonar internet.",
+            "D) Promover una red social específica."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto tiene carácter expositivo-analítico: explica el concepto y sus implicaciones sociales, económicas y éticas."
+        }
+      ]
+    },
+    {
+      "typology": "Expositivo",
+      "id": 8,
+      "type": "Textos expositivos",
+      "title": "La transición energética en Ecuador: desafíos y oportunidades",
+      "text": [
+        "En los últimos años, la transición energética se ha consolidado como un eje estratégico en la agenda pública de Ecuador. Tradicionalmente dependiente de la exportación de petróleo como fuente principal de ingresos, el país enfrenta el reto de diversificar su matriz energética sin comprometer su estabilidad económica. Este proceso implica no solo transformaciones tecnológicas, sino también decisiones políticas y sociales de gran alcance.",
+        "Ecuador cuenta con un potencial significativo en energías renovables, especialmente en el ámbito hidroeléctrico. Durante la última década, se han construido varias centrales destinadas a reducir la dependencia de combustibles fósiles y a garantizar el suministro eléctrico nacional. Sin embargo, la generación hidroeléctrica no está exenta de controversias, ya que puede producir impactos ambientales y sociales, como la alteración de ecosistemas y el desplazamiento de comunidades.",
+        "Más recientemente, ha cobrado fuerza el interés por fuentes alternativas como la energía solar y eólica, particularmente en regiones con alta radiación y corrientes de viento constantes. A pesar de sus ventajas ambientales, la implementación de estos proyectos requiere inversión extranjera, marcos regulatorios estables y planificación a largo plazo. La incertidumbre política y económica puede dificultar la consolidación de estas iniciativas.",
+        "Otro elemento central del debate es la tensión entre la explotación petrolera y la conservación ambiental. Casos como la protección de zonas biodiversas han puesto de relieve la complejidad de equilibrar desarrollo económico y sostenibilidad. En este contexto, la ciudadanía desempeña un papel cada vez más activo, exigiendo mayor transparencia y participación en la toma de decisiones relacionadas con recursos naturales.",
+        "En definitiva, la transición energética en Ecuador no se limita a sustituir una fuente de energía por otra. Se trata de un proceso estructural que redefine el modelo de desarrollo del país. Su éxito dependerá de la capacidad de articular políticas coherentes, atraer inversión responsable y fomentar una cultura de sostenibilidad que trascienda coyunturas gubernamentales."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "Según el texto, Ecuador ha dependido tradicionalmente de:",
+          "answers": [
+            "A) La exportación de banano.",
+            "B) La minería metálica.",
+            "C) La exportación de petróleo.",
+            "D) El turismo internacional."
+          ],
+          "correct_answer": "C",
+          "justification": "El primer párrafo indica explícitamente que Ecuador ha dependido de la exportación de petróleo."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "Una de las principales fuentes renovables mencionadas en el texto es:",
+          "answers": [
+            "A) Energía nuclear.",
+            "B) Energía hidroeléctrica.",
+            "C) Gas natural.",
+            "D) Carbón mineral."
+          ],
+          "correct_answer": "B",
+          "justification": "Se menciona claramente el potencial hidroeléctrico del país."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué fuentes alternativas recientes se mencionan?",
+          "answers": [
+            "A) Biomasa y energía térmica.",
+            "B) Energía mareomotriz exclusivamente.",
+            "C) Energía solar y eólica.",
+            "D) Hidrógeno verde únicamente."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto señala el interés reciente por la energía solar y eólica."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el texto señala que la generación hidroeléctrica “no está exenta de controversias” , significa que:",
+          "answers": [
+            "A) Es completamente rechazada por la población.",
+            "B) Presenta también impactos ambientales y sociales.",
+            "C) No produce suficiente energía.",
+            "D) Es ilegal en Ecuador."
+          ],
+          "correct_answer": "B",
+          "justification": "La expresión indica que, aunque es renovable, puede generar impactos ambientales y sociales."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "La consolidación de proyectos solares y eólicos depende de:",
+          "answers": [
+            "A) La reducción del consumo doméstico.",
+            "B) La eliminación del petróleo inmediatamente.",
+            "C) Inversión, estabilidad regulatoria y planificación.",
+            "D) Decisiones individuales de los ciudadanos."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto especifica que se requiere inversión extranjera, marcos regulatorios estables y planificación a largo plazo."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "El texto afirma que la transición energética redefine el modelo de desarrollo porque:",
+          "answers": [
+            "A) Implica cambios estructurales más allá del ámbito técnico.",
+            "B) Sustituye únicamente las centrales eléctricas antiguas.",
+            "C) Afecta solo al sector energético.",
+            "D) Reduce el número de exportaciones."
+          ],
+          "correct_answer": "A",
+          "justification": "Se explica que la transición energética es un proceso estructural que redefine el modelo de desarrollo, lo cual va más allá del ámbito técnico."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Critico",
+          "question": "Se puede inferir que el autor considera la transición energética como:",
+          "answers": [
+            "A) Un proceso simple y rápido.",
+            "B) Un desafío complejo con múltiples dimensiones.",
+            "C) Una estrategia innecesaria.",
+            "D) Una decisión exclusivamente técnica."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto presenta dimensiones económicas, políticas, sociales y ambientales, lo que evidencia complejidad."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Critico",
+          "question": "La mención de la participación ciudadana sugiere que:",
+          "answers": [
+            "A) La población no confía en ninguna política pública.",
+            "B) Existe mayor demanda de transparencia en decisiones ambientales.",
+            "C) Los proyectos energéticos son secretos.",
+            "D) La ciudadanía controla directamente las centrales eléctricas."
+          ],
+          "correct_answer": "B",
+          "justification": "La participación ciudadana se vincula con la exigencia de transparencia y toma de decisiones responsables."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "La referencia a la “incertidumbre política y económica” implica que:",
+          "answers": [
+            "A) El contexto nacional puede afectar la inversión en energías renovables.",
+            "B) Las energías renovables no son viables técnicamente.",
+            "C) El petróleo desaparecerá pronto.",
+            "D) No existen regulaciones energéticas."
+          ],
+          "correct_answer": "A",
+          "justification": "La incertidumbre política y económica puede dificultar la consolidación de proyectos renovables, especialmente en términos de inversión."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "El propósito principal del texto es:",
+          "answers": [
+            "A) Criticar exclusivamente la explotación petrolera.",
+            "B) Describir de manera analítica los retos y oportunidades de la transición energética en Ecuador.",
+            "C) Promover un partido político específico.",
+            "D) Convencer al lector de invertir en energía solar."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto es expositivo-analítico y presenta de forma equilibrada desafíos y oportunidades sin adoptar una postura partidista."
+        }
+      ]
+    },
+    {
+      "typology": "Expositivo",
+      "id": 9,
+      "type": "Textos expositivos",
+      "title": "La transformación de los hábitos alimentarios en el siglo XXI",
+      "text": [
+        "En las últimas décadas, los hábitos alimentarios han experimentado una transformación profunda como consecuencia de cambios sociales, económicos y tecnológicos. La globalización ha facilitado el acceso a productos procedentes de diversas regiones del mundo, mientras que la industrialización ha permitido la producción masiva de alimentos procesados. Este nuevo escenario ha modificado no solo lo que comemos, sino también la manera en que nos relacionamos con la comida.",
+        "Uno de los fenómenos más relevantes es el aumento del consumo de productos ultraprocesados. Estos alimentos, caracterizados por su alto contenido en azúcares, grasas y aditivos, ofrecen practicidad y larga duración, pero suelen presentar un bajo valor nutricional. Diversas investigaciones han asociado su consumo excesivo con el incremento de enfermedades crónicas como la obesidad y la diabetes tipo 2. Sin embargo, su popularidad continúa en ascenso debido a su bajo costo y fácil disponibilidad.",
+        "Paralelamente, ha surgido un movimiento que promueve una alimentación más consciente y sostenible. Conceptos como “kilómetro cero” , agricultura ecológica y dietas basadas en plantas han ganado visibilidad en el debate público. Estas tendencias no solo buscan mejorar la salud individual, sino también reducir el impacto ambiental del sistema alimentario, responsable de una parte significativa de las emisiones de gases de efecto invernadero.",
+        "Otro factor determinante es la influencia de los medios digitales en la construcción de patrones alimentarios. Las redes sociales difunden modelos estéticos y dietas de moda que, en ocasiones, carecen de respaldo científico. Esta exposición constante puede generar percepciones distorsionadas sobre el cuerpo y la nutrición, especialmente entre los jóvenes.",
+        "En definitiva, la alimentación contemporánea se sitúa en la intersección entre salud, economía, cultura y medio ambiente. Comprender esta complejidad resulta fundamental para adoptar decisiones informadas que equilibren bienestar personal y sostenibilidad colectiva."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "Según el texto, la globalización ha facilitado:",
+          "answers": [
+            "A) La reducción del consumo alimentario.",
+            "B) El acceso a productos de distintas regiones del mundo.",
+            "C) La eliminación de alimentos procesados.",
+            "D) El aumento de la agricultura tradicional exclusivamente."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto indica explícitamente que la globalización facilita el acceso a productos de distintas regiones."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "Los alimentos ultraprocesados se caracterizan por:",
+          "answers": [
+            "A) Su alto valor nutricional.",
+            "B) Su producción artesanal.",
+            "C) Su contenido elevado de azúcares, grasas y aditivos.",
+            "D) Su impacto ambiental reducido."
+          ],
+          "correct_answer": "C",
+          "justification": "Se menciona claramente su alto contenido en azúcares, grasas y aditivos."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué enfermedades se mencionan como asociadas al consumo excesivo de ultraprocesados?",
+          "answers": [
+            "A) Gripe y alergias.",
+            "B) Obesidad y diabetes tipo 2.",
+            "C) Anemia y osteoporosis.",
+            "D) Hipertensión exclusivamente."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto señala específicamente la obesidad y la diabetes tipo 2."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el texto afirma que los ultraprocesados ofrecen “practicidad y larga duración” , implica que:",
+          "answers": [
+            "A) Son más saludables.",
+            "B) Son fáciles de consumir y conservar.",
+            "C) Son más costosos.",
+            "D) Son difíciles de encontrar."
+          ],
+          "correct_answer": "B",
+          "justification": "“Practicidad y larga duración” implica facilidad de consumo y conservación prolongada."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "El movimiento de alimentación sostenible busca:",
+          "answers": [
+            "A) Incrementar la producción industrial.",
+            "B) Reducir el impacto ambiental y mejorar la salud.",
+            "C) Sustituir todas las dietas tradicionales.",
+            "D) Promover únicamente dietas vegetarianas estrictas."
+          ],
+          "correct_answer": "B",
+          "justification": "El movimiento sostenible busca tanto beneficios para la salud como reducción del impacto ambiental."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "La influencia de las redes sociales puede resultar problemática porque:",
+          "answers": [
+            "A) Promueven exclusivamente hábitos saludables.",
+            "B) Eliminan la publicidad alimentaria.",
+            "C) Difunden dietas que a veces no tienen respaldo científico.",
+            "D) Prohíben el consumo de carne."
+          ],
+          "correct_answer": "C",
+          "justification": "Se menciona que algunas dietas difundidas en redes carecen de respaldo científico."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Critico",
+          "question": "Se puede inferir que el autor considera que los cambios en la alimentación actual son:",
+          "answers": [
+            "A) Exclusivamente positivos.",
+            "B) Totalmente negativos.",
+            "C) Complejos y con múltiples implicaciones.",
+            "D) Irrelevantes para la sociedad."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto presenta ventajas, riesgos, factores sociales y ambientales, mostrando complejidad."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Critico",
+          "question": "La popularidad de los ultraprocesados, pese a sus riesgos, sugiere que:",
+          "answers": [
+            "A) La población desconoce completamente sus efectos.",
+            "B) Factores económicos y de disponibilidad influyen en las decisiones alimentarias.",
+            "C) Los gobiernos obligan a consumirlos.",
+            "D) Son indispensables para la nutrición."
+          ],
+          "correct_answer": "B",
+          "justification": "Se menciona su bajo costo y disponibilidad, lo que permite inferir la influencia de factores económicos."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "La expresión “intersección entre salud, economía, cultura y medio ambiente” indica que:",
+          "answers": [
+            "A) La alimentación es un fenómeno multidimensional.",
+            "B) La comida solo afecta a la salud.",
+            "C) El sistema alimentario es estable y uniforme.",
+            "D) La economía no influye en la dieta."
+          ],
+          "correct_answer": "A",
+          "justification": "La expresión indica que la alimentación involucra múltiples dimensiones sociales y estructurales."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "El propósito principal del texto es:",
+          "answers": [
+            "A) Criticar las redes sociales.",
+            "B) Promover una dieta específica.",
+            "C) Explicar los factores que influyen en la transformación de los hábitos alimentarios actuales.",
+            "D) Prohibir el consumo de alimentos procesados."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto tiene carácter expositivo y analiza los diversos factores que explican los cambios en los hábitos alimentarios."
+        }
+      ]
+    },
+    {
+      "typology": "Expositivo",
+      "id": 10,
+      "type": "Textos expositivos",
+      "title": "La nueva era espacial: cooperación, competencia y comercialización",
+      "text": [
+        "La exploración espacial ha experimentado una transformación sustancial en el siglo XXI. A diferencia de la llamada “carrera espacial” del siglo XX, marcada por la rivalidad geopolítica entre superpotencias, la etapa actual se caracteriza por la coexistencia de cooperación internacional y competencia comercial. Este nuevo escenario ha dado lugar a lo que algunos analistas denominan la “nueva era espacial” , en la que participan tanto agencias gubernamentales como empresas privadas.",
+        "Las agencias tradicionales continúan desempeñando un papel central en la investigación científica y en las misiones de exploración planetaria. Sin embargo, el protagonismo creciente del sector privado ha modificado la dinámica del acceso al espacio. Empresas aeroespaciales han desarrollado tecnologías reutilizables que reducen significativamente los costos de lanzamiento, lo que ha ampliado las posibilidades de enviar satélites, suministros e incluso tripulación a la órbita terrestre.",
+        "Uno de los ámbitos donde esta transformación resulta más evidente es el despliegue masivo de satélites para telecomunicaciones y observación terrestre. Estas constelaciones permiten mejorar la conectividad global y recopilar datos fundamentales para el monitoreo climático, la gestión de recursos naturales y la prevención de desastres. No obstante, también han surgido preocupaciones relacionadas con la proliferación de desechos espaciales y la saturación de la órbita baja.",
+        "Paralelamente, varios países han anunciado programas para regresar a la Luna e, incluso, proyectar futuras misiones tripuladas a Marte. Más allá de su dimensión simbólica, estos proyectos persiguen objetivos científicos, estratégicos y económicos. La posibilidad de explotar recursos minerales extraterrestres, aunque todavía incipiente, plantea interrogantes jurídicos sobre la propiedad y regulación del espacio exterior.",
+        "En este contexto, la gobernanza espacial se convierte en un asunto prioritario. Los tratados internacionales vigentes fueron concebidos en un escenario muy distinto al actual y no siempre contemplan la participación intensiva de actores privados. Por ello, la comunidad internacional debate la necesidad de actualizar los marcos normativos para garantizar un uso sostenible, pacífico y equitativo del espacio.",
+        "En suma, la nueva era espacial no solo amplía las fronteras tecnológicas, sino que redefine las relaciones económicas y políticas más allá de la atmósfera terrestre. Comprender sus implicaciones resulta esencial para anticipar los desafíos de un futuro cada vez más interconectado y dependiente de la infraestructura espacial."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "La nueva era espacial se diferencia de la del siglo XX porque:",
+          "answers": [
+            "A) Ha eliminado la competencia entre países.",
+            "B) Combina cooperación internacional y competencia comercial.",
+            "C) Se limita a misiones científicas.",
+            "D) Excluye la participación de empresas privadas."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto explica que la etapa actual combina cooperación internacional y competencia comercial, a diferencia de la rivalidad exclusiva del siglo XX."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué avance tecnológico ha permitido reducir los costos de lanzamiento?",
+          "answers": [
+            "A) La minería lunar.",
+            "B) Los tratados internacionales.",
+            "C) Las tecnologías reutilizables.",
+            "D) La exploración de Marte."
+          ],
+          "correct_answer": "C",
+          "justification": "Se menciona explícitamente el desarrollo de tecnologías reutilizables que reducen los costos."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Para qué sirven las constelaciones de satélites mencionadas en el texto?",
+          "answers": [
+            "A) Únicamente para fines militares.",
+            "B) Para mejorar la conectividad y recopilar datos.",
+            "C) Para reemplazar internet terrestre.",
+            "D) Para eliminar la basura espacial."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto indica que las constelaciones mejoran la conectividad y permiten recopilar datos para diversos fines."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el texto señala que la explotación de recursos minerales es “todavía incipiente” , significa que:",
+          "answers": [
+            "A) Está completamente prohibida.",
+            "B) Se encuentra en una etapa inicial de desarrollo.",
+            "C) Es una práctica común.",
+            "D) Ya genera grandes beneficios económicos."
+          ],
+          "correct_answer": "B",
+          "justification": "“Incipiente” significa que se encuentra en una fase inicial o poco desarrollada."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "La preocupación por la saturación de la órbita baja se relaciona con:",
+          "answers": [
+            "A) El aumento del turismo espacial.",
+            "B) La proliferación de desechos espaciales.",
+            "C) La disminución de lanzamientos.",
+            "D) La falta de interés científico."
+          ],
+          "correct_answer": "B",
+          "justification": "La saturación orbital se relaciona con la acumulación de desechos espaciales."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "El texto indica que los tratados internacionales actuales:",
+          "answers": [
+            "A) Son completamente adecuados al contexto actual.",
+            "B) No contemplan plenamente la participación intensiva de actores privados.",
+            "C) Prohíben la cooperación internacional.",
+            "D) Han eliminado los conflictos espaciales."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto señala que los tratados fueron concebidos en otro contexto y no siempre contemplan la intensa participación privada actual."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Critico",
+          "question": "Se puede inferir que el autor considera la nueva era espacial como:",
+          "answers": [
+            "A) Un fenómeno exclusivamente tecnológico.",
+            "B) Un proceso con implicaciones tecnológicas, económicas y políticas.",
+            "C) Una amenaza inevitable para la humanidad.",
+            "D) Un proyecto limitado a países desarrollados."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto aborda dimensiones tecnológicas, económicas, políticas y jurídicas, lo que evidencia complejidad multidimensional."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Critico",
+          "question": "La necesidad de actualizar los marcos normativos sugiere que:",
+          "answers": [
+            "A) El espacio exterior carece de regulación alguna.",
+            "B) Las normas actuales pueden resultar insuficientes ante los cambios recientes.",
+            "C) Los tratados impiden toda actividad privada.",
+            "D) La gobernanza espacial es innecesaria."
+          ],
+          "correct_answer": "B",
+          "justification": "La mención del debate sobre actualización normativa implica que los marcos actuales pueden resultar insuficientes."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "La referencia a la “gobernanza espacial” implica:",
+          "answers": [
+            "A) La gestión coordinada y regulada de actividades en el espacio.",
+            "B) El control exclusivo de una potencia mundial.",
+            "C) La privatización total del espacio exterior.",
+            "D) La eliminación de acuerdos multilaterales."
+          ],
+          "correct_answer": "A",
+          "justification": "“Gobernanza espacial” sugiere regulación y coordinación internacional para el uso sostenible del espacio."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "El propósito principal del texto es:",
+          "answers": [
+            "A) Promover el turismo espacial.",
+            "B) Criticar la exploración de Marte.",
+            "C) Explicar las características y desafíos de la nueva era espacial.",
+            "D) Defender la explotación inmediata de recursos lunares."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto tiene carácter expositivo-analítico y presenta las principales características y desafíos de la nueva era espacial. Si lo desea, puedo ahora: • Elevar la dificultad de los distractores para ajusta"
+        }
+      ]
+    }
+  ]
+}

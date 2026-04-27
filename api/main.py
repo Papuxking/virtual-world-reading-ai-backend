@@ -1,26 +1,31 @@
 """
 main.py — API REST de lecturas para el mundo virtual educativo
-Endpoints CRUD con búsqueda full-text, paginación y filtrado por tipología.
+Endpoints CRUD con búsqueda full-text, paginación, filtrado por tipología,
+y consulta de preguntas/respuestas por nivel de comprensión.
 """
 import math
+from typing import List
 from fastapi import FastAPI, Depends, HTTPException, Query
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func as sqlfunc, text
 
 from database import get_db
-from models import Reading
+from models import Reading, Question, Answer
 from schemas import (
     ReadingCreate,
     ReadingUpdate,
     ReadingResponse,
+    ReadingFullResponse,
+    QuestionResponse,
     PaginatedReadings,
     VALID_TYPOLOGIES,
+    VALID_COMPREHENSION_LEVELS,
 )
 
 app = FastAPI(
     title="Virtual World Reading API",
     description="API para gestionar lecturas del mundo virtual educativo en Godot",
-    version="1.0.0",
+    version="1.1.0",
 )
 
 
@@ -55,14 +60,52 @@ def list_typologies(db: Session = Depends(get_db)):
     }
 
 
-# ── Lectura aleatoria (DEBE ir antes de /readings/{id}) ─────────────────────
+# ── Lectura aleatoria COMPLETA (DEBE ir antes de /readings/{id}) ────────────
+
+@app.get("/readings/random/full", response_model=ReadingFullResponse, tags=["Lecturas"])
+def get_random_reading_full(
+    typology: str | None = Query(None, description="Filtrar por tipología"),
+    db: Session = Depends(get_db),
+):
+    """
+    Retorna una lectura aleatoria **con todas sus preguntas y respuestas**.
+    Ideal para caché local en el cliente Godot.
+    """
+    if typology and typology not in VALID_TYPOLOGIES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Tipología inválida. Opciones: {VALID_TYPOLOGIES}",
+        )
+    query = (
+        db.query(Reading)
+        .options(
+            joinedload(Reading.questions).joinedload(Question.answers)
+        )
+    )
+    if typology:
+        query = query.filter(Reading.typology == typology)
+    # random() con eager loading requiere subquery para evitar duplicados
+    reading_ids = db.query(Reading.id)
+    if typology:
+        reading_ids = reading_ids.filter(Reading.typology == typology)
+    random_id_row = reading_ids.order_by(sqlfunc.random()).first()
+    if not random_id_row:
+        raise HTTPException(status_code=404, detail="No se encontraron lecturas")
+    reading = (
+        db.query(Reading)
+        .options(joinedload(Reading.questions).joinedload(Question.answers))
+        .filter(Reading.id == random_id_row[0])
+        .first()
+    )
+    return reading
+
 
 @app.get("/readings/random", response_model=ReadingResponse, tags=["Lecturas"])
 def get_random_reading(
     typology: str | None = Query(None, description="Filtrar por tipología"),
     db: Session = Depends(get_db),
 ):
-    """Retorna una lectura aleatoria, opcionalmente filtrada por tipología."""
+    """Retorna una lectura aleatoria (sin preguntas), opcionalmente filtrada por tipología."""
     if typology and typology not in VALID_TYPOLOGIES:
         raise HTTPException(
             status_code=400,
@@ -141,9 +184,62 @@ def list_readings(
     )
 
 
+# ── Lectura completa con preguntas ───────────────────────────────────────────
+
+@app.get("/readings/{reading_id}/full", response_model=ReadingFullResponse, tags=["Lecturas"])
+def get_reading_full(reading_id: int, db: Session = Depends(get_db)):
+    """
+    Obtiene una lectura con todas sus preguntas y respuestas.
+    Incluye correct_answer y justification para validación en caché local.
+    """
+    reading = (
+        db.query(Reading)
+        .options(joinedload(Reading.questions).joinedload(Question.answers))
+        .filter(Reading.id == reading_id)
+        .first()
+    )
+    if not reading:
+        raise HTTPException(status_code=404, detail="Lectura no encontrada")
+    return reading
+
+
+@app.get("/readings/{reading_id}/questions", response_model=List[QuestionResponse], tags=["Preguntas"])
+def get_reading_questions(
+    reading_id: int,
+    level: str | None = Query(None, description="Filtrar por nivel: Literal, Inferencial, Critico"),
+    db: Session = Depends(get_db),
+):
+    """
+    Obtiene las preguntas de una lectura, opcionalmente filtradas por nivel de comprensión.
+    """
+    # Verificar que la lectura exista
+    reading = db.query(Reading).filter(Reading.id == reading_id).first()
+    if not reading:
+        raise HTTPException(status_code=404, detail="Lectura no encontrada")
+
+    if level and level not in VALID_COMPREHENSION_LEVELS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Nivel inválido. Opciones: {VALID_COMPREHENSION_LEVELS}",
+        )
+
+    query = (
+        db.query(Question)
+        .options(joinedload(Question.answers))
+        .filter(Question.reading_id == reading_id)
+    )
+    if level:
+        query = query.filter(Question.comprehension_level == level)
+
+    questions = query.order_by(Question.question_number).all()
+    return questions
+
+
+# ── Lectura por ID (sin preguntas — retrocompatible) ─────────────────────────
+
 @app.get("/readings/{reading_id}", response_model=ReadingResponse, tags=["Lecturas"])
 def get_reading(reading_id: int, db: Session = Depends(get_db)):
-    """Obtiene una lectura por su ID."""
+    """Obtiene una lectura por su ID (sin preguntas)."""
     reading = db.query(Reading).filter(Reading.id == reading_id).first()
     if not reading:
         raise HTTPException(status_code=404, detail="Lectura no encontrada")
@@ -158,7 +254,12 @@ def create_reading(data: ReadingCreate, db: Session = Depends(get_db)):
             status_code=400,
             detail=f"Tipología inválida. Opciones: {VALID_TYPOLOGIES}",
         )
-    reading = Reading(title=data.title, typology=data.typology, content=data.content)
+    reading = Reading(
+        title=data.title,
+        typology=data.typology,
+        type=data.type,
+        content=data.content,
+    )
     db.add(reading)
     db.commit()
     db.refresh(reading)
@@ -186,7 +287,7 @@ def update_reading(reading_id: int, data: ReadingUpdate, db: Session = Depends(g
 
 @app.delete("/readings/{reading_id}", tags=["Lecturas"])
 def delete_reading(reading_id: int, db: Session = Depends(get_db)):
-    """Elimina una lectura por su ID."""
+    """Elimina una lectura por su ID (CASCADE elimina preguntas y respuestas)."""
     reading = db.query(Reading).filter(Reading.id == reading_id).first()
     if not reading:
         raise HTTPException(status_code=404, detail="Lectura no encontrada")
