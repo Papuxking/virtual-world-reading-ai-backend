@@ -1,0 +1,1500 @@
+{
+  "readings": [
+    {
+      "title": "U.S.A. que te usa",
+      "typology": "Narrativo",
+      "type": null,
+      "text": [
+        "U.S.A. que te usa Volar, no saber de ti ya nunca, pequeño paisito polvoroso, olvidar tu nombre, tu camino y tu idioma, toda la vida dormida que he pasado evaporándome entre tus árboles, confundiéndome en el sopor del vegetal. Me voy, abandono la novia querida que me cambió por un capitancito, la madre a quién hay que alimentar su placer de sufrir, el trabajo en el que pasaba las ocho horas fumando el no hacer nada, la puta tristeza de las seis de la tarde que carcome tu pensami ento, tu sentimiento, tu descontento Manuel, sin nada que te sostenga o te defina, te atrape o te suelte, te obligue a rendirte o combatir. Volar, irse, partir mañana Manuel, hoy, a Estados Unidos, a Chicago donde la tía Raquel, la gorda cenicienta que escribe a mamá para contarle cuánto gana, para hablar de su marido gringo y para mandarle fotos en la que aparece fumando y tomando wisky cerca de un perro verde y un arbo lito de navidad plateado, volar donde ella, la valiente que se fue sola y ahora triunfa, volar donde ella, refugiarse en sus alas, pero solo unos días querido sobrinito porque tú entenderás este país es otra cosa, aquí cada cual vive su propia vida (su propia muerte), unos días, conoces el ambiente, te busco un trabajo y luego te instalas y empiezas tu propia, tu verdadera vida querido sobrinito, mi verdadera vida, la mía propia, no la de mamá, ni la del jefe, ni la de la novia n o hagas esto, no me hagas sufrir tanto, maldita sea, mi propia vida, mi única flaca y asquerosa vida. Pérez Torres, R. (2004). Cuentos escogidos . Libresa"
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿A qué ciudad de Estados Unidos planea viajar Manuel?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Nueva York",
+            "B) Miami",
+            "C) Chicago",
+            "D) Los Ángeles"
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué sentimiento predomina en Manuel al abandonar su país natal?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Alegría inmensa por el éxito de su tía Raquel.",
+            "B) Tristeza, frustración y deseo desesperado de escapar de su estancamiento personal.",
+            "C) Indiferencia absoluta hacia su familia y costumbres.",
+            "D) Miedo a fracasar en su trabajo como escritor."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué simboliza la \"verdadera vida\" a la que aspira el protagonista al final del fragmento?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Conseguir el antiguo puesto de su jefe.",
+            "B) Encontrar un árbol plateado de Navidad.",
+            "C) La búsqueda de su identidad propia y libertad, al margen de las expectativas y fracasos de su entorno.",
+            "D) El deseo de ganar mucho dinero para presumir en su país."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Qué familiar de Manuel vive en Chicago y le escribe a su madre sobre sus éxitos?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Su novia",
+            "B) Su tía Raquel",
+            "C) Su abuela",
+            "D) Su hermana"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué la tía Raquel le dice a Manuel que solo podrá quedarse «unos días»?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque su casa es muy pequeña.",
+            "B) Porque en ese país cada cual debe vivir su propia vida y valerse por sí mismo.",
+            "C) Porque no le agrada su sobrino.",
+            "D) Porque su marido gringo no acepta visitas."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué crítica social se puede inferir sobre la visión idealizada de la migración en el texto?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Que el extranjero es un paraíso donde todos triunfan sin esfuerzo.",
+            "B) Que el éxito migratorio muchas veces esconde individualismo y soledad.",
+            "C) Que las familias siempre apoyan económicamente a sus parientes en el exterior.",
+            "D) Que el trabajo en el país natal es más duro que en Estados Unidos."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Madame Bovary",
+      "typology": "Narrativo",
+      "type": null,
+      "text": [
+        "Madame Bovary A la mañana siguiente, cuando se despertó, vio al pasante del notario que estaba en la plaza. Ella estaba en peinador. León alzó la cabeza hacia su ventana y la saludó. Emma contestó con una inclinación rápida de cabeza y cerró la ventana. León se pasó todo el día esperando que dieran las seis. Pero cuando entró en la fonda no se encontró más que con Binet, sentado a su mesa. La cena de la noche anterior había supuesto para él un acontecimiento de considerable importancia. Hasta entonces nunca en su vida había estado hablando dos horas seguidas con una “dama”. ¿Cómo, pues, había sido capaz de expresar, con un lenguaje como el q ue usó, todas aquellas cosas que antes nunca hubiera podido decir tan bien? Generalmente era tímido y reservado con una reserva mezcla de pudor y disimulo. En Yonville era bien considerado, decían que tenía buenos modales. Gustaba de escuchar a la gente de  edad y no daba muestras de tener opiniones políticas exaltadas, cosa que en un joven llamaba la atención. Y luego tenía varias habilidades: pintaba acuarelas, sabía leer la clave de sol y después de cenar, cuando no jugaba a las cartas, se entregaba de mu y buen grado a la literatura. Monsieur Homais lo apreciaba por su instrucción y su mujer le había cogido cariño por la buena disposición de su carácter, ya que muchas veces acompañaba al jardín a los niños del matrimonio, unos chavales siempre sucios, bast ante mal educados y un poco linfáticos, en lo cual salían a su madre. Además de la criada de la casa, se encargaba de su cuidado Justin, el mancebo de la botica, un pariente pobre de Homais, a quien habían recogido por caridad y que ayudaba también en las tareas domésticas. Flaubert, G. (2004). Madame Bovary . Libresa"
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿Con quién se encontró León en la fonda al ir a cenar?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Monsieur Homais",
+            "B) Binet",
+            "C) Justin",
+            "D) Madame Bovary"
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué impresión interna causó en León la conversación de dos horas que tuvo la noche anterior con la dama?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Le provocó indiferencia y lo hizo volver a sus acuarelas.",
+            "B) Le generó un gran impacto y asombro al descubrir que podía expresarse y dialogar mucho mejor de lo que creía.",
+            "C) Lo hizo sentir avergonzado por su timidez extrema.",
+            "D) Le hizo desear estudiar más música."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "Según la descripción que hace el autor, ¿cómo se percibe el carácter de León en la sociedad de Yonville?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Como un joven rebelde, peligroso y políticamente exaltado.",
+            "B) Como un charlatán interesado únicamente en escalar de clase.",
+            "C) Como un joven educado, respetuoso, algo tímido y dotado de aficiones refinadas.",
+            "D) Como un campesino tosco y sin habilidades."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿De qué tareas se encargaba Justin, además del cuidado de los niños?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) De pintar acuarelas",
+            "B) De la contabilidad del notario",
+            "C) De ayudar en las tareas domésticas y la botica",
+            "D) De enseñar música"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué sugiere la mención a que los hijos del matrimonio Homais salían «un poco linfáticos» a su madre?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Que heredaron el talento musical de su madre.",
+            "B) Que tenían una constitución débil y un carácter similar al de ella.",
+            "C) Que eran deportistas y llenos de energía.",
+            "D) Que eran hijos adoptados."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué revela la actitud de León sobre los estereotipos de la época?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Que los hombres debían ser toscos para ser respetados.",
+            "B) Que la sensibilidad y el gusto literario eran vistos como cualidades peculiares pero bien consideradas.",
+            "C) Que a los jóvenes se les prohibía leer literatura.",
+            "D) Que la política exaltada era requisito social."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cuando los guayacanes florecían",
+      "typology": "Narrativo",
+      "type": null,
+      "text": [
+        "FLORECIAN Habían caído las primeras lluvias. Empezaba a compactarse la tierra que había estado agrietada por los sofocantes soles del verano. En las calles se levantaba el monte lleno de una verde alegría. En las huertas silbaban las chicharras, puntuales, a las seis de la mañana y a las seis de la tarde. Subían, a veces, las víboras hasta las casas, y por las noches se escuchaban los gritos de las mujeres y de los niños aterrorizados, cuando las encontraban en las ventanas, en las hamacas, en las esquinas de los cuartos o entre los maceteros de las flores. Se bañaban los chiquillos en la ducha libre del cielo, y corrían por las calles con sus cuerpos salpicados de lodo, gozosos bajo la lluvia. Después se amontonaban en las bocacalles, a jugar con barquichuelos de papel en las cunetas. Por debajo de los portales, las aguas metían sus brazos cariñosos y sacaban, como para poner en exhibición el desaseo de los moradores, cáscaras de huevos, trapos y papeles viejos, cucarachas y virutas de madera. Cuando cesaba la lluvia, los niños se colocaban en cuclillas en las calles para sacar los “coco -chiles”, arrancando unas yerbas menudas. Cuando se habían comido los frutos, —siempre mezclados con lodo — arrojaban lejos las plantitas. Empezaban los ríos a crecer. Bajaban matas de plátanos, arrancadas de raíz por la furia de las crecientes, entremezcladas con guadúas, yarumos, higuerones, matas de caña de azúcar, restos de árboles enve jecidos y árboles verdes  hacia el mar que estaba poniéndose furioso. Estupiñán Bass, N. (2004). Cuando los guayacanes florecían . Libresa."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿Qué hacían los niños en las calles después de bañarse en la lluvia?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Se secaban rápidamente para evitar resfriados.",
+            "B) Se amontonaban en las bocacalles a jugar con barquichuelos de papel en las cunetas.",
+            "C) Ayudaban a arrancar de raíz las matas de plátano.",
+            "D) Atrapaban a las víboras que subían a las casas."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué efecto principal produce la llegada de las primeras lluvias en el entorno natural y social descrito?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Genera una sequía extrema que marchita el monte verde.",
+            "B) Revitaliza la naturaleza provocando crecientes feroces en los ríos, al mismo tiempo que desata la vitalidad infantil en el lodo.",
+            "C) Ahuyenta a todos los insectos e impide que las chicharras canten.",
+            "D) Destruye por completo las viviendas de la ciudad."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Cómo utiliza el autor el flujo del agua como elemento narrativo en este pasaje?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Demostrando que los humanos siempre controlan la naturaleza.",
+            "B) Como una fuerza reveladora que, por un lado, desnuda la basura y el desaseo del pueblo, y por el otro, arrastra la vegetación demostrando su inmenso poder.",
+            "C) Explicando científicamente el ciclo hidráulico de los ríos.",
+            "D) Criticando exclusivamente el pésimo alcantarillado de la ciudad."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Qué encontraban las mujeres y niños en las hamacas y rincones de las casas durante esta época?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Chicharras",
+            "B) Barquichuelos de papel",
+            "C) Víboras",
+            "D) Cucarachas"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué sugiere la costumbre de los niños de sacar los «coco-chiles» del lodo y comerlos?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Su extrema higiene",
+            "B) La conexión profunda y silvestre de la infancia con la naturaleza que renace tras la lluvia",
+            "C) Una escasez absoluta de alimentos en las casas",
+            "D) El miedo a los animales peligrosos"
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿De qué manera la descripción del entorno natural refleja la identidad cultural y social de la comunidad?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Muestra una ciudad hiperindustrializada ajena al clima.",
+            "B) Evidencia cómo la vida cotidiana del pueblo está íntimamente entrelazada con los ciclos de la naturaleza tropical.",
+            "C) Critica la educación formal de los niños.",
+            "D) Idealiza el verano seco como la única época feliz."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Una noche intranquila",
+      "typology": "Narrativo",
+      "type": null,
+      "text": [
+        "Una noche intranquila El Tío soñó que le perseguía un portero con su escoba y se despertó sobresaltado. La habitación estaba silenciosa y oscura, el calor era sofocante. Las pulgas le picaban. El Tío no había sentido nunca miedo a la oscuridad, pero ahora le invadía el terror y le entraron ganas de ladrar. En la pieza vecina el amo suspiró profundamente; lue go, al cabo de un rato, el cerdo gruñó en su cobertizo, y todo quedó de nuevo en silencio. Cuando uno piensa en la comida, el alma parece aliviada, y el Tío empezó a pensar que aquel día había robado a Fiódor Timoféich una pata de pollo, que dejó escondida en la sala, entre el armario y la pared, en un lugar donde abundaban las telarañas y el po lvo. Le habría agradado acercarse ahora y mirar si la pata seguía en su sitio. Era muy posible que el amo la hubiese encontrado y se la hubiera comido. Pero hasta la mañana no se podía salir de la habitación, tal era la norma establecida. El Tío cerró los ojos para dormirse pronto, pues por experiencia sabía que cuanto antes se duerme, más de prisa viene la mañana. Pero en esto, no lejos de él resonó un grito terrible, que le hizo estremecerse y ponerse de pie. Era Iván Ivánich, y su grito no era el de un charlatán que quiere convencer, como hacía a diario, sino algo salvaje y estridente, antinatural, parecido al chirrido de una puerta al abrirse. Sin ver nada en las tinieblas que le rodeaban, sin comprender lo que ocurría, el Tío sintió más  miedo aún y gruñó: —Rrrr... Transcurrió algún tiempo, el que se necesitaría para recitar un buen hueso; el grito no se repitió. El Tío se fue tranquilizando y se durmió de nuevo. Chéjov, A. (2004). Narraciones . Libresa."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿Qué animal escondió una pata de pollo en la sala para comerla después?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) El gato Iván Ivánich.",
+            "B) El amo.",
+            "C) El perro llamado \"Tío\".",
+            "D) El cerdo en el cobertizo."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué originó verdaderamente el pánico de \"Tío\" en medio de la oscuridad?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) El sonido del amo suspirando profundamente.",
+            "B) El gruñido habitual del cerdo.",
+            "C) Un grito salvaje, estridente y antinatural emitido por Iván Ivánich.",
+            "D) El recuerdo del portero con la escoba en su pesadilla."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué recurso literario destaca en el relato al ponerle pensamientos sobre esconder comida al perro?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Personificación, ya que dota al animal de procesos de razonamiento, preocupaciones y emociones casi humanas.",
+            "B) Sátira política dirigida contra los dueños de mascotas.",
+            "C) Metáfora abstracta sobre el miedo a la muerte en la oscuridad.",
+            "D) Una crítica social al maltrato animal en el siglo XIX."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Qué hizo el Tío al sentir que le invadía el terror en la oscuridad?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Huyó al cobertizo",
+            "B) Le entraron ganas de ladrar y gruñó",
+            "C) Se escondió bajo la cama",
+            "D) Atacó a Iván Ivánich"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué el Tío prefería cerrar los ojos y dormirse pronto tras asustarse?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Porque sabía por experiencia que al dormir llegaría antes la mañana",
+            "B) Porque la pata de pollo le daba sueño",
+            "C) Porque así no vería a los ladrones",
+            "D) Porque el amo se lo había ordenado"
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Cómo contribuye el contraste entre la tranquilidad inicial y el grito estridente a la atmósfera del relato?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Produce un efecto cómico exagerado.",
+            "B) Transforma una simple noche de descanso en una experiencia de terror psicológico desde la perspectiva animal.",
+            "C) Demuestra que los animales no sienten miedo.",
+            "D) Hace que el lector pierda el interés."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Sobre el círculo de la comprensión",
+      "typology": "Argumentativo",
+      "type": null,
+      "text": [
+        "Sobre el círculo de la comprensión (1959) La regla hermenéutica de que el todo debe entenderse desde lo individual, y lo individual desde el todo, procede de la retórica antigua y ha pasado, a través de la hermenéutica moderna, del arte de hablar al arte de comprender. En ambos casos nos encontram os con una relación circular. La anticipación del sentido, que involucra el todo, se hace comprensión explícita cuando las partes que se definen desde el todo definen a su vez ese todo. Conocemos este fenómeno por el aprendizaje de lenguas extranjeras. Constatamos ahí que es preciso «construir» una frase antes de tratar de comprender las distintas partes de la frase en su significado lingüístico. Pero este mismo proceso de construcción es tá ya regido por una expectativa de sentido que deriva del contexto anterior. Cierto que esta expectativa debe rectificarse si el texto lo requiere. Eso significa reajustar la expectativa y hacer confluir el texto en la unidad de un pensamiento desde otra expectativa de sentido. El movimiento de la comprensión discurre así del todo a la parte y de nuevo al todo. La tarea es ampliar en círculos concéntricos la unidad del sentido comprendido. La confluencia de todos los detalles en el todo es el criterio para la rectitud de la comprensión. La falta de tal confluencia significa el fracaso de la comprensión. Schleiermacher distinguió este círculo hermenéutico de la parte y el todo en su vertiente objetiva y subjetiva. Como la palabra pertenece al conjunto de la frase, así cada texto al conjunto de la obra de un escritor, y ésta al conjunto del género literario  o de la literatura correspondiente. Mas, por otra parte, el mismo texto como manifestación de un momento creativo pertenece al conjunto de la vida anímica de su autor. Sólo en esa totalidad de signo objetivo se puede realizar la comprensión. En conexión c on esta teoría habla Dilthey de «estructura» y de «centración en un punto medio» desde el cual se produce la comprensión del todo. Transfiere así al mundo histórico lo que es siempre un principio de la interpretación: que es preciso entender un texto desde  él mismo. Gadamer, H. -G. (1998). Verdad y método II . Ediciones Sígueme."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "Según el texto, ¿qué proceso es necesario antes de tratar de comprender las distintas partes de una frase en una lengua extranjera?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Olvidar la lengua materna.",
+            "B) \"Construir\" una frase regida por una expectativa de sentido derivada del contexto.",
+            "C) Buscar todas las palabras en el diccionario simultáneamente.",
+            "D) Memorizar palabras al azar."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿A qué se refiere el autor con que la comprensión discurre \"del todo a la parte y de nuevo al todo\"?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) A que un libro debe leerse siempre desde la última página hacia la primera.",
+            "B) A que el sentido de una palabra individual depende del contexto general, y al entender la palabra, se retroalimenta y amplía el entendimiento del contexto completo.",
+            "C) A que el traductor debe ignorar las partes que no entiende.",
+            "D) A que el conocimiento literario es un ciclo repetitivo inútil."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Por qué resulta fundamental la distinción de Schleiermacher entre la vertiente objetiva y subjetiva al analizar un texto?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque demuestra que las obras de todos los escritores significan lo mismo.",
+            "B) Porque establece que un texto no solo es una pieza lingüística dentro de un género (objetivo), sino también la manifestación de la vida interior y creativa del autor (subjetivo).",
+            "C) Porque argumenta que la psicología es más importante que la gramática.",
+            "D) Porque prueba que la retórica antigua carece de utilidad en la literatura moderna."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿De qué antigua disciplina procede la regla hermenéutica mencionada por el autor?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) De la matemática pura",
+            "B) De la retórica antigua",
+            "C) De la astronomía",
+            "D) De la medicina"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "Si el texto entra en conflicto con nuestra expectativa de sentido previa, ¿qué acción debemos tomar según el autor?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Desechar el texto por considerarlo erróneo.",
+            "B) Reajustar la expectativa original para hacer confluir el texto en una nueva unidad de pensamiento.",
+            "C) Cambiar las palabras del texto.",
+            "D) Ignorar el contexto anterior."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué implicaciones tiene el «fracaso de la comprensión» mencionado en el texto para la labor de traducción?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Que el traductor nunca debe intentar comprender la obra completa.",
+            "B) Que si los detalles no se integran de manera lógica en la totalidad, la interpretación resultante será inválida o fragmentaria.",
+            "C) Que todas las lenguas son imposibles de aprender.",
+            "D) Que el sentido subjetivo del autor no importa."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "El laberinto de la soledad",
+      "typology": "Argumentativo",
+      "type": null,
+      "text": [
+        "EL PACHUGO Y OTROS EXTREMOS A TODOS En algún momento, se nos ha revelado nuestra existencia como algo particular, intransferible y precioso. Casi siempre esta revelación se sitúa en la adolescencia. El descubrimiento de nosotros mismos se manifiesta como un sabernos solos; entre el mundo y no sotros se abre una impalpable, transparente muralla: la de nuestra conciencia. Es cierto que apenas nacemos nos sentimos solos; pero niños y adultos pueden trascender su soledad y olvidarse de sí mismos a través de juego o trabajo. En cambio, el adolescent e, vacilante entre la infancia y la juventud, queda suspenso un instante ante la infinita riqueza del mundo. El adolescente se asombra de ser. Y al pasmo sucede la reflexión: inclinado sobre el río de su conciencia se pregunta si ese rostro que aflora lent amente del fondo, deformado por el agua, es el suyo. La singularidad de ser — pura sensación en el niño — se transforma en problema y pregunta, en conciencia interrogante. A los pueblos en trance de crecimiento les ocurre algo parecido. Su ser se manifiesta como interrogación: ¿qué somos y cómo realizaremos eso que somos? Muchas veces las respuestas que damos a estas preguntas son desmentidas por la historia, acaso porque es o que llaman el \"genio de los pueblos\" sólo es un complejo de reacciones ante un estímulo dado; frente a circunstancias diversas, las respuestas pueden variar y con ellas el carácter nacional, que se pretendía inmutable. A pesar de la naturaleza casi siemp re ilusoria de los ensayos de psicología nacional, me parece reveladora la insistencia con que en ciertos períodos los pueblos se vuelven sobre sí mismos y se interrogan. Despertar a la historia significa adquirir conciencia de nuestra singularidad, moment o de reposo reflexivo antes de entregarnos al hacer. \"Cuando soñamos que soñamos está próximo el despertar\", dice Novalis. No importa, pues, que las respuestas que demos a nuestras preguntas sean luego corregidas por el tiempo; también el adolescente ignor a las futuras transformaciones de ese rostro que ve en el agua: indescifrable a primera vista, como una piedra sagrada cubierta de incisiones y signos, la máscara del viejo es la historia de unas facciones amorfas, que un día emergieron confusas, extraídas  en vilo por una mirada absorta. Por virtud de esa mirada las facciones se hicieron rostro y, más tarde, máscara, significación, historia. Paz, O. (2004). El laberinto de la soledad . Cátedra."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "Según el texto, ¿en qué etapa de la vida se nos suele revelar nuestra existencia como algo particular e intransferible?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) En la niñez temprana.",
+            "B) En la adolescencia.",
+            "C) En la adultez.",
+            "D) En la vejez."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué paralelo conceptual establece el autor entre el adolescente y los \"pueblos en trance de crecimiento\"?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Ambos viven en la ignorancia feliz sin preocuparse del mañana.",
+            "B) Ambos experimentan un momento crítico de reflexión y auto-interrogación para descubrir su verdadera identidad y singularidad.",
+            "C) Ambos ignoran por completo las consecuencias de sus acciones en la historia.",
+            "D) Ambos se rebelan violentamente contra las tradiciones impuestas."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Cuál es el significado profundo de la aseveración \"Despertar a la historia significa adquirir conciencia de nuestra singularidad\"?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Que el verdadero desarrollo de una nación comienza cuando asume reflexivamente quién es frente al mundo y define su propia ruta.",
+            "B) Que es necesario memorizar las fechas de las batallas históricas para ser ciudadano.",
+            "C) Que los pueblos solo avanzan si olvidan por completo su pasado y sus tradiciones.",
+            "D) Que la historia es inmutable y ya todo está escrito."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Qué actitud toman los niños y los adultos para trascender su soledad y olvidarse de sí mismos?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Leer libros de historia",
+            "B) Aislarse en sus habitaciones",
+            "C) A través del juego o el trabajo",
+            "D) Llorando en silencio"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "Cuando el autor menciona que «la máscara del viejo es la historia de unas facciones amorfas», ¿a qué se refiere?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) A que la historia de un pueblo empieza de forma confusa pero adquiere identidad y «rostro» consolidado a lo largo del tiempo.",
+            "B) A que los ancianos suelen usar máscaras reales.",
+            "C) A que el pasado histórico siempre es oculto.",
+            "D) A que la juventud es la única etapa valiosa."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué cuestiona el texto acerca del concepto de «carácter nacional» o «genio de los pueblos»?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Que es un mandato divino inalterable.",
+            "B) Que a menudo no es inmutable, sino una serie de respuestas y reacciones a circunstancias cambiantes.",
+            "C) Que no existe en absoluto.",
+            "D) Que es exactamente igual en todos los continentes."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Prohibido prohibir",
+      "typology": "Argumentativo",
+      "type": null,
+      "text": [
+        "Prohibido prohibir Hace ya de esto algunos años vi en París, en la televisión francesa, un documental que se me quedó grabado en la memoria y cuyas imágenes, de tanto en tanto, los sucesos cotidianos actualizan con restallante vigencia, sobre todo cuando se habla del problem a cultural mayor de nuestro  tiempo: la educación. El documental describía la problemática de un liceo en las afueras de París, uno de esos barrios donde familias francesas empobrecidas se  codean con inmigrantes de origen subsahariano, latinoamericano y árabes del Magreb. Este colegio secundario público, cuyos alumnos, de  ambos sexos, constituían un arco iris de razas, lenguas, costumbres y religiones, había sido escenario de violencias: golpizas a profesores, violaciones en los baños o corredores, enfrentamientos entre pandillas a navajazos y palazos y, si mal no recuerdo,  hasta tiroteos. No sé si de todo ello había resultado algún muerto, pero sí algunos heridos, y en los registros al local la policía había incautado armas, drogas y alcohol. El documental no quería ser alarmista, sino tranquilizador, mostrar que lo peor había ya pasado y que, con la buena voluntad de autoridades, profesores, padres de familia y alumnos, las aguas se estaban sosegando. Por ejemplo, con inocultable satisfacción,  el director señalaba que  gracias al detector de metales recién instalado, por el cual debían pasar ahora los estudiantes al ingresar al colegio, se decomisaban las  manoplas, cuchillos y otras armas punzo -cortantes. De este modo, los hechos de sangre se ha bían reducido de manera drástica. Se habían  dictado disposiciones para que ni profesores ni alumnos circularan solos, ni siquiera a los baños, siempre al menos en grupos de dos. De este  modo se evitaban asaltos y emboscadas. Y , ahora, el colegio tenía dos psicólogos permanentes para dar consejo a los alumnos y alumnas —casi siempre huérfanos, semi  huérfanos, y de familias fracturadas por la desocupación, la promiscuidad, la delincuencia y la violencia de género —inadaptables o pendencieros recalcitrantes. Lo que más me impresionó en el documental fue la entrevista a una profesora que afirmaba, con naturalidad, algo así como: «Tout va bien, maintenant, mais il faut se débrouiller» («Ahora todo anda bien, pero hay que saber arreglárselas»). Explicaba que, a fi n de evitar los asaltos y  palizas de antaño, ella y un grupo de profesores se habían puesto de acuerdo para encontrarse a una hora justa en la boca del metro más cercano y caminar juntos hasta el colegio. De este modo el riesgo de ser agredidos por los vo yous (golfos) disminuía. Aquella profesora y sus colegas, que iban diariamente a su trabajo como quien va al infierno, se habían resignado, aprendido a sobrevivir y no parecían imaginar siquiera  que ejercer la docencia pudiera ser algo distinto a su vía crucis cotidiano . Vargas Llosa, M. (2012). La civilización del espectáculo . Alfaguara."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿Dónde se encontraba el liceo cuya problemática protagonizaba el documental que vio el autor?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) En el centro histórico de París.",
+            "B) En las afueras de París.",
+            "C) En el Magreb.",
+            "D) En América Latina."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué la actitud de la profesora que afirmaba «ahora todo anda bien, pero hay que saber arreglárselas» causó un fuerte impacto en el autor?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque revelaba su inmenso amor y vocación por la pedagogía tradicional.",
+            "B) Porque demostraba una triste resignación docente, al considerar un logro sobrevivir diariamente a la violencia en lugar de dedicarse verdaderamente a educar.",
+            "C) Porque comprobó que el nivel académico de los alumnos era excelente gracias a ella.",
+            "D) Porque la profesora logró desarmar a los delincuentes sin ayuda policial."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué crítica implícita hace el texto frente a las \"soluciones\" implementadas en el colegio (detectores de metales, patrullas docentes, psicólogos de urgencia)?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Aplaude estas medidas como el modelo ideal para todas las escuelas del futuro.",
+            "B) Denuncia que la institución educativa ha perdido su esencia formativa, transformándose en un espacio donde lo primordial es la supervivencia policial.",
+            "C) Sugiere que es el único método válido para educar estudiantes de distintos orígenes raciales.",
+            "D) Celebra el éxito rotundo del director al pacificar el colegio definitivamente."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Qué medida específica se instaló en el colegio para evitar el ingreso de armas y que el director mostraba con satisfacción?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Un muro eléctrico",
+            "B) Un detector de metales en la entrada",
+            "C) Cámaras de vigilancia",
+            "D) Perros policías"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué se dictó la disposición de que ni profesores ni alumnos circularan solos por el colegio?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Para fomentar la amistad.",
+            "B) Para evitar ser víctimas de asaltos, violaciones y emboscadas en los pasillos.",
+            "C) Para ahorrar electricidad.",
+            "D) Para que no se perdieran."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué reflexiona el autor sobre el papel de la educación contemporánea basándose en este caso?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Que la escuela se ha convertido en un espacio donde prima la supervivencia sobre la formación académica.",
+            "B) Que la disciplina militar enseña mejor.",
+            "C) Que la tecnología soluciona los problemas educativos.",
+            "D) Que la violencia es un mito."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "La Redención de Juan Montalvo",
+      "typology": "Argumentativo",
+      "type": null,
+      "text": [
+        "La Redención de Juan Montalvo Enaltecer la memoria de Juan Montalvo cada 13 de abril, en el marco del Día del Maestro, es mucho más que un acto protocolario; es un ejercicio de decencia y resistencia intelectual. La historia, sin embargo, suele ser un espejo incómodo, por eso muchas ve ces no lo cuentan. En la Casa de Montalvo, en Ambato, reposa un documento que a menudo estremece al visitante: un anuncio de venta de un niño esclavizado vinculado al patrimonio de sus antepasados. No obstante, juzgar a Juan Montalvo por los actos administrativos de sus mayores no es solo un absurdo, sino una ceguera histórica profunda. Aquel anuncio, fechado en 1840 cuando el escritor era apenas un niño, no debe interpretarse como una mancha en su e xpediente. Por el contrario, representa el punto de partida de su verdadera grandeza: Montalvo es el hombre que nació entre cadenas y decidió dedicar su vida entera a fundirlas. Es imperativo aclarar que Juan Montalvo jamás tuvo participación alguna en la compra o venta de seres humanos esclavizados. Mientras su entorno familiar y la “nobleza” de la época gestionaban a los esclavizados como simples bienes contables, el joven Juan M. cultivaba una conciencia que pronto estallaría en rebeldía. A diferencia de otros próceres de la época que predicaban libertad en las plazas, pero conservaban métodos de represión arcaicos en sus tierras, Montalvo comprendió que una república con esclav itud era una farsa moral insostenible. Su alianza con el General José María Urbina no fue un cálculo político, sino un acto de fe humanista. Mientras la élite terrateniente ponía el grito en el cielo por la pérdida de su “propiedad” tras el decreto de 1851, Montalvo se convirtió en la voz que l egitimó ese paso hacia la modernidad. Para él, la abolición no era una pérdida económica, sino la única acción que justificaba la existencia misma de un gobierno. Fue su pluma la que elevó el acto de Urbina a la categoría de justicia mundial. Montalvo no fue un cómplice del pasado, sino el constructor del futuro. Su calidad humana reside en su capacidad de mirar los errores de su propio linaje y decir “no”. Reivindicó el valor ético mediante una coherencia inquebrantable entre el pensamiento y la acción. Hoy, ese anuncio en el museo es el testimonio del mundo oscuro que él ayudó a iluminar. Juan Montalvo no vendió esclavizados; él compró, con el precio del exilio y la persecución, la libertad intelectual de todo un continente. Mosquera C., L. (2026). La redención de Juan Montalvo . El Heraldo ."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿De qué año está fechado el anuncio sobre la venta de un niño esclavizado vinculado a los antepasados de Montalvo?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) 1851",
+            "B) 1604",
+            "C) 1840",
+            "D) 2019"
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "Según el autor, ¿por qué dicho anuncio no representa una \"mancha\" sino el verdadero punto de partida de la grandeza del escritor?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque con esa venta Montalvo financió la publicación de sus ensayos.",
+            "B) Porque haber presenciado la esclavitud en su entorno familiar motivó su despertar de conciencia y su férrea voluntad de abolirla de por vida.",
+            "C) Porque fue el propio Montalvo quien escribió y firmó el documento comercial.",
+            "D) Porque gracias al anuncio, conoció al General José María Urbina."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué lección ética principal intenta destacar el texto acerca de la figura histórica de Juan Montalvo frente a su legado familiar?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Que siempre el fin justifica los medios en política.",
+            "B) Que la verdadera altura moral consiste en tener la valentía para juzgar y corregir los errores e injusticias presentes en nuestras propias raíces.",
+            "C) Que es lícito mantener esclavos si las leyes del momento lo permiten.",
+            "D) Que los próceres nunca se equivocan."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Quién fue el General con el que Juan Montalvo formó una alianza para apoyar la abolición de la esclavitud?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Simón Bolívar",
+            "B) Eloy Alfaro",
+            "C) José María Urbina",
+            "D) Antonio José de Sucre"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "¿A qué se refiere la frase: «Montalvo es el hombre que nació entre cadenas y decidió dedicar su vida entera a fundirlas»?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) A que era herrero.",
+            "B) A que, pese a nacer en una élite que poseía esclavos, usó su intelecto para combatir ese sistema.",
+            "C) A que fue prisionero de guerra.",
+            "D) A que escapó de su casa."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Por qué la acción de Montalvo se califica como «la libertad intelectual de todo un continente»?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque no hablaba de política.",
+            "B) Porque transformó un decreto administrativo en un postulado ético universal que inspiró el pensamiento libertario.",
+            "C) Porque compró la libertad de todos los esclavos.",
+            "D) Porque redactó la constitución."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "¿Qué es una lengua?",
+      "typology": "Expositivo",
+      "type": null,
+      "text": [
+        "¿Qué es una lengua? Las lenguas que podemos observar varían enormemente. El español y el ruso no son muy distintas una de otra; el español y el inglés también, pero menos; menos aún el español y el italiano, el español y el gallego, el español de Madrid y el de Huelva, el de Albacete y el de Ciudad Real, mi primo y el mío. No hay dos personas que hablen exactamente igual; incluso una misma persona no habla igual a lo largo de toda su vida, ni en distintos momentos del mismo día. A menos que definamos de alguna forma lo que es una lengua, es imposible hacer un recuento. Y si entendemos el término en maneras distintas, los resultados del recuento lo serán también. Un problema es que se trata de un continuo, una diferenciación gradua l, desde la lengua prácticamente idéntica a sí misma que utiliza una persona en su propia casa a lo largo de un mismo día hasta la diferencia radical que separa el español del k ung. Sin embargo, algo de común queda entre ambas, de manera que en ningún mome nto llegamos a confundir cualquier lengua humana con cualquier medio de comunicación animal. Ninguna lengua humana que exista o haya existido se parece a nada que no sea otra lengua humana, a cualquier otra lengua humana. Algo hay de común a todas ellas, q ue las separa de los lenguajes animales. Más aún: todas las lenguas humanas se parecen bastante entre sí del mundo (diferencias culturales y tecnológicas aparte) como han demostrado a lo largo de la historia traductores e intérpretes, pero resulta imposibl e traducir cualquier cosa de una lengua humana a un «lenguaje animal». De modo que las lenguas humanas, pese a sus enormes diferencias entre sí, son esencialmente variantes de una misma cosa, igual que todos los seres humanos somos simples variantes menores de un mismo tipo: por mucho que algunos hablen de razas y que nos vea mos distintos, todos somos exactamente una misma especie y el componente genético que nos separa es insignificante; y separa negros de blancos, amarillos, cobrizos, aceitunados y verde -limón, pero también a los negros entre sí, a los blancos entre sí, etc. , etc.; con los seres humanos sucede como con las lenguas, que todos estamos en un continuo de diferenciación que tiene una poderosa base común. Referencia bibliográfica: ¿Qué son las lenguas? Bernárdez, E. (1999). ¿Qué son las lenguas?  Alianza Editorial."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿A qué compara el autor el \"continuo de diferenciación\" que poseen las lenguas humanas en la parte final del texto?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) A las especies animales.",
+            "B) Al hecho de que todos los seres humanos somos simples variantes de una misma especie genéticamente idéntica.",
+            "C) A los dialectos que se hablan en Huelva y Albacete.",
+            "D) A los programas de inteligencia artificial."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué el autor argumenta que resulta imposible traducir una obra a un \"lenguaje animal\"?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque los animales no tienen voz para responder.",
+            "B) Porque los sistemas de comunicación animal carecen de la potente base estructural común y humana que permite la inter-traducción.",
+            "C) Porque el español no tiene palabras para describir los sonidos salvajes.",
+            "D) Porque no se ha estudiado lo suficiente a los animales."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Cómo desmonta el autor la idea de una separación estricta entre \"razas\" y entre \"lenguas\"?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Afirmando que el español de Madrid es el único idioma universal y puro.",
+            "B) Evidenciando que tanto en la genética humana como en la lingüística, las variaciones son graduales (un continuo) pero descansan sobre una innegable matriz única común.",
+            "C) Exigiendo que en el futuro todos hablemos un solo idioma para evitar conflictos.",
+            "D) Asegurando que el ruso y el español son, de hecho, el mismo idioma."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Qué ejemplos de profesiones cita el autor para demostrar que todas las lenguas humanas se parecen bastante entre sí?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Biólogos y genetistas",
+            "B) Traductores e intérpretes",
+            "C) Arqueólogos e historiadores",
+            "D) Profesores y estudiantes"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "Según el texto, ¿qué sucede si dos personas definen de forma distinta lo que constituye «una lengua»?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Terminarán hablando un nuevo dialecto.",
+            "B) Los resultados al intentar contar o hacer un recuento de cuántas lenguas existen serán diferentes.",
+            "C) La RAE intervendrá.",
+            "D) Se creará una raza humana distinta."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿De qué manera el concepto de «continuo de diferenciación» desafía los purismos lingüísticos?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Fomenta fronteras estrictas.",
+            "B) Al evidenciar que las fronteras entre dialectos y lenguas son difusas, desmiente la idea de lenguas puras o aisladas.",
+            "C) Exige un idioma internacional.",
+            "D) Demuestra que el lenguaje animal es igual."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Los colores en la física",
+      "typology": "Expositivo",
+      "type": null,
+      "text": [
+        "Los colores en la física En 1676, el físico Isaac Newton demostró con sus experimentos que la luz solar blanca puede descomponerse en los colores del espectro con ayuda de un prisma triangular. Este espectro contiene todos los colores fundamentales excepto el púrpura. Newton llevó a cabo el experimento de la siguiente manera: la luz del sol penetra por una ranura y choca contra un prisma triangular. En él, el rayo de luz blanca se descompone en los colores espectrales. El rayo de luz desplegado puede replegarse en una pantalla y sobre la franja de colores del espectro. Desde el rojo hasta el violeta, pasando por el naranja, el amarillo, el verde y el azul, se extiende una franja cromática continua ; es decir, sin interrupción. Si esta franja cromática se concentra con una lente convergente, se obtiene de nuevo, por adición de colores, una luz blanca sobre una segunda pantalla. Esa franja cromática surge por refracción. Hay además otras formas de cre ar colores de forma física, como la interferencia, la reflexión, la polarización y la fluorescencia. Si se divide la franja espectral en dos partes —por ejemplo, rojo, naranja y amarillo y verde, azul y violeta — y se unen cada uno de estos dos grupos con lentes convergentes, se obtienen dos colores mixtos que, mezclados, dan blanco. A dos tipos de luz que, mezclados, dan blanco los denominamos complementarios. Si separamos un color de la franja cromática del prisma —por ejemplo, el verde — y lo unimos con una lente a los demás colores —rojo, naranja, amarillo, azul y violeta —, entonces el color que resulta de la mezcla es el rojo; es decir, el color complementari o al verde que hemos separado. Si separamos el amarillo, entonces los demás colores, rojo, naranja, verde, azul y violeta, darán como resultado el color complementario violeta. Cada uno de los colores del espectro es complementario al color resultante de la mezcla del resto de los colores espectrales. No podemos ver los colores que contiene este color salido de la mezcla. No ocurre lo mismo en la música, donde un músico puede percibir cada tono entre una mezcla de diferentes tonalidades. Itten, J. (2002). El arte del color . Gustavo Gili."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿Qué demostró el físico Isaac Newton mediante el uso de un prisma triangular en 1676?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Que el espectro solar está compuesto únicamente de púrpura.",
+            "B) Que la luz solar blanca puede descomponerse en los colores del espectro.",
+            "C) Que la música y la luz viajan a la misma velocidad.",
+            "D) Que los colores nacen de la fluorescencia del sol."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "Según el experimento, ¿qué ocurre cuando se separa un color del prisma (por ejemplo, el amarillo) y se mezclan todos los demás colores restantes?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Se obtiene la luz blanca originaria.",
+            "B) Desaparece la luz por completo debido a la refracción.",
+            "C) Da como resultado el color violeta, que es precisamente su color complementario.",
+            "D) Se crea el color verde."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué limitación sensorial humana subraya el texto al comparar nuestra percepción visual con la percepción auditiva del músico?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Que la física es más exacta que la música en términos de ondas.",
+            "B) Que el ojo humano es incapaz de identificar los colores individuales mezclados dentro del color blanco, a diferencia del oído entrenado capaz de aislar las notas de un acorde.",
+            "C) Que los músicos no entienden los principios físicos de Newton.",
+            "D) Que la luz blanca suena como un silencio absoluto."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Cuál es el único color fundamental que NO está contenido en el espectro solar descompuesto por el prisma?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) El verde",
+            "B) El amarillo",
+            "C) El púrpura",
+            "D) El azul"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "Si se divide la franja espectral en dos partes y se unen con lentes, ¿qué sucede al mezclar los dos colores mixtos resultantes?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Producen un tono gris opaco",
+            "B) Generan nuevamente luz blanca",
+            "C) Provocan calor",
+            "D) Crean oscuridad"
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué relevancia tiene la refracción explicada por Newton para disciplinas artísticas como la pintura?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Ninguna, pues la física y el arte nunca se relacionan.",
+            "B) Proporciona una base científica empírica sobre los colores complementarios y la formación del blanco.",
+            "C) Obliga a usar solo luz blanca.",
+            "D) Demuestra que la pintura es inferior."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Distribución de las tierras y de las aguas",
+      "typology": "Expositivo",
+      "type": null,
+      "text": [
+        "DISTRIBUCIÓN DE LAS TIERRAS Y DE LAS AGUAS De los 510’000.000 de Km. cuadrados de superficie que mide aproximadamente la Tierra, los 361’000.000 de Km. cuadrados, o sea el 70,75% corresponden a las aguas que forman los océanos y mares; y, los 149’000.000 Km. cuadrados, que representan el 29,25%, a las tierras que constituyen los continentes e islas. OCÉANOS.  - Son extensas masas de agua salada que se encuentran generalmente alejadas de los continentes. Los océanos son cinco: Glacial Ártico, Glacial Antártico, Atlántico, Pacífico e Índico. Océano Glacial Ártico.  - Es el que ocupa el Polo Norte y baña las costas septentrionales de América del Norte, Europa y Asia. Se comunica con el Pacífico por el estrecho de Behring, con el Atlántico por el Estrecho de Davis y el de Smith, que se encuentra entre Groenlandia y las tierras de Grant y Ellesmere. Este océano tiene aproximadamente 15’000.000 de Km. cuadrados de superficie y una profundidad media de 1.200 m. Sus aguas permanecen gran parte del año cubiertas de hielo, lo que dificulta la navegación . Océano Glacial Antártico.  - Es el que baña el continente del mismo nombre. No tiene límites precisos; es una continuación de los Océanos Atlántico, Índico y Pacífico, respectivamente. Posee características semejantes al Ártico, por cuanto se encuentra en el Polo Sur. Tiene una super ficie aproximada de 28’000.000 de Km. cuadrados; su profundidad media es de 3.500 m. García Gonzáles, L. (s.f.). Distribución de las tierras y de las aguas . En Resumen de geografía, historia y cívica: texto escolar para primer curso  (p. 43)."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "Según los datos del texto, ¿qué porcentaje de la superficie de la Tierra ocupan las aguas de mares y océanos?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) 29,25%",
+            "B) 50%",
+            "C) 70,75%",
+            "D) 100%"
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué se menciona que el Océano Glacial Ártico presenta serias dificultades para la navegación comercial o general?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Porque sus aguas se mezclan con las de la Antártida.",
+            "B) Porque su profundidad media excede los 3.500 metros, provocando naufragios.",
+            "C) Debido a que está situado en el Polo Norte y sus aguas permanecen cubiertas de hielo durante gran parte del año.",
+            "D) Porque no está comunicado con el Océano Pacífico."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Cuál es el propósito central al presentar las cifras y límites de manera tan exacta en el texto?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Convencer a los turistas de viajar al Glacial Antártico.",
+            "B) Demostrar que América del Norte es más grande que Europa.",
+            "C) Proporcionar un panorama geográfico preciso, objetivo e informativo sobre la morfología física del planeta y sus cuerpos de agua.",
+            "D) Advertir sobre el futuro descongelamiento de los polos y el fin del mundo."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Con qué océanos se comunica el Océano Glacial Ártico?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Únicamente con el Índico.",
+            "B) Con el Pacífico (estrecho de Behring) y el Atlántico (estrechos de Davis y Smith).",
+            "C) Con el Océano Antártico de manera directa.",
+            "D) Con el Mar Mediterráneo."
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "Si el Océano Glacial Antártico «no tiene límites precisos» y es la continuación de otros océanos, ¿qué se infiere sobre la geografía acuática?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Que el agua de la Tierra es un sistema continuo e interconectado sin barreras físicas reales.",
+            "B) Que el Polo Sur no tiene agua.",
+            "C) Que es imposible medir el porcentaje de agua.",
+            "D) Que el agua dulce y salada no se mezclan."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿De qué manera la predominancia del agua (70,75%) debería influir en nuestra concepción del planeta «Tierra»?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Invita a reflexionar que somos predominantemente un mundo oceánico, dependiente del equilibrio marino.",
+            "B) Sugiere que debemos secar los océanos.",
+            "C) Demuestra que el agua es infinita.",
+            "D) Prueba que los continentes son irrelevantes."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "¿Qué es la creatividad?",
+      "typology": "Expositivo",
+      "type": null,
+      "text": [
+        "¿Qué es la creatividad? Según el diccionario de la Real Academia de la Lengua, la creatividad es «la facultad de crear» o «la capacidad de creación», esta facultad o capacidad es algo básico en un artista, pero, ¿es algo que solo tienen los artistas? En realidad, todos tenemos la capacidad o la habilidad de hacer existir algo nuevo, una solución a un problema, un nuevo dispositivo o un nuevo objeto artístico. La creatividad puede estar presente en algo tan pequeño como en decir una frase o hacer una acción que nos parezca cómica o que nos cause risa (uno de los casos más grandes es el de Charles Chaplin que, a pesar de no hablar, podía causar risa a todo el que lo viera). También puede estar en hallar la solución a un problema o en casos más grandes como determinar una nueva teoría  física (en este caso se puede citar a Galileo Galilei, quien inventó el telescopio y afirmó que la Tierra giraba alrededor del Sol y no al contrario). Existen algunas características que se encuentran ligadas a la creatividad. Una de ellas es la autonomía: los individuos creativos tienden a ser independientes y no conformistas. Por otra parte, también tienen un dominio en una habilidad particular, es decir, a una esfera del conocimiento. Es así que las personas más creativas pasan horas practicando alguna actividad (como en el caso de los músicos) o pensando una idea (el caso de los filósofos) pero, a pesar de practicar una sola actividad, no se centran s olo en ella porque, a veces, podemos encontrar personas que realizan más de una actividad. Libro de Educación Cultural y Artística. (2016). EducaTemas."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿A qué figura se cita en el texto como un gran ejemplo de generar gracia o creatividad sin necesidad de usar palabras habladas?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Galileo Galilei.",
+            "B) Isaac Newton.",
+            "C) Charles Chaplin.",
+            "D) La Real Academia Española."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "Según lo descrito, ¿por qué se afirma que la creatividad no es un rasgo exclusivo del arte o de los artistas?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque los científicos también saben pintar cuadros hermosos.",
+            "B) Porque se manifiesta como la capacidad de producir ideas nuevas para resolver problemas cotidianos, proponer teorías complejas o ingeniar dispositivos útiles.",
+            "C) Porque cualquiera puede buscar definiciones en el diccionario.",
+            "D) Porque todos los humanos nacen tocando un instrumento."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "Tomando en cuenta las características ligadas a la creatividad (autonomía y dedicación profunda), ¿qué se requiere esencialmente para romper un paradigma preestablecido?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Ser conformista y aceptar todo lo que dicta el dominio científico.",
+            "B) Invertir la misma cantidad de horas en muchas disciplinas simultáneamente sin enfocarse.",
+            "C) Ejercer independencia de pensamiento para desafiar lo convencional, respaldada por la práctica rigurosa en una disciplina.",
+            "D) Hablar el mismo idioma que Charles Chaplin."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "Según la Real Academia de la Lengua citada en el texto, ¿qué es la creatividad?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) El talento de los pintores",
+            "B) La facultad de crear o la capacidad de creación",
+            "C) Un don divino",
+            "D) Resolver matemáticas"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "Si una persona practica música y posee un alto grado de autonomía intelectual, ¿qué probabilidad tiene según el texto?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) De fracasar socialmente",
+            "B) De volverse conformista",
+            "C) De desarrollar un alto nivel de pensamiento creativo e innovación en su área",
+            "D) De perder la creatividad"
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Por qué la autonomía y el no conformismo son esenciales para los avances científicos como los de Galileo?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Porque la obediencia estricta a dogmas vigentes frena la formulación de teorías innovadoras que cuestionan lo establecido.",
+            "B) Porque los científicos deben ser rebeldes sin causa.",
+            "C) Porque la creatividad científica requiere anarquía.",
+            "D) Porque la física depende de la suerte."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "La toga no hace al juez",
+      "typology": "Descriptivo",
+      "type": null,
+      "text": [
+        "LA TOGA NO HACE AL JUEZ Para dar solemnidad al acto de juzgamiento, el Consejo de la Judicatura ha decretado que es obligatorio que los magistrados utilicen toga. Según Paulina Aguirre, presidenta de la Corte Nacional: “Es un paso al restablecimiento de la confianza en el sistema  de justicia”. La toga negra se originó en Inglaterra en 1604 y aunque se utiliza principalmente en países anglosajones, es a los jueces lo que es el uniforme blanco a los médicos y los símbolos son importantes. No obstante, no basta el vestido negro, para  generar confianza o cambiar la percepción sobre la probidad de la justicia que tenemos los ecuatorianos. De acuerdo al Índice del Estado de Derecho 2019, que anualmente realiza el World Justice Project y que mide cómo el común de los ciudadanos de un país considera a la justicia, Ecuador está en el puesto 87 entre 126 países. Sobre un promedio de 100 puntos, Ecuador obtuvo 48, es decir menos de la mitad. En América Latina, Uruguay es el país con el mejor estado de derecho con un promedio de 71, seguido de Costa Rica 69 y Chile 68 puntos. De nuestros vecinos, Perú tiene 51 y Colombia 50. Esta calificación ubica  a Perú en el puesto 70 y a Colombia en el 80, bastante lugares más adelante que nuestro país. Para respetar a nuestro sistema de justicia, se requiere que tanto en el área civil como en la penal, la ley se aplique sin discriminación; que no exista la influencia indebida del gobierno de turno, como sucedió en la década pasada; que no ocurran en los procesos dilatorias y retrasos injustificados y lo más importante, que esté ausente la corrupción. Además, en los casos penales debe imperar una investigación efectiva, el debido proceso y para los sentenciados un buen sistema penitenciario. Es en la evalu ación de todos estos temas en que los ciudadanos comunes del Ecuador, han dejado reprobada a la justicia nacional. Cuando estos preceptos sean realidades, Ecuador tendrá un estado de derecho y los ciudadanos creerán en los jueces y la toga será un símbolo de respeto. Mientras subsistan las deficiencias descritas, al igual que el hábito no hace al monje, la toga no hará al juez. “Si el hábito no hace al monje, la toga tampoco hace al juez. Mientras subsistan las graves deficiencias en el sistema judicial, porque los jueces usen toga no significa que tendremos confianza en ellos.” Estupiñán, P . (2020, 27 de febrero). La toga no hace al juez . Revista Vistazo."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "En el Índice del Estado de Derecho 2019 de World Justice Project, ¿cuántos puntos obtuvo Ecuador sobre 100?",
+          "correct_answer": "D",
+          "justification": "",
+          "answers": [
+            "A) 87",
+            "B) 71",
+            "C) 68",
+            "D) 48"
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué significa el refrán adaptado \"la toga no hace al juez\" dentro del contexto del artículo?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Que los jueces carecen de gusto para vestir adecuadamente en sus juicios.",
+            "B) Que la simple imposición de un atuendo simbólico (como la toga negra) no restaurará por sí sola la probidad ni el estado de derecho frente a la ciudadanía.",
+            "C) Que la vestimenta negra absorbe el calor en un país tropical como Ecuador.",
+            "D) Que es preferible que los jueces utilicen un uniforme blanco como los doctores."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué acciones concretas y sistémicas postula la autora como verdaderos pilares para devolver el prestigio al sistema de justicia nacional?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Adquirir togas inglesas de mejor calidad para todos los juzgados.",
+            "B) Subir a Ecuador del puesto 87 al 70 en los índices comprando jurados.",
+            "C) Eliminar la corrupción, evitar retrasos injustificados y garantizar una aplicación de la ley ajena a influencias y favores políticos.",
+            "D) Expulsar inmediatamente a todos los jueces nombrados en la década pasada."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Qué autoridad decretó que es obligatorio que los magistrados utilicen toga negra?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) El World Justice Project",
+            "B) El Consejo de la Judicatura",
+            "C) El Ministerio de Salud",
+            "D) La presidencia"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué la autora compara la toga de los jueces con el uniforme blanco de los médicos?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque ambos son de algodón.",
+            "B) Porque ambos representan un símbolo externo de autoridad y probidad inherente a su profesión.",
+            "C) Porque los médicos dictan sentencias.",
+            "D) Porque ambos gremios tienen el mismo salario."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué argumento sostiene la autora contra la medida tomada por el Consejo de la Judicatura?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Que las reformas estéticas son insuficientes y encubren los verdaderos problemas estructurales (corrupción, impunidad) que minan la confianza.",
+            "B) Que el color negro es triste.",
+            "C) Que la toga debió ser inventada en América.",
+            "D) Que es muy caro."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Otavalo, una joya para visitar",
+      "typology": "Descriptivo",
+      "type": null,
+      "text": [
+        "Otavalo, una joya para visitar La plaza de los ponchos es la mayor feria artesanal del norte del país. Aquí se encuentran talentosos artesanos de distintos grupos étnicos: Otavalo, Kichwa, Cayambi, Natabuela, Caranqui, Afroecuatorianos y mestizos. En los puestos de venta coloridos, como  collares, gorros, fajas, ponchos, guantes, sacos, carteras, instrumentos, camisas, tapicería, hamacas, adornos de piezas elaboradas en barro, madera, mazapán, cerámica, orfebrería, sombreros, bisutería y pintura. En las faldas del Imbabura, la cascada de Peguche  de 30 metros de altura y 6 de ancho, se convierte en el centro ceremonial de purificación. Danzantes de diferentes pueblos cercanos se bañan en las aguas después de un día de fiesta. Este recurso natural se ubica en la comunidad de Faccha Llacta, a 1,5 km de Peguche y a 3,3 km de Otavalo. Existen tres lagunas en este lugar. La laguna grande, que tiene un perímetro de 7,7 km y una superficie de 271 hectáreas. La laguna negra, de 1,37 km y 11,4 hectáreas; y la laguna pequeña, de 0,37 km y 1,07 hectáreas. Este lugar es apreciado por los naturi stas, ya que está rodeado de montañas como el Fuya Fuya, lo que lo convierte en el sitio ideal para la aclimatación antes de iniciar un ascenso. Las lagunas se encuentran a 40 minutos de Otavalo, a 3720 msnm. Con una temperatura promedio de 8 grados centíg rados, se recomienda visitar el sitio en las mañanas. El centro de rescate y cuidado de aves rapaces se encuentra en Otavalo, a cerca del mirador de 17 hectáreas. Aquí se realizan charlas educativas para conocer la importancia de proteger a estas especies: cóndores, búhos, buitres, gavilanes, águilas, halcone s. Habitan el lugar que tiene una temperatura promedio de 10 grados centígrados y una altura de 2872 msnm. A propósito de esta labor, vale recordar que el cóndor es la construcción indígena, es un símbolo de sabiduría, un mensaje de lo divino. Su imagen fue fundamental para este pueblo en todos los procesos de conquista a lo largo de la región. Revista Vida Activa . (2014, 8 de diciembre). Otavalo, una joya para visitar ."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿A qué distancia aproximada de la ciudad de Otavalo se encuentran las tres lagunas mencionadas en el texto?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) A 1,5 km.",
+            "B) A 3,3 km.",
+            "C) A 40 minutos.",
+            "D) A 10 grados centígrados de distancia."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué el centro de rescate de aves rapaces desempeña un papel más allá de ser un simple mirador?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque está ubicado cerca del monte Imbabura.",
+            "B) Porque asume un rol pedagógico vital mediante charlas para concienciar sobre la conservación de especies endémicas amenazadas.",
+            "C) Porque permite cazar cóndores y gavilanes libremente.",
+            "D) Porque el cóndor fue usado para la conquista española."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿De qué manera la descripción física de elementos como la cascada de Peguche fortalece el atractivo cultural del texto?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Al ilustrar que no es solo agua que cae, sino un verdadero epicentro espiritual y ceremonial profundamente ligado a la cosmovisión andina y purificación.",
+            "B) Al advertir que las dimensiones (30 metros) la hacen peligrosa para el baño.",
+            "C) Al promover la venta de botellas de agua natural cerca de Faccha Llacta.",
+            "D) Al mostrar que las lagunas son exclusivamente para aclimatación de andinistas extranjeros."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Cuál es el nombre de la cascada que sirve de centro ceremonial de purificación en las faldas del Imbabura?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Cascada de Cuicocha",
+            "B) Cascada de San Pablo",
+            "C) Cascada de Peguche",
+            "D) Cascada de Faccha Llacta"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué función utilitaria tiene la zona de las tres lagunas para los montañistas?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Les sirve como balneario termal.",
+            "B) Se considera el sitio ideal para la aclimatación física antes de iniciar un ascenso a montañas como el Fuya Fuya.",
+            "C) Funciona como mercado de equipo.",
+            "D) Es lugar de caza."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Por qué es fundamental rescatar y divulgar el simbolismo ancestral del cóndor en estos centros turísticos?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque permite cobrar más dinero.",
+            "B) Porque revaloriza la identidad indígena, integrando la conservación ambiental con el respeto por la cosmovisión histórica.",
+            "C) Porque el cóndor ataca si no se le respeta.",
+            "D) Porque es el único pájaro de la zona."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "El barrio de Valencia que puede convertirse en un ejemplo mundial",
+      "typology": "Expositivo",
+      "type": null,
+      "text": [
+        "El barrio de Valencia que puede convertirse en un ejemplo mundial Hay algo que diferencia al barrio de Orba, en Alfafar, a las afueras de Valencia, de cualquier otro construido al calor del desarrollismo de los sesenta. Lo distingue incluso de un vecindario prácticamente idéntico levantado en la misma época en Sevilla po r el mismo promotor, con los mismos planos e idéntico nombre originario: Parque Alcosa (acrónimo del constructor Alfredo Corral, SA). Sobre el conglomerado de viviendas de la albufera sur valenciana hay un proyecto único que ha sido galardonado con el prem io internacional de  Rehabilitación Urbana en Edificaciones Masivas, una distinción concedida por  ONU -Hábitat  por la que competían otros 751 proyectos de todo el mundo. El plan se basa en la “revitalización de un barrio obsoleto de bloques de vivienda homogénea”, según cuentan sus autores, María García y Gonzalo Navarrete, miembros del estudio de arquitectura  Improvistos. El vecindario está compuesto por una agrupación de  edificios semejantes, alineados en cuadrículas, en el que viven alrededor de 6.000 personas en solo dos tipos de viviendas distintas: una de unos 70 metros cuadrados (todas idénticas entre sí) y otra de 90 (ídem). “Nos hemos basado en las experiencias de  cohousing  y vivienda colaborativa, que en Europa son más frecuentes. En una comunidad de vecinos se pueden definir varios grados de privacidad y aprovechar zonas infrautilizadas, como las cubiertas para servicios comunes, o generar actividades económicas que financ ien parte de los cambios”, explican los arquitectos. Además de sitios vacíos, el plan contempla, por un lado, aprovechar las viviendas desocupadas para crear lugares de uso vecinal, como pueden ser zonas de  estudio o lavanderías; por otro, tomar parte de la superficie de aquellos hogares cuyos inquilinos no precisan de tanto espacio. Se ganan metros cuadrados para la comunidad y el habitante ahorra en gastos. Linde, P . (2014, 10 de julio). El barrio de Valencia que puede convertirse en un ejemplo mundial . El País ."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿Cuál es el nombre de la distinción otorgada por ONU-Hábitat al proyecto ubicado en el barrio de Orba?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Premio Nacional de Urbanismo.",
+            "B) Premio Internacional de Rehabilitación Urbana en Edificaciones Masivas.",
+            "C) Galardón Europeo de Cohousing y Vivienda.",
+            "D) Reconocimiento al Desarrollismo de los Años Sesenta."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "Según los diseñadores, ¿qué beneficio mutuo (para el habitante y la comunidad) tiene reducir el tamaño de algunos de los pisos privados de 90 metros?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) El constructor Alfredo Corral puede vender esos metros adicionales al extranjero.",
+            "B) Garantiza que todas las fachadas luzcan idénticas a las de Sevilla.",
+            "C) El propietario rebaja sus gastos de mantenimiento y se liberan espacios para destinarlos a zonas comunitarias útiles (como lavanderías o salas de estudio).",
+            "D) Convierte los edificios homogéneos en rascacielos."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Por qué la \"revitalización de un barrio obsoleto\" presentada es catalogada como revolucionaria a escala global?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Porque demuestra que las soluciones de vivienda no siempre implican destruir y construir de cero, sino adaptar, compartir y optimizar infraestructuras preexistentes con lógica colaborativa.",
+            "B) Porque es el primer barrio de Valencia en tener techos y terrazas.",
+            "C) Porque prueba que los proyectos arquitectónicos de los años sesenta eran superiores a los actuales.",
+            "D) Porque obliga a los vecinos a abandonar la propiedad privada por completo."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Qué características arquitectónicas comparten el barrio de Orba y el Parque Alcosa en Sevilla?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) Fueron construidos por el mismo promotor, con los mismos planos y el mismo nombre originario.",
+            "B) Ambos poseen rascacielos ecológicos.",
+            "C) Se sitúan frente al mar.",
+            "D) Cuentan con túneles subterráneos."
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "¿A qué se refiere el término «vivienda colaborativa» en el contexto de la propuesta?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) A que duermen todos en un salón.",
+            "B) A un modelo que combina privacidad con socialización y gestión conjunta de espacios infrautilizados.",
+            "C) A la demolición de los edificios.",
+            "D) A compartir salario."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿De qué manera este proyecto representa una crítica al «desarrollismo de los sesenta»?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Fomenta la construcción masiva.",
+            "B) Contrarresta la visión de los bloques de viviendas como meros dormitorios homogéneos, devolviéndoles la dimensión humana y comunitaria.",
+            "C) Afirma que fue la mejor época.",
+            "D) Destruye el patrimonio histórico."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "¿Cada cuánto debes cambiar cepillos, esponjas y otros objetos?",
+      "typology": "Descriptivo",
+      "type": null,
+      "text": [
+        "¿Cada cuánto debes cambiar cepillos, esponjas y otros objetos? Casi nadie los reemplaza cuando debe Mantener la casa limpia no depende solo de barrer, trapear o usar desinfectantes. También influye mucho saber cuándo es momento de reemplazar ciertos objetos de uso diario que, aunque parecen inofensivos, pueden acumular bacterias, hongos y suciedad con el  paso del tiempo. Entre los artículos que más gérmenes pueden concentrar están las esponjas de cocina, los cepillos de dientes e incluso los colchones. Aunque muchas personas los siguen usando durante meses, expertos en higiene y salud recomiendan cambiarlos con cierta frecuencia para evitar problemas en el hogar y cuidar el bienestar de la familia. Uno de los casos más preocupantes es el de las esponjas para lavar la loza. Al estar constantemente húmedas, tener contacto con restos de comida y permanecer en ambientes cálidos, se convierten en el lugar ideal para la proliferación de bacterias. Por eso, los especialistas aconsejan reemplazarlas cada semana. Aunque se pueden desinfectar por un corto tiempo con agua caliente, vinagre o incluso en el microondas, esto no sustituye el cambio regular. En el baño también hay un objeto que suele pasar demasiado tiempo sin renovación: el cepillo de dientes. Los odontólogos recomiendan cambiarlo cada tres meses, ya que sus cerdas se desgastan y pierden efectividad al momento de limpiar correctamente los dientes. Además, con el uso constante, también puede acumular microorganismos que no conviene mantener por mucho tiempo. Otro elemento clave dentro del hogar es el colchón. Aunque no siempre se nota a simple vista, con los años acumula polvo, ácaros y suciedad, además de perder firmeza. Esto no solo afecta la higiene, sino también la calidad del descanso y la salud física. P or esa razón, se aconseja renovarlo aproximadamente cada siete años. Pequeños cambios como reemplazar estos objetos en el momento adecuado pueden marcar una gran diferencia. Más allá de la limpieza visible, se trata de reducir riesgos, mejorar la higiene del hogar y prevenir que objetos cotidianos se conviertan en focos de contaminación. Revista Familia . (2026, 9 de mayo). Diario El Comercio ."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "Según la lectura, ¿cada cuánto tiempo aconsejan los odontólogos reemplazar el cepillo de dientes?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Semanalmente.",
+            "B) Cada tres meses.",
+            "C) Cada año exacto.",
+            "D) Cada siete años."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "A partir del texto, ¿por qué lavar la esponja de la cocina con vinagre o meterla al microondas resulta ser insuficiente?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Porque el vinagre destruye químicamente el material plástico de la esponja.",
+            "B) Porque elimina la proliferación de bacterias apenas de forma temporal, sin suprimir la necesidad ineludible de cambiar la herramienta periódicamente.",
+            "C) Porque las esponjas estallan al recibir ondas de calor directo.",
+            "D) Porque los restos de comida nunca pueden desprenderse con métodos caseros."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué paradigma doméstico busca desafiar o actualizar principalmente este texto?",
+          "correct_answer": "A",
+          "justification": "",
+          "answers": [
+            "A) La idea errónea de que barrer, fregar y que las cosas \"luzcan\" limpias por fuera es sinónimo de verdadera higiene bacteriológica.",
+            "B) El mito de que los desinfectantes cuestan demasiado dinero y son inservibles.",
+            "C) La creencia de que los ácaros mejoran la firmeza de los colchones con el paso de las décadas.",
+            "D) La costumbre de comprar colchones nuevos cada mes, la cual resulta excesivamente costosa para la familia."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Con qué frecuencia específica recomiendan reemplazar las esponjas para lavar la loza?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Cada mes",
+            "B) Cada tres días",
+            "C) Cada semana",
+            "D) Cada vez que cambien de color"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "Según el texto, ¿qué consecuencias colaterales tiene postergar el cambio de un colchón por más de siete años?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Mejora la postura corporal.",
+            "B) Al acumular polvo y perder firmeza, afecta la calidad del descanso y puede comprometer la salud física.",
+            "C) Aumenta su valor de colección.",
+            "D) Obliga a cambiar de cama."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Cómo refleja el texto la relación entre el hiperconsumismo y la necesidad de salud preventiva?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Promueve comprar compulsivamente.",
+            "B) Establece que el reemplazo no obedece a modas estéticas, sino a criterios biológicos vitales para prevenir focos de contaminación.",
+            "C) Sugiere limpiar todo con químicos.",
+            "D) Defiende que todo sea desechable."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "El plátano verde traspasó fronteras llegando de la Costa a la Sierra",
+      "typology": "Expositivo",
+      "type": null,
+      "text": [
+        "El plátano verde traspasó fronteras llegando de la Costa a la Sierra Un producto originario de la Costa ecuatoriana que data de generaciones es el plátano verde, que se convirtió en uno de los ingredientes principales en la gastronomía de esta región, traspasó fronteras llegando a la Sierra Central, donde se degusta en dife rentes platos típicos. Existe una gran variedad de este producto, pero los de mayor consumo son: el barraganete, el maqueño y el dominico, diferenciados por el tamaño. Entre los platos tradicionales de la Costa que se degustan en la Sierra están los bolones en base a la masa de plátano, rellenos con queso o chicharrón. Las empanadas de verde de una masa similar, cocinada, van rellenas de queso, pollo o carne. También se degusta la cazuela de verde con el plátano rallado o majado que combinado con el maní, vegetales y mariscos es otro producto tradicional, no se diga los chifles, patacones y tigrillo. El plátano verde es considerado una buena fuente de fibra, vitaminas y minerales. Contiene un almidón que puede ayudar a controlar la glucemia, el peso corporal y disminuir los niveles de colesterol en la sangre. En nuestra ciudad hay un sinnúmero de locales gastronómicos con una variedad de platos en base al plátano verde, una delicia de la Costa en la Sierra. El Heraldo. (2026). El plátano verde traspasó fronteras llegando de la Costa a la Sierra ."
+      ],
+      "activites": [
+        {
+          "question_id": 1,
+          "comprehension_level": "Literal",
+          "question": "¿Cuáles de las siguientes variedades de plátano verde son señaladas como las de mayor consumo?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Maduro, guineo y orito.",
+            "B) Barraganete, maqueño y dominico.",
+            "C) Chifle, patacón y tigrillo.",
+            "D) Cazuela, bolón y empanada."
+          ]
+        },
+        {
+          "question_id": 2,
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué indica la proliferación de platos como bolones, empanadas y tigrillos en la Sierra Central acerca de la cultura ecuatoriana?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Indica una división geográfica insalvable, donde cada región come exclusivamente lo suyo.",
+            "B) Demuestra un proceso dinámico de integración e intercambio gastronómico, donde los insumos trascienden su clima originario.",
+            "C) Sugiere que los habitantes de la Sierra son incapaces de cultivar sus propios alimentos.",
+            "D) Refleja la desaparición de la comida tradicional andina por culpa de productos invasores."
+          ]
+        },
+        {
+          "question_id": 3,
+          "comprehension_level": "Crítico",
+          "question": "Sumado a su exquisita adaptabilidad cultural, ¿por qué el consumo del plátano verde resulta altamente recomendable desde la perspectiva nutricional?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Porque es un carbohidrato hueco ideal para subir de peso muy rápido y económicamente.",
+            "B) Porque cura enfermedades contagiosas por sus vitaminas de origen costeño.",
+            "C) Porque actúa como un aliado metabólico al aportar fibras y un almidón específico que regula los picos de glucosa y los niveles de colesterol nocivo.",
+            "D) Porque su sabor sustituye la necesidad de ingerir grasas animales diarias."
+          ]
+        },
+        {
+          "question_id": 4,
+          "comprehension_level": "Literal",
+          "question": "¿Qué platos de la Costa que se degustan en la Sierra utilizan masa de plátano rellenas con queso, pollo o carne?",
+          "correct_answer": "C",
+          "justification": "",
+          "answers": [
+            "A) Los ceviches",
+            "B) Los secos de gallina",
+            "C) Las empanadas de verde",
+            "D) Los encocados"
+          ]
+        },
+        {
+          "question_id": 5,
+          "comprehension_level": "Inferencial",
+          "question": "¿De qué forma contribuye el almidón del plátano verde a la salud del consumidor?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Cura la diabetes tipo 1.",
+            "B) Facilita el control de la glucemia, el peso corporal y la disminución de niveles de colesterol.",
+            "C) Incrementa la retención de líquidos.",
+            "D) Bloquea vitaminas."
+          ]
+        },
+        {
+          "question_id": 6,
+          "comprehension_level": "Crítico",
+          "question": "¿Qué impacto sociológico puede tener el hecho de que un producto endémico de una región se convierta en símbolo gastronómico nacional?",
+          "correct_answer": "B",
+          "justification": "",
+          "answers": [
+            "A) Fomenta la rivalidad regional.",
+            "B) Actúa como puente de cohesión e identidad nacional, difuminando barreras culturales a través de la comida compartida.",
+            "C) Provoca quiebras agrícolas.",
+            "D) Elimina costumbres culinarias autóctonas."
+          ]
+        }
+      ]
+    }
+  ]
+}
