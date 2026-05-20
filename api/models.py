@@ -1,8 +1,9 @@
 """
 models.py — Modelos SQLAlchemy para la base de datos de lecturas
+Incluye modelos de lecturas, preguntas, respuestas, usuarios y progreso.
 """
 from sqlalchemy import (
-    Column, Integer, SmallInteger, String, Text, DateTime,
+    Column, Integer, SmallInteger, String, Text, DateTime, Boolean,
     UniqueConstraint, ForeignKey,
 )
 from sqlalchemy.orm import relationship
@@ -10,6 +11,8 @@ from sqlalchemy.sql import func
 
 from database import Base
 
+
+# ── Modelos de Lecturas (existentes) ─────────────────────────────────────────
 
 class Reading(Base):
     """Modelo ORM para la tabla 'readings'."""
@@ -30,6 +33,20 @@ class Reading(Base):
         back_populates="reading",
         cascade="all, delete-orphan",
         order_by="Question.question_number",
+    )
+
+    # Relación 1:N con sesiones de jugador
+    player_sessions = relationship(
+        "PlayerSession",
+        back_populates="reading",
+        cascade="all, delete-orphan",
+    )
+
+    # Relación 1:N con notas de jugador
+    player_notes = relationship(
+        "PlayerNote",
+        back_populates="reading",
+        cascade="all, delete-orphan",
     )
 
 
@@ -86,4 +103,152 @@ class UserReading(Base):
 
     __table_args__ = (
         UniqueConstraint("user_id", "reading_id", name="uq_user_reading"),
+    )
+
+
+# ── Modelo de Usuarios ──────────────────────────────────────────────────────
+
+class User(Base):
+    """Modelo ORM para la tabla 'users'."""
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(255), unique=True, nullable=False, index=True)
+    hashed_password = Column(String(255), nullable=False)
+    display_name = Column(String(100), nullable=False)
+    character = Column(String(10), default="male")
+    is_active = Column(Boolean, default=True)
+    is_admin = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    last_login_at = Column(DateTime(timezone=True), nullable=True)
+
+    # Relaciones
+    sessions = relationship("PlayerSession", back_populates="user", cascade="all, delete-orphan")
+    achievements = relationship("PlayerAchievement", back_populates="user", cascade="all, delete-orphan")
+    notes = relationship("PlayerNote", back_populates="user", cascade="all, delete-orphan")
+    typology_progress = relationship("PlayerTypologyProgress", back_populates="user", cascade="all, delete-orphan")
+
+
+# ── Modelos de Progreso del Jugador ──────────────────────────────────────────
+
+class PlayerSession(Base):
+    """Sesión de juego completada por un jugador."""
+    __tablename__ = "player_sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    reading_id = Column(Integer, ForeignKey("readings.id", ondelete="CASCADE"), nullable=False)
+    typology = Column(String(50), nullable=False)
+    session_score = Column(Integer, nullable=False, default=0)
+    reading_time_seconds = Column(Integer, nullable=True)
+    total_time_seconds = Column(Integer, nullable=True)
+    is_perfect = Column(Boolean, default=False)
+    correct_count = Column(Integer, nullable=False, default=0)
+    incorrect_count = Column(Integer, nullable=False, default=0)
+    tool_bonus = Column(Integer, nullable=False, default=0)
+    started_at = Column(DateTime(timezone=True), server_default=func.now())
+    completed_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relaciones
+    user = relationship("User", back_populates="sessions")
+    reading = relationship("Reading", back_populates="player_sessions")
+    answers = relationship("PlayerAnswer", back_populates="session", cascade="all, delete-orphan")
+    tools = relationship("SessionTool", back_populates="session", cascade="all, delete-orphan")
+
+
+class PlayerAnswer(Base):
+    """Respuesta individual del jugador a una pregunta."""
+    __tablename__ = "player_answers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    session_id = Column(Integer, ForeignKey("player_sessions.id", ondelete="CASCADE"), nullable=False, index=True)
+    question_id = Column(Integer, ForeignKey("questions.id", ondelete="CASCADE"), nullable=False)
+    comprehension_level = Column(String(20), nullable=False)
+    selected_answer = Column(String(1), nullable=False)
+    correct_answer = Column(String(1), nullable=False)
+    is_correct = Column(Boolean, nullable=False)
+    points_earned = Column(Integer, nullable=False, default=0)
+    penalty_applied = Column(Integer, nullable=False, default=0)
+    response_time_ms = Column(Integer, nullable=True)
+    answered_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relaciones
+    session = relationship("PlayerSession", back_populates="answers")
+    question = relationship("Question")
+
+
+class SessionTool(Base):
+    """Registro de uso de herramienta en una sesión."""
+    __tablename__ = "session_tools"
+
+    id = Column(Integer, primary_key=True, index=True)
+    session_id = Column(Integer, ForeignKey("player_sessions.id", ondelete="CASCADE"), nullable=False, index=True)
+    tool_name = Column(String(30), nullable=False)
+    was_used = Column(Boolean, nullable=False, default=False)
+    usage_count = Column(Integer, nullable=False, default=0)
+    duration_seconds = Column(Integer, nullable=True)
+
+    # Relaciones
+    session = relationship("PlayerSession", back_populates="tools")
+
+    __table_args__ = (
+        UniqueConstraint("session_id", "tool_name", name="uq_session_tool"),
+    )
+
+
+class PlayerNote(Base):
+    """Nota/apunte escrito por el jugador durante una lectura."""
+    __tablename__ = "player_notes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    reading_id = Column(Integer, ForeignKey("readings.id", ondelete="CASCADE"), nullable=False)
+    session_id = Column(Integer, ForeignKey("player_sessions.id", ondelete="SET NULL"), nullable=True)
+    note_content = Column(Text, nullable=False)
+    note_type = Column(String(30), nullable=False, default="free_text")
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relaciones
+    user = relationship("User", back_populates="notes")
+    reading = relationship("Reading", back_populates="player_notes")
+    session = relationship("PlayerSession")
+
+
+class PlayerTypologyProgress(Base):
+    """Progreso acumulado del jugador en cada tipología."""
+    __tablename__ = "player_typology_progress"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    typology = Column(String(50), nullable=False)
+    best_score = Column(Integer, nullable=False, default=0)
+    total_sessions = Column(Integer, nullable=False, default=0)
+    perfect_sessions = Column(Integer, nullable=False, default=0)
+    is_unlocked = Column(Boolean, nullable=False, default=False)
+    first_completed_at = Column(DateTime(timezone=True), nullable=True)
+    last_played_at = Column(DateTime(timezone=True), nullable=True)
+
+    # Relaciones
+    user = relationship("User", back_populates="typology_progress")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "typology", name="uq_user_typology"),
+    )
+
+
+class PlayerAchievement(Base):
+    """Logro desbloqueado por un jugador."""
+    __tablename__ = "player_achievements"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    achievement_id = Column(String(50), nullable=False)
+    achievement_name = Column(String(100), nullable=False)
+    unlocked_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relaciones
+    user = relationship("User", back_populates="achievements")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "achievement_id", name="uq_user_achievement"),
     )

@@ -1,7 +1,8 @@
 # ============================================================================
 # Docker Compose — Virtual World Reading API
-# Servicios: PostgreSQL + FastAPI + Adminer
+# Servicios: PostgreSQL + FastAPI + Adminer + Dashboard Admin
 # Puerto externo de la API: 8001 (para coexistir con LecturaIA en 8000)
+# Puerto externo del Dashboard: 5173
 # ============================================================================
 
 services:
@@ -35,6 +36,20 @@ services:
       DATABASE_URL: postgresql://DB-virtual-world-reading-ai:GodotWorldAdmin@db:5432/godot_readings
       SYNC_SECRET_KEY: lecturaia-vw-sync-2024
       LECTURAIA_API_URL: http://host.docker.internal:8000
+      JWT_SECRET_KEY: virtual-world-jwt-secret-2026-change-in-production
+
+  dashboard:
+    image: node:20-slim
+    working_dir: /app
+    volumes:
+      - ./dashboard:/app
+      - dashboard_modules:/app/node_modules
+    command: >
+      sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    ports:
+      - 5173:5173
+    depends_on:
+      - api
 
   adminer:
     image: adminer
@@ -44,3 +59,4 @@ services:
 
 volumes:
   pgdata:
+  dashboard_modules:

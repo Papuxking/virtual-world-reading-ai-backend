@@ -1,18 +1,20 @@
 """
 main.py — API REST de lecturas para el mundo virtual educativo
 Endpoints CRUD con búsqueda full-text, paginación, filtrado por tipología,
-sincronización bidireccional con LecturaIA y tutor NPC.
+sincronización bidireccional con LecturaIA, tutor NPC,
+autenticación JWT y gestión de progreso del jugador.
 """
 import math
 import os
 import requests
 from typing import List
 from fastapi import FastAPI, Depends, HTTPException, Query, BackgroundTasks, Header
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func as sqlfunc, text
 
-from database import get_db, SessionLocal
+from database import get_db, SessionLocal, engine, Base
 from models import Reading, Question, Answer
 from schemas import (
     ReadingCreate,
@@ -25,11 +27,43 @@ from schemas import (
     VALID_COMPREHENSION_LEVELS,
 )
 
+# Importar routers
+from routers.auth_router import router as auth_router
+from routers.progress_router import router as progress_router
+from routers.admin_router import router as admin_router
+
 app = FastAPI(
     title="Virtual World Reading API",
-    description="API para gestionar lecturas del mundo virtual educativo en Godot",
-    version="1.1.0",
+    description="API para gestionar lecturas del mundo virtual educativo en Godot, con autenticación y progreso de jugadores",
+    version="2.0.0",
 )
+
+# ── CORS ─────────────────────────────────────────────────────────────────────
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",   # Vite dev server (dashboard)
+        "http://localhost:5174",   # Vite dev server alternativo
+        "http://localhost:3000",   # Alternativo
+        "http://localhost:8001",   # Self (API)
+        "http://localhost:8080",   # Adminer
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ── Crear tablas ─────────────────────────────────────────────────────────────
+
+# Crear todas las tablas que no existen (incluye las nuevas de users y progreso)
+Base.metadata.create_all(bind=engine)
+
+# ── Montar Routers ───────────────────────────────────────────────────────────
+
+app.include_router(auth_router)
+app.include_router(progress_router)
+app.include_router(admin_router)
 
 # ── Configuración de sincronización ──────────────────────────────────────────
 

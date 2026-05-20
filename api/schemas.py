@@ -1,9 +1,10 @@
 """
 schemas.py — Schemas Pydantic para validación de request/response
+Incluye schemas de lecturas, autenticación, progreso y administración.
 """
 from datetime import datetime
 from typing import List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 
 
 # ── Tipologías válidas ───────────────────────────────────────────────────────
@@ -20,6 +21,11 @@ VALID_COMPREHENSION_LEVELS = [
     "Literal",
     "Inferencial",
     "Critico",
+]
+
+# Orden de dificultad para la progresión
+DIFFICULTY_ORDER = [
+    "Narrativo", "Descriptivo", "Argumentativo", "Instructivo", "Expositivo"
 ]
 
 
@@ -113,3 +119,275 @@ class ReadingFullResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# ── Schemas de Autenticación ─────────────────────────────────────────────────
+
+class UserRegister(BaseModel):
+    """Schema para registrar un nuevo usuario."""
+    email: EmailStr
+    password: str = Field(..., min_length=8, max_length=128)
+    display_name: str = Field(..., min_length=1, max_length=100)
+    character: str = Field(default="male")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "email": "alumno1@test.com",
+                "password": "Test1234!",
+                "display_name": "Alumno 1",
+                "character": "male",
+            }
+        }
+
+
+class UserLogin(BaseModel):
+    """Schema para iniciar sesión."""
+    email: EmailStr
+    password: str = Field(..., min_length=1)
+
+
+class UserResponse(BaseModel):
+    """Schema de respuesta con datos del usuario (sin contraseña)."""
+    id: int
+    email: str
+    display_name: str
+    character: str
+    is_active: bool
+    is_admin: bool
+    created_at: datetime
+    last_login_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class TokenResponse(BaseModel):
+    """Schema de respuesta tras login exitoso."""
+    access_token: str
+    token_type: str = "bearer"
+    user: UserResponse
+
+
+# ── Schemas de Progreso del Jugador ──────────────────────────────────────────
+
+class PlayerAnswerCreate(BaseModel):
+    """Schema para registrar una respuesta individual."""
+    question_id: int
+    comprehension_level: str
+    selected_answer: str = Field(..., max_length=1)
+    correct_answer: str = Field(..., max_length=1)
+    is_correct: bool
+    points_earned: int = 0
+    penalty_applied: int = 0
+    response_time_ms: Optional[int] = None
+
+
+class SessionToolCreate(BaseModel):
+    """Schema para registrar uso de herramienta."""
+    tool_name: str = Field(..., max_length=30)
+    was_used: bool
+    usage_count: int = 0
+    duration_seconds: Optional[int] = None
+
+
+class SessionCreate(BaseModel):
+    """Schema para registrar una sesión completada desde Godot."""
+    reading_id: int
+    typology: str
+    session_score: int
+    reading_time_seconds: Optional[int] = None
+    total_time_seconds: Optional[int] = None
+    is_perfect: bool = False
+    correct_count: int = 0
+    incorrect_count: int = 0
+    tool_bonus: int = 0
+    answers: List[PlayerAnswerCreate] = []
+    tools: List[SessionToolCreate] = []
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "reading_id": 1,
+                "typology": "Narrativo",
+                "session_score": 180,
+                "reading_time_seconds": 245,
+                "total_time_seconds": 480,
+                "is_perfect": False,
+                "correct_count": 4,
+                "incorrect_count": 2,
+                "tool_bonus": 40,
+                "answers": [
+                    {
+                        "question_id": 1,
+                        "comprehension_level": "Literal",
+                        "selected_answer": "B",
+                        "correct_answer": "B",
+                        "is_correct": True,
+                        "points_earned": 10,
+                    }
+                ],
+                "tools": [
+                    {"tool_name": "highlight", "was_used": True, "usage_count": 3},
+                    {"tool_name": "underline", "was_used": True, "usage_count": 1},
+                    {"tool_name": "notes", "was_used": False, "usage_count": 0},
+                ],
+            }
+        }
+
+
+class NoteCreate(BaseModel):
+    """Schema para guardar una nota del jugador."""
+    reading_id: int
+    session_id: Optional[int] = None
+    note_content: str = Field(..., min_length=1, max_length=10000)
+    note_type: str = Field(default="free_text")
+
+
+class AchievementCreate(BaseModel):
+    """Schema para registrar un logro desbloqueado."""
+    achievement_id: str = Field(..., max_length=50)
+    achievement_name: str = Field(..., max_length=100)
+
+
+# ── Schemas de Respuesta de Progreso ─────────────────────────────────────────
+
+class PlayerAnswerResponse(BaseModel):
+    """Respuesta individual en una sesión."""
+    id: int
+    question_id: int
+    comprehension_level: str
+    selected_answer: str
+    correct_answer: str
+    is_correct: bool
+    points_earned: int
+    penalty_applied: int
+    response_time_ms: Optional[int] = None
+    answered_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class SessionToolResponse(BaseModel):
+    """Herramienta usada en una sesión."""
+    tool_name: str
+    was_used: bool
+    usage_count: int
+    duration_seconds: Optional[int] = None
+
+    class Config:
+        from_attributes = True
+
+
+class SessionResponse(BaseModel):
+    """Respuesta de una sesión completada."""
+    id: int
+    user_id: int
+    reading_id: int
+    typology: str
+    session_score: int
+    reading_time_seconds: Optional[int] = None
+    total_time_seconds: Optional[int] = None
+    is_perfect: bool
+    correct_count: int
+    incorrect_count: int
+    tool_bonus: int
+    started_at: datetime
+    completed_at: datetime
+    answers: List[PlayerAnswerResponse] = []
+    tools: List[SessionToolResponse] = []
+
+    class Config:
+        from_attributes = True
+
+
+class NoteResponse(BaseModel):
+    """Respuesta de una nota del jugador."""
+    id: int
+    user_id: int
+    reading_id: int
+    session_id: Optional[int] = None
+    note_content: str
+    note_type: str
+    created_at: datetime
+    reading_title: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class AchievementResponse(BaseModel):
+    """Logro desbloqueado."""
+    id: int
+    achievement_id: str
+    achievement_name: str
+    unlocked_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class TypologyProgressResponse(BaseModel):
+    """Progreso en una tipología específica."""
+    typology: str
+    best_score: int
+    total_sessions: int
+    perfect_sessions: int
+    is_unlocked: bool
+    first_completed_at: Optional[datetime] = None
+    last_played_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class PlayerProgressResponse(BaseModel):
+    """Progreso completo del jugador (respuesta de GET /progress/me)."""
+    user: UserResponse
+    total_score: int
+    typology_progress: List[TypologyProgressResponse]
+    achievements: List[AchievementResponse]
+    recent_sessions: List[SessionResponse] = []
+
+
+# ── Schemas de Administración ────────────────────────────────────────────────
+
+class PlayerSummary(BaseModel):
+    """Resumen de un jugador para la vista general del dashboard."""
+    id: int
+    email: str
+    display_name: str
+    character: str
+    is_active: bool
+    total_score: int = 0
+    total_sessions: int = 0
+    total_achievements: int = 0
+    last_played_at: Optional[datetime] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class AdminStatsResponse(BaseModel):
+    """Estadísticas globales para el dashboard."""
+    total_players: int
+    active_players: int
+    total_sessions: int
+    total_points: int
+    total_achievements: int
+    average_accuracy: float
+    sessions_by_typology: dict
+    activity_last_7_days: List[dict]
+
+
+class ResetTypologyRequest(BaseModel):
+    """Schema para reiniciar progreso de una tipología (y superiores)."""
+    typology: str = Field(..., description="Tipología desde la cual reiniciar (incluida)")
+    confirm_email: str = Field(..., description="Email del jugador para confirmar")
+
+
+class ResetAllRequest(BaseModel):
+    """Schema para reiniciar todo el progreso de un jugador."""
+    confirm_email: str = Field(..., description="Email del jugador para confirmar")

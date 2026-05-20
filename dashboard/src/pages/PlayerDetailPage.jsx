@@ -1,0 +1,469 @@
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getPlayerDetail, resetTypology, resetAllProgress } from '../services/api';
+import {
+  ArrowLeft, Star, Trophy, BookOpen, Clock, Target, CheckCircle2,
+  XCircle, Lock, Unlock, RotateCcw, AlertTriangle, StickyNote,
+  Highlighter, Underline, PenTool, ChevronDown, ChevronUp, Award,
+} from 'lucide-react';
+
+const DIFFICULTY_ORDER = ['Narrativo', 'Descriptivo', 'Argumentativo', 'Instructivo', 'Expositivo'];
+const DIFFICULTY_COLORS = {
+  Narrativo: { bg: 'bg-indigo-500/20', text: 'text-indigo-400', border: 'border-indigo-500/30', bar: 'bg-indigo-500' },
+  Descriptivo: { bg: 'bg-violet-500/20', text: 'text-violet-400', border: 'border-violet-500/30', bar: 'bg-violet-500' },
+  Argumentativo: { bg: 'bg-purple-500/20', text: 'text-purple-400', border: 'border-purple-500/30', bar: 'bg-purple-500' },
+  Instructivo: { bg: 'bg-fuchsia-500/20', text: 'text-fuchsia-400', border: 'border-fuchsia-500/30', bar: 'bg-fuchsia-500' },
+  Expositivo: { bg: 'bg-pink-500/20', text: 'text-pink-400', border: 'border-pink-500/30', bar: 'bg-pink-500' },
+};
+
+const TOOL_ICONS = { highlight: Highlighter, underline: Underline, notes: PenTool };
+const TOOL_LABELS = { highlight: 'Resaltar', underline: 'Subrayar', notes: 'Notas' };
+
+const ALL_ACHIEVEMENTS = {
+  first_reading: '📖 Primera lectura',
+  explorer: '🏅 Explorador',
+  perfectionist: '🎯 Perfeccionista',
+  avid_reader: '📚 Lector ávido',
+  star_literal: '⭐ Estrella literal',
+  star_inferencial: '⭐⭐ Estrella inferencial',
+  star_critico: '⭐⭐⭐ Estrella crítica',
+  improvement: '📈 En mejora',
+  centurion: '💯 Centurión',
+  half_millennium: '🏆 Medio milenio',
+};
+
+export default function PlayerDetailPage() {
+  const { playerId } = useParams();
+  const navigate = useNavigate();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [expandedSession, setExpandedSession] = useState(null);
+  const [resetModal, setResetModal] = useState(null); // { type: 'typology' | 'all', typology?: string }
+  const [confirmEmail, setConfirmEmail] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetError, setResetError] = useState('');
+
+  useEffect(() => { loadData(); }, [playerId]);
+
+  async function loadData() {
+    setLoading(true);
+    try {
+      const detail = await getPlayerDetail(playerId);
+      setData(detail);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleReset() {
+    setResetError('');
+    setResetLoading(true);
+    try {
+      if (resetModal.type === 'typology') {
+        await resetTypology(playerId, resetModal.typology, confirmEmail);
+      } else {
+        await resetAllProgress(playerId, confirmEmail);
+      }
+      setResetModal(null);
+      setConfirmEmail('');
+      await loadData();
+    } catch (err) {
+      setResetError(err.message);
+    } finally {
+      setResetLoading(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="w-8 h-8 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!data) {
+    return <div className="text-center text-gray-400 py-20">Jugador no encontrado</div>;
+  }
+
+  const { user, total_score, typology_progress, achievements, sessions, notes, tool_stats, level_stats } = data;
+  const unlockedAchievementIds = achievements.map((a) => a.achievement_id);
+
+  return (
+    <div className="space-y-8 animate-fade-in">
+      {/* Header */}
+      <div className="flex items-center gap-4">
+        <button onClick={() => navigate('/')} className="btn-ghost p-2">
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <div className="flex-1">
+          <div className="flex items-center gap-3">
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-lg ${
+              user.character === 'women' ? 'bg-pink-500/20' : 'bg-sky-500/20'
+            }`}>
+              {user.character === 'women' ? '👩' : '👨'}
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">{user.display_name}</h1>
+              <p className="text-sm text-gray-400">{user.email}</p>
+            </div>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm text-gray-400">Registrado</p>
+          <p className="text-sm text-gray-300">{new Date(user.created_at).toLocaleDateString('es-EC')}</p>
+        </div>
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="stat-card">
+          <Star className="w-5 h-5 text-amber-400 mb-2" />
+          <p className="text-2xl font-bold text-white">{total_score.toLocaleString()}</p>
+          <p className="text-xs text-gray-400">Puntos totales</p>
+        </div>
+        <div className="stat-card">
+          <BookOpen className="w-5 h-5 text-violet-400 mb-2" />
+          <p className="text-2xl font-bold text-white">{sessions.length}</p>
+          <p className="text-xs text-gray-400">Sesiones</p>
+        </div>
+        <div className="stat-card">
+          <Award className="w-5 h-5 text-emerald-400 mb-2" />
+          <p className="text-2xl font-bold text-white">{achievements.length}/10</p>
+          <p className="text-xs text-gray-400">Logros</p>
+        </div>
+        <div className="stat-card">
+          <Target className="w-5 h-5 text-sky-400 mb-2" />
+          <p className="text-2xl font-bold text-white">
+            {level_stats.length > 0
+              ? `${Math.round(level_stats.reduce((s, l) => s + l.correct, 0) / Math.max(1, level_stats.reduce((s, l) => s + l.total, 0)) * 100)}%`
+              : '—'}
+          </p>
+          <p className="text-xs text-gray-400">Precisión</p>
+        </div>
+      </div>
+
+      {/* Typology Progress */}
+      <div className="glass-card p-6">
+        <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-primary-400" />
+          Progreso por Tipología
+        </h3>
+        <div className="space-y-4">
+          {DIFFICULTY_ORDER.map((typology) => {
+            const progress = typology_progress.find((tp) => tp.typology === typology);
+            const colors = DIFFICULTY_COLORS[typology];
+            const score = progress?.best_score || 0;
+            const maxScore = 350;
+            const pct = Math.min(100, (score / maxScore) * 100);
+
+            return (
+              <div key={typology} className={`p-4 rounded-xl border ${colors.border} ${colors.bg}`}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    {progress?.is_unlocked ? (
+                      <Unlock className={`w-4 h-4 ${colors.text}`} />
+                    ) : (
+                      <Lock className="w-4 h-4 text-gray-500" />
+                    )}
+                    <span className={`font-semibold ${progress?.is_unlocked ? colors.text : 'text-gray-500'}`}>
+                      {typology}
+                    </span>
+                    {progress?.is_unlocked && (
+                      <span className="badge-success text-[10px]">Desbloqueado</span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm font-bold text-white">{score} pts</span>
+                    <span className="text-xs text-gray-400">{progress?.total_sessions || 0} sesiones</span>
+                    {progress?.is_unlocked && progress?.total_sessions > 0 && (
+                      <button
+                        onClick={() => setResetModal({ type: 'typology', typology })}
+                        className="text-xs text-gray-500 hover:text-red-400 transition-colors flex items-center gap-1"
+                        title="Reiniciar esta tipología y las superiores"
+                      >
+                        <RotateCcw className="w-3 h-3" />
+                        Reiniciar
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div className="w-full bg-white/5 rounded-full h-2">
+                  <div
+                    className={`h-2 rounded-full ${colors.bar} transition-all duration-500`}
+                    style={{ width: `${pct}%` }}
+                  />
+                </div>
+                <div className="flex justify-between mt-1">
+                  <span className="text-[10px] text-gray-500">0</span>
+                  <span className="text-[10px] text-gray-500">Umbral: 250</span>
+                  <span className="text-[10px] text-gray-500">{maxScore}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Sessions, Achievements, Tools, Notes */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Sessions History */}
+        <div className="glass-card p-6">
+          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-primary-400" />
+            Historial de Sesiones
+          </h3>
+          <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
+            {sessions.length === 0 ? (
+              <p className="text-sm text-gray-500 py-4 text-center">Sin sesiones registradas</p>
+            ) : (
+              sessions.map((session) => (
+                <div key={session.id} className="border border-white/5 rounded-xl overflow-hidden">
+                  <button
+                    onClick={() => setExpandedSession(expandedSession === session.id ? null : session.id)}
+                    className="w-full p-3 flex items-center justify-between hover:bg-white/5 transition-colors"
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <div className={`w-2 h-2 rounded-full ${session.is_perfect ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+                      <div>
+                        <p className="text-sm font-medium text-gray-200 truncate max-w-[180px]">
+                          {session.reading_title}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {session.typology} · {session.completed_at
+                            ? new Date(session.completed_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short' })
+                            : '—'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-semibold text-amber-400">{session.session_score} pts</span>
+                      <span className="text-xs text-gray-400">{session.correct_count}/{session.correct_count + session.incorrect_count}</span>
+                      {expandedSession === session.id ? (
+                        <ChevronUp className="w-4 h-4 text-gray-500" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-gray-500" />
+                      )}
+                    </div>
+                  </button>
+                  {expandedSession === session.id && (
+                    <div className="px-3 pb-3 border-t border-white/5 mt-0 pt-3 animate-slide-up">
+                      <div className="grid grid-cols-3 gap-2 text-xs mb-3">
+                        <div className="text-center">
+                          <p className="text-gray-500">Lectura</p>
+                          <p className="text-gray-300 font-medium">
+                            {session.reading_time_seconds ? `${Math.floor(session.reading_time_seconds / 60)}m ${session.reading_time_seconds % 60}s` : '—'}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-gray-500">Total</p>
+                          <p className="text-gray-300 font-medium">
+                            {session.total_time_seconds ? `${Math.floor(session.total_time_seconds / 60)}m ${session.total_time_seconds % 60}s` : '—'}
+                          </p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-gray-500">Bonus</p>
+                          <p className="text-emerald-400 font-medium">+{session.tool_bonus}</p>
+                        </div>
+                      </div>
+                      {session.answers.length > 0 && (
+                        <div className="space-y-1">
+                          {session.answers.map((a, i) => (
+                            <div key={i} className="flex items-center gap-2 text-xs py-1">
+                              {a.is_correct ? (
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                              ) : (
+                                <XCircle className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />
+                              )}
+                              <span className="text-gray-400">{a.comprehension_level}</span>
+                              <span className="text-gray-300">
+                                {a.selected_answer}{a.is_correct ? '' : ` (→${a.correct_answer})`}
+                              </span>
+                              <span className={`ml-auto ${a.is_correct ? 'text-emerald-400' : 'text-red-400'}`}>
+                                {a.is_correct ? `+${a.points_earned}` : `-${a.penalty_applied}`}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Right column */}
+        <div className="space-y-6">
+          {/* Achievements */}
+          <div className="glass-card p-6">
+            <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+              <Award className="w-4 h-4 text-primary-400" />
+              Logros ({achievements.length}/10)
+            </h3>
+            <div className="grid grid-cols-2 gap-2">
+              {Object.entries(ALL_ACHIEVEMENTS).map(([id, name]) => {
+                const unlocked = unlockedAchievementIds.includes(id);
+                return (
+                  <div
+                    key={id}
+                    className={`px-3 py-2 rounded-lg text-xs ${
+                      unlocked
+                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                        : 'bg-white/5 text-gray-500 border border-white/5'
+                    }`}
+                  >
+                    {unlocked ? '✅' : '🔒'} {name}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Tools Usage */}
+          <div className="glass-card p-6">
+            <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+              <Highlighter className="w-4 h-4 text-primary-400" />
+              Uso de Herramientas
+            </h3>
+            {tool_stats.length === 0 ? (
+              <p className="text-sm text-gray-500">Sin datos de herramientas</p>
+            ) : (
+              <div className="space-y-3">
+                {tool_stats.map((tool) => {
+                  const Icon = TOOL_ICONS[tool.tool_name] || PenTool;
+                  return (
+                    <div key={tool.tool_name} className="flex items-center gap-3">
+                      <Icon className="w-4 h-4 text-gray-400" />
+                      <span className="text-sm text-gray-300 w-20">{TOOL_LABELS[tool.tool_name] || tool.tool_name}</span>
+                      <div className="flex-1 bg-white/5 rounded-full h-2">
+                        <div
+                          className="h-2 rounded-full bg-primary-500 transition-all duration-500"
+                          style={{ width: `${tool.usage_rate}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-gray-400 w-12 text-right">{tool.usage_rate}%</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Notes */}
+          <div className="glass-card p-6">
+            <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+              <StickyNote className="w-4 h-4 text-primary-400" />
+              Notas del Jugador ({notes.length})
+            </h3>
+            <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
+              {notes.length === 0 ? (
+                <p className="text-sm text-gray-500">Sin notas registradas</p>
+              ) : (
+                notes.map((note) => (
+                  <div key={note.id} className="p-3 bg-white/5 rounded-lg border border-white/5">
+                    <div className="flex items-center gap-2 mb-1">
+                      <BookOpen className="w-3 h-3 text-primary-400" />
+                      <span className="text-xs text-primary-400 font-medium truncate">{note.reading_title}</span>
+                      <span className="text-[10px] text-gray-500 ml-auto">
+                        {note.created_at ? new Date(note.created_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short' }) : ''}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-300 leading-relaxed">{note.note_content}</p>
+                    <span className="badge-info text-[10px] mt-2">{note.note_type}</span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Reset All Button */}
+      <div className="glass-card p-6 border-red-500/10">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-semibold text-red-400 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4" />
+              Zona de Peligro
+            </h3>
+            <p className="text-xs text-gray-500 mt-1">
+              Reiniciar todo borra sesiones, logros, notas y progreso del jugador
+            </p>
+          </div>
+          <button
+            onClick={() => setResetModal({ type: 'all' })}
+            className="btn-danger text-sm"
+          >
+            <RotateCcw className="w-4 h-4 mr-1 inline" />
+            Reiniciar Todo
+          </button>
+        </div>
+      </div>
+
+      {/* Reset Modal */}
+      {resetModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in">
+          <div className="glass-card p-6 max-w-md w-full mx-4 animate-slide-up">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-red-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-white">
+                  {resetModal.type === 'typology'
+                    ? `Reiniciar desde ${resetModal.typology}`
+                    : 'Reiniciar todo el progreso'}
+                </h3>
+                <p className="text-xs text-gray-400">Esta acción no se puede deshacer</p>
+              </div>
+            </div>
+
+            {resetModal.type === 'typology' && (
+              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 mb-4 text-xs text-amber-400">
+                <strong>Cascada:</strong> Se reiniciarán {resetModal.typology} y todas las tipologías superiores:
+                <span className="font-semibold ml-1">
+                  {DIFFICULTY_ORDER.slice(DIFFICULTY_ORDER.indexOf(resetModal.typology)).join(' → ')}
+                </span>
+              </div>
+            )}
+
+            <p className="text-sm text-gray-300 mb-3">
+              Escribe el email del jugador para confirmar:
+            </p>
+            <input
+              type="email"
+              value={confirmEmail}
+              onChange={(e) => setConfirmEmail(e.target.value)}
+              placeholder={user.email}
+              className="input-field mb-3"
+            />
+
+            {resetError && (
+              <p className="text-sm text-red-400 mb-3">{resetError}</p>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => { setResetModal(null); setConfirmEmail(''); setResetError(''); }}
+                className="btn-ghost flex-1"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleReset}
+                disabled={resetLoading || confirmEmail !== user.email}
+                className="btn-danger flex-1 disabled:opacity-40"
+              >
+                {resetLoading ? 'Procesando...' : 'Confirmar Reinicio'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
