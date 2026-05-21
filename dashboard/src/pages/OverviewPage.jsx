@@ -79,8 +79,8 @@ export default function OverviewPage() {
     <div className="space-y-8 animate-fade-in">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white">Vista General</h1>
-        <p className="text-gray-400 mt-1">Resumen del progreso de todos los jugadores</p>
+        <h1 className="text-3xl font-bold text-slate-800 dark:text-white">Vista General</h1>
+        <p className="text-slate-500 dark:text-gray-400 mt-1">Resumen del progreso de todos los jugadores</p>
       </div>
 
       {/* KPI Cards */}
@@ -121,22 +121,22 @@ export default function OverviewPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Sessions by Typology */}
         <div className="glass-card p-6">
-          <h3 className="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2">
-            <Activity className="w-4 h-4 text-primary-400" />
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <Activity className="w-4 h-4 text-primary-500 dark:text-primary-400" />
             Sesiones por Tipología
           </h3>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={typologyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={12} />
-                <YAxis stroke="rgba(255,255,255,0.3)" fontSize={12} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
+                <XAxis dataKey="name" stroke="var(--chart-axis)" fontSize={12} />
+                <YAxis stroke="var(--chart-axis)" fontSize={12} />
                 <Tooltip
                   contentStyle={{
-                    background: 'rgba(15,23,42,0.95)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    background: 'var(--tooltip-bg)',
+                    border: '1px solid var(--tooltip-border)',
                     borderRadius: '12px',
-                    color: '#e2e8f0',
+                    color: 'var(--tooltip-text)',
                   }}
                   formatter={(value, name, props) => [value, props.payload.fullName]}
                 />
@@ -152,8 +152,8 @@ export default function OverviewPage() {
 
         {/* Typology Distribution Pie */}
         <div className="glass-card p-6">
-          <h3 className="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-primary-400" />
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-4 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 text-primary-500 dark:text-primary-400" />
             Distribución de Sesiones
           </h3>
           <div className="h-56 flex items-center">
@@ -175,10 +175,10 @@ export default function OverviewPage() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    background: 'rgba(15,23,42,0.95)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    background: 'var(--tooltip-bg)',
+                    border: '1px solid var(--tooltip-border)',
                     borderRadius: '12px',
-                    color: '#e2e8f0',
+                    color: 'var(--tooltip-text)',
                   }}
                 />
               </PieChart>
@@ -187,8 +187,8 @@ export default function OverviewPage() {
               {typologyData.map((t) => (
                 <div key={t.fullName} className="flex items-center gap-2 text-xs">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: t.color }} />
-                  <span className="text-gray-400">{t.fullName}</span>
-                  <span className="text-gray-300 font-medium ml-auto">{t.sessions}</span>
+                  <span className="text-slate-500 dark:text-gray-400">{t.fullName}</span>
+                  <span className="text-slate-700 dark:text-gray-300 font-medium ml-auto">{t.sessions}</span>
                 </div>
               ))}
             </div>
@@ -198,13 +198,13 @@ export default function OverviewPage() {
 
       {/* Players Table */}
       <div className="glass-card overflow-hidden">
-        <div className="p-6 border-b border-white/5 flex items-center justify-between gap-4">
-          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-            <Users className="w-5 h-5 text-primary-400" />
+        <div className="p-6 border-b border-slate-200/50 dark:border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white flex items-center gap-2">
+            <Users className="w-5 h-5 text-primary-500 dark:text-primary-400" />
             Jugadores
           </h3>
           <div className="relative max-w-sm w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
             <input
               type="text"
               value={search}
@@ -218,17 +218,17 @@ export default function OverviewPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-white/5">
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Jugador</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Email</th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Puntos</th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Sesiones</th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Logros</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Último Acceso</th>
+              <tr className="border-b border-slate-200/50 dark:border-white/5">
+                <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Jugador</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Email</th>
+                <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Puntos</th>
+                <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Sesiones</th>
+                <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Logros</th>
+                <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Último Acceso</th>
                 <th className="px-6 py-3" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/5">
               {filteredPlayers.map((player) => (
                 <tr
                   key={player.id}
@@ -239,35 +239,35 @@ export default function OverviewPage() {
                     <div className="flex items-center gap-3">
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold ${
                         player.character === 'women'
-                          ? 'bg-pink-500/20 text-pink-400'
-                          : 'bg-sky-500/20 text-sky-400'
+                          ? 'bg-pink-500/20 text-pink-500 dark:text-pink-400'
+                          : 'bg-sky-500/20 text-sky-600 dark:text-sky-400'
                       }`}>
                         {player.character === 'women' ? '👩' : '👨'}
                       </div>
-                      <span className="font-medium text-gray-200">{player.display_name}</span>
+                      <span className="font-semibold text-slate-700 dark:text-gray-200">{player.display_name}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-400">{player.email}</td>
+                  <td className="px-6 py-4 text-sm text-slate-500 dark:text-gray-400">{player.email}</td>
                   <td className="px-6 py-4 text-right">
-                    <span className="font-semibold text-amber-400">{player.total_score.toLocaleString()}</span>
+                    <span className="font-bold text-amber-600 dark:text-amber-400">{player.total_score.toLocaleString()}</span>
                   </td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-300">{player.total_sessions}</td>
+                  <td className="px-6 py-4 text-right text-sm text-slate-600 dark:text-gray-300">{player.total_sessions}</td>
                   <td className="px-6 py-4 text-right">
                     <span className="badge-info">{player.total_achievements}/10</span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-400">
+                  <td className="px-6 py-4 text-sm text-slate-500 dark:text-gray-400">
                     {player.last_played_at
                       ? new Date(player.last_played_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short' })
                       : 'Nunca'}
                   </td>
                   <td className="px-6 py-4">
-                    <ChevronRight className="w-4 h-4 text-gray-500" />
+                    <ChevronRight className="w-4 h-4 text-slate-400 dark:text-gray-500" />
                   </td>
                 </tr>
               ))}
               {filteredPlayers.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
+                  <td colSpan={7} className="px-6 py-12 text-center text-slate-400 dark:text-gray-500">
                     No se encontraron jugadores
                   </td>
                 </tr>
@@ -283,11 +283,11 @@ export default function OverviewPage() {
 function StatCard({ icon, label, value, color }) {
   return (
     <div className="stat-card group">
-      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shadow-lg mb-3`}>
+      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shadow-md mb-3 text-white`}>
         {icon}
       </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
-      <p className="text-xs text-gray-400 mt-1">{label}</p>
+      <p className="text-2xl font-extrabold text-slate-800 dark:text-white">{value}</p>
+      <p className="text-xs font-semibold text-slate-400 dark:text-gray-400 mt-1">{label}</p>
     </div>
   );
 }
