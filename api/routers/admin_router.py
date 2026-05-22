@@ -8,7 +8,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session, joinedload
-from sqlalchemy import func as sqlfunc
+from sqlalchemy import func as sqlfunc, Integer
 
 from database import get_db
 from models import (
@@ -144,7 +144,7 @@ def get_player_detail(
         db.query(
             SessionTool.tool_name,
             sqlfunc.count(SessionTool.id).label("total"),
-            sqlfunc.sum(sqlfunc.cast(SessionTool.was_used, sqlfunc.integer())).label("used"),
+            sqlfunc.sum(sqlfunc.cast(SessionTool.was_used, Integer)).label("used"),
         )
         .join(PlayerSession, SessionTool.session_id == PlayerSession.id)
         .filter(PlayerSession.user_id == player_id)
@@ -157,7 +157,7 @@ def get_player_detail(
         db.query(
             PlayerAnswer.comprehension_level,
             sqlfunc.count(PlayerAnswer.id).label("total"),
-            sqlfunc.sum(sqlfunc.cast(PlayerAnswer.is_correct, sqlfunc.integer())).label("correct"),
+            sqlfunc.sum(sqlfunc.cast(PlayerAnswer.is_correct, Integer)).label("correct"),
         )
         .join(PlayerSession, PlayerAnswer.session_id == PlayerSession.id)
         .filter(PlayerSession.user_id == player_id)

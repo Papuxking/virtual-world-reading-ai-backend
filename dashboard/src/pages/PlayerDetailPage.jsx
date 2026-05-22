@@ -37,6 +37,7 @@ export default function PlayerDetailPage() {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [expandedSession, setExpandedSession] = useState(null);
   const [resetModal, setResetModal] = useState(null); // { type: 'typology' | 'all', typology?: string }
   const [confirmEmail, setConfirmEmail] = useState('');
@@ -47,11 +48,13 @@ export default function PlayerDetailPage() {
 
   async function loadData() {
     setLoading(true);
+    setError(null);
     try {
       const detail = await getPlayerDetail(playerId);
       setData(detail);
     } catch (err) {
       console.error(err);
+      setError(err.message || 'Error al cargar datos del jugador');
     } finally {
       setLoading(false);
     }
@@ -85,7 +88,21 @@ export default function PlayerDetailPage() {
   }
 
   if (!data) {
-    return <div className="text-center text-gray-400 py-20">Jugador no encontrado</div>;
+    return (
+      <div className="text-center py-20 animate-fade-in">
+        <p className="text-slate-500 dark:text-gray-400 mb-4">{error || 'Jugador no encontrado'}</p>
+        <div className="flex items-center justify-center gap-3">
+          <button onClick={() => navigate('/')} className="btn-ghost text-sm">
+            ← Volver
+          </button>
+          {error && (
+            <button onClick={loadData} className="btn-primary text-sm">
+              Reintentar
+            </button>
+          )}
+        </div>
+      </div>
+    );
   }
 
   const { user, total_score, typology_progress, achievements, sessions, notes, tool_stats, level_stats } = data;
