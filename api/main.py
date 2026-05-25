@@ -31,6 +31,7 @@ from schemas import (
 from routers.auth_router import router as auth_router
 from routers.progress_router import router as progress_router
 from routers.admin_router import router as admin_router
+from routers.catalog_router import router as catalog_router
 
 app = FastAPI(
     title="Virtual World Reading API",
@@ -59,11 +60,28 @@ app.add_middleware(
 # Crear todas las tablas que no existen (incluye las nuevas de users y progreso)
 Base.metadata.create_all(bind=engine)
 
+# Asegurar que el directorio de archivos estáticos existe
+from fastapi.staticfiles import StaticFiles
+static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+medals_dir = os.path.join(static_dir, "medals")
+os.makedirs(medals_dir, exist_ok=True)
+
+# Escribir un placeholder.png mínimo si no existe
+placeholder_path = os.path.join(medals_dir, "placeholder.png")
+if not os.path.exists(placeholder_path):
+    import base64
+    min_png = base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=")
+    with open(placeholder_path, "wb") as f:
+        f.write(min_png)
+
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
 # ── Montar Routers ───────────────────────────────────────────────────────────
 
 app.include_router(auth_router)
 app.include_router(progress_router)
 app.include_router(admin_router)
+app.include_router(catalog_router)
 
 # ── Configuración de sincronización ──────────────────────────────────────────
 

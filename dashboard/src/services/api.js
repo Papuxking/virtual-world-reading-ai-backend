@@ -107,14 +107,86 @@ export async function getPlayerNotes(playerId) {
 export async function resetTypology(playerId, typology, confirmEmail) {
   return apiFetch(`/admin/players/${playerId}/reset/typology`, {
     method: 'POST',
-    body: JSON.stringify({ typology, confirm_email: confirmEmail }),
+    body: JSON.stringify({ typology, confirm_email: confirmEmail, confirm_delete: true }),
   });
 }
 
 export async function resetAllProgress(playerId, confirmEmail) {
   return apiFetch(`/admin/players/${playerId}/reset/all`, {
     method: 'POST',
-    body: JSON.stringify({ confirm_email: confirmEmail }),
+    body: JSON.stringify({ confirm_email: confirmEmail, confirm_delete: true }),
+  });
+}
+
+// ── Gestión de Slots ─────────────────────────────────────────────────────────
+
+export async function getPlayerSlots(playerId) {
+  return apiFetch(`/admin/players/${playerId}/slots`);
+}
+
+export async function createPlayerSlot(playerId, label) {
+  return apiFetch(`/admin/players/${playerId}/slots`, {
+    method: 'POST',
+    body: JSON.stringify({ label }),
+  });
+}
+
+export async function activatePlayerSlot(playerId, slotNumber) {
+  return apiFetch(`/admin/players/${playerId}/slots/${slotNumber}/activate`, {
+    method: 'PUT',
+  });
+}
+
+// ── Restablecer Contraseña ──────────────────────────────────────────────────
+
+export async function resetPlayerPassword(playerId) {
+  return apiFetch(`/admin/players/${playerId}/reset-password`, {
+    method: 'POST',
+  });
+}
+
+// ── Catálogo de Logros y Medallas ───────────────────────────────────────────
+
+export async function getAchievementsCatalog() {
+  return apiFetch('/achievements/catalog');
+}
+
+export async function updateCatalogAchievement(achievementId, data) {
+  return apiFetch(`/achievements/admin/${achievementId}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function uploadMedalImage(achievementId, file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  const response = await fetch(`${API_BASE}/achievements/admin/${achievementId}/medal-image`, {
+    method: 'PUT',
+    headers: {
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+    },
+    body: formData,
+  });
+
+  if (response.status === 401) {
+    clearToken();
+    window.location.href = '/login';
+    throw new Error('Sesión expirada');
+  }
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Error al subir la imagen' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function deleteMedalImage(achievementId) {
+  return apiFetch(`/achievements/admin/${achievementId}/medal-image`, {
+    method: 'DELETE',
   });
 }
 

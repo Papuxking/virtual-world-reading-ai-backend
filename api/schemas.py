@@ -155,6 +155,7 @@ class UserResponse(BaseModel):
     character: str
     is_active: bool
     is_admin: bool
+    must_change_password: bool = False
     created_at: datetime
     last_login_at: Optional[datetime] = None
 
@@ -167,6 +168,70 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserResponse
+    must_change_password: bool = False
+
+
+# ── Schemas de Gestión de Slots y Catálogos ───────────────────────────────────
+
+class PlayerSlotResponse(BaseModel):
+    """Schema de respuesta para un slot de jugador."""
+    id: int
+    user_id: int
+    slot_number: int
+    label: str
+    is_active: bool
+    created_at: datetime
+    created_by: Optional[int] = None
+    total_score: int = 0
+    total_sessions: int = 0
+    total_achievements: int = 0
+    last_played_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class PlayerSlotCreate(BaseModel):
+    """Schema para crear un nuevo slot de jugador."""
+    label: str = Field(..., min_length=1, max_length=50, examples=["Intento 2"])
+
+
+class ChangePasswordRequest(BaseModel):
+    """Schema para cambiar la contraseña del jugador."""
+    new_password: str = Field(..., min_length=8, max_length=128)
+
+
+class AchievementCatalogResponse(BaseModel):
+    """Schema de respuesta para un logro del catálogo global."""
+    id: str
+    name: str
+    description: str
+    how_to_unlock: str
+    category: str
+    icon: str
+    medal_name: str
+    medal_tier: str
+    medal_description: Optional[str] = None
+    medal_image_path: Optional[str] = None
+    display_order: int
+    is_active: bool
+
+    class Config:
+        from_attributes = True
+
+
+class AchievementCatalogUpdate(BaseModel):
+    """Schema para actualizar un logro del catálogo."""
+    name: Optional[str] = None
+    description: Optional[str] = None
+    how_to_unlock: Optional[str] = None
+    category: Optional[str] = None
+    icon: Optional[str] = None
+    medal_name: Optional[str] = None
+    medal_tier: Optional[str] = None
+    medal_description: Optional[str] = None
+    display_order: Optional[int] = None
+    is_active: Optional[bool] = None
 
 
 # ── Schemas de Progreso del Jugador ──────────────────────────────────────────
@@ -386,8 +451,10 @@ class ResetTypologyRequest(BaseModel):
     """Schema para reiniciar progreso de una tipología (y superiores)."""
     typology: str = Field(..., description="Tipología desde la cual reiniciar (incluida)")
     confirm_email: str = Field(..., description="Email del jugador para confirmar")
+    confirm_delete: bool = Field(..., description="El admin debe confirmar explícitamente la eliminación")
 
 
 class ResetAllRequest(BaseModel):
     """Schema para reiniciar todo el progreso de un jugador."""
     confirm_email: str = Field(..., description="Email del jugador para confirmar")
+    confirm_delete: bool = Field(..., description="El admin debe confirmar explícitamente la eliminación")

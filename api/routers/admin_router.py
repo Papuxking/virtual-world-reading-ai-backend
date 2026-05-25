@@ -3,6 +3,8 @@ admin_router.py — Endpoints administrativos para el dashboard.
 Lista de jugadores, detalle, estadísticas, reinicio por tipología y reinicio total.
 Todos los endpoints requieren rol de administrador.
 """
+import secrets
+import string
 from datetime import datetime, timedelta, timezone
 from typing import List
 
@@ -14,16 +16,26 @@ from database import get_db
 from models import (
     User, PlayerSession, PlayerAnswer, SessionTool,
     PlayerNote, PlayerTypologyProgress, PlayerAchievement, Reading,
+    PlayerSlot,
 )
 from schemas import (
     PlayerSummary, AdminStatsResponse, UserResponse,
     SessionResponse, NoteResponse, AchievementResponse,
     TypologyProgressResponse, ResetTypologyRequest, ResetAllRequest,
-    DIFFICULTY_ORDER,
+    DIFFICULTY_ORDER, PlayerSlotResponse, PlayerSlotCreate,
 )
-from auth import get_current_admin
+from auth import get_current_admin, hash_password
 
 router = APIRouter(prefix="/admin", tags=["Administración"])
+
+
+def generate_temp_password(length=10) -> str:
+    """Genera una contraseña temporal segura con al menos una mayúscula y un número."""
+    alphabet = string.ascii_letters + string.digits
+    while True:
+        password = ''.join(secrets.choice(alphabet) for _ in range(length))
+        if any(c.isupper() for c in password) and any(c.isdigit() for c in password):
+            return password
 
 
 # ── Lista de Jugadores ───────────────────────────────────────────────────────
@@ -35,7 +47,7 @@ def list_players(
     admin: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    """Lista todos los jugadores con resumen de progreso."""
+    """Lista todos los jugadores con resumen de progreso para el slot activo."""
     query = db.query(User).filter(User.is_admin == False)
 
     if q:
@@ -50,25 +62,34 @@ def list_players(
 
     result = []
     for user in users:
-        # Calcular resumen
+        # Obtener slot activo
+        act_slot = db.query(PlayerSlot).filter(PlayerSlot.user_id == user.id, PlayerSlot.is_active == True).first()
+        slot_filter = (PlayerTypologyProgress.slot_id == act_slot.id) if act_slot else True
+        sess_filter = (PlayerSession.slot_id == act_slot.id) if act_slot else True
+        ach_filter = (PlayerAchievement.slot_id == act_slot.id) if act_slot else True
+
         total_score = (
             db.query(sqlfunc.coalesce(sqlfunc.sum(PlayerTypologyProgress.best_score), 0))
             .filter(PlayerTypologyProgress.user_id == user.id)
+            .filter(slot_filter)
             .scalar()
         )
         total_sessions = (
             db.query(sqlfunc.count(PlayerSession.id))
             .filter(PlayerSession.user_id == user.id)
+            .filter(sess_filter)
             .scalar()
         )
         total_achievements = (
             db.query(sqlfunc.count(PlayerAchievement.id))
             .filter(PlayerAchievement.user_id == user.id)
+            .filter(ach_filter)
             .scalar()
         )
         last_played = (
             db.query(sqlfunc.max(PlayerSession.completed_at))
             .filter(PlayerSession.user_id == user.id)
+            .filter(sess_filter)
             .scalar()
         )
 
@@ -96,27 +117,41 @@ def get_player_detail(
     admin: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    """Retorna el detalle completo de un jugador específico."""
+    """Retorna el detalle completo de un jugador para su slot activo."""
     user = db.query(User).filter(User.id == player_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="Jugador no encontrado")
 
-    # Progreso por tipología
+    # Obtener el slot activo del jugador
+    active_slot = db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id, PlayerSlot.is_active == True).first()
+    if not active_slot:
+        # Crear un slot activo por defecto si no existe por algún motivo
+        active_slot = PlayerSlot(
+            user_id=player_id,
+            slot_number=1,
+            label="Sesión 1",
+            is_active=True
+        )
+        db.add(active_slot)
+        db.commit()
+        db.refresh(active_slot)
+
+    # Progreso por tipología en el slot activo
     typology_progress = (
         db.query(PlayerTypologyProgress)
-        .filter(PlayerTypologyProgress.user_id == player_id)
+        .filter(PlayerTypologyProgress.user_id == player_id, PlayerTypologyProgress.slot_id == active_slot.id)
         .all()
     )
 
-    # Logros
+    # Logros en el slot activo
     achievements = (
         db.query(PlayerAchievement)
-        .filter(PlayerAchievement.user_id == player_id)
+        .filter(PlayerAchievement.user_id == player_id, PlayerAchievement.slot_id == active_slot.id)
         .order_by(PlayerAchievement.unlocked_at)
         .all()
     )
 
-    # Sesiones con detalle
+    # Sesiones con detalle en el slot activo
     sessions = (
         db.query(PlayerSession)
         .options(
@@ -124,22 +159,22 @@ def get_player_detail(
             joinedload(PlayerSession.tools),
             joinedload(PlayerSession.reading),
         )
-        .filter(PlayerSession.user_id == player_id)
+        .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == active_slot.id)
         .order_by(PlayerSession.completed_at.desc())
         .limit(50)
         .all()
     )
 
-    # Notas con título de lectura
+    # Notas con título de lectura en el slot activo
     notes_query = (
         db.query(PlayerNote, Reading.title, Reading.typology)
         .join(Reading, PlayerNote.reading_id == Reading.id)
-        .filter(PlayerNote.user_id == player_id)
+        .filter(PlayerNote.user_id == player_id, PlayerNote.slot_id == active_slot.id)
         .order_by(PlayerNote.created_at.desc())
         .all()
     )
 
-    # Estadísticas de herramientas
+    # Estadísticas de herramientas en el slot activo
     tool_stats = (
         db.query(
             SessionTool.tool_name,
@@ -147,12 +182,12 @@ def get_player_detail(
             sqlfunc.sum(sqlfunc.cast(SessionTool.was_used, Integer)).label("used"),
         )
         .join(PlayerSession, SessionTool.session_id == PlayerSession.id)
-        .filter(PlayerSession.user_id == player_id)
+        .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == active_slot.id)
         .group_by(SessionTool.tool_name)
         .all()
     )
 
-    # Estadísticas por nivel de comprensión
+    # Estadísticas por nivel de comprensión en el slot activo
     level_stats = (
         db.query(
             PlayerAnswer.comprehension_level,
@@ -160,7 +195,7 @@ def get_player_detail(
             sqlfunc.sum(sqlfunc.cast(PlayerAnswer.is_correct, Integer)).label("correct"),
         )
         .join(PlayerSession, PlayerAnswer.session_id == PlayerSession.id)
-        .filter(PlayerSession.user_id == player_id)
+        .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == active_slot.id)
         .group_by(PlayerAnswer.comprehension_level)
         .all()
     )
@@ -170,6 +205,8 @@ def get_player_detail(
     return {
         "user": UserResponse.model_validate(user),
         "total_score": total_score,
+        "active_slot_number": active_slot.slot_number,
+        "active_slot_label": active_slot.label,
         "typology_progress": [
             TypologyProgressResponse.model_validate(tp) for tp in typology_progress
         ],
@@ -320,13 +357,19 @@ def reset_typology(
     db: Session = Depends(get_db),
 ):
     """
-    Reinicia el progreso de una tipología Y TODAS LAS SUPERIORES.
+    Reinicia el progreso de una tipología Y TODAS LAS SUPERIORES en el SLOT ACTIVO.
     Ejemplo: reiniciar Argumentativo también borra Instructivo y Expositivo.
-    Los logros NO se borran (son permanentes).
     """
     user = db.query(User).filter(User.id == player_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="Jugador no encontrado")
+
+    # Validar confirmación de borrado
+    if not data.confirm_delete:
+        raise HTTPException(
+            status_code=400,
+            detail="Debe confirmar explícitamente la eliminación permanente",
+        )
 
     # Verificar confirmación por email
     if data.confirm_email != user.email:
@@ -334,6 +377,11 @@ def reset_typology(
             status_code=400,
             detail="El email de confirmación no coincide con el jugador",
         )
+
+    # Obtener slot activo
+    active_slot = db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id, PlayerSlot.is_active == True).first()
+    if not active_slot:
+        raise HTTPException(status_code=400, detail="El jugador no tiene un slot de sesión activo")
 
     # Determinar tipologías a reiniciar (la indicada + todas las superiores)
     try:
@@ -347,12 +395,13 @@ def reset_typology(
     deleted_notes = 0
 
     for typology in typologies_to_reset:
-        # Obtener IDs de sesiones de esta tipología
+        # Obtener IDs de sesiones de esta tipología para el slot activo
         session_ids = [
             s.id for s in
             db.query(PlayerSession.id)
             .filter(
                 PlayerSession.user_id == player_id,
+                PlayerSession.slot_id == active_slot.id,
                 PlayerSession.typology == typology,
             )
             .all()
@@ -375,7 +424,7 @@ def reset_typology(
             ).delete(synchronize_session=False)
             deleted_sessions += count
 
-        # Borrar notas de lecturas de esta tipología
+        # Borrar notas de lecturas de esta tipología en el slot activo
         reading_ids_of_typology = [
             r.id for r in
             db.query(Reading.id).filter(Reading.typology == typology).all()
@@ -383,15 +432,17 @@ def reset_typology(
         if reading_ids_of_typology:
             note_count = db.query(PlayerNote).filter(
                 PlayerNote.user_id == player_id,
+                PlayerNote.slot_id == active_slot.id,
                 PlayerNote.reading_id.in_(reading_ids_of_typology),
             ).delete(synchronize_session=False)
             deleted_notes += note_count
 
-        # Reiniciar progreso de tipología
+        # Reiniciar progreso de tipología para el slot activo
         progress = (
             db.query(PlayerTypologyProgress)
             .filter(
                 PlayerTypologyProgress.user_id == player_id,
+                PlayerTypologyProgress.slot_id == active_slot.id,
                 PlayerTypologyProgress.typology == typology,
             )
             .first()
@@ -408,13 +459,13 @@ def reset_typology(
             else:
                 progress.is_unlocked = False
 
-    # Re-evaluar desbloqueos desde el principio
-    _reevaluate_unlocks(db, player_id)
+    # Re-evaluar desbloqueos desde el principio para el slot activo
+    _reevaluate_unlocks(db, player_id, active_slot.id)
 
     db.commit()
 
     return {
-        "detail": "Progreso reiniciado",
+        "detail": "Progreso reiniciado en el slot activo",
         "typologies_reset": typologies_to_reset,
         "sessions_deleted": deleted_sessions,
         "notes_deleted": deleted_notes,
@@ -431,7 +482,7 @@ def reset_all_progress(
     db: Session = Depends(get_db),
 ):
     """
-    Reinicia TODO el progreso de un jugador.
+    Reinicia TODO el progreso de un jugador en su SLOT ACTIVO.
     Borra sesiones, respuestas, herramientas, notas, logros y progreso.
     NO borra la cuenta ni el personaje.
     """
@@ -439,17 +490,29 @@ def reset_all_progress(
     if not user:
         raise HTTPException(status_code=404, detail="Jugador no encontrado")
 
+    # Validar confirmación de borrado
+    if not data.confirm_delete:
+        raise HTTPException(
+            status_code=400,
+            detail="Debe confirmar explícitamente la eliminación permanente",
+        )
+
     if data.confirm_email != user.email:
         raise HTTPException(
             status_code=400,
             detail="El email de confirmación no coincide con el jugador",
         )
 
-    # Obtener IDs de sesiones
+    # Obtener slot activo
+    active_slot = db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id, PlayerSlot.is_active == True).first()
+    if not active_slot:
+        raise HTTPException(status_code=400, detail="El jugador no tiene un slot de sesión activo")
+
+    # Obtener IDs de sesiones del slot activo
     session_ids = [
         s.id for s in
         db.query(PlayerSession.id)
-        .filter(PlayerSession.user_id == player_id)
+        .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == active_slot.id)
         .all()
     ]
 
@@ -475,22 +538,26 @@ def reset_all_progress(
         ).delete(synchronize_session=False)
 
     counts["notes"] = db.query(PlayerNote).filter(
-        PlayerNote.user_id == player_id
+        PlayerNote.user_id == player_id,
+        PlayerNote.slot_id == active_slot.id
     ).delete(synchronize_session=False)
 
     counts["achievements"] = db.query(PlayerAchievement).filter(
-        PlayerAchievement.user_id == player_id
+        PlayerAchievement.user_id == player_id,
+        PlayerAchievement.slot_id == active_slot.id
     ).delete(synchronize_session=False)
 
-    # Reiniciar progreso de tipologías
+    # Reiniciar progreso de tipologías del slot activo
     db.query(PlayerTypologyProgress).filter(
-        PlayerTypologyProgress.user_id == player_id
+        PlayerTypologyProgress.user_id == player_id,
+        PlayerTypologyProgress.slot_id == active_slot.id
     ).delete(synchronize_session=False)
 
-    # Recrear progreso con solo Narrativo desbloqueado
+    # Recrear progreso con solo Narrativo desbloqueado para el slot activo
     for typology in DIFFICULTY_ORDER:
         p = PlayerTypologyProgress(
             user_id=player_id,
+            slot_id=active_slot.id,
             typology=typology,
             is_unlocked=(typology == "Narrativo"),
         )
@@ -499,7 +566,7 @@ def reset_all_progress(
     db.commit()
 
     return {
-        "detail": "Todo el progreso ha sido reiniciado",
+        "detail": "Todo el progreso en el slot activo ha sido reiniciado",
         "deleted": counts,
     }
 
@@ -514,7 +581,12 @@ def get_player_sessions(
     admin: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    """Lista las sesiones de un jugador específico (vista admin)."""
+    """Lista las sesiones de un jugador específico para su slot activo (vista admin)."""
+    # Obtener el slot activo del jugador
+    active_slot = db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id, PlayerSlot.is_active == True).first()
+    if not active_slot:
+        return []
+
     query = (
         db.query(PlayerSession)
         .options(
@@ -522,7 +594,7 @@ def get_player_sessions(
             joinedload(PlayerSession.tools),
             joinedload(PlayerSession.reading),
         )
-        .filter(PlayerSession.user_id == player_id)
+        .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == active_slot.id)
     )
     if typology:
         query = query.filter(PlayerSession.typology == typology)
@@ -572,11 +644,16 @@ def get_player_notes(
     admin: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    """Lista las notas de un jugador con el título de la lectura asociada."""
+    """Lista las notas de un jugador para su slot activo."""
+    # Obtener el slot activo del jugador
+    active_slot = db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id, PlayerSlot.is_active == True).first()
+    if not active_slot:
+        return []
+
     results = (
         db.query(PlayerNote, Reading.title, Reading.typology)
         .join(Reading, PlayerNote.reading_id == Reading.id)
-        .filter(PlayerNote.user_id == player_id)
+        .filter(PlayerNote.user_id == player_id, PlayerNote.slot_id == active_slot.id)
         .order_by(PlayerNote.created_at.desc())
         .all()
     )
@@ -595,6 +672,183 @@ def get_player_notes(
     ]
 
 
+# ── Gestión de Slots Administrativa ───────────────────────────────────────────
+
+@router.get("/players/{player_id}/slots", response_model=List[PlayerSlotResponse])
+def get_player_slots(
+    player_id: int,
+    admin: User = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    """Lista todos los slots del jugador con el resumen de su progreso."""
+    user = db.query(User).filter(User.id == player_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Jugador no encontrado")
+
+    slots = db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id).order_by(PlayerSlot.slot_number).all()
+
+    result = []
+    for slot in slots:
+        # Calcular totales para este slot específico
+        total_score = (
+            db.query(sqlfunc.coalesce(sqlfunc.sum(PlayerTypologyProgress.best_score), 0))
+            .filter(PlayerTypologyProgress.user_id == player_id, PlayerTypologyProgress.slot_id == slot.id)
+            .scalar()
+        )
+        total_sessions = (
+            db.query(sqlfunc.count(PlayerSession.id))
+            .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == slot.id)
+            .scalar()
+        )
+        total_achievements = (
+            db.query(sqlfunc.count(PlayerAchievement.id))
+            .filter(PlayerAchievement.user_id == player_id, PlayerAchievement.slot_id == slot.id)
+            .scalar()
+        )
+        last_played = (
+            db.query(sqlfunc.max(PlayerSession.completed_at))
+            .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == slot.id)
+            .scalar()
+        )
+
+        result.append(PlayerSlotResponse(
+            id=slot.id,
+            user_id=slot.user_id,
+            slot_number=slot.slot_number,
+            label=slot.label,
+            is_active=slot.is_active,
+            created_at=slot.created_at,
+            created_by=slot.created_by,
+            total_score=total_score or 0,
+            total_sessions=total_sessions or 0,
+            total_achievements=total_achievements or 0,
+            last_played_at=last_played,
+        ))
+
+    return result
+
+
+@router.post("/players/{player_id}/slots", response_model=PlayerSlotResponse, status_code=201)
+def create_player_slot(
+    player_id: int,
+    data: PlayerSlotCreate,
+    admin: User = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    """Crea un nuevo slot de sesión para el jugador (máximo 4 slots)."""
+    user = db.query(User).filter(User.id == player_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Jugador no encontrado")
+
+    # Contar slots actuales
+    slots_count = db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id).count()
+    if slots_count >= 4:
+        raise HTTPException(status_code=400, detail="El jugador ya tiene el límite de 4 slots de sesión")
+
+    # Obtener el siguiente número de slot libre
+    existing_numbers = [s.slot_number for s in db.query(PlayerSlot.slot_number).filter(PlayerSlot.user_id == player_id).all()]
+    next_slot_number = 1
+    for num in range(1, 5):
+        if num not in existing_numbers:
+            next_slot_number = num
+            break
+
+    # Desactivar todos los slots anteriores
+    db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id).update({PlayerSlot.is_active: False})
+
+    # Crear nuevo slot activo
+    new_slot = PlayerSlot(
+        user_id=player_id,
+        slot_number=next_slot_number,
+        label=data.label,
+        is_active=True,
+        created_by=admin.id
+    )
+    db.add(new_slot)
+    db.commit()
+    db.refresh(new_slot)
+
+    # Inicializar el progreso de tipologías del nuevo slot (Narrativo desbloqueado, resto bloqueado)
+    for typology in DIFFICULTY_ORDER:
+        progress = PlayerTypologyProgress(
+            user_id=player_id,
+            slot_id=new_slot.id,
+            typology=typology,
+            is_unlocked=(typology == "Narrativo"),
+        )
+        db.add(progress)
+    db.commit()
+
+    return PlayerSlotResponse(
+        id=new_slot.id,
+        user_id=new_slot.user_id,
+        slot_number=new_slot.slot_number,
+        label=new_slot.label,
+        is_active=new_slot.is_active,
+        created_at=new_slot.created_at,
+        created_by=new_slot.created_by,
+        total_score=0,
+        total_sessions=0,
+        total_achievements=0,
+        last_played_at=None
+    )
+
+
+@router.put("/players/{player_id}/slots/{slot_number}/activate", response_model=dict)
+def activate_player_slot(
+    player_id: int,
+    slot_number: int,
+    admin: User = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    """Activa un slot de sesión específico para el jugador, desactivando el resto."""
+    user = db.query(User).filter(User.id == player_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Jugador no encontrado")
+
+    # Verificar existencia del slot
+    slot = db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id, PlayerSlot.slot_number == slot_number).first()
+    if not slot:
+        raise HTTPException(status_code=404, detail=f"El slot número {slot_number} no existe para este jugador")
+
+    # Desactivar todos los slots
+    db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id).update({PlayerSlot.is_active: False})
+
+    # Activar el slot seleccionado
+    slot.is_active = True
+    db.commit()
+
+    return {"detail": f"Slot {slot_number} activado exitosamente", "active_slot": slot_number}
+
+
+# ── Gestión de Contraseñas Administrativa ────────────────────────────────────
+
+@router.post("/players/{player_id}/reset-password", response_model=dict)
+def reset_player_password_admin(
+    player_id: int,
+    admin: User = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    """Restablece la contraseña de un jugador y retorna una temporal."""
+    user = db.query(User).filter(User.id == player_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Jugador no encontrado")
+
+    # Generar contraseña temporal segura
+    temp_password = generate_temp_password()
+    
+    # Actualizar usuario
+    user.hashed_password = hash_password(temp_password)
+    user.must_change_password = True
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "detail": "Contraseña restablecida exitosamente",
+        "temp_password": temp_password
+    }
+
+
 # ── Utilidad: Re-evaluar desbloqueos ────────────────────────────────────────
 
 UNLOCK_THRESHOLDS = {
@@ -606,7 +860,7 @@ UNLOCK_THRESHOLDS = {
 }
 
 
-def _reevaluate_unlocks(db: Session, user_id: int) -> None:
+def _reevaluate_unlocks(db: Session, user_id: int, slot_id: int) -> None:
     """
     Re-evalúa qué tipologías deben estar desbloqueadas
     después de un reinicio parcial.
@@ -616,6 +870,7 @@ def _reevaluate_unlocks(db: Session, user_id: int) -> None:
             db.query(PlayerTypologyProgress)
             .filter(
                 PlayerTypologyProgress.user_id == user_id,
+                PlayerTypologyProgress.slot_id == slot_id,
                 PlayerTypologyProgress.typology == typology,
             )
             .first()
@@ -633,6 +888,7 @@ def _reevaluate_unlocks(db: Session, user_id: int) -> None:
             db.query(PlayerTypologyProgress)
             .filter(
                 PlayerTypologyProgress.user_id == user_id,
+                PlayerTypologyProgress.slot_id == slot_id,
                 PlayerTypologyProgress.typology == prev_typology,
             )
             .first()

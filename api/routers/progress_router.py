@@ -1,7 +1,7 @@
 """
 progress_router.py — Endpoints de progreso del jugador.
 Registrar sesiones, logros, notas y consultar progreso completo.
-Todos los endpoints requieren autenticación JWT.
+Todos los endpoints requieren autenticación JWT y se segmentan por el slot activo del jugador.
 """
 from datetime import datetime, timezone
 from typing import List
@@ -14,6 +14,7 @@ from database import get_db
 from models import (
     User, PlayerSession, PlayerAnswer, SessionTool,
     PlayerNote, PlayerTypologyProgress, PlayerAchievement, Reading,
+    PlayerSlot,
 )
 from schemas import (
     SessionCreate, SessionResponse, NoteCreate, NoteResponse,
@@ -34,6 +35,22 @@ UNLOCK_THRESHOLDS = {
 }
 
 
+def _get_active_slot(db: Session, user_id: int) -> PlayerSlot:
+    """Helper para obtener el slot activo del jugador, creándolo si no existe."""
+    slot = db.query(PlayerSlot).filter(PlayerSlot.user_id == user_id, PlayerSlot.is_active == True).first()
+    if not slot:
+        slot = PlayerSlot(
+            user_id=user_id,
+            slot_number=1,
+            label="Sesión 1",
+            is_active=True
+        )
+        db.add(slot)
+        db.commit()
+        db.refresh(slot)
+    return slot
+
+
 # ── Progreso Completo ────────────────────────────────────────────────────────
 
 @router.get("/me", response_model=PlayerProgressResponse)
@@ -41,20 +58,23 @@ def get_my_progress(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Retorna el progreso completo del jugador autenticado."""
-    # Progreso por tipología
+    """Retorna el progreso completo del jugador autenticado en su slot activo."""
+    active_slot = _get_active_slot(db, current_user.id)
+
+    # Progreso por tipología para este slot
     typology_rows = (
         db.query(PlayerTypologyProgress)
-        .filter(PlayerTypologyProgress.user_id == current_user.id)
+        .filter(PlayerTypologyProgress.user_id == current_user.id, PlayerTypologyProgress.slot_id == active_slot.id)
         .order_by(PlayerTypologyProgress.id)
         .all()
     )
 
-    # Si no tiene registros de progreso, inicializarlos
+    # Si no tiene registros de progreso para este slot, inicializarlos
     if not typology_rows:
         for typology in DIFFICULTY_ORDER:
             progress = PlayerTypologyProgress(
                 user_id=current_user.id,
+                slot_id=active_slot.id,
                 typology=typology,
                 is_unlocked=(typology == "Narrativo"),
             )
@@ -62,29 +82,29 @@ def get_my_progress(
         db.commit()
         typology_rows = (
             db.query(PlayerTypologyProgress)
-            .filter(PlayerTypologyProgress.user_id == current_user.id)
+            .filter(PlayerTypologyProgress.user_id == current_user.id, PlayerTypologyProgress.slot_id == active_slot.id)
             .all()
         )
 
     # Calcular puntaje total
     total_score = sum(tp.best_score for tp in typology_rows)
 
-    # Logros
+    # Logros del slot activo
     achievements = (
         db.query(PlayerAchievement)
-        .filter(PlayerAchievement.user_id == current_user.id)
+        .filter(PlayerAchievement.user_id == current_user.id, PlayerAchievement.slot_id == active_slot.id)
         .order_by(PlayerAchievement.unlocked_at)
         .all()
     )
 
-    # Últimas 10 sesiones
+    # Últimas 10 sesiones del slot activo
     recent_sessions = (
         db.query(PlayerSession)
         .options(
             joinedload(PlayerSession.answers),
             joinedload(PlayerSession.tools),
         )
-        .filter(PlayerSession.user_id == current_user.id)
+        .filter(PlayerSession.user_id == current_user.id, PlayerSession.slot_id == active_slot.id)
         .order_by(PlayerSession.completed_at.desc())
         .limit(10)
         .all()
@@ -113,10 +133,13 @@ def create_session(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Registra una sesión completada desde Godot."""
-    # Crear la sesión
+    """Registra una sesión completada desde Godot en el slot activo."""
+    active_slot = _get_active_slot(db, current_user.id)
+
+    # Crear la sesión vinculada al slot activo
     session = PlayerSession(
         user_id=current_user.id,
+        slot_id=active_slot.id,
         reading_id=data.reading_id,
         typology=data.typology,
         session_score=data.session_score,
@@ -156,11 +179,12 @@ def create_session(
         )
         db.add(tool)
 
-    # Actualizar progreso de tipología
+    # Actualizar progreso de tipología en el slot activo
     progress = (
         db.query(PlayerTypologyProgress)
         .filter(
             PlayerTypologyProgress.user_id == current_user.id,
+            PlayerTypologyProgress.slot_id == active_slot.id,
             PlayerTypologyProgress.typology == data.typology,
         )
         .first()
@@ -169,6 +193,7 @@ def create_session(
     if not progress:
         progress = PlayerTypologyProgress(
             user_id=current_user.id,
+            slot_id=active_slot.id,
             typology=data.typology,
             is_unlocked=True,
         )
@@ -183,8 +208,8 @@ def create_session(
     if data.is_perfect:
         progress.perfect_sessions += 1
 
-    # Verificar desbloqueo de la siguiente tipología
-    _check_unlock(db, current_user.id, data.typology)
+    # Verificar desbloqueo de la siguiente tipología en el slot activo
+    _check_unlock(db, current_user.id, active_slot.id, data.typology)
 
     db.commit()
     db.refresh(session)
@@ -210,14 +235,16 @@ def list_sessions(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Lista el historial de sesiones del jugador autenticado."""
+    """Lista el historial de sesiones del jugador autenticado en su slot activo."""
+    active_slot = _get_active_slot(db, current_user.id)
+
     query = (
         db.query(PlayerSession)
         .options(
             joinedload(PlayerSession.answers),
             joinedload(PlayerSession.tools),
         )
-        .filter(PlayerSession.user_id == current_user.id)
+        .filter(PlayerSession.user_id == current_user.id, PlayerSession.slot_id == active_slot.id)
     )
     if typology:
         query = query.filter(PlayerSession.typology == typology)
@@ -230,18 +257,21 @@ def get_typology_progress(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Retorna el progreso del jugador en cada tipología."""
+    """Retorna el progreso del jugador en cada tipología en su slot activo."""
+    active_slot = _get_active_slot(db, current_user.id)
+
     rows = (
         db.query(PlayerTypologyProgress)
-        .filter(PlayerTypologyProgress.user_id == current_user.id)
+        .filter(PlayerTypologyProgress.user_id == current_user.id, PlayerTypologyProgress.slot_id == active_slot.id)
         .all()
     )
-    # Asegurar que todas las tipologías existan
+    # Asegurar que todas las tipologías existan para este slot
     existing_typs = {r.typology for r in rows}
     for typology in DIFFICULTY_ORDER:
         if typology not in existing_typs:
             p = PlayerTypologyProgress(
                 user_id=current_user.id,
+                slot_id=active_slot.id,
                 typology=typology,
                 is_unlocked=(typology == "Narrativo"),
             )
@@ -259,11 +289,14 @@ def register_achievement(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Registra un logro desbloqueado (idempotente: no duplica si ya existe)."""
+    """Registra un logro desbloqueado en el slot activo (idempotente)."""
+    active_slot = _get_active_slot(db, current_user.id)
+
     existing = (
         db.query(PlayerAchievement)
         .filter(
             PlayerAchievement.user_id == current_user.id,
+            PlayerAchievement.slot_id == active_slot.id,
             PlayerAchievement.achievement_id == data.achievement_id,
         )
         .first()
@@ -273,6 +306,7 @@ def register_achievement(
 
     achievement = PlayerAchievement(
         user_id=current_user.id,
+        slot_id=active_slot.id,
         achievement_id=data.achievement_id,
         achievement_name=data.achievement_name,
     )
@@ -287,10 +321,12 @@ def list_achievements(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Lista todos los logros del jugador autenticado."""
+    """Lista todos los logros del jugador autenticado en su slot activo."""
+    active_slot = _get_active_slot(db, current_user.id)
+
     return (
         db.query(PlayerAchievement)
-        .filter(PlayerAchievement.user_id == current_user.id)
+        .filter(PlayerAchievement.user_id == current_user.id, PlayerAchievement.slot_id == active_slot.id)
         .order_by(PlayerAchievement.unlocked_at)
         .all()
     )
@@ -304,14 +340,17 @@ def create_note(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Guarda una nota/apunte del jugador asociada a una lectura."""
+    """Guarda una nota/apunte del jugador asociada a una lectura en el slot activo."""
     # Verificar que la lectura existe
     reading = db.query(Reading).filter(Reading.id == data.reading_id).first()
     if not reading:
         raise HTTPException(status_code=404, detail="Lectura no encontrada")
 
+    active_slot = _get_active_slot(db, current_user.id)
+
     note = PlayerNote(
         user_id=current_user.id,
+        slot_id=active_slot.id,
         reading_id=data.reading_id,
         session_id=data.session_id,
         note_content=data.note_content,
@@ -339,11 +378,13 @@ def list_notes(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Lista las notas del jugador autenticado."""
+    """Lista las notas del jugador autenticado en su slot activo."""
+    active_slot = _get_active_slot(db, current_user.id)
+
     query = (
         db.query(PlayerNote, Reading.title)
         .join(Reading, PlayerNote.reading_id == Reading.id)
-        .filter(PlayerNote.user_id == current_user.id)
+        .filter(PlayerNote.user_id == current_user.id, PlayerNote.slot_id == active_slot.id)
     )
     if reading_id:
         query = query.filter(PlayerNote.reading_id == reading_id)
@@ -367,8 +408,8 @@ def list_notes(
 
 # ── Lógica de desbloqueo ────────────────────────────────────────────────────
 
-def _check_unlock(db: Session, user_id: int, completed_typology: str) -> None:
-    """Verifica si al completar una tipología se desbloquea la siguiente."""
+def _check_unlock(db: Session, user_id: int, slot_id: int, completed_typology: str) -> None:
+    """Verifica si al completar una tipología se desbloquea la siguiente en el slot dado."""
     try:
         idx = DIFFICULTY_ORDER.index(completed_typology)
     except ValueError:
@@ -384,6 +425,7 @@ def _check_unlock(db: Session, user_id: int, completed_typology: str) -> None:
         db.query(PlayerTypologyProgress)
         .filter(
             PlayerTypologyProgress.user_id == user_id,
+            PlayerTypologyProgress.slot_id == slot_id,
             PlayerTypologyProgress.typology == completed_typology,
         )
         .first()
@@ -398,6 +440,7 @@ def _check_unlock(db: Session, user_id: int, completed_typology: str) -> None:
             db.query(PlayerTypologyProgress)
             .filter(
                 PlayerTypologyProgress.user_id == user_id,
+                PlayerTypologyProgress.slot_id == slot_id,
                 PlayerTypologyProgress.typology == next_typology,
             )
             .first()

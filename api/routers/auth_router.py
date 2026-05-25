@@ -8,8 +8,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from database import get_db
-from models import User, PlayerTypologyProgress
-from schemas import UserRegister, UserLogin, UserResponse, TokenResponse, DIFFICULTY_ORDER
+from models import User, PlayerTypologyProgress, PlayerSlot
+from schemas import UserRegister, UserLogin, UserResponse, TokenResponse, DIFFICULTY_ORDER, ChangePasswordRequest
 from auth import hash_password, verify_password, create_access_token, get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
@@ -56,10 +56,22 @@ def register_user(data: UserRegister, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
-    # Inicializar progreso de tipologías (Narrativo desbloqueado)
+    # Crear slot 1 por defecto
+    slot = PlayerSlot(
+        user_id=user.id,
+        slot_number=1,
+        label="Sesión 1",
+        is_active=True
+    )
+    db.add(slot)
+    db.commit()
+    db.refresh(slot)
+
+    # Inicializar progreso de tipologías (Narrativo desbloqueado) vinculadas al slot 1
     for typology in DIFFICULTY_ORDER:
         progress = PlayerTypologyProgress(
             user_id=user.id,
+            slot_id=slot.id,
             typology=typology,
             is_unlocked=(typology == "Narrativo"),
         )
@@ -95,7 +107,9 @@ def login_user(data: UserLogin, db: Session = Depends(get_db)):
 
     return TokenResponse(
         access_token=token,
+        token_type="bearer",
         user=UserResponse.model_validate(user),
+        must_change_password=user.must_change_password,
     )
 
 
@@ -122,3 +136,38 @@ def update_me(
     db.commit()
     db.refresh(current_user)
     return current_user
+
+
+@router.post("/change-password", status_code=200)
+def change_password(
+    data: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Permite al usuario cambiar su contraseña (útil tras un reset del administrador)."""
+    # Validar longitud
+    if len(data.new_password) < 8:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La contraseña debe tener al menos 8 caracteres",
+        )
+    # Validar mayúscula
+    if not any(c.isupper() for c in data.new_password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La contraseña debe contener al menos una letra mayúscula",
+        )
+    # Validar número
+    if not any(c.isdigit() for c in data.new_password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La contraseña debe contener al menos un número",
+        )
+
+    # Actualizar hash y quitar flag de cambio obligatorio
+    current_user.hashed_password = hash_password(data.new_password)
+    current_user.must_change_password = False
+    db.commit()
+    db.refresh(current_user)
+
+    return {"detail": "Contraseña cambiada exitosamente"}

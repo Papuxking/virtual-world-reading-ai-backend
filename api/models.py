@@ -119,14 +119,63 @@ class User(Base):
     character = Column(String(10), default="male")
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
+    must_change_password = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     last_login_at = Column(DateTime(timezone=True), nullable=True)
 
     # Relaciones
+    slots = relationship("PlayerSlot", back_populates="user", cascade="all, delete-orphan", foreign_keys="[PlayerSlot.user_id]")
     sessions = relationship("PlayerSession", back_populates="user", cascade="all, delete-orphan")
     achievements = relationship("PlayerAchievement", back_populates="user", cascade="all, delete-orphan")
     notes = relationship("PlayerNote", back_populates="user", cascade="all, delete-orphan")
     typology_progress = relationship("PlayerTypologyProgress", back_populates="user", cascade="all, delete-orphan")
+
+
+# ── Modelos de Gestión de Slots y Catálogos ───────────────────────────────────
+
+class PlayerSlot(Base):
+    """Slots de sesión para los jugadores."""
+    __tablename__ = "player_slots"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_number = Column(SmallInteger, nullable=False)
+    label = Column(String(50), default="Sesión 1")
+    is_active = Column(Boolean, nullable=False, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+
+    # Relaciones
+    user = relationship("User", back_populates="slots", foreign_keys=[user_id])
+    creator = relationship("User", foreign_keys=[created_by])
+    sessions = relationship("PlayerSession", back_populates="slot", cascade="all, delete-orphan")
+    notes = relationship("PlayerNote", back_populates="slot", cascade="all, delete-orphan")
+    typology_progress = relationship("PlayerTypologyProgress", back_populates="slot", cascade="all, delete-orphan")
+    achievements = relationship("PlayerAchievement", back_populates="slot", cascade="all, delete-orphan")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "slot_number", name="uq_user_slot_number"),
+    )
+
+
+class AchievementCatalog(Base):
+    """Catálogo global de logros y medallas."""
+    __tablename__ = "achievement_catalog"
+
+    id = Column(String(50), primary_key=True)
+    name = Column(String(100), nullable=False)
+    description = Column(Text, nullable=False)
+    how_to_unlock = Column(Text, nullable=False)
+    category = Column(String(30), nullable=False)
+    icon = Column(String(10), default="🏆")
+    medal_name = Column(String(100), nullable=False)
+    medal_tier = Column(String(20), nullable=False, default="bronce")
+    medal_description = Column(Text, nullable=True)
+    medal_image_path = Column(String(255), nullable=True)
+    display_order = Column(SmallInteger, default=0)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
 
 # ── Modelos de Progreso del Jugador ──────────────────────────────────────────
@@ -137,6 +186,7 @@ class PlayerSession(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
     reading_id = Column(Integer, ForeignKey("readings.id", ondelete="CASCADE"), nullable=False)
     typology = Column(String(50), nullable=False)
     session_score = Column(Integer, nullable=False, default=0)
@@ -151,6 +201,7 @@ class PlayerSession(Base):
 
     # Relaciones
     user = relationship("User", back_populates="sessions")
+    slot = relationship("PlayerSlot", back_populates="sessions")
     reading = relationship("Reading", back_populates="player_sessions")
     answers = relationship("PlayerAnswer", back_populates="session", cascade="all, delete-orphan")
     tools = relationship("SessionTool", back_populates="session", cascade="all, delete-orphan")
@@ -202,6 +253,7 @@ class PlayerNote(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
     reading_id = Column(Integer, ForeignKey("readings.id", ondelete="CASCADE"), nullable=False)
     session_id = Column(Integer, ForeignKey("player_sessions.id", ondelete="SET NULL"), nullable=True)
     note_content = Column(Text, nullable=False)
@@ -210,6 +262,7 @@ class PlayerNote(Base):
 
     # Relaciones
     user = relationship("User", back_populates="notes")
+    slot = relationship("PlayerSlot", back_populates="notes")
     reading = relationship("Reading", back_populates="player_notes")
     session = relationship("PlayerSession")
 
@@ -220,6 +273,7 @@ class PlayerTypologyProgress(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
     typology = Column(String(50), nullable=False)
     best_score = Column(Integer, nullable=False, default=0)
     total_sessions = Column(Integer, nullable=False, default=0)
@@ -230,9 +284,10 @@ class PlayerTypologyProgress(Base):
 
     # Relaciones
     user = relationship("User", back_populates="typology_progress")
+    slot = relationship("PlayerSlot", back_populates="typology_progress")
 
     __table_args__ = (
-        UniqueConstraint("user_id", "typology", name="uq_user_typology"),
+        UniqueConstraint("user_id", "slot_id", "typology", name="uq_user_slot_typology"),
     )
 
 
@@ -242,13 +297,15 @@ class PlayerAchievement(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
     achievement_id = Column(String(50), nullable=False)
     achievement_name = Column(String(100), nullable=False)
     unlocked_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relaciones
     user = relationship("User", back_populates="achievements")
+    slot = relationship("PlayerSlot", back_populates="achievements")
 
     __table_args__ = (
-        UniqueConstraint("user_id", "achievement_id", name="uq_user_achievement"),
+        UniqueConstraint("user_id", "slot_id", "achievement_id", name="uq_user_slot_achievement"),
     )

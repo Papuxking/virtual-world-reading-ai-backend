@@ -106,7 +106,7 @@ export default function OverviewPage() {
         />
         <StatCard
           icon={<Award className="w-5 h-5" />}
-          label="Logros"
+          label="Medallas Otorgadas"
           value={stats?.total_achievements || 0}
           color="from-emerald-500 to-teal-500"
         />
