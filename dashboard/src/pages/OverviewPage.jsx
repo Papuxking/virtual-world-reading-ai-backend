@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAdminStats, getPlayers } from '../services/api';
 import {
-  Users, Trophy, Target, Star, Activity, Search,
+  Users, Target, Star, Activity, Search,
   ChevronRight, TrendingUp, BookOpen, Award,
 } from 'lucide-react';
 import {
@@ -27,10 +27,6 @@ export default function OverviewPage() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
   async function loadData() {
     try {
       const [statsData, playersData] = await Promise.all([
@@ -45,6 +41,11 @@ export default function OverviewPage() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line
+    loadData();
+  }, []);
 
   async function handleSearch(value) {
     setSearch(value);

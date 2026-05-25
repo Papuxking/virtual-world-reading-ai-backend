@@ -132,7 +132,7 @@ def get_player_detail(
 
     # Notas con título de lectura
     notes_query = (
-        db.query(PlayerNote, Reading.title)
+        db.query(PlayerNote, Reading.title, Reading.typology)
         .join(Reading, PlayerNote.reading_id == Reading.id)
         .filter(PlayerNote.user_id == player_id)
         .order_by(PlayerNote.created_at.desc())
@@ -218,11 +218,12 @@ def get_player_detail(
                 "id": note.id,
                 "reading_id": note.reading_id,
                 "reading_title": title,
+                "reading_typology": typology,
                 "note_content": note.note_content,
                 "note_type": note.note_type,
                 "created_at": note.created_at.isoformat() if note.created_at else None,
             }
-            for note, title in notes_query
+            for note, title, typology in notes_query
         ],
         "tool_stats": [
             {
@@ -573,7 +574,7 @@ def get_player_notes(
 ):
     """Lista las notas de un jugador con el título de la lectura asociada."""
     results = (
-        db.query(PlayerNote, Reading.title)
+        db.query(PlayerNote, Reading.title, Reading.typology)
         .join(Reading, PlayerNote.reading_id == Reading.id)
         .filter(PlayerNote.user_id == player_id)
         .order_by(PlayerNote.created_at.desc())
@@ -585,11 +586,12 @@ def get_player_notes(
             "id": note.id,
             "reading_id": note.reading_id,
             "reading_title": title,
+            "reading_typology": typology,
             "note_content": note.note_content,
             "note_type": note.note_type,
             "created_at": note.created_at.isoformat() if note.created_at else None,
         }
-        for note, title in results
+        for note, title, typology in results
     ]
 
 

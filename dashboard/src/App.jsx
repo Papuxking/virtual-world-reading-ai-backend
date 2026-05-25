@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import { getToken, getStoredUser } from './services/api';
 import LoginPage from './pages/LoginPage';
 import DashboardLayout from './components/DashboardLayout';
