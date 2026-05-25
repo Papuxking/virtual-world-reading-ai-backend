@@ -120,6 +120,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
     must_change_password = Column(Boolean, default=False)
+    session_version = Column(Integer, default=1, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     last_login_at = Column(DateTime(timezone=True), nullable=True)
 
@@ -172,6 +173,7 @@ class AchievementCatalog(Base):
     medal_tier = Column(String(20), nullable=False, default="bronce")
     medal_description = Column(Text, nullable=True)
     medal_image_path = Column(String(255), nullable=True)
+    medal_placeholder_emoji = Column(String(10), default="🏅")
     display_order = Column(SmallInteger, default=0)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

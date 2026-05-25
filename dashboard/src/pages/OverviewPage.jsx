@@ -106,8 +106,8 @@ export default function OverviewPage() {
         />
         <StatCard
           icon={<Award className="w-5 h-5" />}
-          label="Medallas Otorgadas"
-          value={stats?.total_achievements || 0}
+          label="Logros y Medallas Otorgadas"
+          value={`${stats?.total_achievements || 0} 🏆 / ${stats?.total_achievements || 0} 🏅`}
           color="from-emerald-500 to-teal-500"
         />
         <StatCard
@@ -224,7 +224,7 @@ export default function OverviewPage() {
                 <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Email</th>
                 <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Puntos</th>
                 <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Sesiones</th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Logros</th>
+                <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Logros & Medallas</th>
                 <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Último Acceso</th>
                 <th className="px-6 py-3" />
               </tr>
@@ -254,7 +254,11 @@ export default function OverviewPage() {
                   </td>
                   <td className="px-6 py-4 text-right text-sm text-slate-600 dark:text-gray-300">{player.total_sessions}</td>
                   <td className="px-6 py-4 text-right">
-                    <span className="badge-info">{player.total_achievements}/10</span>
+                    <span className="inline-flex items-center gap-1.5 bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/5 px-2 py-0.5 rounded-lg text-xs font-bold text-slate-700 dark:text-gray-200">
+                      <span>{player.total_achievements} 🏆</span>
+                      <span className="text-slate-300 dark:text-white/10">|</span>
+                      <span>{player.total_achievements} 🏅</span>
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-500 dark:text-gray-400">
                     {player.last_played_at

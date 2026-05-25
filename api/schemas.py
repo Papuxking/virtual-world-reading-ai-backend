@@ -393,6 +393,26 @@ class AchievementResponse(BaseModel):
         from_attributes = True
 
 
+class AchievementFullResponse(BaseModel):
+    """Schema de respuesta para un logro del catálogo completo cruzado con su estado de desbloqueo."""
+    id: str
+    name: str
+    description: str
+    how_to_unlock: str
+    category: str
+    icon: str
+    medal_name: str
+    medal_tier: str
+    medal_description: Optional[str] = None
+    medal_image_path: Optional[str] = None
+    medal_placeholder_emoji: Optional[str] = "🏅"
+    is_unlocked: bool
+    unlocked_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
 class TypologyProgressResponse(BaseModel):
     """Progreso en una tipología específica."""
     typology: str
@@ -410,6 +430,7 @@ class TypologyProgressResponse(BaseModel):
 class PlayerProgressResponse(BaseModel):
     """Progreso completo del jugador (respuesta de GET /progress/me)."""
     user: UserResponse
+    active_slot_id: Optional[int] = None
     total_score: int
     typology_progress: List[TypologyProgressResponse]
     achievements: List[AchievementResponse]

@@ -462,6 +462,9 @@ def reset_typology(
     # Re-evaluar desbloqueos desde el principio para el slot activo
     _reevaluate_unlocks(db, player_id, active_slot.id)
 
+    # Incrementar versión de sesión para notificar al cliente Godot en tiempo real
+    user.session_version += 1
+
     db.commit()
 
     return {
@@ -562,6 +565,9 @@ def reset_all_progress(
             is_unlocked=(typology == "Narrativo"),
         )
         db.add(p)
+
+    # Incrementar versión de sesión para notificar al cliente Godot en tiempo real
+    user.session_version += 1
 
     db.commit()
 
@@ -765,6 +771,10 @@ def create_player_slot(
         created_by=admin.id
     )
     db.add(new_slot)
+
+    # Incrementar versión de sesión para notificar al cliente Godot en tiempo real
+    user.session_version += 1
+
     db.commit()
     db.refresh(new_slot)
 
@@ -816,6 +826,10 @@ def activate_player_slot(
 
     # Activar el slot seleccionado
     slot.is_active = True
+
+    # Incrementar versión de sesión para notificar al cliente Godot en tiempo real
+    user.session_version += 1
+
     db.commit()
 
     return {"detail": f"Slot {slot_number} activado exitosamente", "active_slot": slot_number}

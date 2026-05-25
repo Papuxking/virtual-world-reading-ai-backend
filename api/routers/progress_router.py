@@ -6,7 +6,7 @@ Todos los endpoints requieren autenticación JWT y se segmentan por el slot acti
 from datetime import datetime, timezone
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func as sqlfunc
 
@@ -14,12 +14,13 @@ from database import get_db
 from models import (
     User, PlayerSession, PlayerAnswer, SessionTool,
     PlayerNote, PlayerTypologyProgress, PlayerAchievement, Reading,
-    PlayerSlot,
+    PlayerSlot, AchievementCatalog,
 )
 from schemas import (
     SessionCreate, SessionResponse, NoteCreate, NoteResponse,
     AchievementCreate, AchievementResponse, TypologyProgressResponse,
     PlayerProgressResponse, UserResponse, DIFFICULTY_ORDER,
+    AchievementFullResponse,
 )
 from auth import get_current_user
 
@@ -49,6 +50,24 @@ def _get_active_slot(db: Session, user_id: int) -> PlayerSlot:
         db.commit()
         db.refresh(slot)
     return slot
+
+
+def _validate_slot_header(request: Request, active_slot: PlayerSlot):
+    """Valida si el slot enviado en el header coincide con el slot activo."""
+    client_slot_id_str = request.headers.get("X-Slot-Id")
+    if client_slot_id_str:
+        try:
+            client_slot_id = int(client_slot_id_str)
+            if client_slot_id != active_slot.id:
+                raise HTTPException(
+                    status_code=409,
+                    detail="SESSION_INVALIDATED"
+                )
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid X-Slot-Id header format"
+            )
 
 
 # ── Progreso Completo ────────────────────────────────────────────────────────
@@ -112,6 +131,7 @@ def get_my_progress(
 
     return PlayerProgressResponse(
         user=UserResponse.model_validate(current_user),
+        active_slot_id=active_slot.id,
         total_score=total_score,
         typology_progress=[
             TypologyProgressResponse.model_validate(tp) for tp in typology_rows
@@ -130,11 +150,13 @@ def get_my_progress(
 @router.post("/sessions", response_model=SessionResponse, status_code=201)
 def create_session(
     data: SessionCreate,
+    request: Request,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """Registra una sesión completada desde Godot en el slot activo."""
     active_slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, active_slot)
 
     # Crear la sesión vinculada al slot activo
     session = PlayerSession(
@@ -286,11 +308,13 @@ def get_typology_progress(
 @router.post("/achievements", response_model=AchievementResponse, status_code=201)
 def register_achievement(
     data: AchievementCreate,
+    request: Request,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """Registra un logro desbloqueado en el slot activo (idempotente)."""
     active_slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, active_slot)
 
     existing = (
         db.query(PlayerAchievement)
@@ -337,6 +361,7 @@ def list_achievements(
 @router.post("/notes", response_model=NoteResponse, status_code=201)
 def create_note(
     data: NoteCreate,
+    request: Request,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -347,6 +372,7 @@ def create_note(
         raise HTTPException(status_code=404, detail="Lectura no encontrada")
 
     active_slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, active_slot)
 
     note = PlayerNote(
         user_id=current_user.id,
@@ -447,3 +473,79 @@ def _check_unlock(db: Session, user_id: int, slot_id: int, completed_typology: s
         )
         if next_progress and not next_progress.is_unlocked:
             next_progress.is_unlocked = True
+
+
+@router.get("/validate-session")
+def validate_session(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Endpoint liviano para el polling periódico (heartbeat) de Godot.
+    Verifica si el slot_id en memoria del cliente coincide con el slot activo actual del usuario.
+    """
+    active_slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, active_slot)
+    return {"status": "ok", "active_slot_id": active_slot.id, "slot_number": active_slot.slot_number}
+
+
+@router.get("/achievements-full", response_model=List[AchievementFullResponse])
+def get_achievements_full(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Retorna la lista completa de logros y medallas en el catálogo global,
+    cruzada con el estado de desbloqueo del jugador en su slot activo.
+    """
+    active_slot = _get_active_slot(db, current_user.id)
+
+    # 1. Obtener catálogo completo de logros activos
+    catalog = (
+        db.query(AchievementCatalog)
+        .filter(AchievementCatalog.is_active == True)
+        .order_by(AchievementCatalog.display_order.asc())
+        .all()
+    )
+
+    # 2. Obtener logros desbloqueados por el jugador en este slot
+    unlocked = (
+        db.query(PlayerAchievement)
+        .filter(
+            PlayerAchievement.user_id == current_user.id,
+            PlayerAchievement.slot_id == active_slot.id
+        )
+        .all()
+    )
+    unlocked_map = {a.achievement_id: a for a in unlocked}
+
+    # 3. Cruzar datos
+    result = []
+    for item in catalog:
+        unlocked_record = unlocked_map.get(item.id)
+        is_unlocked = unlocked_record is not None
+        unlocked_at = unlocked_record.unlocked_at if is_unlocked else None
+
+        # Construir URL de la medalla si existe path
+        medal_url = None
+        if item.medal_image_path:
+            medal_url = f"/static/medals/{item.medal_image_path}"
+
+        result.append(AchievementFullResponse(
+            id=item.id,
+            name=item.name,
+            description=item.description,
+            how_to_unlock=item.how_to_unlock,
+            category=item.category,
+            icon=item.icon,
+            medal_name=item.medal_name,
+            medal_tier=item.medal_tier,
+            medal_description=item.medal_description,
+            medal_image_path=medal_url,
+            medal_placeholder_emoji=item.medal_placeholder_emoji,
+            is_unlocked=is_unlocked,
+            unlocked_at=unlocked_at
+        ))
+
+    return result

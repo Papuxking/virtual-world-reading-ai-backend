@@ -53,6 +53,7 @@ INITIAL_ACHIEVEMENTS = [
         "medal_name": "Lector Novato",
         "medal_tier": "bronce",
         "medal_description": "Tu primer paso en el mundo de la lectura.",
+        "medal_placeholder_emoji": "📖",
         "display_order": 1,
     },
     {
@@ -65,6 +66,7 @@ INITIAL_ACHIEVEMENTS = [
         "medal_name": "Crecimiento Firme",
         "medal_tier": "bronce",
         "medal_description": "El esfuerzo continuo rinde frutos.",
+        "medal_placeholder_emoji": "📈",
         "display_order": 2,
     },
     {
@@ -77,6 +79,7 @@ INITIAL_ACHIEVEMENTS = [
         "medal_name": "Explorador Intrépido",
         "medal_tier": "plata",
         "medal_description": "Dominas los viajes a través de todos los estilos textuales.",
+        "medal_placeholder_emoji": "🧭",
         "display_order": 3,
     },
     {
@@ -89,6 +92,7 @@ INITIAL_ACHIEVEMENTS = [
         "medal_name": "Devorador de Páginas",
         "medal_tier": "plata",
         "medal_description": "La lectura es tu hábito favorito.",
+        "medal_placeholder_emoji": "📚",
         "display_order": 4,
     },
     {
@@ -101,6 +105,7 @@ INITIAL_ACHIEVEMENTS = [
         "medal_name": "Ojo de Halcón",
         "medal_tier": "plata",
         "medal_description": "No se te escapa ningún detalle explícito del texto.",
+        "medal_placeholder_emoji": "👁️",
         "display_order": 5,
     },
     {
@@ -113,6 +118,7 @@ INITIAL_ACHIEVEMENTS = [
         "medal_name": "Lector Impecable",
         "medal_tier": "oro",
         "medal_description": "Precisión absoluta en la comprensión de textos.",
+        "medal_placeholder_emoji": "🎯",
         "display_order": 6,
     },
     {
@@ -125,6 +131,7 @@ INITIAL_ACHIEVEMENTS = [
         "medal_name": "Sabueso Deductivo",
         "medal_tier": "oro",
         "medal_description": "Descifras el significado oculto del autor con facilidad.",
+        "medal_placeholder_emoji": "🔍",
         "display_order": 7,
     },
     {
@@ -137,6 +144,7 @@ INITIAL_ACHIEVEMENTS = [
         "medal_name": "Guerrero Intelectual",
         "medal_tier": "oro",
         "medal_description": "Has roto la barrera de los 300 puntos de maestría.",
+        "medal_placeholder_emoji": "🛡️",
         "display_order": 8,
     },
     {
@@ -149,6 +157,7 @@ INITIAL_ACHIEVEMENTS = [
         "medal_name": "Pensador Analítico",
         "medal_tier": "platino",
         "medal_description": "Ningún sesgo ni intención oculta pasa desapercibido ante tu criterio.",
+        "medal_placeholder_emoji": "💎",
         "display_order": 9,
     },
     {
@@ -161,6 +170,7 @@ INITIAL_ACHIEVEMENTS = [
         "medal_name": "Sabio del Reino",
         "medal_tier": "platino",
         "medal_description": "Una leyenda de la comprensión lectora en el mundo virtual.",
+        "medal_placeholder_emoji": "👑",
         "display_order": 10,
     },
 ]
