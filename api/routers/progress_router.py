@@ -52,8 +52,8 @@ def _get_active_slot(db: Session, user_id: int) -> PlayerSlot:
     return slot
 
 
-def _validate_slot_header(request: Request, active_slot: PlayerSlot):
-    """Valida si el slot enviado en el header coincide con el slot activo."""
+def _validate_slot_header(request: Request, active_slot: PlayerSlot, user: User):
+    """Valida si el slot y versión de sesión enviados coinciden con los del usuario."""
     client_slot_id_str = request.headers.get("X-Slot-Id")
     if client_slot_id_str:
         try:
@@ -67,6 +67,21 @@ def _validate_slot_header(request: Request, active_slot: PlayerSlot):
             raise HTTPException(
                 status_code=400,
                 detail="Invalid X-Slot-Id header format"
+            )
+
+    client_version_str = request.headers.get("X-Session-Version")
+    if client_version_str:
+        try:
+            client_version = int(client_version_str)
+            if client_version != user.session_version:
+                raise HTTPException(
+                    status_code=409,
+                    detail="SESSION_INVALIDATED"
+                )
+        except ValueError:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid X-Session-Version header format"
             )
 
 
@@ -156,7 +171,7 @@ def create_session(
 ):
     """Registra una sesión completada desde Godot en el slot activo."""
     active_slot = _get_active_slot(db, current_user.id)
-    _validate_slot_header(request, active_slot)
+    _validate_slot_header(request, active_slot, current_user)
 
     # Crear la sesión vinculada al slot activo
     session = PlayerSession(
@@ -314,7 +329,7 @@ def register_achievement(
 ):
     """Registra un logro desbloqueado en el slot activo (idempotente)."""
     active_slot = _get_active_slot(db, current_user.id)
-    _validate_slot_header(request, active_slot)
+    _validate_slot_header(request, active_slot, current_user)
 
     existing = (
         db.query(PlayerAchievement)
@@ -372,7 +387,7 @@ def create_note(
         raise HTTPException(status_code=404, detail="Lectura no encontrada")
 
     active_slot = _get_active_slot(db, current_user.id)
-    _validate_slot_header(request, active_slot)
+    _validate_slot_header(request, active_slot, current_user)
 
     note = PlayerNote(
         user_id=current_user.id,
@@ -486,7 +501,7 @@ def validate_session(
     Verifica si el slot_id en memoria del cliente coincide con el slot activo actual del usuario.
     """
     active_slot = _get_active_slot(db, current_user.id)
-    _validate_slot_header(request, active_slot)
+    _validate_slot_header(request, active_slot, current_user)
     return {"status": "ok", "active_slot_id": active_slot.id, "slot_number": active_slot.slot_number}
 
 

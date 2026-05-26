@@ -156,6 +156,7 @@ class UserResponse(BaseModel):
     is_active: bool
     is_admin: bool
     must_change_password: bool = False
+    session_version: int = 1
     created_at: datetime
     last_login_at: Optional[datetime] = None
 
