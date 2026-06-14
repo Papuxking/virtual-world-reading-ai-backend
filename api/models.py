@@ -179,6 +179,32 @@ class AchievementCatalog(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
 
+    # Relación con historial de imágenes
+    image_history = relationship(
+        "MedalImageHistory",
+        back_populates="achievement",
+        cascade="all, delete-orphan",
+        order_by="MedalImageHistory.uploaded_at.desc()",
+    )
+
+
+class MedalImageHistory(Base):
+    """Historial de imágenes de medallas."""
+    __tablename__ = "medal_image_history"
+
+    id = Column(Integer, primary_key=True, index=True)
+    achievement_id = Column(String(50), ForeignKey("achievement_catalog.id", ondelete="CASCADE"), nullable=False, index=True)
+    image_path = Column(String(255), nullable=False)
+    original_filename = Column(String(255), nullable=True)
+    file_size_bytes = Column(Integer, nullable=True)
+    uploaded_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
+    is_current = Column(Boolean, default=False)
+
+    # Relaciones
+    achievement = relationship("AchievementCatalog", back_populates="image_history")
+    uploader = relationship("User")
+
 
 # ── Modelos de Progreso del Jugador ──────────────────────────────────────────
 

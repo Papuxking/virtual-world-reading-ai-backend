@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage';
 import DashboardLayout from './components/DashboardLayout';
 import OverviewPage from './pages/OverviewPage';
 import PlayerDetailPage from './pages/PlayerDetailPage';
+import AchievementsPage from './pages/AchievementsPage';
+import AchievementDetailPage from './pages/AchievementDetailPage';
 
 function ProtectedRoute({ children }) {
   const token = getToken();
@@ -29,6 +31,8 @@ export default function App() {
         >
           <Route index element={<OverviewPage />} />
           <Route path="players/:playerId" element={<PlayerDetailPage />} />
+          <Route path="achievements" element={<AchievementsPage />} />
+          <Route path="achievements/:achievementId" element={<AchievementDetailPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

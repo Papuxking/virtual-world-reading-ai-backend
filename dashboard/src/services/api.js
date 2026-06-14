@@ -195,3 +195,132 @@ export async function deleteMedalImage(achievementId) {
 export async function checkHealth() {
   return apiFetch('/health');
 }
+
+// ── Módulo Logros y Medallas (Dashboard Admin) ──────────────────────────────
+
+export async function getAchievementsDashboard(filters = {}) {
+  const params = new URLSearchParams();
+  if (filters.q) params.set('q', filters.q);
+  if (filters.category) params.set('category', filters.category);
+  if (filters.tier) params.set('tier', filters.tier);
+  if (filters.player_id) params.set('player_id', filters.player_id);
+  if (filters.unlock_status) params.set('unlock_status', filters.unlock_status);
+  if (filters.sort) params.set('sort', filters.sort);
+  if (filters.order) params.set('order', filters.order);
+  const qs = params.toString();
+  return apiFetch(`/admin/achievements${qs ? '?' + qs : ''}`);
+}
+
+export async function getAchievementsStats() {
+  return apiFetch('/admin/achievements/stats');
+}
+
+export async function getAchievementDetail(achievementId) {
+  return apiFetch(`/admin/achievements/${achievementId}`);
+}
+
+export async function getAchievementPlayers(achievementId, search = '') {
+  const params = search ? `?q=${encodeURIComponent(search)}` : '';
+  return apiFetch(`/admin/achievements/${achievementId}/players${params}`);
+}
+
+export async function getAchievementImageHistory(achievementId) {
+  return apiFetch(`/admin/achievements/${achievementId}/image-history`);
+}
+
+export async function uploadMedalImageAdmin(achievementId, file) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch(`${API_BASE}/admin/achievements/${achievementId}/medal-image`, {
+    method: 'PUT',
+    headers: {
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+    },
+    body: formData,
+  });
+
+  if (response.status === 401) {
+    clearToken();
+    window.location.href = '/login';
+    throw new Error('Sesión expirada');
+  }
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ detail: 'Error al subir la imagen' }));
+    throw new Error(error.detail || `HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function restoreMedalImage(achievementId, historyId) {
+  return apiFetch(`/admin/achievements/${achievementId}/restore-image/${historyId}`, {
+    method: 'POST',
+  });
+}
+
+export async function deleteHistoryImage(achievementId, historyId) {
+  return apiFetch(`/admin/achievements/${achievementId}/image-history/${historyId}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function getPlayerAchievementStats(playerId) {
+  return apiFetch(`/admin/achievements/players/${playerId}/stats`);
+}
+
+// ── Exportación CSV/Excel ───────────────────────────────────────────────────
+
+export function downloadAchievementsCSV(filters = {}) {
+  const params = new URLSearchParams();
+  if (filters.category) params.set('category', filters.category);
+  if (filters.tier) params.set('tier', filters.tier);
+  const qs = params.toString();
+  _downloadFile(`/admin/achievements/export/csv${qs ? '?' + qs : ''}`, 'logros_medallas.csv');
+}
+
+export function downloadAchievementsExcel(filters = {}) {
+  const params = new URLSearchParams();
+  if (filters.category) params.set('category', filters.category);
+  if (filters.tier) params.set('tier', filters.tier);
+  const qs = params.toString();
+  _downloadFile(`/admin/achievements/export/excel${qs ? '?' + qs : ''}`, 'logros_medallas.xlsx');
+}
+
+export function downloadAchievementPlayersCSV(achievementId) {
+  _downloadFile(`/admin/achievements/${achievementId}/players/export/csv`, `jugadores_${achievementId}.csv`);
+}
+
+export function downloadAchievementPlayersExcel(achievementId) {
+  _downloadFile(`/admin/achievements/${achievementId}/players/export/excel`, `jugadores_${achievementId}.xlsx`);
+}
+
+async function _downloadFile(endpoint, defaultFilename) {
+  const url = `${API_BASE}${endpoint}`;
+  const response = await fetch(url, {
+    headers: {
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+    },
+  });
+
+  if (response.status === 401) {
+    clearToken();
+    window.location.href = '/login';
+    throw new Error('Sesión expirada');
+  }
+
+  if (!response.ok) {
+    throw new Error(`Error al descargar: HTTP ${response.status}`);
+  }
+
+  const blob = await response.blob();
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = defaultFilename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(a.href);
+}
+

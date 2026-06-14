@@ -85,3 +85,73 @@
 .table-row-hover {
   @apply transition-colors duration-150 hover:bg-slate-50/80 dark:hover:bg-white/5;
 }
+
+/* Achievement Tier Badges */
+.badge-bronze {
+  @apply badge bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/25;
+}
+.badge-silver {
+  @apply badge bg-slate-100 text-slate-600 border border-slate-300 dark:bg-slate-400/15 dark:text-slate-300 dark:border-slate-400/25;
+}
+.badge-gold {
+  @apply badge bg-yellow-50 text-yellow-700 border border-yellow-300 dark:bg-yellow-500/15 dark:text-yellow-400 dark:border-yellow-500/25;
+}
+.badge-platinum {
+  @apply badge bg-violet-50 text-violet-700 border border-violet-200 dark:bg-violet-500/15 dark:text-violet-400 dark:border-violet-500/25;
+}
+
+/* Category Badges */
+.badge-progreso {
+  @apply badge bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-500/15 dark:text-blue-400 dark:border-blue-500/25;
+}
+.badge-maestria {
+  @apply badge bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-500/15 dark:text-purple-400 dark:border-purple-500/25;
+}
+.badge-exploracion {
+  @apply badge bg-teal-50 text-teal-700 border border-teal-200 dark:bg-teal-500/15 dark:text-teal-400 dark:border-teal-500/25;
+}
+.badge-superacion {
+  @apply badge bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-500/15 dark:text-orange-400 dark:border-orange-500/25;
+}
+
+/* Progress Bar */
+.progress-bar {
+  @apply w-full h-2 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden;
+}
+.progress-bar-fill {
+  @apply h-full rounded-full transition-all duration-700 ease-out;
+}
+
+/* Image Upload Zone */
+.image-upload-zone {
+  @apply border-2 border-dashed border-slate-300 dark:border-white/15 rounded-2xl p-6
+         flex flex-col items-center justify-center gap-3 cursor-pointer
+         transition-all duration-300
+         hover:border-primary-400 dark:hover:border-primary-500/50
+         hover:bg-primary-50/50 dark:hover:bg-primary-500/5;
+}
+.image-upload-zone.drag-over {
+  @apply border-primary-500 dark:border-primary-400 bg-primary-50 dark:bg-primary-500/10
+         scale-[1.02];
+}
+
+/* Image Gallery */
+.gallery-thumb {
+  @apply relative w-20 h-20 rounded-xl overflow-hidden border-2 border-transparent
+         transition-all duration-200 cursor-pointer
+         hover:border-primary-400 dark:hover:border-primary-400 hover:shadow-lg
+         hover:scale-105;
+}
+.gallery-thumb.active {
+  @apply border-primary-500 dark:border-primary-400 ring-2 ring-primary-500/20 dark:ring-primary-400/20;
+}
+
+/* Fade-in animation for cards */
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-card-in {
+  animation: cardFadeIn 0.4s ease-out both;
+}
+

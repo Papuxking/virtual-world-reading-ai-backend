@@ -480,3 +480,106 @@ class ResetAllRequest(BaseModel):
     """Schema para reiniciar todo el progreso de un jugador."""
     confirm_email: str = Field(..., description="Email del jugador para confirmar")
     confirm_delete: bool = Field(..., description="El admin debe confirmar explícitamente la eliminación")
+
+
+# ── Schemas del Módulo Logros y Medallas (Dashboard Admin) ───────────────────
+
+class MedalImageHistoryResponse(BaseModel):
+    """Entrada del historial de imágenes de una medalla."""
+    id: int
+    achievement_id: str
+    image_path: str
+    original_filename: Optional[str] = None
+    file_size_bytes: Optional[int] = None
+    uploaded_by: Optional[int] = None
+    uploader_name: Optional[str] = None
+    uploaded_at: datetime
+    is_current: bool
+
+    class Config:
+        from_attributes = True
+
+
+class AchievementDashboardItem(BaseModel):
+    """Logro/medalla enriquecido con estadísticas de desbloqueo para el dashboard."""
+    id: str
+    name: str
+    description: str
+    how_to_unlock: str
+    category: str
+    icon: str
+    medal_name: str
+    medal_tier: str
+    medal_description: Optional[str] = None
+    medal_image_path: Optional[str] = None
+    medal_placeholder_emoji: Optional[str] = "🏅"
+    display_order: int
+    is_active: bool
+    # Estadísticas de desbloqueo
+    unlock_count: int = 0
+    total_players: int = 0
+    unlock_percentage: float = 0.0
+    # Estado para un jugador específico (si se filtra por player_id)
+    is_unlocked_by_player: Optional[bool] = None
+    unlocked_at_by_player: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class AchievementPlayerInfo(BaseModel):
+    """Info de un jugador que posee un logro."""
+    user_id: int
+    display_name: str
+    email: str
+    character: str
+    slot_number: int
+    slot_label: str
+    unlocked_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class AchievementDetailResponse(BaseModel):
+    """Detalle completo de un logro/medalla para la vista de detalle."""
+    id: str
+    name: str
+    description: str
+    how_to_unlock: str
+    category: str
+    icon: str
+    medal_name: str
+    medal_tier: str
+    medal_description: Optional[str] = None
+    medal_image_path: Optional[str] = None
+    medal_placeholder_emoji: Optional[str] = "🏅"
+    display_order: int
+    is_active: bool
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
+    # Estadísticas
+    unlock_count: int = 0
+    total_players: int = 0
+    unlock_percentage: float = 0.0
+    # Jugadores que lo poseen
+    players: List[AchievementPlayerInfo] = []
+    # Historial de imágenes
+    image_history: List[MedalImageHistoryResponse] = []
+
+    class Config:
+        from_attributes = True
+
+
+class AchievementStatsResponse(BaseModel):
+    """Estadísticas globales de logros y medallas para el dashboard."""
+    total_achievements: int
+    total_active: int
+    total_unlocks: int
+    unique_players_with_unlocks: int
+    average_unlock_percentage: float
+    distribution_by_category: dict  # {"progreso": 3, "maestría": 4, ...}
+    distribution_by_tier: dict  # {"bronce": 2, "plata": 3, ...}
+    top_unlocked: List[dict]  # [{id, name, icon, unlock_count, percentage}, ...]
+    least_unlocked: List[dict]
+
