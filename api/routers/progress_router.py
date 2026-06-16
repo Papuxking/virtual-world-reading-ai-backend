@@ -545,7 +545,8 @@ def get_achievements_full(
         # Construir URL de la medalla si existe path
         medal_url = None
         if item.medal_image_path:
-            medal_url = f"/static/medals/{item.medal_image_path}"
+            # medal_image_path ya almacena la ruta completa: /static/medals/xxx.png?v=...
+            medal_url = item.medal_image_path
 
         result.append(AchievementFullResponse(
             id=item.id,
