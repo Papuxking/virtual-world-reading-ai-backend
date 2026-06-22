@@ -6,7 +6,6 @@ Todos los endpoints requieren rol de administrador.
 import csv
 import io
 import os
-import struct
 import time
 from datetime import datetime
 from typing import List, Optional
@@ -33,16 +32,29 @@ MEDALS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file
 MEDALS_HISTORY_DIR = os.path.join(MEDALS_DIR, "history")
 
 
-def validate_png_256x256(data: bytes) -> bool:
-    """Valida que los bytes correspondan a una imagen PNG de 256x256 píxeles."""
-    if len(data) < 24:
-        return False
-    if data[:8] != b'\x89PNG\r\n\x1a\n':
-        return False
-    if data[12:16] != b'IHDR':
-        return False
-    width, height = struct.unpack('>II', data[16:24])
-    return width == 256 and height == 256
+def resize_image_to_256(data: bytes) -> bytes:
+    """Redimensiona cualquier imagen a 256x256 píxeles en formato PNG.
+    Acepta PNG, JPEG, WebP, BMP y GIF.
+    Retorna los bytes de la imagen PNG redimensionada.
+    Lanza ValueError si los datos no son una imagen válida.
+    """
+    from PIL import Image
+    try:
+        img = Image.open(io.BytesIO(data))
+    except Exception:
+        raise ValueError("El archivo no es una imagen válida")
+
+    # Convertir a RGBA para mantener transparencia en PNG
+    if img.mode not in ("RGBA", "RGB"):
+        img = img.convert("RGBA")
+
+    # Redimensionar a 256x256 con alta calidad
+    img = img.resize((256, 256), Image.LANCZOS)
+
+    # Guardar como PNG en memoria
+    output = io.BytesIO()
+    img.save(output, format="PNG", optimize=True)
+    return output.getvalue()
 
 
 def _get_total_non_admin_players(db: Session) -> int:
@@ -454,26 +466,29 @@ async def upload_medal_image_with_history(
         raise HTTPException(status_code=404, detail="Logro no encontrado en el catálogo")
 
     # Validar extensión
-    if not file.filename.lower().endswith(".png"):
+    allowed_extensions = (".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif")
+    if not any(file.filename.lower().endswith(ext) for ext in allowed_extensions):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La imagen debe ser en formato PNG (.png)",
+            detail="Formato no soportado. Se aceptan: PNG, JPG, WebP, BMP, GIF",
         )
 
     # Leer y validar tamaño
-    content = await file.read()
-    max_size = 5 * 1024 * 1024
-    if len(content) > max_size:
+    raw_content = await file.read()
+    max_size = 10 * 1024 * 1024  # 10 MB para imágenes grandes que serán redimensionadas
+    if len(raw_content) > max_size:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La imagen excede el límite de tamaño de 5 MB",
+            detail="La imagen excede el límite de tamaño de 10 MB",
         )
 
-    # Validar dimensiones
-    if not validate_png_256x256(content):
+    # Redimensionar automáticamente a 256x256 PNG
+    try:
+        content = resize_image_to_256(raw_content)
+    except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Dimensiones inválidas. Debe ser PNG de 256x256 píxeles",
+            detail=str(e),
         )
 
     # Asegurar directorios

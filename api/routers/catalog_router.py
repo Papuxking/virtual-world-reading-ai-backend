@@ -2,8 +2,8 @@
 catalog_router.py — Endpoints para gestionar el catálogo de logros y medallas.
 Permite listar el catálogo, actualizar logros y subir imágenes de medallas.
 """
+import io
 import os
-import struct
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
@@ -19,19 +19,29 @@ router = APIRouter(prefix="/achievements", tags=["Catálogo de Logros y Medallas
 MEDALS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static", "medals")
 
 
-def validate_png_256x256(data: bytes) -> bool:
-    """Valida que los bytes correspondan a una imagen PNG de 256x256 píxeles leyendo su cabecera IHDR."""
-    if len(data) < 24:
-        return False
-    # Firma estándar de PNG
-    if data[:8] != b'\x89PNG\r\n\x1a\n':
-        return False
-    # Chunk IHDR
-    if data[12:16] != b'IHDR':
-        return False
-    # Ancho y alto son enteros de 32 bits big-endian en los bytes 16-23
-    width, height = struct.unpack('>II', data[16:24])
-    return width == 256 and height == 256
+def resize_image_to_256(data: bytes) -> bytes:
+    """Redimensiona cualquier imagen a 256x256 píxeles en formato PNG.
+    Acepta PNG, JPEG, WebP, BMP y GIF.
+    Retorna los bytes de la imagen PNG redimensionada.
+    Lanza ValueError si los datos no son una imagen válida.
+    """
+    from PIL import Image
+    try:
+        img = Image.open(io.BytesIO(data))
+    except Exception:
+        raise ValueError("El archivo no es una imagen válida")
+
+    # Convertir a RGBA para mantener transparencia en PNG
+    if img.mode not in ("RGBA", "RGB"):
+        img = img.convert("RGBA")
+
+    # Redimensionar a 256x256 con alta calidad
+    img = img.resize((256, 256), Image.LANCZOS)
+
+    # Guardar como PNG en memoria
+    output = io.BytesIO()
+    img.save(output, format="PNG", optimize=True)
+    return output.getvalue()
 
 
 # ── Catálogo Público ─────────────────────────────────────────────────────────
@@ -72,32 +82,35 @@ async def upload_medal_image(
     admin: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    """Sube una imagen personalizada para una medalla (PNG, 256x256, máx 5MB)."""
+    """Sube una imagen personalizada para una medalla. Se redimensiona automáticamente a 256x256 PNG."""
     achievement = db.query(AchievementCatalog).filter(AchievementCatalog.id == achievement_id).first()
     if not achievement:
         raise HTTPException(status_code=404, detail="Logro no encontrado en el catálogo")
 
-    # 1. Validar extensión y formato MIME
-    if not file.filename.lower().endswith(".png"):
+    # 1. Validar extensión y formato
+    allowed_extensions = (".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif")
+    if not any(file.filename.lower().endswith(ext) for ext in allowed_extensions):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La imagen debe ser en formato PNG (.png)",
+            detail="Formato no soportado. Se aceptan: PNG, JPG, WebP, BMP, GIF",
         )
 
-    # 2. Leer archivo y validar tamaño máximo (5MB)
-    content = await file.read()
-    max_size = 5 * 1024 * 1024  # 5 Megabytes
-    if len(content) > max_size:
+    # 2. Leer archivo y validar tamaño máximo (10MB)
+    raw_content = await file.read()
+    max_size = 10 * 1024 * 1024  # 10 MB para imágenes grandes que serán redimensionadas
+    if len(raw_content) > max_size:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="La imagen excede el límite de tamaño de 5 MB",
+            detail="La imagen excede el límite de tamaño de 10 MB",
         )
 
-    # 3. Validar dimensiones (256x256)
-    if not validate_png_256x256(content):
+    # 3. Redimensionar automáticamente a 256x256 PNG
+    try:
+        content = resize_image_to_256(raw_content)
+    except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Dimensiones de imagen inválidas. Debe ser una imagen PNG de exactamente 256x256 píxeles",
+            detail=str(e),
         )
 
     # Asegurar que el directorio de medallas existe

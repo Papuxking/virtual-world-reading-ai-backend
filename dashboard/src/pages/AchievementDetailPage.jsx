@@ -52,8 +52,8 @@ export default function AchievementDetailPage() {
 
   async function handleUpload(file) {
     if (!file) return;
-    if (!file.name.toLowerCase().endsWith('.png')) {
-      showToast('Solo se aceptan imágenes PNG', 'error');
+    if (!file.name.match(/\.(png|jpe?g|webp|bmp|gif)$/i)) {
+      showToast('Formatos aceptados: PNG, JPG, WebP, BMP, GIF', 'error');
       return;
     }
     try {
@@ -211,7 +211,7 @@ export default function AchievementDetailPage() {
             <input
               ref={fileInputRef}
               type="file"
-              accept=".png"
+              accept=".png,.jpg,.jpeg,.webp,.bmp,.gif"
               className="hidden"
               onChange={(e) => handleUpload(e.target.files[0])}
             />
@@ -221,7 +221,7 @@ export default function AchievementDetailPage() {
               <>
                 <Upload className="w-8 h-8 text-slate-400 dark:text-gray-500" />
                 <p className="text-sm font-medium text-slate-600 dark:text-gray-300">Subir nueva imagen</p>
-                <p className="text-xs text-slate-400 dark:text-gray-500">PNG, 256×256px, máx 5MB</p>
+                <p className="text-xs text-slate-400 dark:text-gray-500">PNG, JPG, WebP… se redimensiona a 256×256 auto</p>
               </>
             )}
           </div>
