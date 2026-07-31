@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { clearToken, getStoredUser } from '../services/api';
-import { LayoutDashboard, LogOut, Gamepad2, Users, Sun, Moon, Menu, X, Trophy } from 'lucide-react';
+import { LayoutDashboard, LogOut, Gamepad2, Users, Sun, Moon, Menu, X, Trophy, BarChart3 } from 'lucide-react';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
@@ -137,6 +137,20 @@ function SidebarContent({ user, theme, setTheme, handleLogout, onLinkClick }) {
         >
           <Trophy className="w-5 h-5" />
           Logros y Medallas
+        </NavLink>
+        <NavLink
+          to="/metrics"
+          onClick={onLinkClick}
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold border transition-all duration-200 ${
+              isActive
+                ? 'bg-emerald-500/10 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 dark:border-emerald-500/25'
+                : 'text-slate-600 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5 border-transparent'
+            }`
+          }
+        >
+          <BarChart3 className="w-5 h-5" />
+          Métricas y Reportes
         </NavLink>
       </nav>
 

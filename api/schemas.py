@@ -583,3 +583,144 @@ class AchievementStatsResponse(BaseModel):
     top_unlocked: List[dict]  # [{id, name, icon, unlock_count, percentage}, ...]
     least_unlocked: List[dict]
 
+
+# ── Schemas de Interacciones NPC ─────────────────────────────────────────────
+
+class NpcInteractionCreate(BaseModel):
+    """Schema para registrar una interacción con un NPC."""
+    npc_type: str = Field(..., max_length=30, description="Tipo de NPC: 'robot' o 'sabio'")
+    session_id: Optional[int] = None
+    reading_id: Optional[int] = None
+
+
+class NpcInteractionResponse(BaseModel):
+    """Respuesta de una interacción registrada."""
+    id: int
+    npc_type: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ── Schemas de Leaderboard ───────────────────────────────────────────────────
+
+class LeaderboardEntry(BaseModel):
+    """Entrada individual del leaderboard."""
+    rank: int
+    display_name: str
+    character: str
+    total_score: int
+    total_achievements: int
+
+
+class LeaderboardResponse(BaseModel):
+    """Respuesta completa del leaderboard."""
+    players: List[LeaderboardEntry]
+    updated_at: datetime
+
+
+# ── Schemas de Métricas Avanzadas ────────────────────────────────────────────
+
+class MetricPlayerReadingTime(BaseModel):
+    """Tiempo de lectura por jugador."""
+    player_id: int
+    display_name: str
+    avg_reading_time: float
+    avg_total_time: float
+    total_sessions: int
+
+
+class MetricTypologyReadingTime(BaseModel):
+    """Tiempo de lectura por tipología."""
+    typology: str
+    avg_reading_time: float
+    avg_total_time: float
+    total_sessions: int
+
+
+class MetricsReadingTimeResponse(BaseModel):
+    """Respuesta de métricas de tiempo de lectura."""
+    avg_reading_time: float
+    avg_total_time: float
+    total_sessions: int
+    by_player: List[MetricPlayerReadingTime]
+    by_typology: List[MetricTypologyReadingTime]
+
+
+class MetricPlayerAnswers(BaseModel):
+    """Respuestas correctas/incorrectas por jugador."""
+    player_id: int
+    display_name: str
+    total_correct: int
+    total_incorrect: int
+    accuracy: float
+
+
+class MetricLevelAnswers(BaseModel):
+    """Respuestas por nivel de comprensión."""
+    level: str
+    total_correct: int
+    total_incorrect: int
+    accuracy: float
+
+
+class MetricsAnswersResponse(BaseModel):
+    """Respuesta de métricas de respuestas."""
+    total_correct: int
+    total_incorrect: int
+    overall_accuracy: float
+    by_player: List[MetricPlayerAnswers]
+    by_level: List[MetricLevelAnswers]
+
+
+class MetricQuestionAttempt(BaseModel):
+    """Intentos por pregunta."""
+    question_id: int
+    question_text: str
+    reading_title: str
+    typology: str
+    comprehension_level: str
+    total_attempts: int
+    correct_count: int
+    incorrect_count: int
+    correct_rate: float
+
+
+class MetricsQuestionAttemptsResponse(BaseModel):
+    """Respuesta de métricas de intentos por pregunta."""
+    questions: List[MetricQuestionAttempt]
+    total_questions: int
+
+
+class MetricNpcPlayer(BaseModel):
+    """Interacciones NPC por jugador."""
+    player_id: int
+    display_name: str
+    robot_interactions: int
+    sabio_interactions: int
+    total_interactions: int
+
+
+class MetricsNpcInteractionsResponse(BaseModel):
+    """Respuesta de métricas de interacciones NPC."""
+    total_robot: int
+    total_sabio: int
+    total_all: int
+    by_player: List[MetricNpcPlayer]
+
+
+class MetricToolUsage(BaseModel):
+    """Uso de una herramienta."""
+    tool_name: str
+    total_sessions: int
+    times_used: int
+    usage_rate: float
+
+
+class MetricsToolUsageResponse(BaseModel):
+    """Respuesta de métricas de uso de herramientas."""
+    tools: List[MetricToolUsage]
+    total_sessions: int
+
+

@@ -324,3 +324,67 @@ async function _downloadFile(endpoint, defaultFilename) {
   URL.revokeObjectURL(a.href);
 }
 
+// ── Métricas Avanzadas ──────────────────────────────────────────────────────
+
+function _buildMetricParams(filters = {}) {
+  const params = new URLSearchParams();
+  if (filters.date_from) params.set('date_from', filters.date_from);
+  if (filters.date_to) params.set('date_to', filters.date_to);
+  if (filters.player_id) params.set('player_id', filters.player_id);
+  if (filters.typology) params.set('typology', filters.typology);
+  return params;
+}
+
+export async function getMetricsReadingTime(filters = {}) {
+  const params = _buildMetricParams(filters);
+  const qs = params.toString();
+  return apiFetch(`/admin/metrics/reading-time${qs ? '?' + qs : ''}`);
+}
+
+export async function getMetricsAnswers(filters = {}) {
+  const params = _buildMetricParams(filters);
+  const qs = params.toString();
+  return apiFetch(`/admin/metrics/answers${qs ? '?' + qs : ''}`);
+}
+
+export async function getMetricsQuestionAttempts(filters = {}) {
+  const params = _buildMetricParams(filters);
+  if (filters.limit) params.set('limit', filters.limit);
+  const qs = params.toString();
+  return apiFetch(`/admin/metrics/question-attempts${qs ? '?' + qs : ''}`);
+}
+
+export async function getMetricsNpcInteractions(filters = {}) {
+  const params = _buildMetricParams(filters);
+  if (filters.npc_type) params.set('npc_type', filters.npc_type);
+  const qs = params.toString();
+  return apiFetch(`/admin/metrics/npc-interactions${qs ? '?' + qs : ''}`);
+}
+
+export async function getMetricsToolUsage(filters = {}) {
+  const params = _buildMetricParams(filters);
+  const qs = params.toString();
+  return apiFetch(`/admin/metrics/tool-usage${qs ? '?' + qs : ''}`);
+}
+
+export function downloadMetricsCSV(metric, filters = {}) {
+  const params = _buildMetricParams(filters);
+  params.set('metric', metric);
+  const qs = params.toString();
+  _downloadFile(`/admin/metrics/export/csv?${qs}`, `metricas_${metric}.csv`);
+}
+
+export function downloadMetricsExcel(metric, filters = {}) {
+  const params = _buildMetricParams(filters);
+  params.set('metric', metric);
+  const qs = params.toString();
+  _downloadFile(`/admin/metrics/export/excel?${qs}`, `metricas_${metric}.xlsx`);
+}
+
+// ── Leaderboard ─────────────────────────────────────────────────────────────
+
+export async function getLeaderboard(limit = 5) {
+  return apiFetch(`/leaderboard/top?limit=${limit}`);
+}
+
+

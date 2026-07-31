@@ -33,6 +33,8 @@ from routers.progress_router import router as progress_router
 from routers.admin_router import router as admin_router
 from routers.catalog_router import router as catalog_router
 from routers.achievements_admin_router import router as achievements_admin_router
+from routers.metrics_router import router as metrics_router
+from routers.leaderboard_router import router as leaderboard_router
 
 app = FastAPI(
     title="Virtual World Reading API",
@@ -84,6 +86,8 @@ app.include_router(progress_router)
 app.include_router(admin_router)
 app.include_router(catalog_router)
 app.include_router(achievements_admin_router)
+app.include_router(metrics_router)
+app.include_router(leaderboard_router)
 
 # ── Configuración de sincronización ──────────────────────────────────────────
 

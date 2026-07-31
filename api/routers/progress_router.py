@@ -14,13 +14,13 @@ from database import get_db
 from models import (
     User, PlayerSession, PlayerAnswer, SessionTool,
     PlayerNote, PlayerTypologyProgress, PlayerAchievement, Reading,
-    PlayerSlot, AchievementCatalog,
+    PlayerSlot, AchievementCatalog, NpcInteraction,
 )
 from schemas import (
     SessionCreate, SessionResponse, NoteCreate, NoteResponse,
     AchievementCreate, AchievementResponse, TypologyProgressResponse,
     PlayerProgressResponse, UserResponse, DIFFICULTY_ORDER,
-    AchievementFullResponse,
+    AchievementFullResponse, NpcInteractionCreate, NpcInteractionResponse,
 )
 from auth import get_current_user
 
@@ -565,3 +565,34 @@ def get_achievements_full(
         ))
 
     return result
+
+
+# ── Interacciones NPC ────────────────────────────────────────────────────────
+
+@router.post("/npc-interaction", response_model=NpcInteractionResponse, status_code=201)
+def register_npc_interaction(
+    data: NpcInteractionCreate,
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Registra una interacción del jugador con un NPC (robot o sabio)."""
+    if data.npc_type not in ("robot", "sabio"):
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail="npc_type debe ser 'robot' o 'sabio'")
+
+    active_slot = _get_active_slot(db, current_user.id)
+
+    interaction = NpcInteraction(
+        user_id=current_user.id,
+        slot_id=active_slot.id,
+        npc_type=data.npc_type,
+        session_id=data.session_id,
+        reading_id=data.reading_id,
+    )
+    db.add(interaction)
+    db.commit()
+    db.refresh(interaction)
+
+    return interaction
+

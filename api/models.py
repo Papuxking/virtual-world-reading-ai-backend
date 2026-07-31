@@ -337,3 +337,22 @@ class PlayerAchievement(Base):
     __table_args__ = (
         UniqueConstraint("user_id", "slot_id", "achievement_id", name="uq_user_slot_achievement"),
     )
+
+
+class NpcInteraction(Base):
+    """Registro de interacciones del jugador con NPCs (robot asistente / sabio)."""
+    __tablename__ = "npc_interactions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
+    npc_type = Column(String(30), nullable=False)  # "robot" o "sabio"
+    session_id = Column(Integer, ForeignKey("player_sessions.id", ondelete="SET NULL"), nullable=True)
+    reading_id = Column(Integer, ForeignKey("readings.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relaciones
+    user = relationship("User")
+    slot = relationship("PlayerSlot")
+    session = relationship("PlayerSession")
+    reading = relationship("Reading")

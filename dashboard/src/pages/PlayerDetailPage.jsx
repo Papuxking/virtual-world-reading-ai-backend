@@ -73,6 +73,7 @@ export default function PlayerDetailPage() {
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [showCreateSlot, setShowCreateSlot] = useState(false);
   const [newSlotLabel, setNewSlotLabel] = useState('');
+  const [confirmSlotModal, setConfirmSlotModal] = useState(null); // { slotNumber, slotLabel }
 
   // Password reset
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -162,10 +163,17 @@ export default function PlayerDetailPage() {
     }
   }
 
-  async function handleActivateSlot(slotNumber) {
+  function handleActivateSlot(slotNumber) {
+    const slot = slots.find((s) => s.slot_number === slotNumber);
+    setConfirmSlotModal({ slotNumber, slotLabel: slot?.label || `Slot ${slotNumber}` });
+  }
+
+  async function confirmActivateSlot() {
+    if (!confirmSlotModal) return;
     setSlotsLoading(true);
     try {
-      await activatePlayerSlot(playerId, slotNumber);
+      await activatePlayerSlot(playerId, confirmSlotModal.slotNumber);
+      setConfirmSlotModal(null);
       await loadData();
     } catch (err) {
       alert(err.message || 'Error al activar slot');
@@ -1121,6 +1129,43 @@ export default function PlayerDetailPage() {
                   : !canDelete
                   ? `Borrar (espere ${countdown}s...)`
                   : 'Borrar Datos'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Confirm Slot Change Modal */}
+      {confirmSlotModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-surface-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-white/10 p-8 max-w-md w-full mx-4 animate-slide-up">
+            <div className="flex items-center justify-center mb-5">
+              <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 flex items-center justify-center">
+                <ShieldAlert className="w-7 h-7 text-amber-500" />
+              </div>
+            </div>
+            <h3 className="text-lg font-bold text-slate-800 dark:text-white text-center mb-2">
+              Confirmación de Cambio de Slot
+            </h3>
+            <p className="text-sm text-slate-500 dark:text-gray-400 text-center mb-6 leading-relaxed">
+              ¿Está seguro que desea cambiar de slot a este jugador?
+              <br />
+              <span className="font-semibold text-slate-700 dark:text-gray-200">
+                Se activará: {confirmSlotModal.slotLabel} (Slot {confirmSlotModal.slotNumber})
+              </span>
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmSlotModal(null)}
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-gray-400 border border-slate-200 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10 transition-all"
+              >
+                No
+              </button>
+              <button
+                onClick={confirmActivateSlot}
+                disabled={slotsLoading}
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-bold bg-primary-500 text-white hover:bg-primary-600 transition-all shadow-md shadow-primary-500/20 disabled:opacity-50"
+              >
+                {slotsLoading ? 'Procesando...' : 'Sí'}
               </button>
             </div>
           </div>
