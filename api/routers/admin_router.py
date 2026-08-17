@@ -16,7 +16,7 @@ from database import get_db
 from models import (
     User, PlayerSession, PlayerAnswer, SessionTool,
     PlayerNote, PlayerTypologyProgress, PlayerAchievement, Reading,
-    PlayerSlot,
+    PlayerSlot, ActiveReading,
 )
 from schemas import (
     PlayerSummary, AdminStatsResponse, UserResponse,
@@ -913,3 +913,35 @@ def _reevaluate_unlocks(db: Session, user_id: int, slot_id: int) -> None:
             progress.is_unlocked = True
         else:
             progress.is_unlocked = False
+
+
+# ── Lectura Activa (Admin) ───────────────────────────────────────────────
+
+@router.delete("/players/{player_id}/active-reading", status_code=200)
+def admin_clear_active_reading(
+    player_id: int,
+    admin: User = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    """
+    Permite al administrador limpiar la lectura activa (pendiente) de un jugador.
+    Útil cuando un jugador quedó bloqueado con una lectura pendiente.
+    Limpia el registro de todos los slots activos del jugador.
+    """
+    user = db.query(User).filter(User.id == player_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Jugador no encontrado")
+
+    deleted_count = (
+        db.query(ActiveReading)
+        .filter(ActiveReading.user_id == player_id)
+        .delete(synchronize_session="fetch")
+    )
+    db.commit()
+
+    return {
+        "detail": f"Lectura activa eliminada" if deleted_count > 0 else "No había lectura activa",
+        "deleted_count": deleted_count,
+        "player_id": player_id,
+        "player_email": user.email,
+    }

@@ -115,19 +115,19 @@ export default function AchievementsPage() {
   // Chart data
   const categoryData = stats
     ? Object.entries(stats.distribution_by_category).map(([name, count]) => ({
-        name: name.charAt(0).toUpperCase() + name.slice(1),
-        count,
-        color: CATEGORY_COLORS[name] || '#6366f1',
-      }))
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+      count,
+      color: CATEGORY_COLORS[name] || '#6366f1',
+    }))
     : [];
 
   const tierData = stats
     ? Object.entries(stats.distribution_by_tier).map(([name, count]) => ({
-        name: TIER_LABELS[name] || name,
-        rawName: name,
-        count,
-        color: TIER_COLORS[name] || '#6366f1',
-      }))
+      name: TIER_LABELS[name] || name,
+      rawName: name,
+      count,
+      color: TIER_COLORS[name] || '#6366f1',
+    }))
     : [];
 
   const topData = stats?.top_unlocked?.map(item => ({

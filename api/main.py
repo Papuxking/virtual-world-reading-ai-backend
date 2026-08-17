@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func as sqlfunc, text
 
 from database import get_db, SessionLocal, engine, Base
-from models import Reading, Question, Answer
+from models import Reading, Question, Answer, ActiveReading
 from schemas import (
     ReadingCreate,
     ReadingUpdate,

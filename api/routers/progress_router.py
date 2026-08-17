@@ -3,7 +3,7 @@ progress_router.py — Endpoints de progreso del jugador.
 Registrar sesiones, logros, notas y consultar progreso completo.
 Todos los endpoints requieren autenticación JWT y se segmentan por el slot activo del jugador.
 """
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -14,13 +14,14 @@ from database import get_db
 from models import (
     User, PlayerSession, PlayerAnswer, SessionTool,
     PlayerNote, PlayerTypologyProgress, PlayerAchievement, Reading,
-    PlayerSlot, AchievementCatalog, NpcInteraction,
+    PlayerSlot, AchievementCatalog, NpcInteraction, ActiveReading,
 )
 from schemas import (
     SessionCreate, SessionResponse, NoteCreate, NoteResponse,
     AchievementCreate, AchievementResponse, TypologyProgressResponse,
     PlayerProgressResponse, UserResponse, DIFFICULTY_ORDER,
     AchievementFullResponse, NpcInteractionCreate, NpcInteractionResponse,
+    ActiveReadingSave, ActiveReadingResponse,
 )
 from auth import get_current_user
 
@@ -596,3 +597,142 @@ def register_npc_interaction(
 
     return interaction
 
+
+# ── Lectura Activa (Progreso en curso) ────────────────────────────────────────
+
+@router.get("/active-reading", response_model=ActiveReadingResponse)
+def get_active_reading(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Retorna la lectura activa (en progreso) del jugador en su slot activo.
+    Si no hay lectura activa o está expirada, retorna 204 No Content.
+    Si la lectura referenciada fue eliminada de la BD, limpia automáticamente.
+    """
+    active_slot = _get_active_slot(db, current_user.id)
+
+    record = (
+        db.query(ActiveReading)
+        .filter(
+            ActiveReading.user_id == current_user.id,
+            ActiveReading.slot_id == active_slot.id,
+        )
+        .first()
+    )
+
+    if not record:
+        raise HTTPException(status_code=204)
+
+    # Verificar expiración (24h)
+    if record.expires_at and record.expires_at < datetime.now(timezone.utc):
+        db.delete(record)
+        db.commit()
+        raise HTTPException(status_code=204)
+
+    # Verificar que la lectura referenciada aún existe en la BD
+    reading_exists = db.query(Reading).filter(Reading.id == record.reading_id).first()
+    if not reading_exists:
+        db.delete(record)
+        db.commit()
+        raise HTTPException(status_code=204)
+
+    return record
+
+
+@router.put("/active-reading", response_model=ActiveReadingResponse)
+def save_active_reading(
+    data: ActiveReadingSave,
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Guarda o actualiza la lectura activa del jugador.
+    Usa upsert: si ya existe un registro para este usuario/slot, lo actualiza.
+    Establece expiración automática de 24 horas.
+    """
+    active_slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, active_slot, current_user)
+
+    # Verificar que la lectura existe
+    reading = db.query(Reading).filter(Reading.id == data.reading_id).first()
+    if not reading:
+        raise HTTPException(status_code=404, detail="Lectura no encontrada")
+
+    # Buscar registro existente (upsert)
+    record = (
+        db.query(ActiveReading)
+        .filter(
+            ActiveReading.user_id == current_user.id,
+            ActiveReading.slot_id == active_slot.id,
+        )
+        .first()
+    )
+
+    now = datetime.now(timezone.utc)
+    expires = now + timedelta(hours=24)
+
+    if record:
+        # Actualizar existente
+        record.reading_id = data.reading_id
+        record.typology = data.typology
+        record.current_level_index = data.current_level_index
+        record.current_question_index = data.current_question_index
+        record.reading_completed = data.reading_completed
+        record.session_score = data.session_score
+        record.results_json = data.results_json
+        record.tools_used_json = data.tools_used_json
+        record.reading_start_time = data.reading_start_time
+        record.updated_at = now
+        record.expires_at = expires
+    else:
+        # Crear nuevo
+        record = ActiveReading(
+            user_id=current_user.id,
+            slot_id=active_slot.id,
+            reading_id=data.reading_id,
+            typology=data.typology,
+            current_level_index=data.current_level_index,
+            current_question_index=data.current_question_index,
+            reading_completed=data.reading_completed,
+            session_score=data.session_score,
+            results_json=data.results_json,
+            tools_used_json=data.tools_used_json,
+            reading_start_time=data.reading_start_time,
+            expires_at=expires,
+        )
+        db.add(record)
+
+    db.commit()
+    db.refresh(record)
+    return record
+
+
+@router.delete("/active-reading", status_code=204)
+def clear_active_reading(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Limpia la lectura activa del jugador.
+    Llamar cuando completa la sesión o elige explícitamente iniciar una nueva.
+    """
+    active_slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, active_slot, current_user)
+
+    record = (
+        db.query(ActiveReading)
+        .filter(
+            ActiveReading.user_id == current_user.id,
+            ActiveReading.slot_id == active_slot.id,
+        )
+        .first()
+    )
+
+    if record:
+        db.delete(record)
+        db.commit()
+
+    return None

@@ -724,3 +724,54 @@ class MetricsToolUsageResponse(BaseModel):
     total_sessions: int
 
 
+# ── Schemas de Lectura Activa (Progreso en curso) ────────────────────────────
+
+class ActiveReadingSave(BaseModel):
+    """Schema para guardar/actualizar la lectura activa del jugador."""
+    reading_id: int
+    typology: str = Field(..., max_length=50)
+    current_level_index: int = 0
+    current_question_index: int = 0
+    reading_completed: bool = False
+    session_score: int = 0
+    results_json: str = "[]"
+    tools_used_json: str = '{"highlight":false,"underline":false,"notes":false}'
+    reading_start_time: str = "0"
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "reading_id": 42,
+                "typology": "Narrativo",
+                "current_level_index": 1,
+                "current_question_index": 0,
+                "reading_completed": True,
+                "session_score": 45,
+                "results_json": '[{"level":"Literal","question_id":1,"correct":true}]',
+                "tools_used_json": '{"highlight":true,"underline":false,"notes":false}',
+                "reading_start_time": "12345.67",
+            }
+        }
+
+
+class ActiveReadingResponse(BaseModel):
+    """Schema de respuesta para la lectura activa del jugador."""
+    id: int
+    reading_id: int
+    typology: str
+    current_level_index: int
+    current_question_index: int
+    reading_completed: bool
+    session_score: int
+    results_json: str
+    tools_used_json: str
+    reading_start_time: str
+    created_at: datetime
+    updated_at: datetime
+    expires_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+

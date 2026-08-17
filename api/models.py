@@ -356,3 +356,36 @@ class NpcInteraction(Base):
     slot = relationship("PlayerSlot")
     session = relationship("PlayerSession")
     reading = relationship("Reading")
+
+
+class ActiveReading(Base):
+    """Lectura activa (en progreso) de un jugador.
+    Solo puede existir una por jugador por slot (UNIQUE constraint).
+    Se limpia al completar la sesión o al expirar (24h).
+    """
+    __tablename__ = "active_readings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
+    reading_id = Column(Integer, ForeignKey("readings.id", ondelete="CASCADE"), nullable=False)
+    typology = Column(String(50), nullable=False)
+    current_level_index = Column(Integer, nullable=False, default=0)
+    current_question_index = Column(Integer, nullable=False, default=0)
+    reading_completed = Column(Boolean, nullable=False, default=False)
+    session_score = Column(Integer, nullable=False, default=0)
+    results_json = Column(Text, default="[]")
+    tools_used_json = Column(Text, default='{"highlight":false,"underline":false,"notes":false}')
+    reading_start_time = Column(String(50), default="0")
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    expires_at = Column(DateTime(timezone=True), nullable=True)
+
+    # Relaciones
+    user = relationship("User")
+    slot = relationship("PlayerSlot")
+    reading = relationship("Reading")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "slot_id", name="uq_user_slot_active_reading"),
+    )
