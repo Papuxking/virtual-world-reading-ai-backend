@@ -27,7 +27,7 @@ services:
       - .:/data:ro
     command: >
       sh -c "pip install -r requirements.txt &&
-             uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+             uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4"
     ports:
       - 8001:8000
     depends_on:
