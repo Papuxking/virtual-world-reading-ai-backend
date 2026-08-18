@@ -20,6 +20,28 @@ services:
       timeout: 5s
       retries: 5
 
+  api:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      SYNC_SECRET_KEY: ${SYNC_SECRET_KEY}
+      LECTURAIA_API_URL: ${LECTURAIA_API_URL}
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN}
+    volumes:
+      # Las medallas subidas por el admin deben sobrevivir a un rebuild
+      - medals:/app/static/medals
+      # JSON de lecturas para import_json_readings.py
+      - ..:/data:ro
+    ports:
+      - "127.0.0.1:8001:8000"
+
 volumes:
   pgdata:
   medals:

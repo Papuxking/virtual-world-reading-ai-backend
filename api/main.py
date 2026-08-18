@@ -44,9 +44,11 @@ app = FastAPI(
 
 # ── CORS ─────────────────────────────────────────────────────────────────────
 
+_PUBLIC_ORIGIN = os.getenv("PUBLIC_ORIGIN", "").strip()
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[_PUBLIC_ORIGIN] if _PUBLIC_ORIGIN else [],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
