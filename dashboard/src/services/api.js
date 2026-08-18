@@ -3,7 +3,7 @@
  * Gestiona autenticación, tokens y todas las peticiones al backend.
  */
 
-const API_BASE = 'http://localhost:8001';
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
 /** Token JWT almacenado en memoria */
 let authToken = localStorage.getItem('vw_admin_token') || '';
@@ -44,7 +44,7 @@ async function apiFetch(endpoint, options = {}) {
 
   if (response.status === 401) {
     clearToken();
-    window.location.href = '/login';
+    window.location.href = '/dashboard/login';
     throw new Error('Sesión expirada');
   }
 
@@ -172,7 +172,7 @@ export async function uploadMedalImage(achievementId, file) {
 
   if (response.status === 401) {
     clearToken();
-    window.location.href = '/login';
+    window.location.href = '/dashboard/login';
     throw new Error('Sesión expirada');
   }
 
@@ -242,7 +242,7 @@ export async function uploadMedalImageAdmin(achievementId, file) {
 
   if (response.status === 401) {
     clearToken();
-    window.location.href = '/login';
+    window.location.href = '/dashboard/login';
     throw new Error('Sesión expirada');
   }
 
@@ -306,7 +306,7 @@ async function _downloadFile(endpoint, defaultFilename) {
 
   if (response.status === 401) {
     clearToken();
-    window.location.href = '/login';
+    window.location.href = '/dashboard/login';
     throw new Error('Sesión expirada');
   }
 

@@ -10,7 +10,7 @@ import {
   Users, Medal, Info, ImageIcon, AlertTriangle, CheckCircle2, X,
 } from 'lucide-react';
 
-const API_BASE = 'http://localhost:8001';
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
 const TIER_LABELS = { bronce: 'Bronce', plata: 'Plata', oro: 'Oro', platino: 'Platino' };
 const TIER_BADGE_CLASS = { bronce: 'badge-bronze', plata: 'badge-silver', oro: 'badge-gold', platino: 'badge-platinum' };

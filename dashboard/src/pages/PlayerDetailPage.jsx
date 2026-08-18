@@ -722,7 +722,7 @@ export default function PlayerDetailPage() {
                         {achievement.medal_image_path ? (
                           <div className="w-16 h-16 rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-sm relative bg-white dark:bg-slate-900 flex items-center justify-center">
                             <img
-                              src={`http://localhost:8001${achievement.medal_image_path}`}
+                              src={achievement.medal_image_path}
                               alt={achievement.medal_name}
                               className="w-full h-full object-contain"
                             />

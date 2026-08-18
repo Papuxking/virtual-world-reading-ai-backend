@@ -49,7 +49,7 @@ const CATEGORY_BADGE_CLASS = {
   superación: 'badge-superacion',
 };
 
-const API_BASE = 'http://localhost:8001';
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
 export default function AchievementsPage() {
   const navigate = useNavigate();
