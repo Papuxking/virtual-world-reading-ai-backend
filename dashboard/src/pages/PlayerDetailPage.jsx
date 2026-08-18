@@ -13,6 +13,8 @@ import {
   Key, Plus, Copy, Check, Trash2, ShieldAlert, Sparkles, Upload, X,
 } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
+
 const DIFFICULTY_ORDER = ['Narrativo', 'Descriptivo', 'Argumentativo', 'Instructivo', 'Expositivo'];
 const DIFFICULTY_COLORS = {
   Narrativo: { bg: 'bg-indigo-50 dark:bg-indigo-500/10', text: 'text-indigo-600 dark:text-indigo-400', border: 'border-indigo-100 dark:border-indigo-500/20', bar: 'bg-indigo-500' },
@@ -722,7 +724,7 @@ export default function PlayerDetailPage() {
                         {achievement.medal_image_path ? (
                           <div className="w-16 h-16 rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-sm relative bg-white dark:bg-slate-900 flex items-center justify-center">
                             <img
-                              src={achievement.medal_image_path}
+                              src={`${API_BASE}${achievement.medal_image_path}`}
                               alt={achievement.medal_name}
                               className="w-full h-full object-contain"
                             />
