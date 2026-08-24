@@ -6,8 +6,15 @@ import os
 import sys
 
 if not os.getenv("DATABASE_URL"):
-    os.environ["DATABASE_URL"] = (
-        "postgresql://DB-virtual-world-reading-ai:GodotWorldAdmin@localhost:5433/godot_readings"
+    # Antes aqui habia un fallback a localhost:5433 con la contrasena en claro.
+    # Ese puerto es hoy el Postgres de LecturaIA, de otro autor: ejecutar este
+    # script fuera del contenedor sin la variable puesta habria escrito en su
+    # base de datos. Mejor fallar que adivinar.
+    raise SystemExit(
+        "ERROR: DATABASE_URL no esta definida. Dentro del contenedor ya viene "
+        "del .env:  docker exec vw-api-1 python clean_30_students.py  --  fuera, pasala "
+        "explicitamente. OJO: el puerto 5432 es el entorno virtual y el 5433 "
+        "es LecturaIA."
     )
 
 from database import SessionLocal
