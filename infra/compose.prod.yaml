@@ -21,6 +21,10 @@ services:
       retries: 5
 
   api:
+    # Etiquetada por despliegue (prod-AAAAMMDD-HHMMSS) para poder revertir a la
+    # imagen anterior sin reconstruir. deploy.sh exporta API_TAG; a mano, sin
+    # exportar nada, se comporta como antes y usa :latest.
+    image: vw-api:${API_TAG:-latest}
     build:
       context: ..
       dockerfile: infra/Dockerfile.api

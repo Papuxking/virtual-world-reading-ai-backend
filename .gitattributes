@@ -1,0 +1,19 @@
+# Se desarrolla en Windows y se ejecuta en Linux. Sin esto, git convierte a
+# CRLF en el working copy y un script con finales de linea Windows falla en el
+# servidor con el desconcertante "\r: command not found".
+* text=auto eol=lf
+
+*.sh        text eol=lf
+*.conf      text eol=lf
+*.yaml      text eol=lf
+*.yml       text eol=lf
+*.py        text eol=lf
+Dockerfile* text eol=lf
+.env.example text eol=lf
+
+# Binarios: que git no los toque.
+*.png binary
+*.jpg binary
+*.pck binary
+*.wasm binary
+*.xlsx binary
