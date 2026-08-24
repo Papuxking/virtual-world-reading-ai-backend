@@ -101,6 +101,7 @@ cmd_web() {
             if [ "$(readlink -f "$old")" != "$(readlink -f "$LIVE")" ]; then
                 log "purgando release antigua $(basename "$old")"
                 rm -rf "$old"
+                rm -f "${old%/}.info"
             fi
         done
     fi
@@ -191,7 +192,13 @@ cmd_nginx() {
 
 # --- status ----------------------------------------------------------------
 cmd_status() {
-    echo "release web activa : $(readlink -f "$LIVE" 2>/dev/null || echo '(no es symlink)')"
+    local activa
+    activa="$(readlink -f "$LIVE" 2>/dev/null || echo '')"
+    echo "release web activa : ${activa:-(no es symlink)}"
+    # De que commits salio el build que esta sirviendose ahora mismo.
+    if [ -n "$activa" ] && [ -f "$activa.info" ]; then
+        sed 's/^/                     /' "$activa.info"
+    fi
     echo "imagen de la API   : $(docker inspect --format '{{.Config.Image}}' vw-api-1 2>/dev/null || echo '(sin acceso a docker)')"
     echo "commit de /opt/vw  : $(git -C "$VW_ROOT" describe --tags --always --dirty 2>/dev/null || echo '?')"
     echo "salud API (8001)   : $(curl -s -o /dev/null -w '%{http_code}' "$HEALTH" || echo 000)"

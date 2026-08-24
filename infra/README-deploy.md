@@ -62,6 +62,16 @@ es justo lo que hace imposible saber qué hay desplegado.
    `export_presets.cfg`: sin él, el juego apunta a `localhost:8001` en producción.
 3. `bash Docker/infra/push.sh web`
 
+`push.sh web` aborta si el repo de Godot tiene cambios sin commitear o sin
+pushear: el build sale de ahí, así que es ese repo el que determina qué versión
+corre. Junto a cada release se guarda un `.info` con la rama y el commit del
+juego y del backend, fuera del directorio servido, y `deploy.sh status` lo
+muestra.
+
+> El repo del juego (`Steeven24/virtual-world-reading-ai`) está en la cuenta de
+> un compañero, aunque trabajemos en él. Se empuja a `feature/presentación`; no
+> se mueve `main` ahí sin hablarlo antes.
+
 ### Cambio de API (Python)
 
 1. Commit y push en el repo del backend (`main`).

@@ -18,6 +18,7 @@ SSH_KEY="${SSH_KEY:-$HOME/.ssh/vw_deploy}"
 HOST="${VW_HOST:-deploy@entornovirtual.duckdns.org}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO="$(cd "$HERE/.." && pwd)"          # PROYECTO/Docker  (repo del backend)
+GODOT_REPO="$(cd "$HERE/../.." && pwd)/virtual-world-reading-ai"
 WEB_BUILD="$(cd "$HERE/../.." && pwd)/web_build"
 RELEASES=/var/www/vw-releases
 TS="$(date +%Y%m%d-%H%M%S)"
@@ -27,19 +28,26 @@ SSH=(ssh -i "$SSH_KEY" -o StrictHostKeyChecking=accept-new "$HOST")
 log()  { printf '[push] %s\n' "$*"; }
 die()  { printf '[error] %s\n' "$*" >&2; exit 1; }
 
+# Exige que un repo este limpio y pusheado. Si no, lo que corra en produccion
+# no seria un commit identificable y no se podria reproducir ni revertir.
 check_clean() {
-    git -C "$REPO" diff --quiet && git -C "$REPO" diff --cached --quiet \
-        || die "el repo $REPO tiene cambios sin commitear. Commitea y pushea antes de desplegar."
-    local branch upstream
-    branch="$(git -C "$REPO" rev-parse --abbrev-ref HEAD)"
-    upstream="origin/$branch"
-    git -C "$REPO" fetch origin --quiet
-    if [ -n "$(git -C "$REPO" log "$upstream..HEAD" --oneline 2>/dev/null)" ]; then
-        die "hay commits sin pushear en $branch. Ejecuta: git push origin $branch"
+    local repo="$1" nombre="$2"
+    [ -d "$repo/.git" ] || die "no encuentro el repo de $nombre en $repo"
+    git -C "$repo" diff --quiet && git -C "$repo" diff --cached --quiet \
+        || die "el repo de $nombre ($repo) tiene cambios sin commitear. Commitea antes de desplegar."
+    local branch
+    branch="$(git -C "$repo" rev-parse --abbrev-ref HEAD)"
+    git -C "$repo" fetch origin --quiet
+    if [ -n "$(git -C "$repo" log "origin/$branch..HEAD" --oneline 2>/dev/null)" ]; then
+        die "hay commits sin pushear en $nombre ($branch). Ejecuta: git -C '$repo' push origin '$branch'"
     fi
 }
 
 push_web() {
+    # El build sale del repo de Godot, asi que es ESE el que tiene que estar
+    # limpio y pusheado para poder decir que commit corre en produccion.
+    check_clean "$GODOT_REPO" "el juego Godot"
+
     [ -s "$WEB_BUILD/index.html" ] || die "no encuentro $WEB_BUILD/index.html - exporta desde Godot primero"
     [ -s "$WEB_BUILD/index.pck" ]  || die "falta index.pck en $WEB_BUILD"
     [ -s "$WEB_BUILD/index.wasm" ] || die "falta index.wasm en $WEB_BUILD"
@@ -60,12 +68,24 @@ push_web() {
     tar -czf - -C "$WEB_BUILD" --exclude='*.gz' . \
         | "${SSH[@]}" "tar -xzf - -C $RELEASES/$TS"
 
+    # Trazabilidad: de que commit salio este build. Se guarda FUERA del
+    # directorio servido (fichero hermano) para no publicarlo por HTTP.
+    printf 'release=%s\njuego=%s @ %s\nbackend=%s @ %s\nexportado=%s\ndesplegado_por=%s\n' \
+        "$TS" \
+        "$(git -C "$GODOT_REPO" rev-parse --abbrev-ref HEAD)" \
+        "$(git -C "$GODOT_REPO" rev-parse --short HEAD)" \
+        "$(git -C "$REPO" rev-parse --abbrev-ref HEAD)" \
+        "$(git -C "$REPO" rev-parse --short HEAD)" \
+        "$(date -r "$WEB_BUILD/index.pck" '+%Y-%m-%d %H:%M' 2>/dev/null || echo '?')" \
+        "${USERNAME:-$USER}" \
+        | "${SSH[@]}" "cat > $RELEASES/$TS.info"
+
     log "activando"
     "${SSH[@]}" "/opt/vw/infra/deploy.sh web $TS"
 }
 
 push_code() {
-    check_clean
+    check_clean "$REPO" "el backend"
     local commit
     commit="$(git -C "$REPO" rev-parse HEAD)"
     local branch
