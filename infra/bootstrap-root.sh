@@ -122,6 +122,14 @@ fi
 chown -R "$DEPLOY_USER":nginx "$RELEASES"
 chmod -R a+rX "$RELEASES"
 chown -h "$DEPLOY_USER":nginx "$LIVE"
+
+# Ser dueno del symlink NO basta para reemplazarlo: el intercambio atomico de
+# deploy.sh crea $LIVE.tmp.$$ dentro de /var/www y lo mueve encima, y eso exige
+# escritura en el DIRECTORIO PADRE. Sin esta linea 'deploy.sh web' muere con
+# "ln: failed to create symbolic link: Permission denied" y la release se queda
+# subida pero sin activar, sirviendo la version anterior sin dar error.
+chown root:"$DEPLOY_USER" /var/www
+chmod 775 /var/www
 # vw-dashboard sigue siendo directorio normal, pero deploy debe poder escribirlo.
 chown -R "$DEPLOY_USER":nginx /var/www/vw-dashboard
 chmod -R a+rX /var/www/vw-dashboard

@@ -38,8 +38,18 @@ bash /opt/vw/infra/bootstrap-root.sh
 ```
 
 Añade `deploy` al grupo docker, instala un sudoers acotado, convierte
-`/var/www/vw` en symlink de releases, crea `/var/backups/vw` y programa el
-backup diario. Es idempotente.
+`/var/www/vw` en symlink de releases, da a `deploy` escritura sobre `/var/www`,
+crea `/var/backups/vw` y programa el backup diario. Es idempotente.
+
+> **Por qué `deploy` necesita escribir en `/var/www` y no solo ser dueño del
+> symlink:** el intercambio atómico de `deploy.sh web` crea `/var/www/vw.tmp.$$`
+> y lo mueve encima de `/var/www/vw`, y crear ese temporal exige permiso sobre el
+> **directorio padre**. La primera versión de este script chowneaba el symlink
+> pero no `/var/www`, así que `deploy.sh web` moría con `ln: failed to create
+> symbolic link: Permission denied` **después** de haber subido la release: se
+> quedaba subida pero sin activar, y el sitio seguía sirviendo la versión
+> anterior sin dar ningún error. Si te encuentras un despliegue que "no hace
+> nada", compara `deploy.sh status` con la fecha del `.pck` que sirve nginx.
 
 Después, en la **consola de Hetzner**: `Server → Backups → Enable`. Cuesta un 20 %
 del precio del servidor y es la única copia que sobrevive a perder el disco.
