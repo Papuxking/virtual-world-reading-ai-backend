@@ -44,6 +44,18 @@ need_docker() {
     docker info >/dev/null 2>&1 || die "este usuario no puede hablar con Docker. Ejecuta bootstrap-root.sh como root (anade deploy al grupo docker) y vuelve a entrar por SSH."
 }
 
+# 'docker inspect .Config.Image' devuelve la referencia tal cual se uso al crear
+# el contenedor: para una imagen :latest suele venir SIN etiqueta ("vw-api").
+# Recortar con ${x#vw-api:} no quitaba nada en ese caso y el rollback acababa
+# pidiendo "vw-api:vw-api", que no existe. Se normaliza aqui.
+tag_de_imagen() {
+    case "$1" in
+        none|"") echo none ;;
+        *:*)     echo "${1##*:}" ;;
+        *)       echo latest ;;
+    esac
+}
+
 # --- web -------------------------------------------------------------------
 cmd_web() {
     local rel="${1:-}"
@@ -122,7 +134,7 @@ cmd_api() {
     need_docker
     local tag="prod-$TS"
     local prev
-    prev="$(docker inspect --format '{{.Config.Image}}' vw-api-1 2>/dev/null || echo none)"
+    prev="$(tag_de_imagen "$(docker inspect --format '{{.Config.Image}}' vw-api-1 2>/dev/null || echo none)")"
 
     log "construyendo vw-api:$tag"
     API_TAG="$tag" "${COMPOSE[@]}" build api
@@ -143,15 +155,15 @@ cmd_api() {
     if [ "$ok" != 1 ]; then
         warn "la API no respondio 200 en /health tras 60 s"
         if [ "$prev" != none ]; then
-            warn "revirtiendo a $prev"
-            API_TAG="${prev#vw-api:}" "${COMPOSE[@]}" up -d api
+            warn "revirtiendo a vw-api:$prev"
+            API_TAG="$prev" "${COMPOSE[@]}" up -d api
         fi
         die "despliegue de API revertido. Log:  docker logs --tail 50 vw-api-1"
     fi
 
     echo "$prev" > "$STATE/api.prev"
     echo "$tag"  > "$STATE/api.current"
-    log "API viva en vw-api:$tag (anterior: $prev)"
+    log "API viva en vw-api:$tag (anterior: vw-api:$prev)"
 
     # Conservar solo las ultimas imagenes para no llenar el disco.
     docker images vw-api --format '{{.Tag}}' | grep '^prod-' | sort -r | tail -n +$((KEEP+1)) | while read -r t; do
@@ -165,8 +177,8 @@ cmd_rollback_api() {
     local prev
     prev="$(cat "$STATE/api.prev" 2>/dev/null || echo none)"
     [ "$prev" != none ] || die "no hay imagen anterior registrada"
-    log "volviendo a $prev"
-    API_TAG="${prev#vw-api:}" "${COMPOSE[@]}" up -d api
+    log "volviendo a vw-api:$prev"
+    API_TAG="$prev" "${COMPOSE[@]}" up -d api
     log "hecho"
 }
 
