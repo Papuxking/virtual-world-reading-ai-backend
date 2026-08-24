@@ -86,14 +86,27 @@ push_web() {
 
 push_code() {
     check_clean "$REPO" "el backend"
-    local commit
+    local commit branch
     commit="$(git -C "$REPO" rev-parse HEAD)"
-    local branch
     branch="$(git -C "$REPO" rev-parse --abbrev-ref HEAD)"
-    log "sincronizando /opt/vw con $branch @ ${commit:0:8}"
-    # --hard es seguro AQUI porque el arranque dejo /opt/vw limpio y desde
-    # entonces el servidor no es sitio donde editar: se edita en local.
-    "${SSH[@]}" "cd /opt/vw && git fetch origin && git checkout $branch && git reset --hard $commit"
+
+    # El codigo viaja por SSH, NO con un git pull en el servidor. El repo es
+    # privado y el servidor no tiene credenciales de GitHub: alli 'git fetch'
+    # falla con "could not read Username for https://github.com". Enviar un
+    # git archive del commit ya pusheado conserva la propiedad que importa
+    # -- lo desplegado es un commit identificable -- sin tener que gestionar
+    # una credencial mas en la maquina.
+    log "enviando $branch @ ${commit:0:8} a /opt/vw"
+    git -C "$REPO" archive --format=tar "$commit" \
+        | "${SSH[@]}" "rm -rf /opt/vw/.incoming && mkdir -p /opt/vw/.incoming && tar -xf - -C /opt/vw/.incoming"
+
+    # rsync --delete deja /opt/vw exactamente como el commit, pero infra/.env
+    # es la unica copia de JWT_SECRET_KEY y no esta en git: se excluye siempre.
+    "${SSH[@]}" "rsync -a --delete --exclude 'infra/.env' --exclude '.git' --exclude '.incoming' --exclude '.deploy-state' /opt/vw/.incoming/ /opt/vw/ \
+        && rm -rf /opt/vw/.incoming \
+        && printf '%s\n' '$branch $commit' > /opt/vw/.deployed-commit \
+        && chmod +x /opt/vw/infra/*.sh"
+
     log "reconstruyendo API"
     "${SSH[@]}" "/opt/vw/infra/deploy.sh api"
 }

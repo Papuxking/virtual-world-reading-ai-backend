@@ -200,7 +200,10 @@ cmd_status() {
         sed 's/^/                     /' "$activa.info"
     fi
     echo "imagen de la API   : $(docker inspect --format '{{.Config.Image}}' vw-api-1 2>/dev/null || echo '(sin acceso a docker)')"
-    echo "commit de /opt/vw  : $(git -C "$VW_ROOT" describe --tags --always --dirty 2>/dev/null || echo '?')"
+    # push.sh deja aqui la rama y el commit enviados. No se usa 'git describe'
+    # porque /opt/vw deja de ser un repositorio: el codigo llega por SSH, ya
+    # que el servidor no tiene credenciales para el repo privado de GitHub.
+    echo "codigo en /opt/vw  : $(cat "$VW_ROOT/.deployed-commit" 2>/dev/null || echo '? (aun no desplegado con push.sh)')"
     echo "salud API (8001)   : $(curl -s -o /dev/null -w '%{http_code}' "$HEALTH" || echo 000)"
     echo "portada publica    : $(curl -sk -o /dev/null -w '%{http_code}' "$PUBLIC/" || echo 000)"
     echo "--- ajeno, solo informativo (LecturaIA, no se toca) ---"

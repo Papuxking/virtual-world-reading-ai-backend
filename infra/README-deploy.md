@@ -77,6 +77,13 @@ muestra.
 1. Commit y push en el repo del backend (`main`).
 2. `bash Docker/infra/push.sh code`
 
+El código viaja por SSH (`git archive` del commit ya pusheado), **no** con un
+`git pull` en el servidor: el repo es privado y la máquina no tiene credenciales
+de GitHub. `/opt/vw/.deployed-commit` registra qué commit está desplegado y
+`deploy.sh status` lo muestra. `infra/.env` se excluye siempre del rsync porque
+es la única copia de `JWT_SECRET_KEY`.
+
+
 Si tocas dependencias, edita `api/requirements.txt` **y regenera el lock**:
 
 ```bash
@@ -87,6 +94,24 @@ docker run --rm -v "$PWD/api:/api" -w /api python:3.12-slim sh -c \
 
 La imagen se construye desde el lock, no desde `requirements.txt`. Sin eso, cada
 rebuild resolvía versiones frescas de PyPI y la imagen no era reproducible.
+
+### Reemplazar el corpus de lecturas
+
+```bash
+# 1. copia previa (obligatoria)
+ssh vw '/opt/vw/infra/backup.sh'
+# 2. simulacro: muestra el arrastre en cascada sin tocar nada
+ssh vw 'docker exec vw-api-1 python replace_readings.py --json /data/LECTURAS_TIPOLOGIAS_TEXTUALES.json'
+# 3. aplicar
+ssh vw 'docker exec vw-api-1 python replace_readings.py --json /data/LECTURAS_TIPOLOGIAS_TEXTUALES.json --apply'
+# 4. dejar a los jugadores en estado inicial
+ssh vw 'docker exec vw-api-1 python reset_players.py --students 50 --demo --apply'
+```
+
+Borrar una lectura arrastra en cascada sus preguntas, respuestas, sesiones de
+alumno y notas. Los logros y el `best_score` por tipología **no** cuelgan de
+`readings` y sobreviven, así que sin el paso 4 queda puntuación sin sesiones
+detrás. El simulacro del paso 2 cuantifica todo eso antes de escribir.
 
 ### Router nuevo en la API
 
