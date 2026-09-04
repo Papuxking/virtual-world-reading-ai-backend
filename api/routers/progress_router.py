@@ -90,11 +90,16 @@ def _validate_slot_header(request: Request, active_slot: PlayerSlot, user: User)
 
 @router.get("/me", response_model=PlayerProgressResponse)
 def get_my_progress(
+    request: Request,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """Retorna el progreso completo del jugador autenticado en su slot activo."""
     active_slot = _get_active_slot(db, current_user.id)
+    # Sin esta validacion una sesion ya expulsada volvia a la vida: al pedir el
+    # progreso adoptaba el session_version nuevo que viene en la respuesta y
+    # pasaba de nuevo los controles de escritura.
+    _validate_slot_header(request, active_slot, current_user)
 
     # Progreso por tipología para este slot
     typology_rows = (

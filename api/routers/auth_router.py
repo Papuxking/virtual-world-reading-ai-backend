@@ -97,6 +97,14 @@ def login_user(data: UserLogin, db: Session = Depends(get_db)):
             detail="La cuenta está desactivada",
         )
 
+    # Sesión única: cada login invalida la anterior.
+    # El juego se publica en web y un mismo alumno puede abrirlo desde otro
+    # navegador o equipo, donde el cerrojo de pestañas del cliente ya no llega.
+    # Al subir session_version, la ventana antigua recibe 409 SESSION_INVALIDATED
+    # en su siguiente petición y se cierra sola, de modo que solo una sesión
+    # escribe progreso a la vez.
+    user.session_version = (user.session_version or 1) + 1
+
     # Actualizar último login
     user.last_login_at = datetime.now(timezone.utc)
     db.commit()
