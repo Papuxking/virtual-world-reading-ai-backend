@@ -121,7 +121,40 @@ ssh vw 'docker exec vw-api-1 python reset_players.py --students 50 --demo --appl
 Borrar una lectura arrastra en cascada sus preguntas, respuestas, sesiones de
 alumno y notas. Los logros y el `best_score` por tipología **no** cuelgan de
 `readings` y sobreviven, así que sin el paso 4 queda puntuación sin sesiones
-detrás. El simulacro del paso 2 cuantifica todo eso antes de escribir.
+detrás. El simulacro del paso 2 cuantifica todo eso antes de escribir. Las
+lecturas de la zona de práctica nunca se borran con este script: tienen su
+propio corpus (`LECTURAS_PRACTICA.json`).
+
+### Migración a 4 tipologías y zona de práctica (una sola vez)
+
+Retira Instructivo de la progresión (borra sus lecturas, sesiones, notas y
+puntajes) y carga las lecturas de práctica. **Borra datos reales del piloto**: el
+simulacro enseña exactamente qué y de quién antes de escribir nada.
+
+El orden importa. La API nueva lee la columna `is_practice` y, si arranca antes
+de que exista, falla con "column does not exist". La API vieja, en cambio,
+tolera la columna. Por eso las columnas van primero:
+
+```bash
+# 1. copia previa (obligatoria) y copia a local
+ssh vw '/opt/vw/infra/backup.sh'
+bash Docker/infra/pull-backups.sh
+# 2. columnas nuevas, con la API vieja todavía en marcha
+ssh vw 'docker exec -i vw-db-1 sh -c "psql -v ON_ERROR_STOP=1 -U \$POSTGRES_USER -d \$POSTGRES_DB"' \
+  < Docker/api/sql/009_practice_mode.sql
+# 3. API nueva (tras mergear a main y pushear)
+bash Docker/infra/push.sh code
+# 4. simulacro: revisar con calma quién pierde puntos y qué se borra
+ssh vw 'docker exec vw-api-1 python migrate_practice_mode.py'
+# 5. aplicar
+ssh vw 'docker exec vw-api-1 python migrate_practice_mode.py --apply'
+# 6. juego nuevo (exportado desde la rama que se despliega)
+bash Docker/infra/push.sh web
+```
+
+Entre los pasos 5 y 6, un cliente viejo que entre en la estación Instructivo
+recibe "sin lecturas": haz el 6 justo después. No hay routers nuevos (solo
+parámetros), así que la lista blanca de nginx no cambia.
 
 ### Router nuevo en la API
 
