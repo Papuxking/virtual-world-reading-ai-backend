@@ -35,11 +35,12 @@ curl http://localhost:8000/typologies
     {"name": "Descriptivo", "count": 2},
     {"name": "Narrativo", "count": 1},
     {"name": "Argumentativo", "count": 7},
-    {"name": "Expositivo", "count": 5},
-    {"name": "Instructivo", "count": 1}
+    {"name": "Expositivo", "count": 5}
   ]
 }
 ```
+
+Cuenta solo las lecturas de progresión; las de la zona de práctica no aparecen.
 
 ---
 
@@ -71,8 +72,14 @@ curl http://localhost:8000/readings/1
 ### `GET /readings/random`
 Lectura aleatoria (**sin preguntas**).
 
+| Parámetro  | Tipo   | Default | Descripción |
+|-----------|--------|---------|-------------|
+| `typology`| string | `null`  | Filtrar por tipología |
+| `practice`| bool   | `false` | `true`: solo lecturas de la zona de práctica; `false`: solo de la progresión |
+
 ```bash
 curl "http://localhost:8000/readings/random?typology=Descriptivo"
+curl "http://localhost:8000/readings/random?typology=Descriptivo&practice=true"
 ```
 
 ### `POST /readings`
@@ -163,9 +170,25 @@ curl "http://localhost:8000/readings/1/questions?level=Inferencial"
 ### `GET /readings/random/full`
 Lectura aleatoria **con preguntas**, con filtro opcional por tipología.
 
+| Parámetro  | Tipo   | Default | Descripción |
+|-----------|--------|---------|-------------|
+| `typology`| string | `null`  | Filtrar por tipología |
+| `practice`| bool   | `false` | `true`: solo lecturas de la zona de práctica; `false`: solo de la progresión |
+
 ```bash
 curl "http://localhost:8000/readings/random/full?typology=Argumentativo"
+curl "http://localhost:8000/readings/random/full?typology=Narrativo&practice=true"
 ```
+
+---
+
+## Zona de práctica
+
+- Las lecturas llevan `is_practice`. El juego pide las de práctica con `practice=true`.
+- `POST /progress/sessions` acepta `"is_practice": true`: la sesión se guarda (el
+  dashboard la muestra aparte) pero no toca el progreso, los desbloqueos, el ranking
+  ni las métricas. Sin el campo, la sesión cuenta como progresión.
+- `GET /progress/me` devuelve solo las 4 tipologías del juego y `practice_sessions`.
 
 ---
 
@@ -177,6 +200,9 @@ docker-compose exec api python import_json_readings.py
 
 # Archivos personalizados
 docker-compose exec api python import_json_readings.py /data/mi_archivo.json
+
+# Como lecturas de la zona de práctica
+docker-compose exec api python import_json_readings.py --practice /data/LECTURAS_PRACTICA.json
 ```
 
 ---

@@ -61,8 +61,9 @@ def normalize_level(level: str) -> str:
 
 # ── Importación ──────────────────────────────────────────────────────────────
 
-def import_json_file(session, filepath: str, stats: dict):
-    """Importa un archivo JSON completo a la base de datos."""
+def import_json_file(session, filepath: str, stats: dict, is_practice: bool = False):
+    """Importa un archivo JSON completo a la base de datos.
+    Con is_practice=True las lecturas quedan como exclusivas de la zona de práctica."""
     print(f"\n📖 Procesando: {filepath}")
 
     with open(filepath, "r", encoding="utf-8") as f:
@@ -99,8 +100,8 @@ def import_json_file(session, filepath: str, stats: dict):
         # Insertar lectura
         result = session.execute(
             text("""
-                INSERT INTO readings (title, typology, type, content)
-                VALUES (:title, :typology, :type, :content)
+                INSERT INTO readings (title, typology, type, content, is_practice)
+                VALUES (:title, :typology, :type, :content, :is_practice)
                 RETURNING id
             """),
             {
@@ -108,6 +109,7 @@ def import_json_file(session, filepath: str, stats: dict):
                 "typology": typology,
                 "type": reading_type,
                 "content": content,
+                "is_practice": is_practice,
             }
         )
         reading_id = result.fetchone()[0]
@@ -178,6 +180,11 @@ def main():
         default=DEFAULT_JSON_FILES,
         help="Rutas a los archivos JSON a importar"
     )
+    parser.add_argument(
+        "--practice",
+        action="store_true",
+        help="Importa las lecturas como exclusivas de la zona de práctica"
+    )
     args = parser.parse_args()
 
     # Verificar que los archivos existen
@@ -212,7 +219,7 @@ def main():
 
     try:
         for filepath in valid_files:
-            import_json_file(session, filepath, stats)
+            import_json_file(session, filepath, stats, is_practice=args.practice)
 
         print("\n" + "=" * 60)
         print("📊 Resumen de importación:")

@@ -36,11 +36,18 @@ user_readings (futura)
 | `typology`  | `VARCHAR(50)` | NOT NULL, CHECK IN (Descriptivo, Narrativo, Argumentativo, Expositivo, Instructivo) |
 | `type`      | `VARCHAR(100)` | NULL (subtipo textual opcional)                   |
 | `content`   | `TEXT`        | NOT NULL                                          |
+| `is_practice` | `BOOLEAN`   | NOT NULL DEFAULT false — lectura exclusiva de la zona de práctica |
 | `created_at`| `TIMESTAMPTZ` | DEFAULT NOW()                                     |
 | `updated_at`| `TIMESTAMPTZ` | DEFAULT NOW()                                     |
 
+El CHECK de `typology` conserva Instructivo por compatibilidad con la sincronización
+de LecturaIA; el juego ya no la usa (ver `game_rules.DIFFICULTY_ORDER`).
+`player_sessions` tiene también `is_practice`: las sesiones de la zona de práctica
+se guardan pero no cuentan en progreso, ranking ni métricas.
+
 **Índices:**
 - `idx_readings_typology` — B-tree sobre `typology`
+- `idx_readings_typology_practice` — B-tree sobre `(typology, is_practice)`
 - `idx_readings_title_fts` — GIN full-text español sobre `title`
 - `idx_readings_content_fts` — GIN full-text español sobre `content`
 
@@ -98,6 +105,7 @@ user_readings (futura)
 | `001_schema.sql` | DDL base: readings, user_readings, índices FTS |
 | `002_questions_schema.sql` | DDL: questions, answers, ALTER readings ADD type |
 | `002_seed.sql` | Seed: lectura Baños de Agua Santa + 12 preguntas |
+| `009_practice_mode.sql` | Columnas `is_practice` en `readings` y `player_sessions` |
 
 ## Resetear la base de datos
 

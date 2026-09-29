@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """
-Reemplaza el corpus de lecturas conservando una tipologia.
+Reemplaza el corpus de lecturas de PROGRESION.
 
-Borra todas las lecturas cuya tipologia NO sea la que se conserva y carga en su
-lugar las del JSON indicado. Pensado para ejecutarse dentro del contenedor de
-la API, donde ya estan la conexion a la BD y el JSON montado en /data.
+Borra las lecturas de progresion (todas, o todas menos la tipologia indicada con
+--keep) y carga en su lugar las del JSON. Las lecturas de la zona de practica
+NUNCA se tocan: tienen su propio corpus (LECTURAS_PRACTICA.json). Pensado para
+ejecutarse dentro del contenedor de la API, donde ya estan la conexion a la BD
+y el JSON montado en /data.
 
     docker exec vw-api-1 python replace_readings.py \
         --json /data/LECTURAS_TIPOLOGIAS_TEXTUALES.json
@@ -48,7 +50,7 @@ TABLAS_EN_CASCADA = [
 ]
 
 
-def validar_json(datos: dict, conservar: str) -> list[str]:
+def validar_json(datos: dict, conservar: str | None) -> list[str]:
     """Devuelve la lista de problemas encontrados. Vacia si el JSON esta sano."""
     problemas: list[str] = []
     lecturas = datos.get("readings", [])
@@ -72,7 +74,7 @@ def validar_json(datos: dict, conservar: str) -> list[str]:
         # Si el JSON trajera lecturas de la tipologia que se conserva, el
         # resultado seria ambiguo: se conservan las viejas y ademas entran las
         # nuevas. Mejor parar y que lo decida una persona.
-        elif tipologia == conservar:
+        elif conservar and tipologia == conservar:
             problemas.append(
                 f"{titulo}: es de la tipologia '{conservar}', que se conserva. "
                 "Quita esa lectura del JSON o cambia --keep."
@@ -101,20 +103,34 @@ def validar_json(datos: dict, conservar: str) -> list[str]:
     return problemas
 
 
-def informe_previo(sesion, conservar: str) -> dict:
+def _filtro_borrado(conservar: str | None) -> tuple[str, dict]:
+    """Lecturas que se reemplazan: las de progresion, menos la tipologia que se
+    conserva. Las de practica nunca: tienen su propio corpus."""
+    if conservar:
+        return "is_practice = false AND typology <> :keep", {"keep": conservar}
+    return "is_practice = false", {}
+
+
+def borrar_lecturas_de_progresion(sesion, conservar: str | None) -> int:
+    """Borra las lecturas que se reemplazan. Devuelve cuantas."""
+    filtro, params = _filtro_borrado(conservar)
+    return sesion.execute(text(f"DELETE FROM readings WHERE {filtro}"), params).rowcount
+
+
+def informe_previo(sesion, conservar: str | None) -> dict:
     """Cuenta que hay ahora y que se llevaria por delante el borrado."""
-    filtro = "typology <> :keep"
-    params = {"keep": conservar}
+    filtro, params = _filtro_borrado(conservar)
 
     por_tipologia = sesion.execute(
-        text("SELECT typology, count(*) FROM readings GROUP BY typology ORDER BY typology")
+        text("SELECT typology, is_practice, count(*) FROM readings "
+             "GROUP BY typology, is_practice ORDER BY typology, is_practice")
     ).fetchall()
 
     a_borrar = sesion.execute(
         text(f"SELECT count(*) FROM readings WHERE {filtro}"), params
     ).scalar()
     se_conservan = sesion.execute(
-        text("SELECT count(*) FROM readings WHERE typology = :keep"), params
+        text(f"SELECT count(*) FROM readings WHERE NOT ({filtro})"), params
     ).scalar()
 
     cascada = {}
@@ -151,22 +167,24 @@ def informe_previo(sesion, conservar: str) -> dict:
     }
 
 
-def insertar_lecturas(sesion, lecturas: list[dict]) -> dict:
-    """Inserta las lecturas del JSON con sus preguntas y respuestas."""
+def insertar_lecturas(sesion, lecturas: list[dict], is_practice: bool = False) -> dict:
+    """Inserta las lecturas del JSON con sus preguntas y respuestas.
+    Con is_practice=True quedan como lecturas de la zona de practica."""
     stats = {"lecturas": 0, "preguntas": 0, "respuestas": 0}
 
     for lectura in lecturas:
         titulo = lectura["title"].strip()
         fila = sesion.execute(
             text(
-                "INSERT INTO readings (title, typology, type, content) "
-                "VALUES (:title, :typology, :type, :content) RETURNING id"
+                "INSERT INTO readings (title, typology, type, content, is_practice) "
+                "VALUES (:title, :typology, :type, :content, :is_practice) RETURNING id"
             ),
             {
                 "title": titulo,
                 "typology": lectura["typology"].strip(),
                 "type": lectura.get("type"),
                 "content": join_paragraphs(lectura["text"]),
+                "is_practice": is_practice,
             },
         ).fetchone()
         reading_id = fila[0]
@@ -210,7 +228,8 @@ def insertar_lecturas(sesion, lecturas: list[dict]) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--json", required=True, help="Ruta del JSON con las lecturas nuevas")
-    ap.add_argument("--keep", default="Instructivo", help="Tipologia que NO se borra (por defecto: Instructivo)")
+    ap.add_argument("--keep", default=None,
+                    help="Tipologia de progresion que NO se borra (opcional). Las lecturas de practica nunca se borran.")
     ap.add_argument("--db-url", default=os.environ.get("DATABASE_URL"), help="Por defecto, $DATABASE_URL")
     ap.add_argument("--apply", action="store_true", help="Aplicar de verdad. Sin esto solo simula.")
     args = ap.parse_args()
@@ -248,9 +267,10 @@ def main() -> int:
         previo = informe_previo(sesion, args.keep)
 
         print("Estado actual de la base:")
-        for tipologia, n in previo["por_tipologia"]:
-            marca = "  (se conserva)" if tipologia == args.keep else ""
-            print(f"  {tipologia:<15} {n:>3}{marca}")
+        for tipologia, practica, n in previo["por_tipologia"]:
+            nombre = f"{tipologia} (practica)" if practica else tipologia
+            marca = "  (se conserva)" if practica or tipologia == args.keep else ""
+            print(f"  {nombre:<26} {n:>3}{marca}")
         print()
         print(f"Se borrarian {previo['a_borrar']} lecturas y se conservarian {previo['se_conservan']}.")
         print("Arrastre en cascada:")
@@ -267,9 +287,7 @@ def main() -> int:
             return 0
 
         print("Aplicando en una sola transaccion...")
-        borradas = sesion.execute(
-            text("DELETE FROM readings WHERE typology <> :keep"), {"keep": args.keep}
-        ).rowcount
+        borradas = borrar_lecturas_de_progresion(sesion, args.keep)
         print(f"  borradas {borradas} lecturas")
 
         stats = insertar_lecturas(sesion, lecturas)
@@ -282,10 +300,12 @@ def main() -> int:
 
         sesion.commit()
         print("\nHecho. Estado final:")
-        for tipologia, n in sesion.execute(
-            text("SELECT typology, count(*) FROM readings GROUP BY typology ORDER BY typology")
+        for tipologia, practica, n in sesion.execute(
+            text("SELECT typology, is_practice, count(*) FROM readings "
+                 "GROUP BY typology, is_practice ORDER BY typology, is_practice")
         ).fetchall():
-            print(f"  {tipologia:<15} {n:>3}")
+            nombre = f"{tipologia} (practica)" if practica else tipologia
+            print(f"  {nombre:<26} {n:>3}")
         return 0
 
     except Exception as exc:  # noqa: BLE001

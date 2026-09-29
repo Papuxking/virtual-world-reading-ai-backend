@@ -17,15 +17,14 @@ readings/
 │   └── relato corto.txt
 ├── Argumentativo/
 │   └── ensayo opinión.txt
-├── Expositivo/
-│   └── el sistema solar.txt
-└── Instructivo/
-    └── guia herbario.txt
+└── Expositivo/
+    └── el sistema solar.txt
 ```
 
 ### Convenciones
 
 - **Tipología**: inferida del nombre de la subcarpeta (case-insensitive)
+- Solo se aceptan las 4 tipologías del juego (Narrativo, Descriptivo, Argumentativo, Expositivo).
 - **Título**: inferido del nombre del archivo sin extensión (capitalizado con `.title()`)
 - **Contenido mínimo**: 100 caracteres (lecturas más cortas se omiten)
 - **Carpeta "Test"**: se omite automáticamente (tipología no reconocida)
