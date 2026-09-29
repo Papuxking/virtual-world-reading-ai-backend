@@ -232,6 +232,7 @@ def sync_receive_delete(
 def list_typologies(db: Session = Depends(get_db)):
     counts = (
         db.query(Reading.typology, sqlfunc.count(Reading.id))
+        .filter(Reading.is_practice == False)
         .group_by(Reading.typology)
         .all()
     )
@@ -249,11 +250,12 @@ def list_typologies(db: Session = Depends(get_db)):
 @app.get("/readings/random/full", response_model=ReadingFullResponse, tags=["Lecturas"])
 def get_random_reading_full(
     typology: str | None = Query(None, description="Filtrar por tipología"),
+    practice: bool = Query(False, description="true: solo lecturas de la zona de práctica; false: solo de la progresión"),
     db: Session = Depends(get_db),
 ):
     if typology and typology not in VALID_TYPOLOGIES:
         raise HTTPException(status_code=400, detail=f"Tipología inválida. Opciones: {VALID_TYPOLOGIES}")
-    reading_ids = db.query(Reading.id)
+    reading_ids = db.query(Reading.id).filter(Reading.is_practice == practice)
     if typology:
         reading_ids = reading_ids.filter(Reading.typology == typology)
     random_id_row = reading_ids.order_by(sqlfunc.random()).first()
@@ -271,11 +273,12 @@ def get_random_reading_full(
 @app.get("/readings/random", response_model=ReadingResponse, tags=["Lecturas"])
 def get_random_reading(
     typology: str | None = Query(None, description="Filtrar por tipología"),
+    practice: bool = Query(False, description="true: solo lecturas de la zona de práctica; false: solo de la progresión"),
     db: Session = Depends(get_db),
 ):
     if typology and typology not in VALID_TYPOLOGIES:
         raise HTTPException(status_code=400, detail=f"Tipología inválida. Opciones: {VALID_TYPOLOGIES}")
-    query = db.query(Reading)
+    query = db.query(Reading).filter(Reading.is_practice == practice)
     if typology:
         query = query.filter(Reading.typology == typology)
     reading = query.order_by(sqlfunc.random()).first()

@@ -62,6 +62,7 @@ class ReadingResponse(BaseModel):
     title: str
     typology: str
     type: Optional[str] = None
+    is_practice: bool = False
     content: str
     created_at: datetime
     updated_at: datetime
@@ -110,6 +111,7 @@ class ReadingFullResponse(BaseModel):
     title: str
     typology: str
     type: Optional[str] = None
+    is_practice: bool = False
     content: str
     created_at: datetime
     updated_at: datetime
