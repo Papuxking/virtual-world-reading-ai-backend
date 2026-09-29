@@ -24,18 +24,10 @@ from schemas import (
     ActiveReadingSave, ActiveReadingResponse,
 )
 from game_rules import DIFFICULTY_ORDER
+from progression import ensure_typology_rows, reevaluate_unlocks
 from auth import get_current_user
 
 router = APIRouter(prefix="/progress", tags=["Progreso del Jugador"])
-
-# ── Umbrales de desbloqueo (deben coincidir con ProgressionManager en Godot) ──
-UNLOCK_THRESHOLDS = {
-    "Narrativo": 0,
-    "Descriptivo": 250,
-    "Argumentativo": 250,
-    "Instructivo": 250,
-    "Expositivo": 250,
-}
 
 
 def _get_active_slot(db: Session, user_id: int) -> PlayerSlot:
@@ -102,32 +94,10 @@ def get_my_progress(
     # pasaba de nuevo los controles de escritura.
     _validate_slot_header(request, active_slot, current_user)
 
-    # Progreso por tipología para este slot
-    typology_rows = (
-        db.query(PlayerTypologyProgress)
-        .filter(PlayerTypologyProgress.user_id == current_user.id, PlayerTypologyProgress.slot_id == active_slot.id)
-        .order_by(PlayerTypologyProgress.id)
-        .all()
-    )
+    # Progreso de las tipologías del juego; se crean las filas que falten.
+    typology_rows = ensure_typology_rows(db, current_user.id, active_slot.id)
+    db.commit()
 
-    # Si no tiene registros de progreso para este slot, inicializarlos
-    if not typology_rows:
-        for typology in DIFFICULTY_ORDER:
-            progress = PlayerTypologyProgress(
-                user_id=current_user.id,
-                slot_id=active_slot.id,
-                typology=typology,
-                is_unlocked=(typology == "Narrativo"),
-            )
-            db.add(progress)
-        db.commit()
-        typology_rows = (
-            db.query(PlayerTypologyProgress)
-            .filter(PlayerTypologyProgress.user_id == current_user.id, PlayerTypologyProgress.slot_id == active_slot.id)
-            .all()
-        )
-
-    # Calcular puntaje total
     total_score = sum(tp.best_score for tp in typology_rows)
 
     # Logros del slot activo
@@ -138,23 +108,38 @@ def get_my_progress(
         .all()
     )
 
-    # Últimas 10 sesiones del slot activo
+    # Últimas 10 sesiones de progresión del slot activo
     recent_sessions = (
         db.query(PlayerSession)
         .options(
             joinedload(PlayerSession.answers),
             joinedload(PlayerSession.tools),
         )
-        .filter(PlayerSession.user_id == current_user.id, PlayerSession.slot_id == active_slot.id)
+        .filter(
+            PlayerSession.user_id == current_user.id,
+            PlayerSession.slot_id == active_slot.id,
+            PlayerSession.is_practice == False,
+        )
         .order_by(PlayerSession.completed_at.desc())
         .limit(10)
         .all()
+    )
+
+    practice_sessions = (
+        db.query(sqlfunc.count(PlayerSession.id))
+        .filter(
+            PlayerSession.user_id == current_user.id,
+            PlayerSession.slot_id == active_slot.id,
+            PlayerSession.is_practice == True,
+        )
+        .scalar()
     )
 
     return PlayerProgressResponse(
         user=UserResponse.model_validate(current_user),
         active_slot_id=active_slot.id,
         total_score=total_score,
+        practice_sessions=practice_sessions or 0,
         typology_progress=[
             TypologyProgressResponse.model_validate(tp) for tp in typology_rows
         ],
@@ -176,7 +161,7 @@ def create_session(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Registra una sesión completada desde Godot en el slot activo."""
+    """Registra una sesión completada desde Godot en el slot activo (práctica incluida)."""
     active_slot = _get_active_slot(db, current_user.id)
     _validate_slot_header(request, active_slot, current_user)
 
@@ -193,6 +178,7 @@ def create_session(
         correct_count=data.correct_count,
         incorrect_count=data.incorrect_count,
         tool_bonus=data.tool_bonus,
+        is_practice=data.is_practice,
     )
     db.add(session)
     db.flush()  # Para obtener session.id
@@ -223,37 +209,11 @@ def create_session(
         )
         db.add(tool)
 
-    # Actualizar progreso de tipología en el slot activo
-    progress = (
-        db.query(PlayerTypologyProgress)
-        .filter(
-            PlayerTypologyProgress.user_id == current_user.id,
-            PlayerTypologyProgress.slot_id == active_slot.id,
-            PlayerTypologyProgress.typology == data.typology,
-        )
-        .first()
-    )
-
-    if not progress:
-        progress = PlayerTypologyProgress(
-            user_id=current_user.id,
-            slot_id=active_slot.id,
-            typology=data.typology,
-            is_unlocked=True,
-        )
-        db.add(progress)
-        db.flush()
-
-    progress.total_sessions += 1
-    progress.best_score = max(progress.best_score, data.session_score)
-    progress.last_played_at = datetime.now(timezone.utc)
-    if progress.first_completed_at is None:
-        progress.first_completed_at = datetime.now(timezone.utc)
-    if data.is_perfect:
-        progress.perfect_sessions += 1
-
-    # Verificar desbloqueo de la siguiente tipología en el slot activo
-    _check_unlock(db, current_user.id, active_slot.id, data.typology)
+    # La práctica se guarda para el docente pero no toca el progreso. Tampoco lo
+    # toca una tipología que ya no es del juego, que solo puede llegar de un
+    # cliente antiguo.
+    if not data.is_practice and data.typology in DIFFICULTY_ORDER:
+        _registrar_progreso(db, current_user.id, active_slot.id, data)
 
     db.commit()
     db.refresh(session)
@@ -272,6 +232,31 @@ def create_session(
     return session
 
 
+def _registrar_progreso(db: Session, user_id: int, slot_id: int, data: SessionCreate) -> None:
+    """Suma la sesión al progreso de su tipología y desbloquea la siguiente si toca."""
+    ensure_typology_rows(db, user_id, slot_id)
+    progress = (
+        db.query(PlayerTypologyProgress)
+        .filter(
+            PlayerTypologyProgress.user_id == user_id,
+            PlayerTypologyProgress.slot_id == slot_id,
+            PlayerTypologyProgress.typology == data.typology,
+        )
+        .one()
+    )
+    ahora = datetime.now(timezone.utc)
+    # Una tipología que se acaba de jugar está, por definición, abierta.
+    progress.is_unlocked = True
+    progress.total_sessions += 1
+    progress.best_score = max(progress.best_score, data.session_score)
+    progress.last_played_at = ahora
+    if progress.first_completed_at is None:
+        progress.first_completed_at = ahora
+    if data.is_perfect:
+        progress.perfect_sessions += 1
+    reevaluate_unlocks(db, user_id, slot_id, only_unlock=True)
+
+
 @router.get("/sessions", response_model=List[SessionResponse])
 def list_sessions(
     typology: str = Query(None, description="Filtrar por tipología"),
@@ -288,7 +273,11 @@ def list_sessions(
             joinedload(PlayerSession.answers),
             joinedload(PlayerSession.tools),
         )
-        .filter(PlayerSession.user_id == current_user.id, PlayerSession.slot_id == active_slot.id)
+        .filter(
+            PlayerSession.user_id == current_user.id,
+            PlayerSession.slot_id == active_slot.id,
+            PlayerSession.is_practice == False,
+        )
     )
     if typology:
         query = query.filter(PlayerSession.typology == typology)
@@ -301,26 +290,9 @@ def get_typology_progress(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Retorna el progreso del jugador en cada tipología en su slot activo."""
+    """Retorna el progreso del jugador en cada tipología del juego (slot activo)."""
     active_slot = _get_active_slot(db, current_user.id)
-
-    rows = (
-        db.query(PlayerTypologyProgress)
-        .filter(PlayerTypologyProgress.user_id == current_user.id, PlayerTypologyProgress.slot_id == active_slot.id)
-        .all()
-    )
-    # Asegurar que todas las tipologías existan para este slot
-    existing_typs = {r.typology for r in rows}
-    for typology in DIFFICULTY_ORDER:
-        if typology not in existing_typs:
-            p = PlayerTypologyProgress(
-                user_id=current_user.id,
-                slot_id=active_slot.id,
-                typology=typology,
-                is_unlocked=(typology == "Narrativo"),
-            )
-            db.add(p)
-            rows.append(p)
+    rows = ensure_typology_rows(db, current_user.id, active_slot.id)
     db.commit()
     return rows
 
@@ -452,49 +424,6 @@ def list_notes(
         )
         for note, title in results
     ]
-
-
-# ── Lógica de desbloqueo ────────────────────────────────────────────────────
-
-def _check_unlock(db: Session, user_id: int, slot_id: int, completed_typology: str) -> None:
-    """Verifica si al completar una tipología se desbloquea la siguiente en el slot dado."""
-    try:
-        idx = DIFFICULTY_ORDER.index(completed_typology)
-    except ValueError:
-        return
-
-    if idx >= len(DIFFICULTY_ORDER) - 1:
-        return  # Es la última tipología
-
-    next_typology = DIFFICULTY_ORDER[idx + 1]
-
-    # Obtener el progreso del completado
-    progress = (
-        db.query(PlayerTypologyProgress)
-        .filter(
-            PlayerTypologyProgress.user_id == user_id,
-            PlayerTypologyProgress.slot_id == slot_id,
-            PlayerTypologyProgress.typology == completed_typology,
-        )
-        .first()
-    )
-    if not progress:
-        return
-
-    threshold = UNLOCK_THRESHOLDS.get(next_typology, 999)
-    if progress.best_score >= threshold:
-        # Desbloquear la siguiente
-        next_progress = (
-            db.query(PlayerTypologyProgress)
-            .filter(
-                PlayerTypologyProgress.user_id == user_id,
-                PlayerTypologyProgress.slot_id == slot_id,
-                PlayerTypologyProgress.typology == next_typology,
-            )
-            .first()
-        )
-        if next_progress and not next_progress.is_unlocked:
-            next_progress.is_unlocked = True
 
 
 @router.get("/validate-session")

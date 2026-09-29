@@ -268,6 +268,9 @@ class SessionCreate(BaseModel):
     correct_count: int = 0
     incorrect_count: int = 0
     tool_bonus: int = 0
+    # Sesión de la zona de práctica: se guarda, pero no toca el progreso.
+    # Los clientes antiguos no lo mandan y valen como progresión.
+    is_practice: bool = False
     answers: List[PlayerAnswerCreate] = []
     tools: List[SessionToolCreate] = []
 
@@ -359,6 +362,7 @@ class SessionResponse(BaseModel):
     correct_count: int
     incorrect_count: int
     tool_bonus: int
+    is_practice: bool = False
     started_at: datetime
     completed_at: datetime
     answers: List[PlayerAnswerResponse] = []
@@ -433,6 +437,9 @@ class PlayerProgressResponse(BaseModel):
     user: UserResponse
     active_slot_id: Optional[int] = None
     total_score: int
+    # Sesiones de práctica del slot. No cuentan para nada, pero el juego las usa
+    # para saber que el alumno ya ha jugado y no pedirle otra vez el personaje.
+    practice_sessions: int = 0
     typology_progress: List[TypologyProgressResponse]
     achievements: List[AchievementResponse]
     recent_sessions: List[SessionResponse] = []
