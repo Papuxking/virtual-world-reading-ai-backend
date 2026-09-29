@@ -37,6 +37,7 @@ services:
       SYNC_SECRET_KEY: lecturaia-vw-sync-2024
       LECTURAIA_API_URL: http://host.docker.internal:8000
       JWT_SECRET_KEY: virtual-world-jwt-secret-2026-change-in-production
+      PUBLIC_ORIGIN: http://localhost:5173
 
   dashboard:
     image: node:20-slim

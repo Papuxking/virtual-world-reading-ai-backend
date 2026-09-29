@@ -5,4 +5,32 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: '/dashboard/',
   plugins: [react()],
+  server: {
+    proxy: {
+      '/auth': {
+        target: 'http://api:8000',
+        changeOrigin: true,
+      },
+      '/admin': {
+        target: 'http://api:8000',
+        changeOrigin: true,
+      },
+      '/health': {
+        target: 'http://api:8000',
+        changeOrigin: true,
+      },
+      '/achievements': {
+        target: 'http://api:8000',
+        changeOrigin: true,
+      },
+      '/leaderboard': {
+        target: 'http://api:8000',
+        changeOrigin: true,
+      },
+      '/static': {
+        target: 'http://api:8000',
+        changeOrigin: true,
+      },
+    },
+  },
 })
