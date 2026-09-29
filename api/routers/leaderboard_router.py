@@ -14,6 +14,7 @@ from models import (
     User, PlayerTypologyProgress, PlayerAchievement, PlayerSlot,
 )
 from schemas import LeaderboardResponse, LeaderboardEntry
+from game_rules import DIFFICULTY_ORDER
 from auth import get_current_user
 from datetime import datetime, timezone
 
@@ -51,7 +52,8 @@ def get_leaderboard(
     """
     Retorna el Top N de jugadores ordenados por puntaje total.
     Los datos se cachean por 60 segundos para evitar consultas costosas.
-    El puntaje se calcula como la suma de best_score del slot activo de cada jugador.
+    El puntaje es la suma de best_score de las tipologías del juego en el slot
+    activo de cada jugador.
     """
     # Verificar caché (solo si el limit coincide o es menor)
     if _is_cache_valid() and _cache.get("limit", 0) >= limit:
@@ -81,6 +83,7 @@ def get_leaderboard(
             .filter(
                 PlayerTypologyProgress.user_id == user.id,
                 PlayerTypologyProgress.slot_id == active_slot.id,
+                PlayerTypologyProgress.typology.in_(DIFFICULTY_ORDER),
             )
             .scalar()
         ) or 0

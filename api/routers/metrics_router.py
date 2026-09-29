@@ -12,7 +12,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
-from sqlalchemy import func as sqlfunc, Integer, case
+from sqlalchemy import func as sqlfunc, Integer, case, or_
 
 from database import get_db
 from models import (
@@ -43,7 +43,12 @@ def _apply_date_filter(query, date_col, date_from, date_to):
 
 
 def _apply_session_filters(query, date_from, date_to, player_id, typology):
-    """Aplica los filtros comunes a queries basadas en PlayerSession."""
+    """Aplica los filtros comunes a queries basadas en PlayerSession.
+
+    La práctica nunca entra en las métricas: el docente la ve aparte, en el
+    detalle de cada jugador.
+    """
+    query = query.filter(PlayerSession.is_practice == False)
     if date_from:
         query = query.filter(PlayerSession.completed_at >= date_from)
     if date_to:
@@ -268,7 +273,13 @@ def get_npc_interaction_metrics(
     db: Session = Depends(get_db),
 ):
     """Métricas de interacciones con NPCs (robot asistente y sabio)."""
-    base = db.query(NpcInteraction)
+    # Las interacciones durante una lectura de práctica no cuentan; las que no
+    # tienen lectura asociada, sí.
+    base = (
+        db.query(NpcInteraction)
+        .outerjoin(Reading, NpcInteraction.reading_id == Reading.id)
+        .filter(or_(NpcInteraction.reading_id.is_(None), Reading.is_practice == False))
+    )
     base = _apply_date_filter(base, NpcInteraction.created_at, date_from, date_to)
     if player_id:
         base = base.filter(NpcInteraction.user_id == player_id)
