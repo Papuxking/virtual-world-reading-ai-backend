@@ -7,6 +7,7 @@ import {
   uploadMedalImage, deleteMedalImage
 } from '../services/api';
 import SessionList from '../components/SessionList';
+import { TYPOLOGY_ORDER } from '../constants/typologies';
 import {
   ArrowLeft, Star, Trophy, BookOpen, Target, CheckCircle2,
   Lock, Unlock, RotateCcw, AlertTriangle, StickyNote,
@@ -16,13 +17,16 @@ import {
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
-const DIFFICULTY_ORDER = ['Narrativo', 'Descriptivo', 'Argumentativo', 'Instructivo', 'Expositivo'];
+// Grupo de las lecturas de la zona de práctica en el panel de notas.
+const PRACTICE_GROUP = 'Práctica';
+const NOTES_GROUPS = [...TYPOLOGY_ORDER, PRACTICE_GROUP];
+
 const DIFFICULTY_COLORS = {
   Narrativo: { bg: 'bg-indigo-50 dark:bg-indigo-500/10', text: 'text-indigo-600 dark:text-indigo-400', border: 'border-indigo-100 dark:border-indigo-500/20', bar: 'bg-indigo-500' },
   Descriptivo: { bg: 'bg-violet-50 dark:bg-violet-500/10', text: 'text-violet-600 dark:text-violet-400', border: 'border-violet-100 dark:border-violet-500/20', bar: 'bg-violet-500' },
   Argumentativo: { bg: 'bg-purple-50 dark:bg-purple-500/10', text: 'text-purple-600 dark:text-purple-400', border: 'border-purple-100 dark:border-purple-500/20', bar: 'bg-purple-500' },
-  Instructivo: { bg: 'bg-fuchsia-50 dark:bg-fuchsia-500/10', text: 'text-fuchsia-600 dark:text-fuchsia-400', border: 'border-fuchsia-100 dark:border-fuchsia-500/20', bar: 'bg-fuchsia-500' },
   Expositivo: { bg: 'bg-pink-50 dark:bg-pink-500/10', text: 'text-pink-600 dark:text-pink-400', border: 'border-pink-100 dark:border-pink-500/20', bar: 'bg-pink-500' },
+  [PRACTICE_GROUP]: { bg: 'bg-emerald-50 dark:bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400', border: 'border-emerald-100 dark:border-emerald-500/20', bar: 'bg-emerald-500' },
 };
 
 const TIER_COLORS = {
@@ -273,7 +277,7 @@ export default function PlayerDetailPage() {
     );
   }
 
-  const { user, total_score, active_slot_number, active_slot_label, typology_progress, achievements, sessions, notes, tool_stats, level_stats } = data;
+  const { user, total_score, active_slot_number, active_slot_label, typology_progress, achievements, sessions, practice_sessions, notes, tool_stats, level_stats, score_rules } = data;
   const unlockedAchievementIds = achievements.map((a) => a.achievement_id);
 
   // Filtrar catálogo de logros
@@ -282,14 +286,15 @@ export default function PlayerDetailPage() {
     return achievement.category === selectedCategory;
   });
 
-  // Agrupar y deduplicar lecturas presentadas al estudiante por tipología en el slot activo
-  const presentedReadingsByTypology = DIFFICULTY_ORDER.reduce((acc, typo) => {
-    const fromSessions = sessions
-      .filter((s) => s.typology === typo)
+  // Lecturas que ha abierto el estudiante, agrupadas por tipología. Las de la
+  // zona de práctica van en su propio grupo.
+  const presentedReadingsByTypology = NOTES_GROUPS.reduce((acc, group) => {
+    const isPractice = group === PRACTICE_GROUP;
+    const fromSessions = (isPractice ? practice_sessions : sessions.filter((s) => s.typology === group))
       .map((s) => ({ id: s.reading_id, title: s.reading_title }));
 
     const fromNotes = notes
-      .filter((n) => n.reading_typology === typo)
+      .filter((n) => (isPractice ? n.reading_is_practice : !n.reading_is_practice && n.reading_typology === group))
       .map((n) => ({ id: n.reading_id, title: n.reading_title }));
 
     const merged = [...fromSessions, ...fromNotes];
@@ -302,7 +307,7 @@ export default function PlayerDetailPage() {
       }
     });
 
-    acc[typo] = Array.from(uniqueMap.entries()).map(([id, title]) => ({
+    acc[group] = Array.from(uniqueMap.entries()).map(([id, title]) => ({
       id,
       title,
     }));
@@ -459,11 +464,15 @@ export default function PlayerDetailPage() {
           Progreso por Tipología ({active_slot_label})
         </h3>
         <div className="space-y-4">
-          {DIFFICULTY_ORDER.map((typology) => {
+          {TYPOLOGY_ORDER.map((typology, index) => {
             const progress = typology_progress.find((tp) => tp.typology === typology);
             const colors = DIFFICULTY_COLORS[typology];
             const score = progress?.best_score || 0;
-            const maxScore = 350;
+            // El máximo y los umbrales vienen de la API (game_rules.py). Antes el
+            // máximo estaba fijado aquí a 350, por encima de los 300 posibles.
+            const maxScore = score_rules.max_session_score;
+            const next = TYPOLOGY_ORDER[index + 1];
+            const threshold = next ? score_rules.unlock_thresholds[next] : null;
             const pct = Math.min(100, (score / maxScore) * 100);
 
             return (
@@ -505,7 +514,9 @@ export default function PlayerDetailPage() {
                 </div>
                 <div className="flex justify-between mt-1">
                   <span className="text-[10px] text-slate-400 dark:text-gray-500 font-semibold">0</span>
-                  <span className="text-[10px] text-slate-400 dark:text-gray-500 font-semibold">Umbral: 250</span>
+                  {threshold !== null && (
+                    <span className="text-[10px] text-slate-400 dark:text-gray-500 font-semibold">Umbral: {threshold}</span>
+                  )}
                   <span className="text-[10px] text-slate-400 dark:text-gray-500 font-semibold">{maxScore}</span>
                 </div>
               </div>
@@ -516,14 +527,43 @@ export default function PlayerDetailPage() {
 
       {/* Sessions, Achievements, Tools, Notes */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Sessions History */}
-        <div className="glass-card p-6">
-          <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-primary-500 dark:text-primary-400" />
-            Historial de Sesiones ({active_slot_label})
-          </h3>
-          <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
-            <SessionList sessions={sessions} emptyText="Sin sesiones registradas" />
+        {/* Left column */}
+        <div className="space-y-6">
+          {/* Sessions History */}
+          <div className="glass-card p-6">
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-4 flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-primary-500 dark:text-primary-400" />
+              Historial de Sesiones ({active_slot_label})
+            </h3>
+            <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
+              <SessionList sessions={sessions} emptyText="Sin sesiones registradas" />
+            </div>
+          </div>
+
+          {/* Practice */}
+          <div className="glass-card p-6">
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-1 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
+              Práctica ({active_slot_label})
+            </h3>
+            <p className="text-xs text-slate-400 dark:text-gray-500 mb-4">
+              Lecturas de la zona de práctica. No cuentan para el puntaje, los desbloqueos, los logros ni las métricas.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+              {TYPOLOGY_ORDER.map((typology) => {
+                const colors = DIFFICULTY_COLORS[typology];
+                const count = practice_sessions.filter((s) => s.typology === typology).length;
+                return (
+                  <div key={typology} className={`p-2 rounded-lg border text-center ${colors.border} ${colors.bg}`}>
+                    <p className={`text-lg font-extrabold ${colors.text}`}>{count}</p>
+                    <p className="text-[10px] font-semibold text-slate-500 dark:text-gray-400">{typology}</p>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
+              <SessionList sessions={practice_sessions} emptyText="Todavía no ha usado la zona de práctica" />
+            </div>
           </div>
         </div>
 
@@ -738,7 +778,7 @@ export default function PlayerDetailPage() {
 
             {/* Selector de Tipologías */}
             <div className="flex flex-wrap gap-1.5 mb-4">
-              {DIFFICULTY_ORDER.map((typology) => {
+              {NOTES_GROUPS.map((typology) => {
                 const colors = DIFFICULTY_COLORS[typology];
                 const isSelected = selectedNotesTypology === typology;
                 const readingsForTypo = presentedReadingsByTypology[typology] || [];
@@ -775,7 +815,13 @@ export default function PlayerDetailPage() {
                 <BookOpen className="w-8 h-8 text-slate-300 dark:text-gray-600 mb-2" />
                 <p className="text-xs font-bold text-slate-500 dark:text-gray-400">Sin lecturas presentadas</p>
                 <p className="text-[10px] text-slate-400 dark:text-gray-500 max-w-[200px] mt-1 leading-normal">
-                  El estudiante aún no ha abierto ninguna lectura de la tipología <span className="font-semibold text-slate-500 dark:text-gray-400">{selectedNotesTypology}</span> en este slot.
+                  El estudiante aún no ha abierto ninguna lectura{' '}
+                  {selectedNotesTypology === PRACTICE_GROUP ? (
+                    'de práctica'
+                  ) : (
+                    <>de la tipología <span className="font-semibold text-slate-500 dark:text-gray-400">{selectedNotesTypology}</span></>
+                  )}{' '}
+                  en este slot.
                 </p>
               </div>
             ) : (
@@ -998,7 +1044,7 @@ export default function PlayerDetailPage() {
               <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20 rounded-xl p-3 mb-4 text-xs text-amber-700 dark:text-amber-400">
                 <strong>Cascada:</strong> Se reiniciarán {resetModal.typology} y todas las tipologías superiores:
                 <span className="font-bold ml-1">
-                  {DIFFICULTY_ORDER.slice(DIFFICULTY_ORDER.indexOf(resetModal.typology)).join(' → ')}
+                  {TYPOLOGY_ORDER.slice(TYPOLOGY_ORDER.indexOf(resetModal.typology)).join(' → ')}
                 </span>
               </div>
             )}
