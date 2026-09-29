@@ -9,6 +9,9 @@ from pydantic import BaseModel, Field, EmailStr
 
 # ── Tipologías válidas ───────────────────────────────────────────────────────
 
+# Tipologías que la API acepta al CREAR lecturas (POST /readings y
+# /sync/reading de LecturaIA). Conserva Instructivo para no romper esa
+# sincronización. Las tipologías del JUEGO están en game_rules.DIFFICULTY_ORDER.
 VALID_TYPOLOGIES = [
     "Descriptivo",
     "Narrativo",
@@ -21,11 +24,6 @@ VALID_COMPREHENSION_LEVELS = [
     "Literal",
     "Inferencial",
     "Critico",
-]
-
-# Orden de dificultad para la progresión
-DIFFICULTY_ORDER = [
-    "Narrativo", "Descriptivo", "Argumentativo", "Instructivo", "Expositivo"
 ]
 
 

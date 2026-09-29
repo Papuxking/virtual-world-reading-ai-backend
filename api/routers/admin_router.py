@@ -22,8 +22,9 @@ from schemas import (
     PlayerSummary, AdminStatsResponse, UserResponse,
     SessionResponse, NoteResponse, AchievementResponse,
     TypologyProgressResponse, ResetTypologyRequest, ResetAllRequest,
-    DIFFICULTY_ORDER, PlayerSlotResponse, PlayerSlotCreate,
+    PlayerSlotResponse, PlayerSlotCreate,
 )
+from game_rules import DIFFICULTY_ORDER
 from auth import get_current_admin, hash_password
 
 router = APIRouter(prefix="/admin", tags=["Administración"])

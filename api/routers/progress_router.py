@@ -19,10 +19,11 @@ from models import (
 from schemas import (
     SessionCreate, SessionResponse, NoteCreate, NoteResponse,
     AchievementCreate, AchievementResponse, TypologyProgressResponse,
-    PlayerProgressResponse, UserResponse, DIFFICULTY_ORDER,
+    PlayerProgressResponse, UserResponse,
     AchievementFullResponse, NpcInteractionCreate, NpcInteractionResponse,
     ActiveReadingSave, ActiveReadingResponse,
 )
+from game_rules import DIFFICULTY_ORDER
 from auth import get_current_user
 
 router = APIRouter(prefix="/progress", tags=["Progreso del Jugador"])

@@ -9,7 +9,8 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 from models import User, PlayerTypologyProgress, PlayerSlot
-from schemas import UserRegister, UserLogin, UserResponse, TokenResponse, DIFFICULTY_ORDER, ChangePasswordRequest
+from schemas import UserRegister, UserLogin, UserResponse, TokenResponse, ChangePasswordRequest
+from game_rules import DIFFICULTY_ORDER
 from auth import hash_password, verify_password, create_access_token, get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
