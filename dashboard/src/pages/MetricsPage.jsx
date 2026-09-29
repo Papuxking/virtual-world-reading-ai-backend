@@ -4,6 +4,7 @@ import {
   getMetricsNpcInteractions, getMetricsToolUsage, getPlayers,
   downloadMetricsCSV, downloadMetricsExcel,
 } from '../services/api';
+import { TYPOLOGY_ORDER, TYPOLOGY_COLORS } from '../constants/typologies';
 import {
   Clock, CheckCircle, XCircle, MessageCircle, Wrench,
   Download, FileSpreadsheet, Filter, RotateCcw, HelpCircle,
@@ -14,14 +15,6 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell, Legend,
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
 } from 'recharts';
-
-const TYPOLOGY_COLORS = {
-  Narrativo: '#6366f1',
-  Descriptivo: '#8b5cf6',
-  Argumentativo: '#a855f7',
-  Instructivo: '#d946ef',
-  Expositivo: '#ec4899',
-};
 
 const LEVEL_COLORS = {
   Literal: '#22c55e',
@@ -39,8 +32,6 @@ const TABS = [
   { id: 'npc-interactions', label: 'Interacciones NPC', icon: MessageCircle },
   { id: 'tool-usage', label: 'Herramientas', icon: Wrench },
 ];
-
-const TYPOLOGIES = ['Narrativo', 'Descriptivo', 'Argumentativo', 'Instructivo', 'Expositivo'];
 
 export default function MetricsPage() {
   const [activeTab, setActiveTab] = useState('reading-time');
@@ -205,7 +196,7 @@ export default function MetricsPage() {
                 className="input-field text-sm"
               >
                 <option value="">Todas</option>
-                {TYPOLOGIES.map((t) => (
+                {TYPOLOGY_ORDER.map((t) => (
                   <option key={t} value={t}>{t}</option>
                 ))}
               </select>
