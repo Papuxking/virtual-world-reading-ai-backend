@@ -38,7 +38,7 @@ from models import (
     User,
 )
 
-DIFFICULTY_ORDER = ["Narrativo", "Descriptivo", "Argumentativo", "Instructivo", "Expositivo"]
+from game_rules import DIFFICULTY_ORDER
 
 # Tablas que solo existen en la base del entorno virtual. Si faltan, estamos
 # apuntando a otra base y hay que parar.

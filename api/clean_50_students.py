@@ -25,7 +25,7 @@ from models import (
 )
 from auth import hash_password
 
-DIFFICULTY_ORDER = ["Narrativo", "Descriptivo", "Argumentativo", "Instructivo", "Expositivo"]
+from game_rules import DIFFICULTY_ORDER
 STUDENTS_COUNT = 50
 PASSWORD = "Test1234!"
 

@@ -29,7 +29,7 @@ from models import (
 from auth import hash_password
 
 # Orden de dificultad
-DIFFICULTY_ORDER = ["Narrativo", "Descriptivo", "Argumentativo", "Instructivo", "Expositivo"]
+from game_rules import DIFFICULTY_ORDER
 
 # Datos de los 10 usuarios
 USERS_DATA = [
@@ -80,7 +80,7 @@ INITIAL_ACHIEVEMENTS = [
         "id": "explorer",
         "name": "🏅 Explorador",
         "description": "Has explorado todas las tipologías textuales del juego.",
-        "how_to_unlock": "Completar al menos 1 sesión en cada una de las 5 tipologías textuales.",
+        "how_to_unlock": "Completar al menos 1 sesión en cada una de las 4 tipologías textuales.",
         "category": "exploración",
         "icon": "🏅",
         "medal_name": "Explorador Intrépido",
@@ -391,8 +391,8 @@ def seed():
         u = users[2]
         s1 = slots_map[u.id]
         init_typology_progress(db, u, s1, ["Narrativo", "Descriptivo", "Argumentativo"],
-                               {"Narrativo": 310, "Descriptivo": 275, "Argumentativo": 180})
-        add_session(db, u.id, s1.id, rid, "Narrativo", 310, 5, 1, days_ago=9)
+                               {"Narrativo": 300, "Descriptivo": 275, "Argumentativo": 180})
+        add_session(db, u.id, s1.id, rid, "Narrativo", 300, 5, 1, days_ago=9)
         add_session(db, u.id, s1.id, rid, "Descriptivo", 275, 5, 1, days_ago=6)
         s = add_session(db, u.id, s1.id, rid, "Argumentativo", 180, 4, 2, tool_bonus=40, days_ago=2)
         add_tools(db, s.id, highlight=True, underline=True)
@@ -406,10 +406,9 @@ def seed():
         s1 = slots_map[u.id]
         # Slot 1: Completado al máximo
         init_typology_progress(db, u, s1, DIFFICULTY_ORDER,
-                               {"Narrativo": 350, "Descriptivo": 320, "Argumentativo": 290,
-                                "Instructivo": 310, "Expositivo": 280})
+                               {t: 300 for t in DIFFICULTY_ORDER})
         for i, typ in enumerate(DIFFICULTY_ORDER):
-            s = add_session(db, u.id, s1.id, rid, typ, 280 + i * 20, 6, 0, perfect=True,
+            s = add_session(db, u.id, s1.id, rid, typ, 300, 6, 0, perfect=True,
                           tool_bonus=60, days_ago=10 - i * 2)
             add_tools(db, s.id, highlight=True, underline=True, notes=True)
         add_achievement(db, u.id, s1.id, "first_reading", "📖 Primera lectura", 10)
@@ -491,9 +490,9 @@ def seed():
         u = users[7]
         s1 = slots_map[u.id]
         init_typology_progress(db, u, s1, ["Narrativo", "Descriptivo", "Argumentativo"],
-                               {"Narrativo": 350, "Descriptivo": 340, "Argumentativo": 330})
+                               {"Narrativo": 300, "Descriptivo": 300, "Argumentativo": 300})
         for i, typ in enumerate(["Narrativo", "Descriptivo", "Argumentativo"]):
-            s = add_session(db, u.id, s1.id, rid, typ, 330 + i * 10, 6, 0, perfect=True,
+            s = add_session(db, u.id, s1.id, rid, typ, 300, 6, 0, perfect=True,
                           tool_bonus=60, days_ago=7 - i * 2)
             add_tools(db, s.id, highlight=True, underline=True, notes=True)
         add_achievement(db, u.id, s1.id, "first_reading", "📖 Primera lectura", 7)

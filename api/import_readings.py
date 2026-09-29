@@ -21,7 +21,10 @@ import zipfile
 import tempfile
 import requests
 
-VALID_TYPOLOGIES = {"Descriptivo", "Narrativo", "Argumentativo", "Expositivo", "Instructivo"}
+from game_rules import DIFFICULTY_ORDER
+
+# Solo las tipologías del juego: Instructivo ya no tiene escenario de progresión.
+VALID_TYPOLOGIES = set(DIFFICULTY_ORDER)
 
 
 def infer_title(filename: str) -> str:

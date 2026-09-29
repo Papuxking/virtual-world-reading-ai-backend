@@ -17,7 +17,7 @@ from models import User, PlayerSlot, PlayerTypologyProgress
 from auth import hash_password
 from seed_users import seed_achievements_catalog
 
-DIFFICULTY_ORDER = ["Narrativo", "Descriptivo", "Argumentativo", "Instructivo", "Expositivo"]
+from game_rules import DIFFICULTY_ORDER
 
 # Cuenta de demostracion solicitada expresamente por el usuario.
 # La contrasena es deliberadamente corta y no pasa el minimo de 8 caracteres
