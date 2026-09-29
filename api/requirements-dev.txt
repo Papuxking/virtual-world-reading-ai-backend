@@ -1,0 +1,6 @@
+# Solo para desarrollo: la imagen de producción se construye desde
+# requirements.lock.txt y no las incluye.
+pytest
+# Cliente HTTP del TestClient de FastAPI. Starlette 1.7 marca httpx como
+# obsoleto para esto y pide httpx2.
+httpx2
