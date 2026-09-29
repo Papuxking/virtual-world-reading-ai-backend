@@ -24,7 +24,8 @@ from schemas import (
     TypologyProgressResponse, ResetTypologyRequest, ResetAllRequest,
     PlayerSlotResponse, PlayerSlotCreate,
 )
-from game_rules import DIFFICULTY_ORDER
+from game_rules import DIFFICULTY_ORDER, score_rules
+from progression import reevaluate_unlocks
 from auth import get_current_admin, hash_password
 
 router = APIRouter(prefix="/admin", tags=["Administración"])
@@ -37,6 +38,68 @@ def generate_temp_password(length=10) -> str:
         password = ''.join(secrets.choice(alphabet) for _ in range(length))
         if any(c.isupper() for c in password) and any(c.isdigit() for c in password):
             return password
+
+
+def _sesion_a_dict(s: PlayerSession) -> dict:
+    """Sesión con sus respuestas y herramientas, tal como la pinta el dashboard."""
+    return {
+        "id": s.id,
+        "reading_id": s.reading_id,
+        "reading_title": s.reading.title if s.reading else "Desconocida",
+        "typology": s.typology,
+        "is_practice": s.is_practice,
+        "session_score": s.session_score,
+        "reading_time_seconds": s.reading_time_seconds,
+        "total_time_seconds": s.total_time_seconds,
+        "is_perfect": s.is_perfect,
+        "correct_count": s.correct_count,
+        "incorrect_count": s.incorrect_count,
+        "tool_bonus": s.tool_bonus,
+        "completed_at": s.completed_at.isoformat() if s.completed_at else None,
+        "answers": [
+            {
+                "question_id": a.question_id,
+                "comprehension_level": a.comprehension_level,
+                "selected_answer": a.selected_answer,
+                "correct_answer": a.correct_answer,
+                "is_correct": a.is_correct,
+                "points_earned": a.points_earned,
+                "penalty_applied": a.penalty_applied,
+            }
+            for a in s.answers
+        ],
+        "tools": [
+            {"tool_name": t.tool_name, "was_used": t.was_used, "usage_count": t.usage_count}
+            for t in s.tools
+        ],
+    }
+
+
+def _sesiones_del_slot(
+    db: Session,
+    player_id: int,
+    slot_id: int,
+    practica: bool,
+    limite: int = 50,
+    typology: str | None = None,
+) -> list:
+    """Sesiones de progresión (practica=False) o de práctica del slot, más recientes primero."""
+    query = (
+        db.query(PlayerSession)
+        .options(
+            joinedload(PlayerSession.answers),
+            joinedload(PlayerSession.tools),
+            joinedload(PlayerSession.reading),
+        )
+        .filter(
+            PlayerSession.user_id == player_id,
+            PlayerSession.slot_id == slot_id,
+            PlayerSession.is_practice == practica,
+        )
+    )
+    if typology:
+        query = query.filter(PlayerSession.typology == typology)
+    return query.order_by(PlayerSession.completed_at.desc()).limit(limite).all()
 
 
 # ── Lista de Jugadores ───────────────────────────────────────────────────────
@@ -71,13 +134,22 @@ def list_players(
 
         total_score = (
             db.query(sqlfunc.coalesce(sqlfunc.sum(PlayerTypologyProgress.best_score), 0))
-            .filter(PlayerTypologyProgress.user_id == user.id)
+            .filter(
+                PlayerTypologyProgress.user_id == user.id,
+                PlayerTypologyProgress.typology.in_(DIFFICULTY_ORDER),
+            )
             .filter(slot_filter)
             .scalar()
         )
         total_sessions = (
             db.query(sqlfunc.count(PlayerSession.id))
-            .filter(PlayerSession.user_id == user.id)
+            .filter(PlayerSession.user_id == user.id, PlayerSession.is_practice == False)
+            .filter(sess_filter)
+            .scalar()
+        )
+        practice_sessions = (
+            db.query(sqlfunc.count(PlayerSession.id))
+            .filter(PlayerSession.user_id == user.id, PlayerSession.is_practice == True)
             .filter(sess_filter)
             .scalar()
         )
@@ -102,6 +174,7 @@ def list_players(
             is_active=user.is_active,
             total_score=total_score or 0,
             total_sessions=total_sessions or 0,
+            practice_sessions=practice_sessions or 0,
             total_achievements=total_achievements or 0,
             last_played_at=last_played,
             created_at=user.created_at,
@@ -118,7 +191,8 @@ def get_player_detail(
     admin: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    """Retorna el detalle completo de un jugador para su slot activo."""
+    """Retorna el detalle de un jugador para su slot activo. La práctica va
+    aparte (practice_sessions) y no entra en puntaje, historial ni estadísticas."""
     user = db.query(User).filter(User.id == player_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="Jugador no encontrado")
@@ -137,12 +211,17 @@ def get_player_detail(
         db.commit()
         db.refresh(active_slot)
 
-    # Progreso por tipología en el slot activo
+    # Progreso de las tipologías del juego, en orden de dificultad
     typology_progress = (
         db.query(PlayerTypologyProgress)
-        .filter(PlayerTypologyProgress.user_id == player_id, PlayerTypologyProgress.slot_id == active_slot.id)
+        .filter(
+            PlayerTypologyProgress.user_id == player_id,
+            PlayerTypologyProgress.slot_id == active_slot.id,
+            PlayerTypologyProgress.typology.in_(DIFFICULTY_ORDER),
+        )
         .all()
     )
+    typology_progress.sort(key=lambda tp: DIFFICULTY_ORDER.index(tp.typology))
 
     # Logros en el slot activo
     achievements = (
@@ -152,30 +231,20 @@ def get_player_detail(
         .all()
     )
 
-    # Sesiones con detalle en el slot activo
-    sessions = (
-        db.query(PlayerSession)
-        .options(
-            joinedload(PlayerSession.answers),
-            joinedload(PlayerSession.tools),
-            joinedload(PlayerSession.reading),
-        )
-        .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == active_slot.id)
-        .order_by(PlayerSession.completed_at.desc())
-        .limit(50)
-        .all()
-    )
+    # Sesiones: progresión y práctica por separado
+    sessions = _sesiones_del_slot(db, player_id, active_slot.id, practica=False)
+    practice_sessions = _sesiones_del_slot(db, player_id, active_slot.id, practica=True)
 
     # Notas con título de lectura en el slot activo
     notes_query = (
-        db.query(PlayerNote, Reading.title, Reading.typology)
+        db.query(PlayerNote, Reading.title, Reading.typology, Reading.is_practice)
         .join(Reading, PlayerNote.reading_id == Reading.id)
         .filter(PlayerNote.user_id == player_id, PlayerNote.slot_id == active_slot.id)
         .order_by(PlayerNote.created_at.desc())
         .all()
     )
 
-    # Estadísticas de herramientas en el slot activo
+    # Estadísticas de herramientas (solo progresión)
     tool_stats = (
         db.query(
             SessionTool.tool_name,
@@ -183,12 +252,16 @@ def get_player_detail(
             sqlfunc.sum(sqlfunc.cast(SessionTool.was_used, Integer)).label("used"),
         )
         .join(PlayerSession, SessionTool.session_id == PlayerSession.id)
-        .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == active_slot.id)
+        .filter(
+            PlayerSession.user_id == player_id,
+            PlayerSession.slot_id == active_slot.id,
+            PlayerSession.is_practice == False,
+        )
         .group_by(SessionTool.tool_name)
         .all()
     )
 
-    # Estadísticas por nivel de comprensión en el slot activo
+    # Estadísticas por nivel de comprensión (solo progresión)
     level_stats = (
         db.query(
             PlayerAnswer.comprehension_level,
@@ -196,7 +269,11 @@ def get_player_detail(
             sqlfunc.sum(sqlfunc.cast(PlayerAnswer.is_correct, Integer)).label("correct"),
         )
         .join(PlayerSession, PlayerAnswer.session_id == PlayerSession.id)
-        .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == active_slot.id)
+        .filter(
+            PlayerSession.user_id == player_id,
+            PlayerSession.slot_id == active_slot.id,
+            PlayerSession.is_practice == False,
+        )
         .group_by(PlayerAnswer.comprehension_level)
         .all()
     )
@@ -205,6 +282,7 @@ def get_player_detail(
 
     return {
         "user": UserResponse.model_validate(user),
+        "score_rules": score_rules(),
         "total_score": total_score,
         "active_slot_number": active_slot.slot_number,
         "active_slot_label": active_slot.label,
@@ -214,54 +292,20 @@ def get_player_detail(
         "achievements": [
             AchievementResponse.model_validate(a) for a in achievements
         ],
-        "sessions": [
-            {
-                "id": s.id,
-                "reading_id": s.reading_id,
-                "reading_title": s.reading.title if s.reading else "Desconocida",
-                "typology": s.typology,
-                "session_score": s.session_score,
-                "reading_time_seconds": s.reading_time_seconds,
-                "total_time_seconds": s.total_time_seconds,
-                "is_perfect": s.is_perfect,
-                "correct_count": s.correct_count,
-                "incorrect_count": s.incorrect_count,
-                "tool_bonus": s.tool_bonus,
-                "completed_at": s.completed_at.isoformat() if s.completed_at else None,
-                "answers": [
-                    {
-                        "question_id": a.question_id,
-                        "comprehension_level": a.comprehension_level,
-                        "selected_answer": a.selected_answer,
-                        "correct_answer": a.correct_answer,
-                        "is_correct": a.is_correct,
-                        "points_earned": a.points_earned,
-                        "penalty_applied": a.penalty_applied,
-                    }
-                    for a in s.answers
-                ],
-                "tools": [
-                    {
-                        "tool_name": t.tool_name,
-                        "was_used": t.was_used,
-                        "usage_count": t.usage_count,
-                    }
-                    for t in s.tools
-                ],
-            }
-            for s in sessions
-        ],
+        "sessions": [_sesion_a_dict(s) for s in sessions],
+        "practice_sessions": [_sesion_a_dict(s) for s in practice_sessions],
         "notes": [
             {
                 "id": note.id,
                 "reading_id": note.reading_id,
                 "reading_title": title,
                 "reading_typology": typology,
+                "reading_is_practice": is_practice,
                 "note_content": note.note_content,
                 "note_type": note.note_type,
                 "created_at": note.created_at.isoformat() if note.created_at else None,
             }
-            for note, title, typology in notes_query
+            for note, title, typology, is_practice in notes_query
         ],
         "tool_stats": [
             {
@@ -298,25 +342,35 @@ def get_admin_stats(
         .filter(User.is_admin == False, User.is_active == True)
         .scalar()
     )
-    total_sessions = db.query(sqlfunc.count(PlayerSession.id)).scalar()
+    progresion = PlayerSession.is_practice == False
+
+    total_sessions = db.query(sqlfunc.count(PlayerSession.id)).filter(progresion).scalar()
+    total_practice_sessions = (
+        db.query(sqlfunc.count(PlayerSession.id))
+        .filter(PlayerSession.is_practice == True)
+        .scalar()
+    )
     total_points = (
         db.query(sqlfunc.coalesce(sqlfunc.sum(PlayerTypologyProgress.best_score), 0))
+        .filter(PlayerTypologyProgress.typology.in_(DIFFICULTY_ORDER))
         .scalar()
     )
     total_achievements = db.query(sqlfunc.count(PlayerAchievement.id)).scalar()
 
-    # Precisión promedio
-    total_answers = db.query(sqlfunc.count(PlayerAnswer.id)).scalar()
-    correct_answers = (
+    # Precisión promedio (solo respuestas de progresión)
+    respuestas = (
         db.query(sqlfunc.count(PlayerAnswer.id))
-        .filter(PlayerAnswer.is_correct == True)
-        .scalar()
+        .join(PlayerSession, PlayerAnswer.session_id == PlayerSession.id)
+        .filter(progresion)
     )
+    total_answers = respuestas.scalar()
+    correct_answers = respuestas.filter(PlayerAnswer.is_correct == True).scalar()
     avg_accuracy = round(correct_answers / total_answers * 100, 1) if total_answers > 0 else 0
 
     # Sesiones por tipología
     sessions_by_typ = (
         db.query(PlayerSession.typology, sqlfunc.count(PlayerSession.id))
+        .filter(progresion)
         .group_by(PlayerSession.typology)
         .all()
     )
@@ -328,7 +382,7 @@ def get_admin_stats(
             sqlfunc.date(PlayerSession.completed_at).label("day"),
             sqlfunc.count(PlayerSession.id).label("count"),
         )
-        .filter(PlayerSession.completed_at >= seven_days_ago)
+        .filter(PlayerSession.completed_at >= seven_days_ago, progresion)
         .group_by(sqlfunc.date(PlayerSession.completed_at))
         .order_by(sqlfunc.date(PlayerSession.completed_at))
         .all()
@@ -338,6 +392,7 @@ def get_admin_stats(
         total_players=total_players or 0,
         active_players=active_players or 0,
         total_sessions=total_sessions or 0,
+        total_practice_sessions=total_practice_sessions or 0,
         total_points=total_points or 0,
         total_achievements=total_achievements or 0,
         average_accuracy=avg_accuracy,
@@ -359,7 +414,8 @@ def reset_typology(
 ):
     """
     Reinicia el progreso de una tipología Y TODAS LAS SUPERIORES en el SLOT ACTIVO.
-    Ejemplo: reiniciar Argumentativo también borra Instructivo y Expositivo.
+    Ejemplo: reiniciar Argumentativo también borra Expositivo.
+    Las sesiones y notas de práctica no se tocan.
     """
     user = db.query(User).filter(User.id == player_id).first()
     if not user:
@@ -404,6 +460,7 @@ def reset_typology(
                 PlayerSession.user_id == player_id,
                 PlayerSession.slot_id == active_slot.id,
                 PlayerSession.typology == typology,
+                PlayerSession.is_practice == False,
             )
             .all()
         ]
@@ -428,7 +485,7 @@ def reset_typology(
         # Borrar notas de lecturas de esta tipología en el slot activo
         reading_ids_of_typology = [
             r.id for r in
-            db.query(Reading.id).filter(Reading.typology == typology).all()
+            db.query(Reading.id).filter(Reading.typology == typology, Reading.is_practice == False).all()
         ]
         if reading_ids_of_typology:
             note_count = db.query(PlayerNote).filter(
@@ -461,7 +518,7 @@ def reset_typology(
                 progress.is_unlocked = False
 
     # Re-evaluar desbloqueos desde el principio para el slot activo
-    _reevaluate_unlocks(db, player_id, active_slot.id)
+    reevaluate_unlocks(db, player_id, active_slot.id)
 
     # Incrementar versión de sesión para notificar al cliente Godot en tiempo real
     user.session_version += 1
@@ -584,63 +641,19 @@ def reset_all_progress(
 def get_player_sessions(
     player_id: int,
     typology: str = Query(None),
+    practice: bool = Query(False, description="true: sesiones de la zona de práctica"),
     limit: int = Query(50, ge=1, le=200),
     admin: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    """Lista las sesiones de un jugador específico para su slot activo (vista admin)."""
-    # Obtener el slot activo del jugador
+    """Lista las sesiones de un jugador en su slot activo (vista admin)."""
     active_slot = db.query(PlayerSlot).filter(PlayerSlot.user_id == player_id, PlayerSlot.is_active == True).first()
     if not active_slot:
         return []
-
-    query = (
-        db.query(PlayerSession)
-        .options(
-            joinedload(PlayerSession.answers),
-            joinedload(PlayerSession.tools),
-            joinedload(PlayerSession.reading),
-        )
-        .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == active_slot.id)
+    sesiones = _sesiones_del_slot(
+        db, player_id, active_slot.id, practica=practice, limite=limit, typology=typology,
     )
-    if typology:
-        query = query.filter(PlayerSession.typology == typology)
-
-    sessions = query.order_by(PlayerSession.completed_at.desc()).limit(limit).all()
-
-    return [
-        {
-            "id": s.id,
-            "reading_id": s.reading_id,
-            "reading_title": s.reading.title if s.reading else "Desconocida",
-            "typology": s.typology,
-            "session_score": s.session_score,
-            "reading_time_seconds": s.reading_time_seconds,
-            "total_time_seconds": s.total_time_seconds,
-            "is_perfect": s.is_perfect,
-            "correct_count": s.correct_count,
-            "incorrect_count": s.incorrect_count,
-            "tool_bonus": s.tool_bonus,
-            "completed_at": s.completed_at.isoformat() if s.completed_at else None,
-            "answers": [
-                {
-                    "question_id": a.question_id,
-                    "comprehension_level": a.comprehension_level,
-                    "selected_answer": a.selected_answer,
-                    "correct_answer": a.correct_answer,
-                    "is_correct": a.is_correct,
-                    "points_earned": a.points_earned,
-                    "penalty_applied": a.penalty_applied,
-                }
-                for a in s.answers
-            ],
-            "tools": [
-                {"tool_name": t.tool_name, "was_used": t.was_used, "usage_count": t.usage_count}
-                for t in s.tools
-            ],
-        }
-        for s in sessions
-    ]
+    return [_sesion_a_dict(s) for s in sesiones]
 
 
 # ── Notas de un jugador ─────────────────────────────────────────────────────
@@ -699,12 +712,20 @@ def get_player_slots(
         # Calcular totales para este slot específico
         total_score = (
             db.query(sqlfunc.coalesce(sqlfunc.sum(PlayerTypologyProgress.best_score), 0))
-            .filter(PlayerTypologyProgress.user_id == player_id, PlayerTypologyProgress.slot_id == slot.id)
+            .filter(
+                PlayerTypologyProgress.user_id == player_id,
+                PlayerTypologyProgress.slot_id == slot.id,
+                PlayerTypologyProgress.typology.in_(DIFFICULTY_ORDER),
+            )
             .scalar()
         )
         total_sessions = (
             db.query(sqlfunc.count(PlayerSession.id))
-            .filter(PlayerSession.user_id == player_id, PlayerSession.slot_id == slot.id)
+            .filter(
+                PlayerSession.user_id == player_id,
+                PlayerSession.slot_id == slot.id,
+                PlayerSession.is_practice == False,
+            )
             .scalar()
         )
         total_achievements = (
@@ -862,58 +883,6 @@ def reset_player_password_admin(
         "detail": "Contraseña restablecida exitosamente",
         "temp_password": temp_password
     }
-
-
-# ── Utilidad: Re-evaluar desbloqueos ────────────────────────────────────────
-
-UNLOCK_THRESHOLDS = {
-    "Narrativo": 0,
-    "Descriptivo": 250,
-    "Argumentativo": 250,
-    "Instructivo": 250,
-    "Expositivo": 250,
-}
-
-
-def _reevaluate_unlocks(db: Session, user_id: int, slot_id: int) -> None:
-    """
-    Re-evalúa qué tipologías deben estar desbloqueadas
-    después de un reinicio parcial.
-    """
-    for i, typology in enumerate(DIFFICULTY_ORDER):
-        progress = (
-            db.query(PlayerTypologyProgress)
-            .filter(
-                PlayerTypologyProgress.user_id == user_id,
-                PlayerTypologyProgress.slot_id == slot_id,
-                PlayerTypologyProgress.typology == typology,
-            )
-            .first()
-        )
-        if not progress:
-            continue
-
-        if typology == "Narrativo":
-            progress.is_unlocked = True
-            continue
-
-        # Verificar si la tipología anterior cumple el umbral
-        prev_typology = DIFFICULTY_ORDER[i - 1]
-        prev_progress = (
-            db.query(PlayerTypologyProgress)
-            .filter(
-                PlayerTypologyProgress.user_id == user_id,
-                PlayerTypologyProgress.slot_id == slot_id,
-                PlayerTypologyProgress.typology == prev_typology,
-            )
-            .first()
-        )
-
-        threshold = UNLOCK_THRESHOLDS.get(typology, 999)
-        if prev_progress and prev_progress.best_score >= threshold:
-            progress.is_unlocked = True
-        else:
-            progress.is_unlocked = False
 
 
 # ── Lectura Activa (Admin) ───────────────────────────────────────────────

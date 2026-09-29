@@ -456,6 +456,7 @@ class PlayerSummary(BaseModel):
     is_active: bool
     total_score: int = 0
     total_sessions: int = 0
+    practice_sessions: int = 0
     total_achievements: int = 0
     last_played_at: Optional[datetime] = None
     created_at: datetime
@@ -469,6 +470,7 @@ class AdminStatsResponse(BaseModel):
     total_players: int
     active_players: int
     total_sessions: int
+    total_practice_sessions: int = 0
     total_points: int
     total_achievements: int
     average_accuracy: float
