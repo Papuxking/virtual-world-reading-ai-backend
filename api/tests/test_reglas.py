@@ -17,7 +17,7 @@ def _fila(db, slot, tipologia):
 def test_reglas_de_cuatro_tipologias():
     assert DIFFICULTY_ORDER == ["Narrativo", "Descriptivo", "Argumentativo", "Expositivo"]
     assert UNLOCK_THRESHOLDS == {
-        "Narrativo": 0, "Descriptivo": 250, "Argumentativo": 250, "Expositivo": 250,
+        "Narrativo": 0, "Descriptivo": 120, "Argumentativo": 120, "Expositivo": 120,
     }
     assert MAX_SESSION_SCORE == 300
     assert score_rules() == {
@@ -75,6 +75,17 @@ def test_reevaluate_desbloquea_expositivo_desde_argumentativo(db):
     reevaluate_unlocks(db, usuario.id, slot.id)
     db.commit()
     assert all(_fila(db, slot, t).is_unlocked for t in DIFFICULTY_ORDER)
+
+
+def test_umbral_justo_desbloquea_y_uno_menos_no(db):
+    usuario, slot = crear_usuario(db)
+    _fila(db, slot, "Narrativo").best_score = UNLOCK_THRESHOLDS["Descriptivo"]
+    _fila(db, slot, "Descriptivo").best_score = UNLOCK_THRESHOLDS["Argumentativo"] - 1
+    db.commit()
+    reevaluate_unlocks(db, usuario.id, slot.id)
+    db.commit()
+    assert _fila(db, slot, "Descriptivo").is_unlocked is True
+    assert _fila(db, slot, "Argumentativo").is_unlocked is False
 
 
 def test_reevaluate_bloquea_si_no_llega_al_umbral(db):

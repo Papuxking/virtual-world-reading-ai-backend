@@ -689,8 +689,375 @@
       ]
     },
     {
-      "typology": "Argumentativo",
+      "typology": "Narrativo",
       "id": 5,
+      "type": "Prosa poética / narrativa literaria",
+      "title": "Apuntes de un rencoroso",
+      "text": [
+        "Huyendo del espectáculo de su felicidad bochornosa, he caído de nuevo en la soledad. Acorralado entre cuatro paredes, lucho en vano contra la imagen repulsiva.",
+        "Apuesto contra su dicha y espío detalladamente su convivencia. Aquella noche salí disparado como tercero innecesario y estorboso. Ellos compusieron su pareja ante mis ojos. Se acoplaron en un gesto intenso y solapado. Lúbricos, en abrazo secreto y esponsal.",
+        "Cuando me despedí, les costaba trabajo disimular su prisa: temblaban en espera de la soledad henchida. Los dos me sacaron a empujones de su erróneo paraíso, como a un huésped incorrecto. Pero yo vuelvo siempre allí, arrastrándome. Y cuando adivine el primer gesto de hastío, el primer cansancio y la primera tristeza, me pondré en pie y echaré a reír. Sacudiré de mis hombros la carga insoportable de la felicidad ajena.",
+        "Llevo muchas noches esperando que esto se corrompa. La carne viva y fragante del amor se llena de gusanos sistemáticos. Pero todavía falta mucho por roer, para que ella se resuelva en polvo y un soplo cualquiera pueda aventarla de mi corazón.",
+        "Miré su espíritu en la resaca odiosa que mostró a la luz un fondo de detritus miserables. Y, sin embargo, todavía hoy puedo decirle: te conozco. Te conozco y te amo. Amo el fondo verdinoso de tu alma. En él sé hallar mil cosas pequeñas y turbias que de pronto resplandecen en mi espíritu.",
+        "Desde su falso lecho de Cleopatra implora y ordena. Una atmósfera espesa y tibia la rodea. Después de infinitas singladuras, la dormida encalla en la arena final del mediodía.",
+        "Deferente y sumiso, el esclavo fiel la desembarca de su purpúrea venera. La despega cuidadoso de su sueño de ostra. Acólito embriagado en ondas de tenue incienso respiratorio, el joven la asiste en los ritos monótonos de su pereza malsana. A veces, ella despierta en altamar y ve la silueta del joven en la playa, desdibujada por la sombra. Piensa que lo está soñando, y se sumerge otra vez en las sábanas. Él apenas respira, sentado al borde de la cama. Cuando la amada duerme profundamente, el fantasma puntual se levanta y desaparece de veras, marchito y melancólico, por las desiertas calles del amanecer. Pero dos o tres horas más tarde, nuevamente está en servicio.",
+        "El joven desaparece melancólico por las desiertas calles, pero yo estoy aquí, caído en el insomnio, como sapo en lo profundo de un pozo. Me golpeo la frente contra el muro de la soledad, y distingo a lo lejos la disforme pareja inoperante. Ella navega horizontal por un sueño espesado de narcóticos. Y él va remando a la orilla, desvelado, silencioso, con tierna cautela, como quien lleva un tesoro en una barca que hace agua.",
+        "Yo estoy aquí, caído en la noche, como un ancla entre las rocas marinas, sin nave ya que me sostenga. Y sobre mí acumula el mar amargo su limo corrosivo, sus esponjas de sal verde, sus duros ramos de vegetación rencorosa.",
+        "Morosos, los dos detienen y aplazan el previsto final. El demonio de la pasividad se ha apoderado de ellos, y yo naufrago en la angustia. Han pasado muchas noches y en la atmósfera del cuarto cerrada, íntima y espesa, no se percibe el agudo olor de la lujuria. No hay más que la lenta emanación azucarada del anís, y un rancio aroma de aceitunas negras.",
+        "El joven languidece en su rincón, hasta nueva orden. Ella navega en su góndola, con un halo de anestesia. Se queja, interminablemente se queja. El joven médico de cabecera se inclina solícito y espía su corazón. Ella sonríe dulcísima, como una heroína en el tercer acto, agonizante. Su mano cae desmayada entre las manos del erótico galeno. Luego se recobra, enciende el braserillo de las fumigaciones aromáticas; manda abrir el guardarropa atestado de trajes y zapatos, y va eligiendo una por una, cavilosa, las prendas diurnas.",
+        "Yo, entretanto, hago señales desesperadas desde mi roca de náufrago. Giro en la espiral del insomnio. Clamo a la oscuridad. Lento como un buzo, recorro la noche interminable. Y ellos aplazan el acto decisivo, el previsto final.",
+        "Desde lejos, mi voz los acompaña. Repitiendo las letanías del amor inútil, el lívido amanecer me encuentra siempre exhausto y apagado, con la boca llena de palabras ciegas y envenenadas.",
+        "Referencia: Juan José Arreola — Bestiario, pp. 120–123"
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Qué circunstancia provoca que el narrador se retire del encuentro con la pareja?",
+          "answers": [
+            "A) La indiferencia que ambos manifiestan durante la conversación.",
+            "B) La urgencia que ambos evidencian por quedarse solos.",
+            "C) La incomodidad que ambos expresan ante sus reproches.",
+            "D) La impaciencia que ambos muestran por abandonar la casa."
+          ],
+          "correct_answer": "B",
+          "justification": "El narrador cuenta que, al despedirse, a la pareja «le costaba trabajo disimular su prisa» por quedarse sola."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué acontecimiento espera el narrador para liberarse de la felicidad ajena?",
+          "answers": [
+            "A) La separación definitiva que deshaga el vínculo amoroso.",
+            "B) La confesión íntima que revele un engaño sentimental.",
+            "C) La partida inesperada que interrumpa la convivencia.",
+            "D) La aparición inicial del cansancio y la tristeza."
+          ],
+          "correct_answer": "D",
+          "justification": "Espera «el primer gesto de hastío, el primer cansancio y la primera tristeza» para echar a reír y sacudirse la felicidad ajena."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Cómo describe el narrador la conducta del joven mientras la mujer duerme?",
+          "answers": [
+            "A) Permanece vigilante y atiende sus necesidades con cautela.",
+            "B) Se mantiene distante y contempla su descanso con recelo.",
+            "C) Interrumpe su sueño y reclama muestras constantes de afecto.",
+            "D) Abandona su habitación y evita regresar durante el día."
+          ],
+          "correct_answer": "A",
+          "justification": "El joven se sienta al borde de la cama, apenas respira y la asiste «con tierna cautela» mientras ella duerme."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué comportamiento de la mujer se presenta después de sus quejas y aparente desfallecimiento?",
+          "answers": [
+            "A) Reanuda el descanso y solicita nuevas atenciones del joven.",
+            "B) Rechaza los cuidados y se retira hacia otra habitación.",
+            "C) Recupera el ánimo y comienza a seleccionar su vestuario.",
+            "D) Abandona el lecho y dispone la preparación del desayuno."
+          ],
+          "correct_answer": "C",
+          "justification": "Tras quejarse y desmayarse, la mujer se recobra, abre el guardarropa y elige «una por una» sus prendas diurnas."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué revela la insistencia del narrador en esperar el deterioro de la relación?",
+          "answers": [
+            "A) Su deseo de confirmar una sospecha sobre la infidelidad.",
+            "B) Su necesidad de justificar una ruptura decidida anteriormente.",
+            "C) Su esperanza de aliviar el sufrimiento mediante el fracaso ajeno.",
+            "D) Su intención de recuperar una amistad interrumpida por los celos."
+          ],
+          "correct_answer": "C",
+          "justification": "Desear que el amor «se corrompa» muestra que el narrador busca alivio a su dolor en el fracaso de la pareja."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué sugiere la comparación del joven con quien transporta un tesoro en una barca que hace agua?",
+          "answers": [
+            "A) Una devoción que protege algo valioso pese a su fragilidad.",
+            "B) Una resignación que conserva algo inútil pese a su desgaste.",
+            "C) Una ambición que persigue algo deseado pese a su peligro.",
+            "D) Una desconfianza que vigila algo ajeno pese a su aparente valor."
+          ],
+          "correct_answer": "A",
+          "justification": "Llevar un tesoro en una barca que hace agua sugiere cuidar con devoción algo valioso que es frágil y está en riesgo."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué significado adquieren las imágenes del naufragio y del ancla sin nave en la representación del narrador?",
+          "answers": [
+            "A) La incertidumbre ante una decisión que todavía puede modificar.",
+            "B) La impotencia de permanecer atrapado en un vínculo doloroso.",
+            "C) La nostalgia por una experiencia compartida que desea recuperar.",
+            "D) La indiferencia frente a una pérdida que considera inevitable."
+          ],
+          "correct_answer": "B",
+          "justification": "Naufragio y ancla «sin nave ya que me sostenga» expresan la impotencia de quien sigue atado a un vínculo que lo hiere."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué permite inferir la afirmación «Te conozco y te amo» después de describir aspectos turbios del alma de la mujer?",
+          "answers": [
+            "A) Que el narrador desconoce las contradicciones de la persona amada.",
+            "B) Que el narrador confunde la admiración sentimental con la compasión.",
+            "C) Que el narrador ha reemplazado el afecto por una condena moral.",
+            "D) Que el narrador mantiene su afecto pese a reconocer sus defectos."
+          ],
+          "correct_answer": "D",
+          "justification": "Tras describir lo «turbio» de su alma, afirma «te conozco y te amo»: su afecto persiste aunque reconoce sus defectos."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué valoración resulta más fundamentada sobre la actitud del narrador frente a la felicidad de la pareja?",
+          "answers": [
+            "A) Expresa una crítica razonada contra las relaciones basadas en la dependencia.",
+            "B) Manifiesta una preocupación legítima por la vulnerabilidad del joven.",
+            "C) Revela un resentimiento que convierte el sufrimiento ajeno en consuelo.",
+            "D) Representa una oposición reflexiva frente a los excesos del romanticismo."
+          ],
+          "correct_answer": "C",
+          "justification": "El narrador encuentra consuelo en la desgracia ajena; su actitud nace del resentimiento, no de una crítica razonada."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Qué juicio sobre la representación de la mujer se sostiene mejor a partir de la perspectiva narrativa?",
+          "answers": [
+            "A) Constituye una descripción equilibrada de sus virtudes y limitaciones.",
+            "B) Presenta una imagen condicionada por los sentimientos del narrador.",
+            "C) Ofrece un retrato verificable de sus verdaderas intenciones amorosas.",
+            "D) Desarrolla una caracterización independiente de los conflictos sentimentales."
+          ],
+          "correct_answer": "B",
+          "justification": "La mujer se ve solo a través de un narrador celoso y herido, por lo que su retrato está condicionado por esos sentimientos."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué valoración crítica puede hacerse del uso reiterado de imágenes marinas en el relato?",
+          "answers": [
+            "A) Intensifica la experiencia de desamparo mediante una red simbólica coherente.",
+            "B) Sustituye la progresión narrativa mediante una descripción paisajística autónoma.",
+            "C) Reduce la tensión sentimental mediante una ambientación naturalista objetiva.",
+            "D) Atenúa el conflicto psicológico mediante una sucesión de imágenes ornamentales."
+          ],
+          "correct_answer": "A",
+          "justification": "Ancla, naufragio, mar amargo y barca forman una red simbólica coherente que intensifica la sensación de desamparo."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Qué interpretación crítica del título «Apuntes de un rencoroso» resulta más consistente con el conjunto del texto?",
+          "answers": [
+            "A) Presenta una confesión que demuestra la superación definitiva del desengaño.",
+            "B) Propone una denuncia que atribuye toda responsabilidad a la mujer amada.",
+            "C) Anticipa una reflexión que cuestiona exclusivamente la conducta del joven.",
+            "D) Anuncia una mirada subjetiva dominada por el resentimiento y la frustración."
+          ],
+          "correct_answer": "D",
+          "justification": "El título anuncia lo que el texto confirma: una mirada subjetiva dominada por el rencor y la frustración amorosa."
+        }
+      ]
+    },
+    {
+      "typology": "Narrativo",
+      "id": 6,
+      "type": "Relato tradicional / apólogo",
+      "title": "La cólera de un particular",
+      "text": [
+        "El rey de Tsin mandó decir al príncipe de Ngan-ling:",
+        "—A cambio de tu tierra quiero darte otra diez veces más grande. Te ruego que accedas a mi demanda.",
+        "El príncipe contestó:",
+        "—El rey me hace un gran honor y una oferta ventajosa. Pero he recibido mi tierra de mis antepasados príncipes y desearía conservarla hasta el fin. No puedo consentir en ese cambio.",
+        "El rey se enojó mucho, y el príncipe mandó a T’ang Tsu de embajador. El rey le dijo:",
+        "—El príncipe no ha querido cambiar su tierra por otra diez veces más grande. Si tu amo conserva su pequeño feudo cuando yo he destruido a grandes países, es porque hasta ahora lo he considerado un hombre venerable y no me he ocupado de él. Pero si ahora rechaza su propia conveniencia, realmente se burla de mí.",
+        "T’ang Tsu respondió:",
+        "—No es eso. El príncipe quiere conservar la heredad de sus abuelos. Así le ofrecieras un territorio veinte veces, y no diez veces, más grande, igualmente se negaría.",
+        "El rey se enfureció y dijo a T’ang Tsu:",
+        "—¿Sabes lo que es la cólera de un rey?",
+        "—No —dijo T’ang Tsu.",
+        "—Son millones de cadáveres y la sangre que corre como un río en mil leguas a la redonda —dijo el rey.",
+        "T’ang Tsu preguntó, entonces:",
+        "—¿Sabe Su Majestad lo que es la cólera de un simple particular?",
+        "Dijo el rey:",
+        "—¿La cólera de un particular? Es perder las insignias de su dignidad y marchar descalzo golpeando el suelo con la cabeza.",
+        "—No —dijo T’ang Tsu—, esa es la cólera de un hombre mediocre, no la de un hombre de valor. Cuando un hombre de valor se ve obligado a encolerizarse, como cadáveres aquí no hay más que dos, la sangre corre apenas a cinco pasos. Y, sin embargo, China entera se viste de luto. Hoy es ese día.",
+        "Y se levantó, desenvainando la espada.",
+        "El rey se demudó, saludó humildemente y dijo:",
+        "—Maestro, vuelve a sentarte. ¿Para qué llegar a esto? He comprendido.",
+        "Referencia: Anónimo · China · Relatos del mundo · pp. 45–46"
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Qué fundamento presenta el príncipe para rechazar el intercambio territorial?",
+          "answers": [
+            "A) La intención de mantener los tributos de sus súbditos.",
+            "B) La promesa de ampliar las posesiones de sus descendientes.",
+            "C) La obligación de conservar la herencia de sus antepasados.",
+            "D) La necesidad de proteger las fronteras de sus aliados."
+          ],
+          "correct_answer": "C",
+          "justification": "El príncipe responde que recibió su tierra de sus antepasados y desea conservarla hasta el fin."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué argumento emplea el rey para considerar ofensiva la negativa del príncipe?",
+          "answers": [
+            "A) Su autoridad dependía del reconocimiento de aquel pequeño feudo.",
+            "B) Su oferta había sido aprobada por otros gobernantes vecinos.",
+            "C) Su poder militar había sometido territorios mucho mayores.",
+            "D) Su propuesta exigía una compensación económica considerable."
+          ],
+          "correct_answer": "C",
+          "justification": "El rey dice que ha destruido grandes países y que, si el príncipe rechaza su oferta, se burla de él."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Cómo define inicialmente el rey la cólera de un particular?",
+          "answers": [
+            "A) Como una humillación acompañada de gestos de sometimiento.",
+            "B) Como una protesta dirigida contra los funcionarios del reino.",
+            "C) Como una amenaza capaz de paralizar a toda una nación.",
+            "D) Como una resistencia sostenida frente a un ejército invasor."
+          ],
+          "correct_answer": "A",
+          "justification": "El rey la define como perder las insignias y marchar descalzo golpeando el suelo con la cabeza: gestos de humillación."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué hace T’ang Tsu inmediatamente antes de que el rey cambie de actitud?",
+          "answers": [
+            "A) Presenta una nueva propuesta para negociar el territorio.",
+            "B) Recuerda los compromisos asumidos por los antepasados.",
+            "C) Solicita permiso para retirarse de la audiencia real.",
+            "D) Se pone de pie y desenvaina su propia espada."
+          ],
+          "correct_answer": "D",
+          "justification": "Justo antes del cambio del rey, T’ang Tsu «se levantó, desenvainando la espada»."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué revela la insistencia del rey en ofrecer una extensión territorial mayor?",
+          "answers": [
+            "A) Que interpreta la posesión de la tierra como valor negociable.",
+            "B) Que busca fortalecer una alianza entre gobernantes equivalentes.",
+            "C) Que reconoce la autoridad ancestral como límite inviolable.",
+            "D) Que considera la independencia política un derecho universal."
+          ],
+          "correct_answer": "A",
+          "justification": "Ofrecer diez veces más tierra muestra que el rey ve la heredad como algo que se puede comprar o cambiar."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué efecto produce la comparación entre la cólera real y la del hombre valeroso?",
+          "answers": [
+            "A) Equipara la autoridad hereditaria con la obediencia militar.",
+            "B) Contrapone el poder colectivo con el riesgo personal inmediato.",
+            "C) Traslada la disputa desde el honor hacia la riqueza.",
+            "D) Sustituye la amenaza concreta por una advertencia ceremonial."
+          ],
+          "correct_answer": "B",
+          "justification": "Se oponen los millones de cadáveres del ejército real y el riesgo inmediato de un solo hombre dispuesto a morir."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué explica mejor el cambio repentino de actitud del rey?",
+          "answers": [
+            "A) Comprende que el príncipe aceptará una compensación posterior.",
+            "B) Reconoce que la oferta inicial carecía de ventajas materiales.",
+            "C) Descubre que el embajador representa a un ejército superior.",
+            "D) Percibe que su superioridad política no impide su vulnerabilidad."
+          ],
+          "correct_answer": "D",
+          "justification": "Al ver la espada, el rey entiende que todo su poder no lo protege de un hombre decidido a cinco pasos."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué sugiere la respuesta final del rey sobre el alcance de la intervención del embajador?",
+          "answers": [
+            "A) Que consiguió frenar la imposición mediante una amenaza creíble.",
+            "B) Que logró una reconciliación basada en intereses comerciales.",
+            "C) Que obtuvo la promesa de una futura ampliación territorial.",
+            "D) Que consiguió el reconocimiento público de una nueva dinastía."
+          ],
+          "correct_answer": "A",
+          "justification": "El rey dice «He comprendido» y desiste: la amenaza creíble del embajador frenó la imposición."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué valoración de la negativa del príncipe se ajusta mejor al conflicto narrado?",
+          "answers": [
+            "A) Rechaza el diálogo diplomático frente a una oferta razonable.",
+            "B) Antecede el beneficio personal a la seguridad de su pueblo.",
+            "C) Defiende la continuidad heredada frente a una ventaja material.",
+            "D) Privilegia la expansión militar frente a una convivencia pacífica."
+          ],
+          "correct_answer": "C",
+          "justification": "El príncipe prefiere conservar la herencia de sus abuelos antes que aceptar un territorio mayor."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Qué juicio sobre la estrategia de T’ang Tsu está mejor sustentado?",
+          "answers": [
+            "A) Neutraliza la intimidación mostrando el costo de ejercerla.",
+            "B) Evita la confrontación al ocultar sus verdaderas intenciones.",
+            "C) Renuncia a la negociación al aceptar la autoridad del monarca.",
+            "D) Transforma el conflicto mediante una concesión territorial recíproca."
+          ],
+          "correct_answer": "A",
+          "justification": "T’ang Tsu muestra al rey lo que le costaría personalmente seguir intimidando, y así neutraliza la amenaza."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué función cumple la oposición entre «rey» y «particular» en el relato?",
+          "answers": [
+            "A) Presenta dos concepciones equivalentes de legitimidad hereditaria.",
+            "B) Confirma que el poder político garantiza siempre la victoria.",
+            "C) Establece una jerarquía moral basada en la riqueza acumulada.",
+            "D) Cuestiona que la posición social determine por sí sola el valor."
+          ],
+          "correct_answer": "D",
+          "justification": "El relato muestra que un simple particular puede imponerse a un rey: el valor no depende solo de la posición social."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Qué interpretación del desenlace resulta más defendible desde una lectura ética?",
+          "answers": [
+            "A) Justifica cualquier acto violento cuando lo realiza un subordinado.",
+            "B) Establece que la obediencia es la principal virtud del gobernante.",
+            "C) Expone los límites de la fuerza cuando enfrenta resistencia decidida.",
+            "D) Demuestra que toda negociación necesita una amenaza de muerte."
+          ],
+          "correct_answer": "C",
+          "justification": "El desenlace expone que la fuerza del poderoso tiene límites cuando enfrenta una resistencia decidida."
+        }
+      ]
+    },
+    {
+      "typology": "Argumentativo",
+      "id": 7,
       "type": "Ensayo filosófico",
       "title": "Sobre el círculo de la comprensión (1959)",
       "text": [
@@ -860,7 +1227,7 @@
     },
     {
       "typology": "Argumentativo",
-      "id": 6,
+      "id": 8,
       "type": "Ensayo de interpretación cultural",
       "title": "El pachuco y otros extremos",
       "text": [
@@ -1029,7 +1396,7 @@
     },
     {
       "typology": "Argumentativo",
-      "id": 7,
+      "id": 9,
       "type": "Artículo de opinión / ensayo periodístico",
       "title": "Prohibido prohibir",
       "text": [
@@ -1200,7 +1567,7 @@
     },
     {
       "typology": "Argumentativo",
-      "id": 8,
+      "id": 10,
       "type": "Artículo de opinión histórico-conmemorativo",
       "title": "La redención de Juan Montalvo",
       "text": [
@@ -1371,8 +1738,350 @@
       ]
     },
     {
+      "typology": "Argumentativo",
+      "id": 11,
+      "type": "Ensayo de gestión empresarial",
+      "title": "La adopción de decisiones humilde",
+      "text": [
+        "La adopción de decisiones en los años noventa tendrá más de arte y menos de ciencia que en la actualidad. No es sólo que el mundo se está volviendo cada vez más complejo e incierto, sino que además los antiguos modelos de adopción de decisiones están fallando, y cabe prever que su fracaso también se acelere.",
+        "Si en algún momento los directivos creyeron que eran capaces de reunir la información suficiente para entender el entorno empresarial como un libro abierto, han tenido que renunciar a sus esperanzas. El caudal de información se ha convertido en una inundación tal que los directivos corren el riesgo de ahogarse; extraer de dicho torrente datos interesantes es una tarea cada vez más aterradora. No es de extrañar que algunas personas responsables de la adopción de decisiones —incluso fuera de la Casa Blanca— sintiéndose asediadas, recurran a astrólogos y médiums.",
+        "Sin embargo, fruto de esa creciente confusión, se está desarrollando un nuevo modelo de adopción de decisiones; un modelo que encaja mejor con un mundo que ya no se parece a un libro abierto, sino más bien a toda una biblioteca de enciclopedias en constante revisión. Este nuevo método —de hecho, se trata de un antiguo método con nuevo rostro— sabe que con frecuencia los directivos deben actuar con información parcial que, además, no han tenido tiempo suficiente de procesar o analizar totalmente. Yo denomino a este modelo «adopción de decisiones humilde».",
+        "En una época más simple, el principio básico que regía las decisiones empresariales era el racionalismo. Los racionalistas sostenían que los responsables de las decisiones debían y podían analizar todos los caminos que pudieran conducir a su objetivo, reunir información sobre el coste y la utilidad de cada uno de ellos, comparar sistemáticamente las diferentes alternativas y elegir el camino más eficaz. A continuación, se instaba a los directivos a poner toda la fuerza de su liderazgo para respaldar dicho camino. La regla era la siguiente: ¡Poner en práctica! ¡Superar todas las adversidades! Para esto se necesitaba el tipo de resolución mostrada por los oficiales del ejército israelí cuando ordenan a sus subordinados la toma y asalto de una barricada: «No me importa si pasas por encima, por debajo, por detrás, o por en medio; limítate a asegurarte de que es nuestra antes de que acabe el día».",
+        "Referencia: P. F. Drucker et al. (2002.). La adopción de decisiones humilde. En La toma de decisiones (pp. 50–51). Deusto."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Qué dificultad atribuye el autor al aumento de información disponible para los directivos?",
+          "answers": [
+            "A) La reducción progresiva de los cambios empresariales.",
+            "B) La imposibilidad de recibir información desde el exterior.",
+            "C) La desaparición completa de las alternativas de gestión.",
+            "D) La extracción de datos relevantes de un caudal desbordante."
+          ],
+          "correct_answer": "D",
+          "justification": "La información se ha vuelto una «inundación» y extraer datos interesantes de ella es «cada vez más aterradora»."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿En qué condiciones reconoce el nuevo modelo que deben actuar frecuentemente los directivos?",
+          "answers": [
+            "A) Con alternativas limitadas y objetivos completamente estables.",
+            "B) Con información parcial y tiempo insuficiente para procesarla.",
+            "C) Con previsiones exactas y procedimientos de eficacia demostrada.",
+            "D) Con datos completos y plazos suficientes para examinarlos."
+          ],
+          "correct_answer": "B",
+          "justification": "El nuevo modelo sabe que los directivos actúan «con información parcial» que no han tenido tiempo de procesar."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué procedimiento defendía el racionalismo descrito en el fragmento?",
+          "answers": [
+            "A) Delegar toda decisión en quienes ejecutan las órdenes.",
+            "B) Elegir una alternativa antes de conocer sus posibles consecuencias.",
+            "C) Comparar sistemáticamente los costos y beneficios de las alternativas.",
+            "D) Confiar la selección de opciones a intuiciones no examinadas."
+          ],
+          "correct_answer": "C",
+          "justification": "Los racionalistas reunían información sobre el coste y la utilidad de cada camino y comparaban sistemáticamente las alternativas."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué actitud se exigía tras escoger el camino considerado más eficaz?",
+          "answers": [
+            "A) Respaldar decididamente su ejecución pese a las adversidades.",
+            "B) Suspender la ejecución hasta desaparecer toda incertidumbre.",
+            "C) Reabrir indefinidamente la evaluación de todas las opciones.",
+            "D) Renunciar al liderazgo ante las primeras dificultades prácticas."
+          ],
+          "correct_answer": "A",
+          "justification": "Elegido el camino, se pedía respaldarlo con todo el liderazgo: «¡Poner en práctica! ¡Superar todas las adversidades!»."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué comunica la imagen del entorno empresarial como una biblioteca en revisión constante?",
+          "answers": [
+            "A) Que las decisiones pueden basarse en manuales definitivamente cerrados.",
+            "B) Que los problemas empresariales se han vuelto completamente previsibles.",
+            "C) Que el conocimiento disponible cambia y desborda una visión única.",
+            "D) Que la información relevante ha disminuido con el tiempo."
+          ],
+          "correct_answer": "C",
+          "justification": "Una biblioteca en revisión constante sugiere un conocimiento enorme y cambiante, imposible de abarcar de un vistazo."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué sugiere la referencia a directivos que recurren a astrólogos y médiums?",
+          "answers": [
+            "A) Que la ciencia ha demostrado la eficacia de tales consultas.",
+            "B) Que la incertidumbre puede impulsar respuestas poco fundamentadas.",
+            "C) Que los directivos han dejado de recibir información empresarial.",
+            "D) Que esas prácticas constituyen el método preferido del autor."
+          ],
+          "correct_answer": "B",
+          "justification": "Recurrir a astrólogos y médiums muestra que la incertidumbre puede empujar a soluciones sin fundamento."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué limitación del racionalismo se desprende de la situación descrita?",
+          "answers": [
+            "A) La comparación de opciones impide siempre alcanzar cualquier objetivo.",
+            "B) La complejidad actual elimina toda posibilidad de decisión razonada.",
+            "C) La evaluación exhaustiva puede resultar inviable bajo incertidumbre.",
+            "D) La experiencia directiva carece de utilidad para resolver problemas."
+          ],
+          "correct_answer": "C",
+          "justification": "Si la información desborda y el tiempo falta, analizar todos los caminos, como pedía el racionalismo, se vuelve inviable."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué implica calificar el nuevo método como «antiguo método con nuevo rostro»?",
+          "answers": [
+            "A) Que recupera una forma previa adaptada a condiciones cambiantes.",
+            "B) Que rechaza cualquier práctica desarrollada antes de los noventa.",
+            "C) Que propone sustituir las decisiones por obediencia automática.",
+            "D) Que reproduce exactamente el modelo racionalista sin modificaciones."
+          ],
+          "correct_answer": "A",
+          "justification": "Un «antiguo método con nuevo rostro» recupera una práctica anterior adaptándola a las condiciones actuales."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué valoración del argumento central está mejor sustentada?",
+          "answers": [
+            "A) Cuestiona la pretensión de decidir siempre con información exhaustiva.",
+            "B) Defiende que toda intuición supera a la evidencia disponible.",
+            "C) Asegura que las organizaciones deben abandonar sus objetivos.",
+            "D) Niega que cualquier análisis contribuya a una decisión eficaz."
+          ],
+          "correct_answer": "A",
+          "justification": "El autor cuestiona la idea de que se pueda reunir siempre toda la información para decidir."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Qué juicio sobre la metáfora de la «inundación» informativa resulta pertinente?",
+          "answers": [
+            "A) Describe una escasez de datos que facilita las decisiones.",
+            "B) Presenta la tecnología como única causa de los errores.",
+            "C) Ilustra cómo la abundancia puede dificultar la selección relevante.",
+            "D) Demuestra que toda información empresarial carece de utilidad."
+          ],
+          "correct_answer": "C",
+          "justification": "La «inundación» muestra que el exceso de datos dificulta encontrar lo que realmente importa."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué límite conviene reconocer al evaluar la propuesta del autor?",
+          "answers": [
+            "A) Que el texto demuestra empíricamente la superioridad del modelo nuevo.",
+            "B) Que el fragmento ofrece procedimientos operativos detallados y completos.",
+            "C) Que el pasaje justifica el cambio sin desarrollar todavía su aplicación.",
+            "D) Que la exposición rechaza expresamente cualquier decisión bajo incertidumbre."
+          ],
+          "correct_answer": "C",
+          "justification": "El fragmento argumenta por qué hace falta un nuevo modelo, pero aún no explica cómo aplicarlo."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Qué función cumple el ejemplo de la orden militar al final del fragmento?",
+          "answers": [
+            "A) Evidencia que el nuevo modelo exige obediencia militar estricta.",
+            "B) Prueba que la planificación racional carece de objetivos claros.",
+            "C) Presenta la jerarquía militar como solución universal empresarial.",
+            "D) Ilustra la determinación inflexible atribuida al enfoque anterior."
+          ],
+          "correct_answer": "D",
+          "justification": "La orden del oficial israelí ilustra la determinación inflexible que exigía el modelo racionalista."
+        }
+      ]
+    },
+    {
+      "typology": "Argumentativo",
+      "id": 12,
+      "type": "Crónica periodística",
+      "title": "Mal tiempo",
+      "text": [
+        "En esta ciudad nunca sabemos si es verano o invierno, otoño o primavera. Durante un mismo día el sol se muestra calcinante y azota la lluvia; el viento se arremolina y barre con las hojas de los árboles, o suavemente acaricia los cabellos de las muchachas, ensayando un tímido juego amoroso. El tiempo cambia de un momento a otro; es increíblemente inestable en Quito. A veces salimos de casa por la mañana con zapatones de caucho y abrigo impermeable, y a la hora del almuerzo tenemos que dejar tales prendas en la oficina, para volver al hogar con la camisa humedecida por la transpiración. Y esto les pasa, creo, hasta a los profesores del Observatorio. Aquí nadie puede predecir qué tiempo se avecina y hay que guiarse solo por corazonadas. Lo malo es que en estos casos la víscera cordial suele equivocarse con más frecuencia que en otros y lo complica todo. Sin embargo, estas desventajas evidentes ofrecen una compensación, al menos relativa y ciertamente discutible: nos permiten ufanarnos de vivir en una ciudad que goza de las cuatro estaciones cada veinte y cuatro horas, aun cuando en una sucesión del todo arbitraria.",
+        "Un turista, por ejemplo, puede darse el gusto de fotografiar el mismo día un paisaje soleado y la inundación de una casa de los barrios pobres y, si tiene suerte, hasta el blanco manto de hielo que cubre las calles de la urbe después de una granizada como la del domingo pasado, aunque tenga que lamentarse de no poder probar en su país de origen que toda la película fue impresionada en un lapso tan corto, y de no poder llevar en su equipaje, como «souvenir», esas frías pepitas del tamaño de una nuez pequeña.",
+        "Fue fantástico ese día, el domingo pasado. De pronto y sin que nada lo anunciara se presentó el fenómeno: era como una cabalgata precipitada sobre los tejados y contra las ventanas, o como millones de dientes que lo mordieran todo, sonoramente. Yo no recuerdo haber visto antes, tanto granizo y tan grande. Golpeaba con fuerza en los vidrios y rebotaba en mil direcciones para caer al fin en el asfalto, donde se iba acumulando poco a poco hasta formar una gruesa capa de albura inmaculada, como la nieve en los países del norte, en el invierno.",
+        "Esta semana el tiempo sigue sufriendo bruscas variaciones. Ahora mismo, mientras escribo, estoy escuchando la canción de la lluvia, y de mañana fui a mi trabajo a pie, gozando de un clima imponderablemente delicioso. Son las nueve o diez de la noche y a través de la ventana puedo ver la calle desolada; solo algún carro a veces, pasa dejando una huella luminosa y fugaz en el asfalto húmedo y agitando ruidosamente el agua que corre en busca de los sumideros. Las gentes se han recogido temprano hoy y es raro hallar a alguien que se haya aventurado a salir en este aguacero; por eso, y quizá un poco por el frío, hasta las tiendas del barrio han cerrado más temprano que de costumbre. ¿Dónde, pues, y cómo iría yo a comprar cigarrillos a esta hora? Este que estoy fumando es el último que me queda, y tengo la maldita costumbre de fumar cuando escribo...",
+        "Referencia: Villacís Molina, R. (s. f.). Mal tiempo. En Abalorios y otras crónicas (pp. 18–19). Casa de la Cultura Ecuatoriana, Núcleo de Tungurahua."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Qué situación cotidiana menciona el narrador para mostrar la inestabilidad del clima quiteño?",
+          "answers": [
+            "A) Salir abrigado por la mañana y sentir calor al mediodía.",
+            "B) Permanecer en casa por una tormenta anunciada temprano.",
+            "C) Viajar con sol al amanecer y encontrar nieve nocturna.",
+            "D) Regresar empapado del trabajo tras una mañana despejada."
+          ],
+          "correct_answer": "A",
+          "justification": "Se sale de casa con zapatones de caucho y abrigo y a la hora del almuerzo hay que dejarlos por el calor."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué dificultad atribuye el narrador al turista que fotografía fenómenos distintos en un día?",
+          "answers": [
+            "A) No encuentra lugares desde los cuales observar las cuatro estaciones.",
+            "B) No logra transportar sus cámaras durante una granizada intensa.",
+            "C) No puede demostrar fácilmente que las imágenes corresponden al mismo día.",
+            "D) No consigue revelar las fotografías antes de abandonar la ciudad."
+          ],
+          "correct_answer": "C",
+          "justification": "El turista lamenta no poder probar en su país que toda la película fue impresionada en un lapso tan corto."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Cómo caracteriza el narrador el granizo caído el domingo anterior?",
+          "answers": [
+            "A) Como piedras abundantes que golpearon y blanquearon las calles.",
+            "B) Como una tormenta distante que apenas alcanzó los tejados.",
+            "C) Como una nevada continua que cubrió las cumbres lejanas.",
+            "D) Como una llovizna ligera que desapareció al tocar el suelo."
+          ],
+          "correct_answer": "A",
+          "justification": "El granizo golpeaba con fuerza y se acumuló en el asfalto hasta formar «una gruesa capa de albura inmaculada»."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué circunstancia dificulta al narrador comprar cigarrillos al final de la crónica?",
+          "answers": [
+            "A) La interrupción del tránsito por una nevada prolongada.",
+            "B) El aguacero nocturno y el cierre temprano de tiendas.",
+            "C) La ausencia de vendedores durante una celebración local.",
+            "D) La pérdida de su dinero durante el trayecto laboral."
+          ],
+          "correct_answer": "B",
+          "justification": "Llueve a cántaros y hasta las tiendas del barrio han cerrado más temprano que de costumbre."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué revela la afirmación de que Quito vive cuatro estaciones en veinticuatro horas?",
+          "answers": [
+            "A) Una descripción técnica de cuatro ciclos anuales completos.",
+            "B) Una exageración humorística sobre los cambios climáticos repentinos.",
+            "C) Una comparación histórica con ciudades de estaciones regulares.",
+            "D) Una predicción científica de las temperaturas del día siguiente."
+          ],
+          "correct_answer": "B",
+          "justification": "Tener «las cuatro estaciones cada veinte y cuatro horas» es una exageración humorística sobre lo cambiante del clima."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué sugiere la alusión a los profesores del Observatorio?",
+          "answers": [
+            "A) Que el narrador cuestiona la existencia de estudios meteorológicos.",
+            "B) Que los expertos provocan involuntariamente los cambios de tiempo.",
+            "C) Que incluso los especialistas padecen la imprevisibilidad cotidiana.",
+            "D) Que la ciudad carece de instituciones dedicadas al clima."
+          ],
+          "correct_answer": "C",
+          "justification": "Si hasta a los profesores del Observatorio les pasa, ni los especialistas escapan de la imprevisibilidad del tiempo."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué efecto produce comparar el granizo con «millones de dientes»?",
+          "answers": [
+            "A) Presenta el fenómeno como una lluvia silenciosa y apacible.",
+            "B) Sugiere que el granizo modifica la composición de los tejados.",
+            "C) Transmite la violencia sonora y física de los impactos.",
+            "D) Explica científicamente la forma geométrica de cada piedra."
+          ],
+          "correct_answer": "C",
+          "justification": "«Millones de dientes que lo mordieran todo, sonoramente» transmite la violencia y el ruido de los impactos."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué permite inferir el cierre anticipado de las tiendas durante la lluvia?",
+          "answers": [
+            "A) Que los comerciantes esperan un incremento de compradores.",
+            "B) Que el narrador desconoce los horarios habituales del barrio.",
+            "C) Que el aguacero altera las rutinas sociales y comerciales.",
+            "D) Que la ciudad celebra una festividad de carácter nocturno."
+          ],
+          "correct_answer": "C",
+          "justification": "Por el aguacero la gente se recoge temprano y las tiendas cierran antes: la lluvia altera la vida del barrio."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué valoración del tono del narrador resulta más convincente?",
+          "answers": [
+            "A) Combina observación cotidiana e ironía ante el clima imprevisible.",
+            "B) Mantiene una exposición estrictamente técnica sin comentarios personales.",
+            "C) Presenta una denuncia política sostenida contra las autoridades.",
+            "D) Construye una descripción solemne sin ningún recurso humorístico."
+          ],
+          "correct_answer": "A",
+          "justification": "El narrador observa la vida diaria con ironía: hasta se «ufana» de vivir con cuatro estaciones al día."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Qué función cumple la escena del turista en el desarrollo del texto?",
+          "answers": [
+            "A) Establece una comparación económica entre visitantes y residentes.",
+            "B) Demuestra que la ciudad recibe turistas únicamente en invierno.",
+            "C) Interrumpe la descripción climática con una anécdota ajena.",
+            "D) Ilustra de manera ingeniosa la sucesión extrema de fenómenos."
+          ],
+          "correct_answer": "D",
+          "justification": "El turista que fotografía sol, inundación y granizo el mismo día ilustra con ingenio los cambios extremos."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué juicio sobre las imágenes empleadas para describir la granizada es más adecuado?",
+          "answers": [
+            "A) Restan intensidad a los acontecimientos mediante imágenes neutras.",
+            "B) Reemplazan el episodio por una explicación exclusivamente estadística.",
+            "C) Hacen perceptible la fuerza del fenómeno desde la experiencia.",
+            "D) Impiden reconocer las consecuencias visibles sobre las calles."
+          ],
+          "correct_answer": "C",
+          "justification": "Las imágenes de cabalgata y dientes hacen sentir la fuerza del granizo desde la experiencia del narrador."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Qué interpretación del cierre con los cigarrillos resulta mejor sustentada?",
+          "answers": [
+            "A) Desmiente las observaciones previas sobre el tiempo inestable.",
+            "B) Introduce una explicación meteorológica pendiente desde el inicio.",
+            "C) Devuelve el fenómeno extraordinario a una preocupación cotidiana.",
+            "D) Convierte la crónica en una advertencia médica sobre el tabaco."
+          ],
+          "correct_answer": "C",
+          "justification": "El cierre vuelve de la granizada extraordinaria a una preocupación cotidiana: conseguir cigarrillos."
+        }
+      ]
+    },
+    {
       "typology": "Expositivo",
-      "id": 9,
+      "id": 13,
       "type": "Texto de divulgación lingüística",
       "title": "¿Qué es una lengua?",
       "text": [
@@ -1542,7 +2251,7 @@
     },
     {
       "typology": "Expositivo",
-      "id": 10,
+      "id": 14,
       "type": "Texto científico-divulgativo",
       "title": "Los colores en la física",
       "text": [
@@ -1716,7 +2425,7 @@
     },
     {
       "typology": "Expositivo",
-      "id": 11,
+      "id": 15,
       "type": "Texto escolar de geografía",
       "title": "Distribución de las tierras y de las aguas",
       "text": [
@@ -1887,7 +2596,7 @@
     },
     {
       "typology": "Expositivo",
-      "id": 12,
+      "id": 16,
       "type": "Texto didáctico escolar",
       "title": "¿Qué es la creatividad?",
       "text": [
@@ -2055,8 +2764,353 @@
       ]
     },
     {
+      "typology": "Expositivo",
+      "id": 17,
+      "type": "Texto científico-divulgativo",
+      "title": "Estructura de las bacterias",
+      "text": [
+        "Las bacterias son, por definición, organismos microscópicos muy simples, desprovistos de clorofila y que se reproducen por división. Dotadas de todas las propiedades fisicoquímicas de la célula (constituyen las células más pequeñas que se conocen), poseen una estructura interna diferenciada. Si tomamos su forma como elemento clasificador podemos distinguir tres categorías: los cocos, los bastoncillos o bacilos y las bacterias espirales, incurvadas en forma de vírgula (vibrios) o contorneadas como un muelle de resorte (espirilos). Sus dimensiones son variables. El diámetro medio de los cocos es de 0,5 micras (0,0005 mm), como el de los bastoncillos, pero estos últimos a veces pueden alcanzar el tamaño de algunas micras.",
+        "Sin embargo, ni el tamaño ni la morfología son factores estructurales definitivos. Entre los cocos y algunos bacilos existe a veces más semejanza que entre diferentes tipos de bacilos. Al margen de las diferencias morfológicas indicadas y tomando las propiedades fisicoquímicas como término de referencia, podemos dividir las bacterias en dos grandes grupos en función de sus diferencias de estructura, metabolismo (sensibilidad a los antibióticos y desinfectantes), necesidades alimentarias, etc.",
+        "Un método de coloración «simple», llamado método de Gram, permite determinar dos tipos fundamentales de bacterias: cuando se trata sucesivamente un frotis bacteriano, fijado por el calor, con ametistina (que colorea en violeta), agua yodada y alcohol de 90° y después con una coloración de contraste con el violeta, se observa que determinado número de bacterias se colorean con el tinte violeta (grampositivas), mientras que otras fijan solamente el segundo colorante de contraste (gramnegativas).",
+        "Todas las bacterias, sean grampositivas o gramnegativas, poseen una envoltura rígida característica por la cual se distinguen de los demás seres vivientes; en efecto, la membrana de la célula animal es plástica y permeable y la de las células vegetales, aunque rígida también y celulósica, está interiormente forrada por una membrana citoplasmática igualmente flexible y permeable.",
+        "Referencia: Umbreit, W. W. (s. f.). Estructura de las bacterias. En La vida: enciclopedia del mundo viviente. El mundo de los microbios (pp. 24–25). Salvat."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Qué criterio utiliza inicialmente el texto para distinguir cocos, bacilos y bacterias espirales?",
+          "answers": [
+            "A) La forma observable de los organismos microscópicos.",
+            "B) La reacción producida por determinados desinfectantes.",
+            "C) La composición química de sus necesidades alimentarias.",
+            "D) La sensibilidad específica frente a los antibióticos."
+          ],
+          "correct_answer": "A",
+          "justification": "El texto dice: «Si tomamos su forma como elemento clasificador podemos distinguir tres categorías»."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué precisión introduce el autor acerca de las semejanzas entre bacterias?",
+          "answers": [
+            "A) Los cocos siempre presentan estructuras idénticas entre sí.",
+            "B) Las bacterias espirales poseen dimensiones totalmente uniformes.",
+            "C) Todos los bacilos comparten necesariamente una misma morfología.",
+            "D) Algunos cocos pueden parecerse más a ciertos bacilos."
+          ],
+          "correct_answer": "D",
+          "justification": "Se afirma que «entre los cocos y algunos bacilos existe a veces más semejanza que entre diferentes tipos de bacilos»."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué resultado identifica a las bacterias grampositivas en el procedimiento descrito?",
+          "answers": [
+            "A) La pérdida completa de color tras aplicar alcohol.",
+            "B) La fijación exclusiva del colorante de contraste.",
+            "C) La conservación de la coloración violeta aplicada.",
+            "D) La aparición de una envoltura flexible y permeable."
+          ],
+          "correct_answer": "C",
+          "justification": "Las bacterias que se colorean con el tinte violeta se denominan grampositivas."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué característica atribuye el texto a todas las bacterias estudiadas?",
+          "answers": [
+            "A) Una cubierta externa flexible como la membrana animal.",
+            "B) Una estructura interna idéntica a las células animales.",
+            "C) Una membrana exterior formada exclusivamente por celulosa.",
+            "D) Una envoltura rígida que las distingue de otros seres."
+          ],
+          "correct_answer": "D",
+          "justification": "«Todas las bacterias […] poseen una envoltura rígida característica por la cual se distinguen de los demás seres vivientes»."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Por qué la clasificación exclusivamente morfológica resulta insuficiente según el texto?",
+          "answers": [
+            "A) Porque las diferencias químicas desaparecen al modificar la forma.",
+            "B) Porque una forma semejante no garantiza una estructura equivalente.",
+            "C) Porque todos los grupos presentan dimensiones exactamente iguales.",
+            "D) Porque el tamaño bacteriano impide cualquier observación microscópica."
+          ],
+          "correct_answer": "B",
+          "justification": "El autor señala que ni el tamaño ni la morfología son factores estructurales definitivos."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué permite deducir el uso de la coloración de Gram en la exposición?",
+          "answers": [
+            "A) Que reemplaza por completo el estudio del metabolismo bacteriano.",
+            "B) Que determina de manera directa la alimentación de cada especie.",
+            "C) Que transforma temporalmente la forma externa de los microorganismos.",
+            "D) Que revela diferencias bacterianas no evidentes por la silueta."
+          ],
+          "correct_answer": "D",
+          "justification": "La tinción de Gram separa dos tipos fundamentales de bacterias que la forma externa no permite distinguir."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué relación puede establecerse entre estructura bacteriana y respuesta a sustancias externas?",
+          "answers": [
+            "A) Las diferencias estructurales pueden acompañarse de distinta sensibilidad.",
+            "B) La dimensión celular determina por sí sola la resistencia química.",
+            "C) La morfología garantiza una reacción uniforme a todos los agentes.",
+            "D) Las propiedades internas impiden cualquier efecto de los desinfectantes."
+          ],
+          "correct_answer": "A",
+          "justification": "El texto vincula las diferencias de estructura con la sensibilidad a antibióticos y desinfectantes."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué se infiere de la comparación final con células animales y vegetales?",
+          "answers": [
+            "A) Que todas las células comparten una cubierta rígida idéntica.",
+            "B) Que las bacterias carecen de límites celulares definidos.",
+            "C) Que las células vegetales son necesariamente menores que las bacterias.",
+            "D) Que la rigidez externa no basta para equiparar envolturas celulares."
+          ],
+          "correct_answer": "D",
+          "justification": "Las células vegetales también son rígidas, pero tienen por dentro una membrana flexible; la rigidez no las equipara."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué valoración del orden explicativo del texto resulta más adecuada?",
+          "answers": [
+            "A) Sustituye la descripción científica por una clasificación exclusivamente histórica.",
+            "B) Presenta primero consecuencias médicas y después causas ambientales.",
+            "C) Organiza las propiedades bacterianas únicamente según su tamaño.",
+            "D) Avanza de rasgos visibles hacia criterios estructurales más precisos."
+          ],
+          "correct_answer": "D",
+          "justification": "El texto parte de la forma y el tamaño y avanza hacia criterios fisicoquímicos y estructurales más precisos."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Qué juicio sobre el método de Gram respalda la información presentada?",
+          "answers": [
+            "A) Aporta una distinción útil dentro de una clasificación compleja.",
+            "B) Explica por sí solo todas las funciones metabólicas bacterianas.",
+            "C) Permite identificar sin errores todas las especies existentes.",
+            "D) Demuestra que la forma externa carece de interés científico."
+          ],
+          "correct_answer": "A",
+          "justification": "El método de Gram permite distinguir dos grandes grupos, pero el texto no dice que lo explique todo."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué objeción sería pertinente ante una clasificación basada solo en el diámetro?",
+          "answers": [
+            "A) Que elimina la necesidad de observar la forma microscópica.",
+            "B) Que impide medir las dimensiones de los microorganismos.",
+            "C) Que omite diferencias relevantes de estructura y propiedades.",
+            "D) Que exige estudiar únicamente las células de origen vegetal."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto advierte que tamaño y forma no son definitivos: faltarían diferencias de estructura, metabolismo y alimentación."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Qué conclusión sobre la precisión científica del fragmento está mejor fundamentada?",
+          "answers": [
+            "A) Desestima las propiedades químicas por su difícil observación.",
+            "B) Reduce las bacterias a categorías establecidas por su longitud.",
+            "C) Reconoce límites de ciertos criterios y propone otros complementarios.",
+            "D) Ofrece definiciones absolutas sin reconocer excepciones morfológicas."
+          ],
+          "correct_answer": "C",
+          "justification": "El fragmento reconoce los límites de la morfología y propone criterios fisicoquímicos complementarios."
+        }
+      ]
+    },
+    {
+      "typology": "Expositivo",
+      "id": 18,
+      "type": "Texto académico de antropología",
+      "title": "El lenguaje y la ciencia",
+      "text": [
+        "El tema del relativismo lingüístico atañe al núcleo de la antropología porque trata la posibilidad de una ciencia de los seres humanos, en tanto que entidades distintas de meros seres biológicos. Si el lenguaje (en el sentido amplio del término) es (o puede ser) realmente constitutivo, ¿cómo es que podemos usarlo para describir lo que otros hacen, creen, piensan y sienten?",
+        "Si el lenguaje en sí mismo representa un particular modo de mirar el mundo, un par de gafas con que venimos equipados al mundo y que llevamos puestas sin ser conscientes de ello, ¿cómo podemos ver lo que ven otros que llevan gafas diferentes?",
+        "Hay diversas respuestas para esta pregunta. Ninguna de ellas es completa y totalmente satisfactoria, pero todas ellas juntas constituyen las herramientas de trabajo que nos permiten entregarnos a la investigación antropológica.",
+        "En primer lugar, inspirado por la teoría de Cassirer, podríamos aceptar el reto e intentar volvernos artistas. Esto significa que necesitamos actuar como seres creativos que no tienen miedo de violar expectativas al mismo tiempo que se mueven dentro de patrones predecibles de comunicación. No hay duda de que en la ciencia, como en el arte, muchas ideas nacen a partir de intuiciones momentáneas, epifanías que son difíciles de reconstruir de una manera certera. Hay un arte del descubrimiento igual que hay un arte de presentar una idea al público. Al mismo tiempo, al igual que en el mundo de los artistas, en la ciencia también pueden nacer y sostenerse nuevas ideas cuando no van mucho más allá de lo que ya está aceptado. Como los artistas, los investigadores viven en un mercado de ideas, donde se produce un capital cultural y las normas de éxito están sujetas a constante evaluación (Bourdieu, 1982, 1985; Rossi-Landi, 1970, 1973).",
+        "La segunda solución que tácitamente propone Cassirer es estudiar los productos culturales como mitos que revelan ciertas verdades sobre una comunidad, que escaparían a la conciencia de sus miembros o que estos no estarían dispuestos a reconocer abiertamente. Este es uno de los intereses centrales de la antropología simbólica (véase Dolgin, Kemnitzer y Schneider, 1977). Se asume que una cultura comunica de muchas formas algo que va más allá de las afirmaciones descriptivas producidas por los nativos cuando son entrevistados por el etnógrafo.",
+        "Esta es una extensión de la intuición de Freud con respecto a los niños: los sueños son más listos que los soñadores, y en ellos somos capaces de establecer nuevas conexiones, reconocer problemas, o incluso encontrar soluciones. Un grupo de personas podrían no ser capaces de enunciar lo que les importa, o por qué se comportan de la manera en que lo hacen, pero sus historias, actos y expresiones cotidianas podrían revelar sus motivaciones interiores.",
+        "Una tercera solución es estudiar las condiciones bajo las que una lengua o, mejor, sus hablantes, pueden superar los límites de su propia cosmovisión o metafísica. Esto es, por ejemplo, lo que sugirió el trabajo de Silverstein en metapragmática. Para Silverstein, debido a nuestra utilización de la lengua, si queremos estudiar un fenómeno cultural necesitamos comprobar la medida en que una lengua y sus hablantes son capaces de reconocer ciertas distinciones y darnos pistas cruciales sobre el modo de hacer generalizaciones. Una teoría de la deixis proporciona las herramientas analíticas para una investigación de este tipo. Desde esta perspectiva, la «prisión del lenguaje» es una hipótesis que debe probarse comparando enunciados de un hablante sobre su propio uso de la lengua con hipótesis basadas en el uso real que hace de la misma.",
+        "Referencia: Duranti, A. (2000). Antropología lingüística. Cambridge University Press."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Qué dificultad plantea el relativismo lingüístico para la investigación antropológica?",
+          "answers": [
+            "A) Sustituir la observación cultural por mediciones puramente biológicas.",
+            "B) Establecer una clasificación universal de todos los idiomas existentes.",
+            "C) Describir otras perspectivas desde un lenguaje que también condiciona la mirada.",
+            "D) Traducir todas las lenguas mediante un sistema de equivalencias exactas."
+          ],
+          "correct_answer": "C",
+          "justification": "Si el lenguaje condiciona la mirada, el autor pregunta cómo usarlo para describir lo que otros creen y sienten."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué propone la primera vía inspirada en Cassirer para el trabajo científico?",
+          "answers": [
+            "A) Evitar toda innovación para preservar las ideas previamente aceptadas.",
+            "B) Renunciar a las intuiciones para seguir modelos exclusivamente previsibles.",
+            "C) Actuar creativamente sin abandonar los patrones comunicativos reconocibles.",
+            "D) Separar la producción artística de cualquier investigación antropológica."
+          ],
+          "correct_answer": "C",
+          "justification": "Volverse artista implica ser creativo sin dejar de moverse «dentro de patrones predecibles de comunicación»."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué materiales considera relevantes la segunda solución para conocer una comunidad?",
+          "answers": [
+            "A) Las descripciones biológicas independientes de las prácticas culturales.",
+            "B) Únicamente los documentos oficiales de las instituciones políticas.",
+            "C) Solo las respuestas conscientes ofrecidas durante las entrevistas.",
+            "D) Los relatos, actos y expresiones que revelan motivaciones implícitas."
+          ],
+          "correct_answer": "D",
+          "justification": "Se estudian productos culturales porque «sus historias, actos y expresiones cotidianas podrían revelar sus motivaciones»."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Qué contraste propone la tercera solución para examinar la «prisión del lenguaje»?",
+          "answers": [
+            "A) Los discursos científicos frente a las creaciones artísticas locales.",
+            "B) Las declaraciones del hablante frente a su uso efectivo.",
+            "C) La gramática de una lengua frente a sus traducciones históricas.",
+            "D) Las costumbres de una comunidad frente a sus recursos económicos."
+          ],
+          "correct_answer": "B",
+          "justification": "La «prisión del lenguaje» se prueba comparando lo que el hablante dice de su lengua con el uso real que hace de ella."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué implica la metáfora de las «gafas diferentes» para quien investiga otra cultura?",
+          "answers": [
+            "A) Que todas las comunidades perciben una realidad cultural idéntica.",
+            "B) Que su propia perspectiva puede limitar la comprensión de otras.",
+            "C) Que la diversidad lingüística impide cualquier interpretación compartida.",
+            "D) Que la observación directa elimina automáticamente los sesgos."
+          ],
+          "correct_answer": "B",
+          "justification": "Cada lengua es como unas gafas puestas sin darnos cuenta: la propia perspectiva puede limitar la comprensión de otras."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué permite inferir la comparación entre creación artística e investigación científica?",
+          "answers": [
+            "A) Que el descubrimiento puede combinar intuición y convenciones compartidas.",
+            "B) Que la investigación depende exclusivamente de talentos individuales innatos.",
+            "C) Que la creatividad sustituye cualquier análisis sistemático posterior.",
+            "D) Que ambas disciplinas deben renunciar a toda validación colectiva."
+          ],
+          "correct_answer": "A",
+          "justification": "Ciencia y arte nacen de intuiciones, pero las ideas se sostienen cuando no se alejan demasiado de lo ya aceptado."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué presupone el estudio de mitos y prácticas más allá de las entrevistas?",
+          "answers": [
+            "A) Que las personas siempre ocultan deliberadamente información esencial.",
+            "B) Que los relatos comunitarios tienen significados universales invariables.",
+            "C) Que las respuestas verbales carecen de utilidad para el etnógrafo.",
+            "D) Que una cultura comunica sentidos no siempre reconocidos conscientemente."
+          ],
+          "correct_answer": "D",
+          "justification": "Se asume que una cultura comunica algo más allá de lo que sus miembros declaran conscientemente."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué se desprende de considerar comprobable la «prisión del lenguaje»?",
+          "answers": [
+            "A) Que cada lengua imposibilita toda reflexión sobre su uso.",
+            "B) Que las limitaciones lingüísticas constituyen una verdad indiscutible.",
+            "C) Que las categorías culturales permanecen ajenas a la observación.",
+            "D) Que los límites de una cosmovisión deben examinarse empíricamente."
+          ],
+          "correct_answer": "D",
+          "justification": "Si la «prisión del lenguaje» es una hipótesis que debe probarse, sus límites se examinan con datos, no se dan por hechos."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué valoración de las tres soluciones propuestas resulta más consistente?",
+          "answers": [
+            "A) Son respuestas incompatibles que impiden desarrollar investigaciones antropológicas.",
+            "B) Son procedimientos equivalentes que producen conclusiones necesariamente idénticas.",
+            "C) Son aproximaciones complementarias a un problema que permanece abierto.",
+            "D) Son explicaciones definitivas que eliminan las dificultades del relativismo."
+          ],
+          "correct_answer": "C",
+          "justification": "El autor dice que ninguna respuesta es completa, pero que juntas son las herramientas de trabajo del antropólogo."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Qué juicio sobre la segunda solución evita reducir la cultura a declaraciones explícitas?",
+          "answers": [
+            "A) Las manifestaciones simbólicas permiten prescindir del contexto comunitario.",
+            "B) La investigación debe excluir toda expresión verbal de sus fuentes.",
+            "C) Los testimonios personales siempre contradicen los comportamientos observables.",
+            "D) Las prácticas culturales pueden revelar significados no verbalizados."
+          ],
+          "correct_answer": "D",
+          "justification": "Los mitos, relatos y actos pueden revelar lo que una comunidad no es capaz o no quiere decir abiertamente."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué fortaleza metodológica presenta la propuesta asociada con Silverstein?",
+          "answers": [
+            "A) Contrasta la conciencia declarada con las prácticas lingüísticas observadas.",
+            "B) Convierte la experiencia individual en criterio único de verdad.",
+            "C) Resuelve la diversidad cultural mediante una sola categoría universal.",
+            "D) Descarta las afirmaciones de los hablantes por ser subjetivas."
+          ],
+          "correct_answer": "A",
+          "justification": "La metapragmática contrasta lo que los hablantes dicen sobre su lengua con cómo la usan realmente."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Qué postura epistemológica se ajusta mejor al razonamiento global del autor?",
+          "answers": [
+            "A) El estudio cultural necesita métodos diversos y examen reflexivo.",
+            "B) El conocimiento de otras culturas requiere abandonar el lenguaje.",
+            "C) La investigación antropológica puede alcanzar neutralidad absoluta inmediata.",
+            "D) La ciencia exige eliminar toda creatividad del análisis cultural."
+          ],
+          "correct_answer": "A",
+          "justification": "El autor combina varias vías y reconoce sus límites: el estudio de la cultura exige métodos diversos y reflexión."
+        }
+      ]
+    },
+    {
       "typology": "Descriptivo",
-      "id": 13,
+      "id": 19,
       "type": "Artículo periodístico de opinión con datos",
       "title": "La toga no hace al juez",
       "text": [
@@ -2227,7 +3281,7 @@
     },
     {
       "typology": "Descriptivo",
-      "id": 14,
+      "id": 20,
       "type": "Texto descriptivo turístico",
       "title": "Otavalo, una joya para visitar",
       "text": [
@@ -2399,7 +3453,7 @@
     },
     {
       "typology": "Descriptivo",
-      "id": 15,
+      "id": 21,
       "type": "Reportaje periodístico descriptivo",
       "title": "El barrio de Valencia que puede convertirse en un ejemplo mundial",
       "text": [
@@ -2569,180 +3623,7 @@
     },
     {
       "typology": "Descriptivo",
-      "id": 16,
-      "type": "Artículo divulgativo de vida cotidiana",
-      "title": "¿Cada cuánto debes cambiar cepillos, esponjas y otros objetos?",
-      "text": [
-        "Mantener la casa limpia no depende solo de barrer, trapear o usar desinfectantes. También influye mucho saber cuándo es momento de reemplazar ciertos objetos de uso diario que, aunque parecen inofensivos, pueden acumular bacterias, hongos y suciedad con el paso del tiempo.",
-        "Entre los artículos que más gérmenes pueden concentrar están las esponjas de cocina, los cepillos de dientes e incluso los colchones. Aunque muchas personas los siguen usando durante meses, expertos en higiene y salud recomiendan cambiarlos con cierta frecuencia para evitar problemas en el hogar y cuidar el bienestar de la familia.",
-        "Uno de los casos más preocupantes es el de las esponjas para lavar la loza. Al estar constantemente húmedas, tener contacto con restos de comida y permanecer en ambientes cálidos, se convierten en el lugar ideal para la proliferación de bacterias. Por eso, los especialistas aconsejan reemplazarlas cada semana. Aunque se pueden desinfectar por un corto tiempo con agua caliente, vinagre o incluso en el microondas, esto no sustituye el cambio regular.",
-        "En el baño también hay un objeto que suele pasar demasiado tiempo sin renovación: el cepillo de dientes. Los odontólogos recomiendan cambiarlo cada tres meses, ya que sus cerdas se desgastan y pierden efectividad al momento de limpiar correctamente los dientes. Además, con el uso constante, también puede acumular microorganismos que no conviene mantener por mucho tiempo.",
-        "Otro elemento clave dentro del hogar es el colchón. Aunque no siempre se nota a simple vista, con los años acumula polvo, ácaros y suciedad, además de perder firmeza. Esto no solo afecta la higiene, sino también la calidad del descanso y la salud física. Por esa razón, se aconseja renovarlo aproximadamente cada siete años.",
-        "Pequeños cambios como reemplazar estos objetos en el momento adecuado pueden marcar una gran diferencia. Más allá de la limpieza visible, se trata de reducir riesgos, mejorar la higiene del hogar y prevenir que objetos cotidianos se conviertan en focos de contaminación.",
-        "Referencia: Revista Familia. (2026, 9 de mayo). Diario El Comercio."
-      ],
-      "activites": [
-        {
-          "question_id": "1",
-          "comprehension_level": "Literal",
-          "question": "¿Con qué frecuencia se recomienda reemplazar las esponjas de cocina?",
-          "answers": [
-            "A) Cada tres meses",
-            "B) Cada mes",
-            "C) Cada semana",
-            "D) Cada año"
-          ],
-          "correct_answer": "C",
-          "justification": "El texto indica que los especialistas aconsejan reemplazarlas cada semana."
-        },
-        {
-          "question_id": "2",
-          "comprehension_level": "Literal",
-          "question": "¿Cada cuánto tiempo aconsejan los odontólogos cambiar el cepillo de dientes?",
-          "answers": [
-            "A) Cada tres meses",
-            "B) Cada mes",
-            "C) Cada año",
-            "D) Cada seis meses"
-          ],
-          "correct_answer": "A",
-          "justification": "Se señala que los odontólogos recomiendan cambiarlo cada tres meses."
-        },
-        {
-          "question_id": "3",
-          "comprehension_level": "Literal",
-          "question": "¿Cuál es el período recomendado para renovar el colchón?",
-          "answers": [
-            "A) Cada siete años",
-            "B) Cada quince años",
-            "C) Cada dos años",
-            "D) Cada cinco años"
-          ],
-          "correct_answer": "A",
-          "justification": "El artículo aconseja renovarlo aproximadamente cada siete años."
-        },
-        {
-          "question_id": "4",
-          "comprehension_level": "Literal",
-          "question": "¿Qué métodos de desinfección temporal se mencionan para las esponjas?",
-          "answers": [
-            "A) Cloro y detergente en polvo",
-            "B) Agua caliente, vinagre o microondas",
-            "C) Exposición al sol",
-            "D) Alcohol y jabón"
-          ],
-          "correct_answer": "B",
-          "justification": "El texto menciona el agua caliente, el vinagre e incluso el microondas como desinfección temporal."
-        },
-        {
-          "question_id": "5",
-          "comprehension_level": "Inferencial",
-          "question": "¿Por qué las esponjas de cocina concentran tantas bacterias?",
-          "answers": [
-            "A) Porque se fabrican con materiales contaminados",
-            "B) Porque se guardan en el refrigerador",
-            "C) Porque están húmedas, en contacto con restos de comida y en ambientes cálidos",
-            "D) Porque se usan una sola vez"
-          ],
-          "correct_answer": "C",
-          "justification": "Esas tres condiciones son las que el texto identifica como ideales para la proliferación bacteriana."
-        },
-        {
-          "question_id": "6",
-          "comprehension_level": "Inferencial",
-          "question": "¿Qué idea principal transmite el artículo?",
-          "answers": [
-            "A) Reemplazar a tiempo los objetos de uso diario es parte esencial de la higiene",
-            "B) El colchón es el objeto más sucio del hogar",
-            "C) Los objetos del hogar duran indefinidamente",
-            "D) La limpieza depende solo de los desinfectantes"
-          ],
-          "correct_answer": "A",
-          "justification": "El texto insiste en que la higiene no se limita a limpiar, sino que incluye saber cuándo renovar."
-        },
-        {
-          "question_id": "7",
-          "comprehension_level": "Inferencial",
-          "question": "¿Qué se deduce sobre el desgaste del cepillo de dientes?",
-          "answers": [
-            "A) No afecta la higiene bucal",
-            "B) Solo cambia de color",
-            "C) Mejora la limpieza con el uso",
-            "D) Al desgastarse las cerdas, disminuye su eficacia"
-          ],
-          "correct_answer": "D",
-          "justification": "Se explica que las cerdas se desgastan y pierden efectividad al limpiar los dientes."
-        },
-        {
-          "question_id": "8",
-          "comprehension_level": "Inferencial",
-          "question": "¿Por qué se afirma que el deterioro del colchón afecta más que la higiene?",
-          "answers": [
-            "A) Porque cambia el aspecto del dormitorio",
-            "B) Porque atrae insectos voladores",
-            "C) Porque incide en la calidad del descanso y en la salud física",
-            "D) Porque encarece el mobiliario"
-          ],
-          "correct_answer": "C",
-          "justification": "El texto vincula la pérdida de firmeza y la acumulación de ácaros con el descanso y la salud."
-        },
-        {
-          "question_id": "9",
-          "comprehension_level": "Critico",
-          "question": "¿Qué debilidad presenta el artículo desde el punto de vista de la fiabilidad?",
-          "answers": [
-            "A) Ofrece demasiados datos técnicos",
-            "B) Alude a “expertos” y “especialistas” sin identificar fuentes concretas",
-            "C) No propone ninguna recomendación",
-            "D) Contradice sus propias recomendaciones"
-          ],
-          "correct_answer": "B",
-          "justification": "Las recomendaciones se atribuyen genéricamente a expertos, sin citar estudios ni instituciones."
-        },
-        {
-          "question_id": "10",
-          "comprehension_level": "Critico",
-          "question": "¿A qué tipo de público está dirigido el texto?",
-          "answers": [
-            "A) Profesionales de la microbiología",
-            "B) Lectores generales interesados en el cuidado del hogar",
-            "C) Fabricantes de artículos de limpieza",
-            "D) Estudiantes de medicina"
-          ],
-          "correct_answer": "B",
-          "justification": "El lenguaje sencillo y los consejos prácticos apuntan a un público amplio y no especializado."
-        },
-        {
-          "question_id": "11",
-          "comprehension_level": "Critico",
-          "question": "¿Qué función cumple el párrafo final del artículo?",
-          "answers": [
-            "A) Introducir un tema nuevo",
-            "B) Citar a los expertos consultados",
-            "C) Presentar una objeción",
-            "D) Sintetizar la idea central y reforzar la recomendación"
-          ],
-          "correct_answer": "D",
-          "justification": "El cierre resume que pequeños cambios oportunos reducen riesgos y mejoran la higiene del hogar."
-        },
-        {
-          "question_id": "12",
-          "comprehension_level": "Critico",
-          "question": "¿Qué añadirías al texto para hacerlo más útil?",
-          "answers": [
-            "A) Una lista de marcas comerciales",
-            "B) Más adjetivos descriptivos",
-            "C) Un relato personal extenso",
-            "D) Referencias a estudios y consideraciones sobre costo o alternativas sostenibles"
-          ],
-          "correct_answer": "D",
-          "justification": "Respaldar los plazos con evidencia y contemplar el gasto o el impacto ambiental daría mayor valor práctico."
-        }
-      ]
-    },
-    {
-      "typology": "Descriptivo",
-      "id": 17,
+      "id": 22,
       "type": "Nota periodística gastronómica",
       "title": "El plátano verde traspasó fronteras llegando de la Costa a la Sierra",
       "text": [
@@ -2910,6 +3791,344 @@
           ],
           "correct_answer": "A",
           "justification": "El posesivo evidencia el vínculo del medio con su comunidad de lectores."
+        }
+      ]
+    },
+    {
+      "typology": "Descriptivo",
+      "id": 23,
+      "type": "Texto divulgativo de ciencias de la Tierra",
+      "title": "¡Vaya gas!",
+      "text": [
+        "La Tierra, vista desde el espacio (Figura 2.1), parece que estuviera rodeada por un océano de aire con mechones de nubes vagando perezosamente por él. La atmósfera es una extraordinaria mezcla formada por un 77 por 100 de nitrógeno, un 20 por 100 de oxígeno, un 2 por 100 de vapor de agua y un 1 por 100 de otros gases, siendo el dióxido de carbono el más importante de éstos. Ningún otro planeta de nuestro Sistema Solar tiene tanto oxígeno libre o combinado con el hidrógeno formando agua, razón por la cual es posible que ninguno de ellos pueda tener vida tal como nosotros la conocemos. Sin embargo, si el porcentaje de nivel de oxígeno aumentase solamente un poco sobre el actual, toda la superficie de nuestro planeta se consumiría en un gran incendio.",
+        "El noventa por ciento de todo el aire de la atmósfera se encuentra en una zona de sólo 16 kilómetros de espesor, formando una delgada envoltura que tiene una altura del 0,1 por 100 del diámetro de la tierra y una millonésima de su masa. También es la región en la que se forma el clima.",
+        "La atmósfera se divide en cinco capas principales que se extienden hasta mucha altura en el espacio. La presión atmosférica al nivel del mar es mayor de un kilogramo por centímetro cuadrado; en el Valle de la Muerte, California, que se encuentra a 85 metros por debajo del nivel del mar, la presión atmosférica es mucho mayor. La razón por la que nosotros no notamos la diferencia radica en el hecho de que la presión del aire está igualada con la del interior de nuestros cuerpos, ejerciendo hacia el exterior una presión de igual valor.",
+        "Referencia: Erickson, J. (s. f.). Las tormentas: De las antiguas creencias a la moderna meteorología. McGraw-Hill."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Qué proporción de la atmósfera atribuye el texto al nitrógeno?",
+          "answers": [
+            "A) El dos por ciento de sus componentes.",
+            "B) El uno por ciento de los gases.",
+            "C) El setenta y siete por ciento de la mezcla.",
+            "D) El veinte por ciento del volumen total."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto indica que la atmósfera está formada por «un 77 por 100 de nitrógeno»."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué afirma el texto sobre el oxígeno en otros planetas del Sistema Solar?",
+          "answers": [
+            "A) Se presenta en proporciones mayores que en la Tierra.",
+            "B) Aparece únicamente combinado con gases distintos del hidrógeno.",
+            "C) Está completamente ausente de todas sus atmósferas conocidas.",
+            "D) Ninguno posee tanto oxígeno libre o combinado en agua."
+          ],
+          "correct_answer": "D",
+          "justification": "«Ningún otro planeta de nuestro Sistema Solar tiene tanto oxígeno libre o combinado con el hidrógeno formando agua»."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿En qué espesor se concentra el noventa por ciento del aire atmosférico?",
+          "answers": [
+            "A) En una región de varios cientos de kilómetros.",
+            "B) En una franja de ochenta y cinco metros.",
+            "C) En una capa equivalente al diámetro terrestre completo.",
+            "D) En una envoltura de dieciséis kilómetros de espesor."
+          ],
+          "correct_answer": "D",
+          "justification": "«El noventa por ciento de todo el aire […] se encuentra en una zona de sólo 16 kilómetros de espesor»."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Por qué no percibimos habitualmente la presión atmosférica sobre nuestro cuerpo?",
+          "answers": [
+            "A) Porque actúa exclusivamente sobre los objetos sin vida.",
+            "B) Porque disminuye hasta cero en los espacios habitados.",
+            "C) Porque desaparece al encontrarnos por encima del mar.",
+            "D) Porque se equilibra con la presión interna corporal."
+          ],
+          "correct_answer": "D",
+          "justification": "La presión del aire «está igualada con la del interior de nuestros cuerpos», por eso no la notamos."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué permite inferir la advertencia sobre un pequeño aumento del oxígeno?",
+          "answers": [
+            "A) Que el oxígeno resulta innecesario para sostener la vida.",
+            "B) Que la composición atmosférica requiere un equilibrio delicado.",
+            "C) Que la Tierra carece de materiales capaces de arder.",
+            "D) Que todos los planetas poseen atmósferas químicamente idénticas."
+          ],
+          "correct_answer": "B",
+          "justification": "Si un pequeño aumento de oxígeno provocaría un gran incendio, la composición del aire depende de un equilibrio delicado."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué efecto produce describir la atmósfera como un «océano de aire»?",
+          "answers": [
+            "A) Hace imaginable una envoltura extensa y visualmente continua.",
+            "B) Demuestra que las nubes se forman fuera del planeta.",
+            "C) Niega que existan diferencias entre agua y gases.",
+            "D) Atribuye a la atmósfera las propiedades químicas del mar."
+          ],
+          "correct_answer": "A",
+          "justification": "La imagen del «océano de aire» con nubes vagando ayuda a imaginar una envoltura amplia y continua alrededor del planeta."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué relación sugiere el texto entre la concentración del aire y los fenómenos meteorológicos?",
+          "answers": [
+            "A) La presión atmosférica es uniforme en todas las alturas.",
+            "B) Las capas superiores concentran todo el aire del planeta.",
+            "C) Los cambios del clima ocurren únicamente fuera de la atmósfera.",
+            "D) Gran parte del aire coincide con la región formadora del clima."
+          ],
+          "correct_answer": "D",
+          "justification": "La capa donde está el noventa por ciento del aire «también es la región en la que se forma el clima»."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué se deduce del ejemplo del Valle de la Muerte?",
+          "answers": [
+            "A) La presión aumenta siempre que crece la altitud.",
+            "B) La menor altitud puede asociarse con mayor presión atmosférica.",
+            "C) La presión depende exclusivamente de la temperatura local.",
+            "D) El nivel del mar representa el punto de presión máxima."
+          ],
+          "correct_answer": "B",
+          "justification": "El Valle de la Muerte está bajo el nivel del mar y allí la presión es mayor: a menor altitud, más presión."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué valoración del recurso de los porcentajes resulta más adecuada?",
+          "answers": [
+            "A) Demuestra que cada gas cumple exactamente la misma función.",
+            "B) Impide comprender la importancia de los componentes minoritarios.",
+            "C) Sustituye la explicación física por una enumeración de planetas.",
+            "D) Permite precisar la composición de la mezcla atmosférica descrita."
+          ],
+          "correct_answer": "D",
+          "justification": "Los porcentajes permiten conocer con precisión cuánto aporta cada gas a la mezcla atmosférica."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Qué juicio sobre la comparación planetaria está mejor respaldado por el fragmento?",
+          "answers": [
+            "A) Descarta cualquier influencia del agua en los organismos.",
+            "B) Plantea una posibilidad condicionada a la vida conocida.",
+            "C) Confirma que toda forma de vida requiere oxígeno atmosférico.",
+            "D) Afirma con certeza que ningún otro planeta contiene vida."
+          ],
+          "correct_answer": "B",
+          "justification": "El texto dice que es posible que ningún planeta tenga vida «tal como nosotros la conocemos»: es una posibilidad condicionada."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué función explicativa cumple la referencia a la presión interna del cuerpo?",
+          "answers": [
+            "A) Presenta una causa histórica de la composición atmosférica.",
+            "B) Introduce una excepción exclusiva del Valle de la Muerte.",
+            "C) Sustituye la observación de la presión por una metáfora.",
+            "D) Aclara una experiencia cotidiana mediante un equilibrio físico."
+          ],
+          "correct_answer": "D",
+          "justification": "El equilibrio entre la presión externa y la interna explica por qué no sentimos el peso del aire en la vida diaria."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Qué característica del fragmento contribuye más a su eficacia descriptiva?",
+          "answers": [
+            "A) El predominio de testimonios personales sobre observaciones físicas.",
+            "B) La sustitución de fenómenos naturales por relatos imaginarios.",
+            "C) La ausencia de cifras para evitar dificultades de interpretación.",
+            "D) La combinación de imágenes accesibles con magnitudes cuantificadas."
+          ],
+          "correct_answer": "D",
+          "justification": "El texto une imágenes sencillas («océano de aire») con cifras exactas de gases, espesor y presión."
+        }
+      ]
+    },
+    {
+      "typology": "Descriptivo",
+      "id": 24,
+      "type": "Artículo enciclopédico geográfico",
+      "title": "Cordillera de Mérida",
+      "text": [
+        "Sistema montañoso de Venezuela, llamado en el país los Andes; culmina en el pico Bolívar, a 5 007 m. Constituye la orografía más ingente de Venezuela. Con una longitud de 450 km y una anchura media de 100, se extiende oblicuamente desde la axila que la separa de los Andes colombianos hasta la depresión de Yaracuy. Está constituida por un tronco de rocas arcaicas y paleozoicas (esquistos y neis, con intrusiones de granito), en cuyos flancos, y especialmente en los extremos, se adosan formaciones mesozoicas (areniscas, lutitas y calizas), que también se hallan en algunas cumbres. La existencia y localización de estas formaciones mesozoicas, generalmente cretácicas, atestigua que se trata de una orografía alpina, si bien carece de grandes pliegues. Estructuralmente se puede considerar como un sistema de bloques que, bajo presiones tectónicas, se movieron independientemente. El tramo central corresponde al sector más elevado (alturas máximas superiores a 3 000 metros) y dentro del conjunto destacan: la sierra Nevada de Mérida, cuyas cumbres sobrepasan los 4 000 m (Bolívar, 5 007 m), la sierra de Santo Domingo (Mucunuque, 4 672 m) y la sierra del Norte o de la Culata (Piedras Blancas, 4 762 m). En esta zona axial existe una hendidura que atraviesa la cordillera longitudinalmente, en especial a lo largo de las formaciones más antiguas, separa la sierra del Norte de la de Santo Domingo y Nevada y encauza las aguas por ríos que las llevan hacia el lago Maracaibo y hacia la depresión de los Llanos. La continuidad del surco ha hecho suponer que se trata de un accidente tectónico que arranca del zócalo primitivo. La acción de estas aguas, junto con las que caen por torrentes de las vertientes exteriores, ha labrado un relieve muy quebrado y abrupto, de rápidos declives, el cual, a partir de los 2 800 m, presenta una topografía glaciar, especialmente en el tramo central de la cordillera, debida a los heleros pleistocenos. Breves glaciares se originan todavía de las nieves perennes de sierra Nevada. Los ríos axiales formaron una serie de terrazas, bien conservadas, donde se han desarrollado distintas poblaciones, entre ellas Mérida y Valera, las más importantes. En los Andes venezolanos —con su sucesión de pisos térmicos, desde la «tierra caliente» hasta los páramos y los nevados, y con las fuertes diferencias pluviométricas (abundantes lluvias en las vertientes externas y escasas y estacionales en las internas)— se dan todos los tipos de vegetación; la variedad florística (con numerosas especies endémicas) es extraordinaria: desde las palmeras y guaduas de las tierras bajas, hasta los líquenes y musgos periglaciares, pasando por la selva nublada y los típicos frailejones.",
+        "Referencia: Geografía universal. (s. f.). Planeta."
+      ],
+      "activites": [
+        {
+          "question_id": "1",
+          "comprehension_level": "Literal",
+          "question": "¿Entre qué referencias geográficas sitúa el texto la extensión de la cordillera?",
+          "answers": [
+            "A) Entre la sierra Nevada y la depresión de los Llanos.",
+            "B) Entre la sierra del Norte y la de Santo Domingo.",
+            "C) Entre la separación de los Andes colombianos y Yaracuy.",
+            "D) Entre el lago Maracaibo y las tierras bajas orientales."
+          ],
+          "correct_answer": "C",
+          "justification": "Se extiende «desde la axila que la separa de los Andes colombianos hasta la depresión de Yaracuy»."
+        },
+        {
+          "question_id": "2",
+          "comprehension_level": "Literal",
+          "question": "¿Qué característica estructural se atribuye al sistema montañoso?",
+          "answers": [
+            "A) Una superficie uniforme sin fracturas ni deformaciones antiguas.",
+            "B) Un conjunto de bloques desplazados por presiones tectónicas.",
+            "C) Un gran pliegue continuo sin movimientos independientes.",
+            "D) Una cadena formada exclusivamente por sedimentos recientes."
+          ],
+          "correct_answer": "B",
+          "justification": "«Estructuralmente se puede considerar como un sistema de bloques que, bajo presiones tectónicas, se movieron independientemente»."
+        },
+        {
+          "question_id": "3",
+          "comprehension_level": "Literal",
+          "question": "¿Qué función cumple la hendidura longitudinal de la zona axial?",
+          "answers": [
+            "A) Separa las formaciones mesozoicas de todas las antiguas.",
+            "B) Concentra exclusivamente las lluvias de las vertientes externas.",
+            "C) Une directamente las cumbres con los glaciares exteriores.",
+            "D) Divide sectores serranos y canaliza aguas hacia dos destinos."
+          ],
+          "correct_answer": "D",
+          "justification": "La hendidura separa la sierra del Norte de las de Santo Domingo y Nevada y lleva las aguas al lago Maracaibo y a los Llanos."
+        },
+        {
+          "question_id": "4",
+          "comprehension_level": "Literal",
+          "question": "¿Dónde sitúa el texto las terrazas que acogieron poblaciones importantes?",
+          "answers": [
+            "A) En las cumbres nevadas de las sierras principales.",
+            "B) En las áreas de glaciares originados recientemente.",
+            "C) En los flancos externos de las formaciones cretácicas.",
+            "D) En superficies modeladas por los cursos fluviales axiales."
+          ],
+          "correct_answer": "D",
+          "justification": "Los ríos axiales formaron terrazas «donde se han desarrollado distintas poblaciones, entre ellas Mérida y Valera»."
+        },
+        {
+          "question_id": "5",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué permite inferir la presencia de formaciones mesozoicas sobre rocas más antiguas?",
+          "answers": [
+            "A) Que la cordillera registra procesos geológicos de distintas épocas.",
+            "B) Que las rocas antiguas desaparecieron antes de la elevación.",
+            "C) Que todo el relieve se originó mediante un único depósito.",
+            "D) Que las cumbres carecen de materiales sedimentarios superpuestos."
+          ],
+          "correct_answer": "A",
+          "justification": "Sobre un tronco de rocas arcaicas y paleozoicas se adosan formaciones mesozoicas: hay huellas de distintas épocas."
+        },
+        {
+          "question_id": "6",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué sugiere la combinación de aguas torrenciales y fuertes declives?",
+          "answers": [
+            "A) Que el relieve permanece inalterado por la circulación del agua.",
+            "B) Que los ríos se desarrollaron después de desaparecer las montañas.",
+            "C) Que la erosión hídrica contribuyó al carácter abrupto del terreno.",
+            "D) Que la lluvia afecta solamente a las áreas de poca pendiente."
+          ],
+          "correct_answer": "C",
+          "justification": "Las aguas axiales y los torrentes «han labrado un relieve muy quebrado y abrupto, de rápidos declives»."
+        },
+        {
+          "question_id": "7",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué relación puede establecerse entre pisos térmicos y variedad vegetal?",
+          "answers": [
+            "A) La variación altitudinal favorece ambientes vegetales muy distintos.",
+            "B) Los glaciares permiten una cobertura vegetal uniforme en toda la cordillera.",
+            "C) La vegetación depende únicamente de la antigüedad de las rocas.",
+            "D) La altura elimina cualquier diferencia entre las especies vegetales."
+          ],
+          "correct_answer": "A",
+          "justification": "Los pisos térmicos van de la «tierra caliente» a los nevados y en ellos «se dan todos los tipos de vegetación»."
+        },
+        {
+          "question_id": "8",
+          "comprehension_level": "Inferencial",
+          "question": "¿Qué se desprende de la existencia de huellas glaciares y glaciares actuales breves?",
+          "answers": [
+            "A) Que el relieve glaciar se formó exclusivamente en tiempos recientes.",
+            "B) Que la actividad glaciar actual es menor que la pasada.",
+            "C) Que la cordillera carece de cambios climáticos reconocibles.",
+            "D) Que la glaciación continúa con la misma extensión pleistocena."
+          ],
+          "correct_answer": "B",
+          "justification": "La topografía glaciar viene de los heleros pleistocenos y hoy solo se originan «breves glaciares»: la actividad es menor."
+        },
+        {
+          "question_id": "9",
+          "comprehension_level": "Critico",
+          "question": "¿Qué valoración de la explicación del relieve resulta mejor fundamentada?",
+          "answers": [
+            "A) Descarta la influencia de los materiales sobre las montañas.",
+            "B) Atribuye toda la morfología a una única causa climática.",
+            "C) Integra estructura tectónica y erosión para explicar su configuración.",
+            "D) Reduce la formación del relieve a la presencia vegetal."
+          ],
+          "correct_answer": "C",
+          "justification": "El texto explica el relieve por los bloques tectónicos y por la erosión del agua y los glaciares."
+        },
+        {
+          "question_id": "10",
+          "comprehension_level": "Critico",
+          "question": "¿Qué juicio sobre la descripción de la vegetación es más pertinente?",
+          "answers": [
+            "A) Considera la lluvia un fenómeno exclusivo de las cumbres.",
+            "B) Sostiene que todas las especies se distribuyen uniformemente.",
+            "C) Relaciona la variedad vegetal con contrastes altitudinales y pluviométricos.",
+            "D) Presenta la diversidad florística como ajena a las condiciones físicas."
+          ],
+          "correct_answer": "C",
+          "justification": "La variedad florística se relaciona con los pisos térmicos y con las diferencias de lluvia entre vertientes."
+        },
+        {
+          "question_id": "11",
+          "comprehension_level": "Critico",
+          "question": "¿Qué aporte cumple la mención de Mérida y Valera en la descripción?",
+          "answers": [
+            "A) Desvía la explicación hacia una historia política de Venezuela.",
+            "B) Vincula una forma del relieve con asentamientos humanos concretos.",
+            "C) Demuestra que las ciudades surgieron únicamente sobre glaciares.",
+            "D) Permite comparar el tamaño económico de todas las poblaciones."
+          ],
+          "correct_answer": "B",
+          "justification": "Mérida y Valera muestran que las terrazas fluviales son el lugar donde se asentó la población."
+        },
+        {
+          "question_id": "12",
+          "comprehension_level": "Critico",
+          "question": "¿Qué valoración de la organización del fragmento es más sólida?",
+          "answers": [
+            "A) Presenta solamente cifras de altura sin explicar su significado.",
+            "B) Acumula datos aislados sin establecer relaciones geográficas relevantes.",
+            "C) Sustituye la descripción física por un relato cronológico de viajes.",
+            "D) Articula geología, hidrografía y vegetación en una descripción integrada."
+          ],
+          "correct_answer": "D",
+          "justification": "El fragmento relaciona rocas, ríos, glaciares, clima y vegetación en una sola descripción coherente."
         }
       ]
     }

@@ -12,8 +12,8 @@ Todo ocurre en UNA transacción, en este orden:
      filas de progreso. Las interacciones con el NPC se conservan, pero pierden
      la referencia a la sesión y a la lectura borradas.
   3. Cada slot queda con sus 4 filas de progreso y se recalculan los
-     desbloqueos SIN bloquear nunca: quien tenga 250 en Argumentativo pasa a
-     tener Expositivo abierto.
+     desbloqueos SIN bloquear nunca: quien llegue al umbral en Argumentativo
+     pasa a tener Expositivo abierto.
   4. Se cargan las lecturas de práctica del JSON. Se saltan los títulos que ya
      existen, así que repetir la migración no duplica nada.
   5. El texto del logro Explorador pasa a "4 tipologías" solo si sigue siendo

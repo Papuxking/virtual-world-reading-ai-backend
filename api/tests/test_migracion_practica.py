@@ -71,7 +71,7 @@ def test_migracion_borra_instructivo_y_desbloquea(db, base_con_instructivo):
     filas = {f.typology: f for f in db.query(PlayerTypologyProgress).filter_by(
         slot_id=base_con_instructivo["slot"].id)}
     assert sorted(filas) == sorted(DIFFICULTY_ORDER)
-    assert filas["Expositivo"].is_unlocked is True      # Argumentativo 255 >= 250
+    assert filas["Expositivo"].is_unlocked is True      # Argumentativo 255 >= 120
     practica = db.query(Reading).filter_by(title="Práctica narrativa").one()
     assert practica.is_practice is True
     assert len(practica.questions) == 12

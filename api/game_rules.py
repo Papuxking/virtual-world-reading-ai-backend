@@ -18,11 +18,14 @@ contenedor (import_readings.py).
 DIFFICULTY_ORDER = ["Narrativo", "Descriptivo", "Argumentativo", "Expositivo"]
 
 # Puntaje mínimo en la tipología ANTERIOR para desbloquear cada una.
+# 120 = aprobar con hasta 2 errores sin usar herramientas: el peor caso con 2
+# errores (uno inferencial y uno crítico) da 122. Sin herramientas el máximo
+# es 240, así que el antiguo 250 obligaba a usarlas.
 UNLOCK_THRESHOLDS = {
     "Narrativo": 0,
-    "Descriptivo": 250,
-    "Argumentativo": 250,
-    "Expositivo": 250,
+    "Descriptivo": 120,
+    "Argumentativo": 120,
+    "Expositivo": 120,
 }
 
 # Máximo de una sesión según game_session.gd:
