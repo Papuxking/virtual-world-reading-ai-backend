@@ -79,6 +79,29 @@ def _validate_slot_header(request: Request, active_slot: PlayerSlot, user: User)
             )
 
 
+def _aciertos_por_nivel(db: Session, user_id: int, slot_id: int) -> dict:
+    """Respuestas correctas del slot por nivel de comprensión, sin la práctica.
+    Siempre con los 3 niveles del juego; un nivel desconocido no cuenta."""
+    aciertos = {"Literal": 0, "Inferencial": 0, "Critico": 0}
+    filas = (
+        db.query(PlayerAnswer.comprehension_level, sqlfunc.count(PlayerAnswer.id))
+        .join(PlayerSession, PlayerAnswer.session_id == PlayerSession.id)
+        .filter(
+            PlayerSession.user_id == user_id,
+            PlayerSession.slot_id == slot_id,
+            PlayerSession.is_practice == False,
+            PlayerAnswer.is_correct == True,
+        )
+        .group_by(PlayerAnswer.comprehension_level)
+        .all()
+    )
+    for nivel, cantidad in filas:
+        clave = (nivel or "").replace("í", "i").replace("Í", "I").capitalize()
+        if clave in aciertos:
+            aciertos[clave] += cantidad
+    return aciertos
+
+
 # ── Progreso Completo ────────────────────────────────────────────────────────
 
 @router.get("/me", response_model=PlayerProgressResponse)
@@ -140,6 +163,7 @@ def get_my_progress(
         active_slot_id=active_slot.id,
         total_score=total_score,
         practice_sessions=practice_sessions or 0,
+        correct_by_level=_aciertos_por_nivel(db, current_user.id, active_slot.id),
         typology_progress=[
             TypologyProgressResponse.model_validate(tp) for tp in typology_rows
         ],

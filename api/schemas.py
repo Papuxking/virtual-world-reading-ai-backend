@@ -3,7 +3,7 @@ schemas.py — Schemas Pydantic para validación de request/response
 Incluye schemas de lecturas, autenticación, progreso y administración.
 """
 from datetime import datetime
-from typing import List, Optional
+from typing import Dict, List, Optional
 from pydantic import BaseModel, Field, EmailStr
 
 
@@ -443,6 +443,10 @@ class PlayerProgressResponse(BaseModel):
     typology_progress: List[TypologyProgressResponse]
     achievements: List[AchievementResponse]
     recent_sessions: List[SessionResponse] = []
+    # Respuestas correctas acumuladas por nivel (sin la práctica). El juego las
+    # restaura al iniciar sesión: sin ellas, los logros de las Estrellas solo
+    # contaban los aciertos de una misma partida.
+    correct_by_level: Dict[str, int] = {}
 
 
 # ── Schemas de Administración ────────────────────────────────────────────────
