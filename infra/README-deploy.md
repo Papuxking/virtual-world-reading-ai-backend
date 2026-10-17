@@ -156,6 +156,23 @@ Entre los pasos 5 y 6, un cliente viejo que entre en la estación Instructivo
 recibe "sin lecturas": haz el 6 justo después. No hay routers nuevos (solo
 parámetros), así que la lista blanca de nginx no cambia.
 
+### Tipologías aprobadas, fuentes y sonido (una sola vez)
+
+La rama `feature/bloqueo-fuentes-sonido` añade `correct_by_level` a
+`/progress/me` y cambia la pista de cuatro logros (Lector ávido y las tres
+Estrellas) en `achievement_catalog`. Tras desplegar su API:
+
+```bash
+# simulacro: enseña qué pistas cambiarían
+ssh vw 'docker exec vw-api-1 python actualizar_pistas_logros.py'
+# aplicar (solo toca las que siguen con el texto original)
+ssh vw 'docker exec vw-api-1 python actualizar_pistas_logros.py --apply'
+```
+
+No hay routers nuevos, así que nginx no cambia. El juego de esa rama necesita
+la API nueva para restaurar los aciertos por nivel: despliega la API antes que
+el juego.
+
 ### Router nuevo en la API
 
 nginx enruta por **lista blanca**:
