@@ -277,7 +277,7 @@ export default function PlayerDetailPage() {
     );
   }
 
-  const { user, total_score, active_slot_number, active_slot_label, typology_progress, achievements, sessions, practice_sessions, notes, tool_stats, level_stats, score_rules } = data;
+  const { user, total_score, active_slot_number, active_slot_label, typology_progress, achievements, sessions, practice_sessions, notes, tool_stats, level_stats, score_rules, game_over } = data;
   const unlockedAchievementIds = achievements.map((a) => a.achievement_id);
 
   // Filtrar catálogo de logros
@@ -335,6 +335,11 @@ export default function PlayerDetailPage() {
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-400 border border-amber-200 dark:border-amber-500/35 animate-pulse">
                     <Key className="w-3 h-3" />
                     Pendiente de cambio
+                  </span>
+                )}
+                {game_over && (
+                  <span className="badge-danger" title="Agotó los intentos de una tipología sin aprobarla">
+                    Juego terminado
                   </span>
                 )}
               </div>
@@ -474,6 +479,12 @@ export default function PlayerDetailPage() {
             const next = TYPOLOGY_ORDER[index + 1];
             const threshold = next ? score_rules.unlock_thresholds[next] : null;
             const pct = Math.min(100, (score / maxScore) * 100);
+            // Se aprueba con el umbral que abre la siguiente; la última, con el
+            // suyo (game_rules.pass_threshold). Sin aprobar y sin intentos, agotada.
+            const passThreshold = next ? score_rules.unlock_thresholds[next] : score_rules.unlock_thresholds[typology];
+            const maxAttempts = score_rules.max_attempts;
+            const attempts = progress?.attempts_used || 0;
+            const agotada = score < passThreshold && attempts >= maxAttempts;
 
             return (
               <div key={typology} className={`p-4 rounded-xl border ${colors.border} ${colors.bg}`}>
@@ -490,10 +501,16 @@ export default function PlayerDetailPage() {
                     {progress?.is_unlocked && (
                       <span className="badge-success text-[10px]">Desbloqueado</span>
                     )}
+                    {agotada && (
+                      <span className="badge-danger text-[10px]">Sin intentos</span>
+                    )}
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-sm font-bold text-slate-800 dark:text-white">{score} pts</span>
                     <span className="text-xs text-slate-500 dark:text-gray-400">{progress?.total_sessions || 0} sesiones</span>
+                    <span className={`text-xs font-semibold ${agotada ? 'text-red-600 dark:text-red-300' : 'text-slate-500 dark:text-gray-400'}`}>
+                      Intentos: {attempts}/{maxAttempts}
+                    </span>
                     {progress?.is_unlocked && progress?.total_sessions > 0 && (
                       <button
                         onClick={() => setResetModal({ type: 'typology', typology })}

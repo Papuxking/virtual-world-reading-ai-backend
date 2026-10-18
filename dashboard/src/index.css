@@ -67,6 +67,9 @@
   .badge-locked {
     @apply badge bg-slate-100 text-slate-500 border border-slate-200 dark:bg-gray-500/20 dark:text-gray-400 dark:border-gray-500/30;
   }
+  .badge-danger {
+    @apply badge bg-red-50 text-red-700 border border-red-200 dark:bg-red-500/20 dark:text-red-300 dark:border-red-500/30;
+  }
 }
 
 /* Custom scrollbar */

@@ -243,6 +243,9 @@ export default function OverviewPage() {
                         {player.character === 'women' ? '👩' : '👨'}
                       </div>
                       <span className="font-semibold text-slate-700 dark:text-gray-200">{player.display_name}</span>
+                      {player.game_over && (
+                        <span className="badge-danger text-[10px]">Juego terminado</span>
+                      )}
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-500 dark:text-gray-400">{player.email}</td>
