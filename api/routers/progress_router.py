@@ -3,7 +3,7 @@ progress_router.py — Endpoints de progreso del jugador.
 Registrar sesiones, logros, notas y consultar progreso completo.
 Todos los endpoints requieren autenticación JWT y se segmentan por el slot activo del jugador.
 """
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -654,7 +654,8 @@ def get_active_reading(
 ):
     """
     Retorna la lectura activa (en progreso) del jugador en su slot activo.
-    Si no hay lectura activa o está expirada, retorna 204 No Content.
+    Si no hay lectura activa, retorna 204 No Content. No caduca: con intentos
+    limitados, perderla le daría al alumno otra lectura gratis.
     Si la lectura referenciada fue eliminada de la BD, limpia automáticamente.
     """
     active_slot = _get_active_slot(db, current_user.id)
@@ -669,12 +670,6 @@ def get_active_reading(
     )
 
     if not record:
-        raise HTTPException(status_code=204)
-
-    # Verificar expiración (24h)
-    if record.expires_at and record.expires_at < datetime.now(timezone.utc):
-        db.delete(record)
-        db.commit()
         raise HTTPException(status_code=204)
 
     # Verificar que la lectura referenciada aún existe en la BD
@@ -697,7 +692,7 @@ def save_active_reading(
     """
     Guarda o actualiza la lectura activa del jugador.
     Usa upsert: si ya existe un registro para este usuario/slot, lo actualiza.
-    Establece expiración automática de 24 horas.
+    No caduca (expires_at queda vacío): se borra al terminar la lectura.
     """
     active_slot = _get_active_slot(db, current_user.id)
     _validate_slot_header(request, active_slot, current_user)
@@ -718,7 +713,6 @@ def save_active_reading(
     )
 
     now = datetime.now(timezone.utc)
-    expires = now + timedelta(hours=24)
 
     if record:
         # Actualizar existente
@@ -731,8 +725,10 @@ def save_active_reading(
         record.results_json = data.results_json
         record.tools_used_json = data.tools_used_json
         record.reading_start_time = data.reading_start_time
+        record.reading_seconds = data.reading_seconds
+        record.total_seconds = data.total_seconds
         record.updated_at = now
-        record.expires_at = expires
+        record.expires_at = None
     else:
         # Crear nuevo
         record = ActiveReading(
@@ -747,7 +743,9 @@ def save_active_reading(
             results_json=data.results_json,
             tools_used_json=data.tools_used_json,
             reading_start_time=data.reading_start_time,
-            expires_at=expires,
+            reading_seconds=data.reading_seconds,
+            total_seconds=data.total_seconds,
+            expires_at=None,
         )
         db.add(record)
 

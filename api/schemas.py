@@ -756,6 +756,9 @@ class ActiveReadingSave(BaseModel):
     results_json: str = "[]"
     tools_used_json: str = '{"highlight":false,"underline":false,"notes":false}'
     reading_start_time: str = "0"
+    # Segundos acumulados hasta este guardado (los clientes antiguos no los mandan).
+    reading_seconds: int = Field(0, ge=0)
+    total_seconds: int = Field(0, ge=0)
 
     class Config:
         json_schema_extra = {
@@ -785,6 +788,8 @@ class ActiveReadingResponse(BaseModel):
     results_json: str
     tools_used_json: str
     reading_start_time: str
+    reading_seconds: int = 0
+    total_seconds: int = 0
     created_at: datetime
     updated_at: datetime
     expires_at: Optional[datetime] = None
