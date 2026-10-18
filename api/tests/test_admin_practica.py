@@ -40,6 +40,7 @@ def test_detalle_incluye_reglas_de_puntaje(client, escenario):
         "typology_order": DIFFICULTY_ORDER,
         "unlock_thresholds": UNLOCK_THRESHOLDS,
         "max_session_score": MAX_SESSION_SCORE,
+        "max_attempts": 5,
     }
 
 

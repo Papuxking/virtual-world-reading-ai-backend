@@ -24,6 +24,7 @@ def test_reglas_de_cuatro_tipologias():
         "typology_order": DIFFICULTY_ORDER,
         "unlock_thresholds": UNLOCK_THRESHOLDS,
         "max_session_score": 300,
+        "max_attempts": 5,
     }
 
 

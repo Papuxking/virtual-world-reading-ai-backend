@@ -38,6 +38,21 @@ UNLOCK_THRESHOLDS = {
 #                                  300
 MAX_SESSION_SCORE = 300
 
+# Lecturas de progresión terminadas que tiene el alumno para aprobar cada
+# tipología. Gastadas sin aprobar, el juego termina: ya no puede avanzar.
+# Espejo de ProgressionManager.MAX_INTENTOS.
+MAX_INTENTOS_POR_TIPOLOGIA = 5
+
+
+def pass_threshold(typology: str) -> int:
+    """Puntaje con el que se aprueba una tipología: el que abre la siguiente.
+    La última no abre nada y usa su propio umbral (espejo de
+    ProgressionManager.get_pass_threshold)."""
+    indice = DIFFICULTY_ORDER.index(typology)
+    if indice + 1 < len(DIFFICULTY_ORDER):
+        return UNLOCK_THRESHOLDS[DIFFICULTY_ORDER[indice + 1]]
+    return UNLOCK_THRESHOLDS[typology]
+
 
 def score_rules() -> dict:
     """Reglas de puntaje tal como las consume el dashboard (copias)."""
@@ -45,4 +60,5 @@ def score_rules() -> dict:
         "typology_order": list(DIFFICULTY_ORDER),
         "unlock_thresholds": dict(UNLOCK_THRESHOLDS),
         "max_session_score": MAX_SESSION_SCORE,
+        "max_attempts": MAX_INTENTOS_POR_TIPOLOGIA,
     }

@@ -6,7 +6,7 @@ aplican sobre la base de datos.
 """
 from sqlalchemy.orm import Session
 
-from game_rules import DIFFICULTY_ORDER, UNLOCK_THRESHOLDS
+from game_rules import DIFFICULTY_ORDER, MAX_INTENTOS_POR_TIPOLOGIA, UNLOCK_THRESHOLDS, pass_threshold
 from models import PlayerTypologyProgress
 
 
@@ -66,3 +66,21 @@ def reevaluate_unlocks(db: Session, user_id: int, slot_id: int, only_unlock: boo
             fila.is_unlocked = True
         elif not only_unlock:
             fila.is_unlocked = False
+
+
+# ── Intentos ─────────────────────────────────────────────────────────────────
+
+def aprobada(fila: PlayerTypologyProgress) -> bool:
+    """¿Superó el alumno esta tipología con su mejor puntaje?"""
+    return fila.best_score >= pass_threshold(fila.typology)
+
+
+def agotada(fila: PlayerTypologyProgress) -> bool:
+    """Sin aprobar y sin intentos: ya no puede empezar otra lectura en ella."""
+    return not aprobada(fila) and (fila.attempts_used or 0) >= MAX_INTENTOS_POR_TIPOLOGIA
+
+
+def juego_terminado(filas) -> bool:
+    """Con una tipología agotada el recorrido se acaba: como se desbloquean en
+    orden, las siguientes ya no se abren."""
+    return any(agotada(f) for f in filas if f.typology in DIFFICULTY_ORDER)

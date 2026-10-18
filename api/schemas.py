@@ -425,6 +425,8 @@ class TypologyProgressResponse(BaseModel):
     total_sessions: int
     perfect_sessions: int
     is_unlocked: bool
+    # Lecturas terminadas que cuentan para el máximo de intentos (game_rules).
+    attempts_used: int = 0
     first_completed_at: Optional[datetime] = None
     last_played_at: Optional[datetime] = None
 
@@ -440,6 +442,10 @@ class PlayerProgressResponse(BaseModel):
     # Sesiones de práctica del slot. No cuentan para nada, pero el juego las usa
     # para saber que el alumno ya ha jugado y no pedirle otra vez el personaje.
     practice_sessions: int = 0
+    # Intentos por tipología y si ya se agotaron en alguna sin aprobarla: con el
+    # juego terminado el alumno sigue entrando, pero no puede avanzar.
+    max_attempts: int = 5
+    game_over: bool = False
     typology_progress: List[TypologyProgressResponse]
     achievements: List[AchievementResponse]
     recent_sessions: List[SessionResponse] = []

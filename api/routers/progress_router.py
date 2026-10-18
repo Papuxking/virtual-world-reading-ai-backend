@@ -23,8 +23,8 @@ from schemas import (
     AchievementFullResponse, NpcInteractionCreate, NpcInteractionResponse,
     ActiveReadingSave, ActiveReadingResponse,
 )
-from game_rules import DIFFICULTY_ORDER
-from progression import ensure_typology_rows, reevaluate_unlocks
+from game_rules import DIFFICULTY_ORDER, MAX_INTENTOS_POR_TIPOLOGIA
+from progression import ensure_typology_rows, juego_terminado, reevaluate_unlocks
 from auth import get_current_user
 
 router = APIRouter(prefix="/progress", tags=["Progreso del Jugador"])
@@ -163,6 +163,8 @@ def get_my_progress(
         active_slot_id=active_slot.id,
         total_score=total_score,
         practice_sessions=practice_sessions or 0,
+        max_attempts=MAX_INTENTOS_POR_TIPOLOGIA,
+        game_over=juego_terminado(typology_rows),
         correct_by_level=_aciertos_por_nivel(db, current_user.id, active_slot.id),
         typology_progress=[
             TypologyProgressResponse.model_validate(tp) for tp in typology_rows
@@ -272,6 +274,8 @@ def _registrar_progreso(db: Session, user_id: int, slot_id: int, data: SessionCr
     # Una tipología que se acaba de jugar está, por definición, abierta.
     progress.is_unlocked = True
     progress.total_sessions += 1
+    # Cada lectura terminada gasta un intento, apruebe o no.
+    progress.attempts_used = (progress.attempts_used or 0) + 1
     progress.best_score = max(progress.best_score, data.session_score)
     progress.last_played_at = ahora
     if progress.first_completed_at is None:
