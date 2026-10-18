@@ -34,6 +34,7 @@ from pathlib import Path
 from sqlalchemy import func as sqlfunc, text
 
 from database import SessionLocal
+from esquema import sentencias_sql
 from game_rules import DIFFICULTY_ORDER
 from import_json_readings import join_paragraphs, normalize_level
 from models import PlayerSlot, PlayerTypologyProgress, Reading
@@ -118,15 +119,6 @@ def validar_lecturas_practica(datos: dict) -> list[str]:
 
 
 # ── Pasos de la migración ────────────────────────────────────────────────────
-
-def sentencias_sql(ruta: Path) -> list[str]:
-    """Sentencias de un fichero .sql, sin las líneas de comentario."""
-    lineas = [
-        linea for linea in ruta.read_text(encoding="utf-8").splitlines()
-        if not linea.strip().startswith("--")
-    ]
-    return [s.strip() for s in "\n".join(lineas).split(";") if s.strip()]
-
 
 def aplicar_columnas(db) -> None:
     for sentencia in sentencias_sql(SQL_COLUMNAS):

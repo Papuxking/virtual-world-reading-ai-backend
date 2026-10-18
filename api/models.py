@@ -313,6 +313,9 @@ class PlayerTypologyProgress(Base):
     total_sessions = Column(Integer, nullable=False, default=0)
     perfect_sessions = Column(Integer, nullable=False, default=0)
     is_unlocked = Column(Boolean, nullable=False, default=False)
+    # Lecturas de progresión terminadas desde la migración 010 (5 como máximo
+    # para aprobar la tipología). Reiniciar la tipología lo devuelve a 0.
+    attempts_used = Column(Integer, nullable=False, default=0, server_default="0")
     first_completed_at = Column(DateTime(timezone=True), nullable=True)
     last_played_at = Column(DateTime(timezone=True), nullable=True)
 
@@ -383,6 +386,10 @@ class ActiveReading(Base):
     results_json = Column(Text, default="[]")
     tools_used_json = Column(Text, default='{"highlight":false,"underline":false,"notes":false}')
     reading_start_time = Column(String(50), default="0")
+    # Segundos acumulados de lectura y de sesión hasta el último guardado: al
+    # reanudar tras cerrar el navegador se sigue sumando desde aquí.
+    reading_seconds = Column(Integer, nullable=False, default=0, server_default="0")
+    total_seconds = Column(Integer, nullable=False, default=0, server_default="0")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     expires_at = Column(DateTime(timezone=True), nullable=True)
