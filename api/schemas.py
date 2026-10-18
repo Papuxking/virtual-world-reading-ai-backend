@@ -470,6 +470,8 @@ class PlayerSummary(BaseModel):
     total_achievements: int = 0
     last_played_at: Optional[datetime] = None
     created_at: datetime
+    # Agotó los intentos de una tipología sin aprobarla (ya no puede avanzar).
+    game_over: bool = False
 
     class Config:
         from_attributes = True

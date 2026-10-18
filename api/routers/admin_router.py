@@ -25,7 +25,7 @@ from schemas import (
     PlayerSlotResponse, PlayerSlotCreate,
 )
 from game_rules import DIFFICULTY_ORDER, score_rules
-from progression import reevaluate_unlocks
+from progression import juego_terminado, reevaluate_unlocks
 from auth import get_current_admin, hash_password
 
 router = APIRouter(prefix="/admin", tags=["Administración"])
@@ -165,6 +165,12 @@ def list_players(
             .filter(sess_filter)
             .scalar()
         )
+        filas_slot = (
+            db.query(PlayerTypologyProgress)
+            .filter(PlayerTypologyProgress.user_id == user.id)
+            .filter(slot_filter)
+            .all()
+        ) if act_slot else []
 
         result.append(PlayerSummary(
             id=user.id,
@@ -178,6 +184,7 @@ def list_players(
             total_achievements=total_achievements or 0,
             last_played_at=last_played,
             created_at=user.created_at,
+            game_over=juego_terminado(filas_slot),
         ))
 
     return result
@@ -284,6 +291,7 @@ def get_player_detail(
         "user": UserResponse.model_validate(user),
         "score_rules": score_rules(),
         "total_score": total_score,
+        "game_over": juego_terminado(typology_progress),
         "active_slot_number": active_slot.slot_number,
         "active_slot_label": active_slot.label,
         "typology_progress": [
@@ -509,6 +517,7 @@ def reset_typology(
             progress.best_score = 0
             progress.total_sessions = 0
             progress.perfect_sessions = 0
+            progress.attempts_used = 0
             progress.first_completed_at = None
             progress.last_played_at = None
             # La primera tipología (Narrativo) siempre queda desbloqueada
