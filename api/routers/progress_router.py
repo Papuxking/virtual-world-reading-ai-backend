@@ -4,7 +4,7 @@ Registrar sesiones, logros, notas y consultar progreso completo.
 Todos los endpoints requieren autenticación JWT y se segmentan por el slot activo del jugador.
 """
 from datetime import datetime, timezone, timedelta
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session, joinedload
@@ -13,7 +13,7 @@ from sqlalchemy import func as sqlfunc
 from database import get_db
 from models import (
     User, PlayerSession, PlayerAnswer, SessionTool,
-    PlayerNote, PlayerTypologyProgress, PlayerAchievement, Reading,
+    PlayerNote, PlayerTypologyProgress, PlayerAchievement, Reading, Question,
     PlayerSlot, AchievementCatalog, NpcInteraction, ActiveReading,
 )
 from schemas import (
@@ -21,10 +21,10 @@ from schemas import (
     AchievementCreate, AchievementResponse, TypologyProgressResponse,
     PlayerProgressResponse, UserResponse,
     AchievementFullResponse, NpcInteractionCreate, NpcInteractionResponse,
-    ActiveReadingSave, ActiveReadingResponse,
+    ActiveReadingSave, ActiveReadingResponse, ReadingFullResponse,
 )
 from game_rules import DIFFICULTY_ORDER, MAX_INTENTOS_POR_TIPOLOGIA
-from progression import ensure_typology_rows, juego_terminado, reevaluate_unlocks
+from progression import agotada, ensure_typology_rows, juego_terminado, reevaluate_unlocks
 from auth import get_current_user
 
 router = APIRouter(prefix="/progress", tags=["Progreso del Jugador"])
@@ -175,6 +175,90 @@ def get_my_progress(
         recent_sessions=[
             SessionResponse.model_validate(s) for s in recent_sessions
         ],
+    )
+
+
+# ── Lectura siguiente ────────────────────────────────────────────────────────
+
+def _elegir_lectura(db: Session, user_id: int, slot_id: int, typology: str) -> Optional[int]:
+    """Lectura de progresión de la tipología que el alumno aún no ha terminado
+    en este slot, al azar. Si ya las terminó todas, la que lleva más tiempo sin
+    leerse. Nunca la que tiene a medias, salvo que no quede otra."""
+    activa = (
+        db.query(ActiveReading.reading_id)
+        .filter(ActiveReading.user_id == user_id, ActiveReading.slot_id == slot_id)
+        .scalar()
+    )
+    candidatas = db.query(Reading.id).filter(Reading.typology == typology, Reading.is_practice == False)
+    if activa is not None:
+        candidatas = candidatas.filter(Reading.id != activa)
+
+    # Última vez que terminó cada lectura de la tipología en este slot.
+    ultima_vez = (
+        db.query(
+            PlayerSession.reading_id.label("reading_id"),
+            sqlfunc.max(PlayerSession.completed_at).label("ultima"),
+        )
+        .filter(
+            PlayerSession.user_id == user_id,
+            PlayerSession.slot_id == slot_id,
+            PlayerSession.typology == typology,
+            PlayerSession.is_practice == False,
+        )
+        .group_by(PlayerSession.reading_id)
+        .subquery()
+    )
+
+    sin_leer = (
+        candidatas.outerjoin(ultima_vez, ultima_vez.c.reading_id == Reading.id)
+        .filter(ultima_vez.c.reading_id.is_(None))
+        .order_by(sqlfunc.random())
+        .first()
+    )
+    if sin_leer:
+        return sin_leer[0]
+
+    mas_antigua = (
+        candidatas.join(ultima_vez, ultima_vez.c.reading_id == Reading.id)
+        .order_by(ultima_vez.c.ultima.asc())
+        .first()
+    )
+    if mas_antigua:
+        return mas_antigua[0]
+    return activa
+
+
+@router.get("/next-reading", response_model=ReadingFullResponse)
+def get_next_reading(
+    request: Request,
+    typology: str = Query(..., description="Tipología de la progresión"),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Lectura de progresión que toca en una tipología: sin repetir las que el
+    alumno ya terminó y nunca si se quedó sin intentos (403 SIN_INTENTOS, no
+    409: el juego trata el 409 como sesión invalidada). La práctica sigue con
+    /readings/random/full."""
+    if typology not in DIFFICULTY_ORDER:
+        raise HTTPException(status_code=400, detail=f"Tipología fuera de la progresión: {typology}")
+
+    active_slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, active_slot, current_user)
+
+    filas = {f.typology: f for f in ensure_typology_rows(db, current_user.id, active_slot.id)}
+    db.commit()
+    if agotada(filas[typology]):
+        raise HTTPException(status_code=403, detail="SIN_INTENTOS")
+
+    reading_id = _elegir_lectura(db, current_user.id, active_slot.id, typology)
+    if reading_id is None:
+        raise HTTPException(status_code=404, detail="No hay lecturas de esta tipología")
+
+    return (
+        db.query(Reading)
+        .options(joinedload(Reading.questions).joinedload(Question.answers))
+        .filter(Reading.id == reading_id)
+        .first()
     )
 
 
