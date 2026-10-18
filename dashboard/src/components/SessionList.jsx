@@ -7,7 +7,7 @@ export default function SessionList({ sessions, emptyText }) {
   const [expanded, setExpanded] = useState(null);
 
   if (sessions.length === 0) {
-    return <p className="text-sm text-slate-400 dark:text-gray-500 py-4 text-center">{emptyText}</p>;
+    return <p className="text-sm text-slate-400 dark:text-gray-400 py-4 text-center">{emptyText}</p>;
   }
 
   return (
@@ -24,7 +24,7 @@ export default function SessionList({ sessions, emptyText }) {
                 <p className="text-sm font-semibold text-slate-700 dark:text-gray-200 truncate max-w-[180px]">
                   {session.reading_title}
                 </p>
-                <p className="text-xs text-slate-400 dark:text-gray-500 font-medium">
+                <p className="text-xs text-slate-400 dark:text-gray-400 font-medium">
                   {session.typology} · {session.completed_at
                     ? new Date(session.completed_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short' })
                     : '—'}
@@ -35,9 +35,9 @@ export default function SessionList({ sessions, emptyText }) {
               <span className="text-sm font-bold text-amber-600 dark:text-amber-400">{session.session_score} pts</span>
               <span className="text-xs text-slate-500 dark:text-gray-400 font-semibold">{session.correct_count}/{session.correct_count + session.incorrect_count}</span>
               {expanded === session.id ? (
-                <ChevronUp className="w-4 h-4 text-slate-400 dark:text-gray-500" />
+                <ChevronUp className="w-4 h-4 text-slate-400 dark:text-gray-400" />
               ) : (
-                <ChevronDown className="w-4 h-4 text-slate-400 dark:text-gray-500" />
+                <ChevronDown className="w-4 h-4 text-slate-400 dark:text-gray-400" />
               )}
             </div>
           </button>
@@ -45,19 +45,19 @@ export default function SessionList({ sessions, emptyText }) {
             <div className="px-3 pb-3 border-t border-slate-200/50 dark:border-white/5 mt-0 pt-3 animate-slide-up bg-slate-50/30 dark:bg-transparent">
               <div className="grid grid-cols-3 gap-2 text-xs mb-3">
                 <div className="text-center">
-                  <p className="text-slate-400 dark:text-gray-500 font-semibold">Lectura</p>
+                  <p className="text-slate-400 dark:text-gray-400 font-semibold">Lectura</p>
                   <p className="text-slate-700 dark:text-gray-300 font-bold">
                     {session.reading_time_seconds ? `${Math.floor(session.reading_time_seconds / 60)}m ${session.reading_time_seconds % 60}s` : '—'}
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-slate-400 dark:text-gray-500 font-semibold">Total</p>
+                  <p className="text-slate-400 dark:text-gray-400 font-semibold">Total</p>
                   <p className="text-slate-700 dark:text-gray-300 font-bold">
                     {session.total_time_seconds ? `${Math.floor(session.total_time_seconds / 60)}m ${session.total_time_seconds % 60}s` : '—'}
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-slate-400 dark:text-gray-500 font-semibold">Bonus</p>
+                  <p className="text-slate-400 dark:text-gray-400 font-semibold">Bonus</p>
                   <p className="text-emerald-600 dark:text-emerald-400 font-bold">+{session.tool_bonus}</p>
                 </div>
               </div>
@@ -70,7 +70,7 @@ export default function SessionList({ sessions, emptyText }) {
                       ) : (
                         <XCircle className="w-3.5 h-3.5 text-red-500 dark:text-red-400 flex-shrink-0" />
                       )}
-                      <span className="text-slate-400 dark:text-gray-500 font-semibold">{a.comprehension_level}</span>
+                      <span className="text-slate-400 dark:text-gray-400 font-semibold">{a.comprehension_level}</span>
                       <span className="text-slate-700 dark:text-gray-300 font-medium">
                         {a.selected_answer}{a.is_correct ? '' : ` (→${a.correct_answer})`}
                       </span>

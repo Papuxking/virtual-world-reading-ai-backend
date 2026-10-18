@@ -219,9 +219,9 @@ export default function AchievementDetailPage() {
               <div className="w-8 h-8 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
             ) : (
               <>
-                <Upload className="w-8 h-8 text-slate-400 dark:text-gray-500" />
+                <Upload className="w-8 h-8 text-slate-400 dark:text-gray-400" />
                 <p className="text-sm font-medium text-slate-600 dark:text-gray-300">Subir nueva imagen</p>
-                <p className="text-xs text-slate-400 dark:text-gray-500">PNG, JPG, WebP… se redimensiona a 256×256 auto</p>
+                <p className="text-xs text-slate-400 dark:text-gray-400">PNG, JPG, WebP… se redimensiona a 256×256 auto</p>
               </>
             )}
           </div>
@@ -255,13 +255,13 @@ export default function AchievementDetailPage() {
                       <p className="text-xs font-medium text-slate-600 dark:text-gray-300 truncate">
                         {hist.original_filename || 'imagen.png'}
                       </p>
-                      <p className="text-[10px] text-slate-400 dark:text-gray-500">
+                      <p className="text-[10px] text-slate-400 dark:text-gray-400">
                         {new Date(hist.uploaded_at).toLocaleDateString('es-EC', {
                           day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
                         })}
                       </p>
                       {hist.uploader_name && (
-                        <p className="text-[10px] text-slate-400 dark:text-gray-500">
+                        <p className="text-[10px] text-slate-400 dark:text-gray-400">
                           por {hist.uploader_name}
                         </p>
                       )}
@@ -360,7 +360,7 @@ export default function AchievementDetailPage() {
 
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <div className="relative flex-1 sm:w-64">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-400" />
                   <input
                     type="text"
                     value={searchPlayers}
@@ -450,7 +450,7 @@ export default function AchievementDetailPage() {
                   ))}
                   {filteredPlayers.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="px-6 py-12 text-center text-slate-400 dark:text-gray-500">
+                      <td colSpan={4} className="px-6 py-12 text-center text-slate-400 dark:text-gray-400">
                         <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
                         Ningún jugador ha desbloqueado este logro
                       </td>
@@ -471,7 +471,7 @@ function InfoRow({ icon, label, value }) {
     <div className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/[0.02] border border-slate-100 dark:border-white/5">
       <div className="flex items-center gap-1.5 mb-1">
         <span className="text-primary-500 dark:text-primary-400">{icon}</span>
-        <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-gray-500">{label}</span>
+        <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-gray-400">{label}</span>
       </div>
       <p className="text-sm text-slate-700 dark:text-gray-300">{value}</p>
     </div>

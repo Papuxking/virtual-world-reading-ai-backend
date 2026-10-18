@@ -202,7 +202,7 @@ export default function OverviewPage() {
             Jugadores
           </h3>
           <div className="relative max-w-sm w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-400" />
             <input
               type="text"
               value={search}
@@ -266,13 +266,13 @@ export default function OverviewPage() {
                       : 'Nunca'}
                   </td>
                   <td className="px-6 py-4">
-                    <ChevronRight className="w-4 h-4 text-slate-400 dark:text-gray-500" />
+                    <ChevronRight className="w-4 h-4 text-slate-400 dark:text-gray-400" />
                   </td>
                 </tr>
               ))}
               {filteredPlayers.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-slate-400 dark:text-gray-500">
+                  <td colSpan={7} className="px-6 py-12 text-center text-slate-400 dark:text-gray-400">
                     No se encontraron jugadores
                   </td>
                 </tr>

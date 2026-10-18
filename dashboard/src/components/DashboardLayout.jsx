@@ -102,7 +102,7 @@ function SidebarContent({ user, theme, setTheme, handleLogout, onLinkClick }) {
           </div>
           <div>
             <h1 className="text-sm font-bold text-slate-800 dark:text-white leading-tight">Mundo Virtual</h1>
-            <p className="text-xs text-slate-400 dark:text-gray-500">Dashboard Admin</p>
+            <p className="text-xs text-slate-400 dark:text-gray-400">Dashboard Admin</p>
           </div>
         </div>
       </div>
@@ -156,7 +156,7 @@ function SidebarContent({ user, theme, setTheme, handleLogout, onLinkClick }) {
 
       {/* Theme Toggle */}
       <div className="px-4 py-4 border-t border-slate-200 dark:border-white/5">
-        <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-gray-500 mb-2 px-2">Tema</p>
+        <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-gray-400 mb-2 px-2">Tema</p>
         <div className="flex p-1 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200/50 dark:border-white/5 transition-all duration-300">
           <button
             onClick={() => setTheme('light')}
@@ -191,7 +191,7 @@ function SidebarContent({ user, theme, setTheme, handleLogout, onLinkClick }) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-slate-700 dark:text-gray-200 truncate">{user?.display_name || 'Admin'}</p>
-            <p className="text-xs text-slate-400 dark:text-gray-500 truncate">{user?.email}</p>
+            <p className="text-xs text-slate-400 dark:text-gray-400 truncate">{user?.email}</p>
           </div>
         </div>
         <button

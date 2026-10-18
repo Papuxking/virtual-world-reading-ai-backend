@@ -242,7 +242,7 @@ export default function MetricsPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center h-64 gap-3">
           <div className="w-8 h-8 border-3 border-primary-500/30 border-t-primary-500 rounded-full animate-spin" />
-          <p className="text-sm text-slate-400 dark:text-gray-500">Cargando métricas...</p>
+          <p className="text-sm text-slate-400 dark:text-gray-400">Cargando métricas...</p>
         </div>
       ) : error ? (
         <div className="glass-card p-12 text-center animate-fade-in">
@@ -269,7 +269,7 @@ export default function MetricsPage() {
         <div className="glass-card p-12 text-center">
           <BarChart3 className="w-12 h-12 text-slate-300 dark:text-gray-600 mx-auto mb-4" />
           <h3 className="text-lg font-bold text-slate-600 dark:text-gray-300 mb-2">Sin datos disponibles</h3>
-          <p className="text-sm text-slate-400 dark:text-gray-500">
+          <p className="text-sm text-slate-400 dark:text-gray-400">
             No se encontraron datos para los filtros seleccionados. Intenta ajustar los filtros o verifica que haya sesiones registradas.
           </p>
         </div>
@@ -520,7 +520,7 @@ function QuestionAttemptsPanel({ data }) {
             ))}
             {questions.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-12 text-center text-slate-400 dark:text-gray-500">
+                <td colSpan={6} className="px-4 py-12 text-center text-slate-400 dark:text-gray-400">
                   No hay datos de intentos disponibles
                 </td>
               </tr>
@@ -673,7 +673,7 @@ function ToolUsagePanel({ data, tooltipStyle }) {
                         style={{ width: `${t.usage_rate || 0}%`, backgroundColor: TOOL_COLORS[i] || '#6366f1' }}
                       />
                     </div>
-                    <p className="text-xs text-slate-400 dark:text-gray-500 mt-1">{t.times_used || 0} usos en {t.total_sessions || 0} sesiones</p>
+                    <p className="text-xs text-slate-400 dark:text-gray-400 mt-1">{t.times_used || 0} usos en {t.total_sessions || 0} sesiones</p>
                   </div>
                 </div>
               ))}
@@ -706,7 +706,7 @@ function EmptyState({ message }) {
   return (
     <div className="flex flex-col items-center justify-center h-48 text-center">
       <BarChart3 className="w-8 h-8 text-slate-200 dark:text-gray-700 mb-3" />
-      <p className="text-sm text-slate-400 dark:text-gray-500">{message}</p>
+      <p className="text-sm text-slate-400 dark:text-gray-400">{message}</p>
     </div>
   );
 }

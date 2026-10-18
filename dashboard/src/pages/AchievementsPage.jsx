@@ -322,7 +322,7 @@ export default function AchievementsPage() {
               </div>
             ))}
             {topData.length === 0 && (
-              <p className="text-xs text-slate-400 dark:text-gray-500 text-center py-8">Sin datos de desbloqueos</p>
+              <p className="text-xs text-slate-400 dark:text-gray-400 text-center py-8">Sin datos de desbloqueos</p>
             )}
           </div>
         </div>
@@ -340,7 +340,7 @@ export default function AchievementsPage() {
 
             {/* Search */}
             <div className="relative flex-1 max-w-sm w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-400" />
               <input
                 type="text"
                 onChange={(e) => handleSearch(e.target.value)}
@@ -477,7 +477,7 @@ export default function AchievementsPage() {
                   {/* Name & Description */}
                   <td className="px-6 py-4 max-w-[250px]">
                     <p className="font-semibold text-slate-700 dark:text-gray-200 truncate">{ach.name}</p>
-                    <p className="text-xs text-slate-400 dark:text-gray-500 truncate mt-0.5">{ach.medal_name}</p>
+                    <p className="text-xs text-slate-400 dark:text-gray-400 truncate mt-0.5">{ach.medal_name}</p>
                   </td>
 
                   {/* Category */}
@@ -529,13 +529,13 @@ export default function AchievementsPage() {
                   )}
 
                   <td className="px-6 py-4">
-                    <ChevronRight className="w-4 h-4 text-slate-400 dark:text-gray-500" />
+                    <ChevronRight className="w-4 h-4 text-slate-400 dark:text-gray-400" />
                   </td>
                 </tr>
               ))}
               {achievements.length === 0 && (
                 <tr>
-                  <td colSpan={filterPlayerId ? 7 : 6} className="px-6 py-16 text-center text-slate-400 dark:text-gray-500">
+                  <td colSpan={filterPlayerId ? 7 : 6} className="px-6 py-16 text-center text-slate-400 dark:text-gray-400">
                     <Trophy className="w-8 h-8 mx-auto mb-2 opacity-30" />
                     No se encontraron logros con los filtros seleccionados
                   </td>

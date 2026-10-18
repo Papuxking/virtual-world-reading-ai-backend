@@ -103,7 +103,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-gray-500 text-xs mt-6">
+          <p className="text-center text-gray-400 text-xs mt-6">
             Solo usuarios con rol de administrador pueden acceder
           </p>
         </div>

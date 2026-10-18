@@ -358,7 +358,7 @@ export default function PlayerDetailPage() {
           </div>
         </div>
         <div className="text-left sm:text-right px-2 sm:px-0">
-          <p className="text-xs text-slate-400 dark:text-gray-500 uppercase font-semibold">Registrado</p>
+          <p className="text-xs text-slate-400 dark:text-gray-400 uppercase font-semibold">Registrado</p>
           <p className="text-sm font-semibold text-slate-700 dark:text-gray-300">{new Date(user.created_at).toLocaleDateString('es-EC')}</p>
         </div>
       </div>
@@ -427,7 +427,7 @@ export default function PlayerDetailPage() {
                 >
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-slate-400 dark:text-gray-500">Slot {slot.slot_number}</span>
+                      <span className="text-xs font-bold text-slate-400 dark:text-gray-400">Slot {slot.slot_number}</span>
                       {isActive ? (
                         <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30">
                           ✅ Activo
@@ -446,7 +446,7 @@ export default function PlayerDetailPage() {
                     </div>
                   </div>
                   <div className="mt-3 pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
-                    <span className="text-[10px] text-slate-400 dark:text-gray-500 font-semibold">
+                    <span className="text-[10px] text-slate-400 dark:text-gray-400 font-semibold">
                       {slot.created_at ? new Date(slot.created_at).toLocaleDateString('es-EC') : '—'}
                     </span>
                     {!isActive && (
@@ -493,9 +493,9 @@ export default function PlayerDetailPage() {
                     {progress?.is_unlocked ? (
                       <Unlock className={`w-4 h-4 ${colors.text}`} />
                     ) : (
-                      <Lock className="w-4 h-4 text-slate-400 dark:text-gray-500" />
+                      <Lock className="w-4 h-4 text-slate-400 dark:text-gray-400" />
                     )}
-                    <span className={`font-semibold ${progress?.is_unlocked ? colors.text : 'text-slate-400 dark:text-gray-500'}`}>
+                    <span className={`font-semibold ${progress?.is_unlocked ? colors.text : 'text-slate-400 dark:text-gray-400'}`}>
                       {typology}
                     </span>
                     {progress?.is_unlocked && (
@@ -514,7 +514,7 @@ export default function PlayerDetailPage() {
                     {progress?.is_unlocked && progress?.total_sessions > 0 && (
                       <button
                         onClick={() => setResetModal({ type: 'typology', typology })}
-                        className="text-xs text-slate-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-400 transition-colors flex items-center gap-1 font-semibold"
+                        className="text-xs text-slate-400 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors flex items-center gap-1 font-semibold"
                         title="Reiniciar esta tipología y las superiores"
                       >
                         <RotateCcw className="w-3 h-3" />
@@ -530,11 +530,11 @@ export default function PlayerDetailPage() {
                   />
                 </div>
                 <div className="flex justify-between mt-1">
-                  <span className="text-[10px] text-slate-400 dark:text-gray-500 font-semibold">0</span>
+                  <span className="text-[10px] text-slate-400 dark:text-gray-400 font-semibold">0</span>
                   {threshold !== null && (
-                    <span className="text-[10px] text-slate-400 dark:text-gray-500 font-semibold">Umbral: {threshold}</span>
+                    <span className="text-[10px] text-slate-400 dark:text-gray-400 font-semibold">Umbral: {threshold}</span>
                   )}
-                  <span className="text-[10px] text-slate-400 dark:text-gray-500 font-semibold">{maxScore}</span>
+                  <span className="text-[10px] text-slate-400 dark:text-gray-400 font-semibold">{maxScore}</span>
                 </div>
               </div>
             );
@@ -563,7 +563,7 @@ export default function PlayerDetailPage() {
               <Sparkles className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
               Práctica ({active_slot_label})
             </h3>
-            <p className="text-xs text-slate-400 dark:text-gray-500 mb-4">
+            <p className="text-xs text-slate-400 dark:text-gray-400 mb-4">
               Lecturas de la zona de práctica. No cuentan para el puntaje, los desbloqueos, los logros ni las métricas.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
@@ -638,10 +638,10 @@ export default function PlayerDetailPage() {
                       <div className="flex items-center gap-3 min-w-0">
                         <span className="text-xl flex-shrink-0">{achievement.icon}</span>
                         <div className="min-w-0">
-                          <h4 className={`text-xs font-bold truncate ${unlocked ? 'text-slate-800 dark:text-white' : 'text-slate-500'}`}>
+                          <h4 className={`text-xs font-bold truncate ${unlocked ? 'text-slate-800 dark:text-white' : 'text-slate-500 dark:text-gray-400'}`}>
                             {achievement.name}
                           </h4>
-                          <p className="text-[10px] text-slate-400 dark:text-gray-500 font-semibold line-clamp-1">
+                          <p className="text-[10px] text-slate-400 dark:text-gray-400 font-semibold line-clamp-1">
                             {achievement.description}
                           </p>
                         </div>
@@ -653,7 +653,7 @@ export default function PlayerDetailPage() {
                             <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                               <CheckCircle2 className="w-3 h-3" /> Desbloqueado
                             </span>
-                            <span className="text-[8px] text-slate-400 dark:text-gray-500">
+                            <span className="text-[8px] text-slate-400 dark:text-gray-400">
                               {unlockRecord?.unlocked_at ? new Date(unlockRecord.unlocked_at).toLocaleDateString('es-EC') : '—'}
                             </span>
                           </div>
@@ -678,7 +678,7 @@ export default function PlayerDetailPage() {
                 Medallas Coleccionadas ({active_slot_label})
               </h3>
               <p className="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
-                Coleccionadas: <span className="font-extrabold text-primary-500">{achievements.length}/10</span> cromos/medallas
+                Coleccionadas: <span className="font-extrabold text-primary-500 dark:text-primary-400">{achievements.length}/10</span> cromos/medallas
               </p>
             </div>
 
@@ -720,10 +720,10 @@ export default function PlayerDetailPage() {
                           </div>
                         ) : (
                           <div className={`w-16 h-16 rounded-xl flex flex-col items-center justify-center border border-dashed shadow-sm relative overflow-hidden ${
-                            unlocked ? 'border-white/60' : 'border-slate-300 dark:border-gray-700'
-                          }`} style={{ backgroundColor: unlocked ? tierStyles.medalBg.replace('bg-[', '').replace(']', '') : '#f1f5f9' }}>
+                            unlocked ? 'border-white/60' : 'border-slate-300 dark:border-gray-700 bg-slate-100 dark:bg-white/5'
+                          }`} style={unlocked ? { backgroundColor: tierStyles.medalBg.replace('bg-[', '').replace(']', '') } : undefined}>
                             <span className="text-2xl filter drop-shadow-sm">{unlocked ? achievement.icon : '?'}</span>
-                            <span className="text-[6px] font-extrabold uppercase tracking-wider text-slate-600 dark:text-gray-300 absolute bottom-0.5" style={{ color: unlocked ? '#ffffff' : '#94a3b8' }}>
+                            <span className={`text-[6px] font-extrabold uppercase tracking-wider absolute bottom-0.5 ${unlocked ? 'text-slate-800' : 'text-slate-400 dark:text-gray-400'}`}>
                               {achievement.medal_tier}
                             </span>
                             {/* Admin Upload file input */}
@@ -763,14 +763,14 @@ export default function PlayerDetailPage() {
               Uso de Herramientas ({active_slot_label})
             </h3>
             {tool_stats.length === 0 ? (
-              <p className="text-sm text-slate-400 dark:text-gray-500">Sin datos de herramientas</p>
+              <p className="text-sm text-slate-400 dark:text-gray-400">Sin datos de herramientas</p>
             ) : (
               <div className="space-y-3">
                 {tool_stats.map((tool) => {
                   const Icon = TOOL_ICONS[tool.tool_name] || PenTool;
                   return (
                     <div key={tool.tool_name} className="flex items-center gap-3">
-                      <Icon className="w-4 h-4 text-slate-400 dark:text-gray-500" />
+                      <Icon className="w-4 h-4 text-slate-400 dark:text-gray-400" />
                       <span className="text-sm font-semibold text-slate-700 dark:text-gray-300 w-20">{TOOL_LABELS[tool.tool_name] || tool.tool_name}</span>
                       <div className="flex-1 bg-slate-100 dark:bg-white/5 rounded-full h-2">
                         <div
@@ -816,8 +816,8 @@ export default function PlayerDetailPage() {
                     <span>{typology}</span>
                     <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-extrabold ${
                       isSelected
-                        ? 'bg-white/60 dark:bg-white/10'
-                        : 'bg-slate-100 dark:bg-white/5 text-slate-400 dark:text-gray-500'
+                        ? 'bg-white/60 dark:bg-white/10 dark:text-white'
+                        : 'bg-slate-100 dark:bg-white/5 text-slate-400 dark:text-gray-400'
                     }`}>
                       {readingsForTypo.length}
                     </span>
@@ -831,7 +831,7 @@ export default function PlayerDetailPage() {
               <div className="flex flex-col items-center justify-center py-8 text-center bg-slate-50/50 dark:bg-white/[0.01] border border-dashed border-slate-200 dark:border-white/5 rounded-xl">
                 <BookOpen className="w-8 h-8 text-slate-300 dark:text-gray-600 mb-2" />
                 <p className="text-xs font-bold text-slate-500 dark:text-gray-400">Sin lecturas presentadas</p>
-                <p className="text-[10px] text-slate-400 dark:text-gray-500 max-w-[200px] mt-1 leading-normal">
+                <p className="text-[10px] text-slate-400 dark:text-gray-400 max-w-[200px] mt-1 leading-normal">
                   El estudiante aún no ha abierto ninguna lectura{' '}
                   {selectedNotesTypology === PRACTICE_GROUP ? (
                     'de práctica'
@@ -861,7 +861,7 @@ export default function PlayerDetailPage() {
                         className="w-full p-2.5 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
                       >
                         <div className="flex items-center gap-2 text-left min-w-0">
-                          <BookOpen className={`w-4 h-4 flex-shrink-0 ${isExpanded ? 'text-primary-500' : 'text-slate-400 dark:text-gray-500'}`} />
+                          <BookOpen className={`w-4 h-4 flex-shrink-0 ${isExpanded ? 'text-primary-500' : 'text-slate-400 dark:text-gray-400'}`} />
                           <span className="text-xs font-semibold text-slate-700 dark:text-gray-200 truncate max-w-[150px] sm:max-w-[180px]">
                             {reading.title}
                           </span>
@@ -870,14 +870,14 @@ export default function PlayerDetailPage() {
                           <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
                             readingNotes.length > 0
                               ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-500/20'
-                              : 'bg-slate-100 dark:bg-white/5 text-slate-400 dark:text-gray-500'
+                              : 'bg-slate-100 dark:bg-white/5 text-slate-400 dark:text-gray-400'
                           }`}>
                             {readingNotes.length === 0 ? 'Sin notas' : `${readingNotes.length} ${readingNotes.length === 1 ? 'nota' : 'notas'}`}
                           </span>
                           {isExpanded ? (
-                            <ChevronUp className="w-3.5 h-3.5 text-slate-400 dark:text-gray-500" />
+                            <ChevronUp className="w-3.5 h-3.5 text-slate-400 dark:text-gray-400" />
                           ) : (
-                            <ChevronDown className="w-3.5 h-3.5 text-slate-400 dark:text-gray-500" />
+                            <ChevronDown className="w-3.5 h-3.5 text-slate-400 dark:text-gray-400" />
                           )}
                         </div>
                       </button>
@@ -897,7 +897,7 @@ export default function PlayerDetailPage() {
                                   <span className="px-1.5 py-0.5 rounded text-[8px] font-extrabold bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20">
                                     {note.note_type}
                                   </span>
-                                  <span className="text-[9px] text-slate-400 dark:text-gray-500 font-semibold">
+                                  <span className="text-[9px] text-slate-400 dark:text-gray-400 font-semibold">
                                     {note.created_at ? new Date(note.created_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}
                                   </span>
                                 </div>
@@ -926,7 +926,7 @@ export default function PlayerDetailPage() {
               <AlertTriangle className="w-4 h-4 animate-bounce" />
               Zona de Peligro (Borrado Real de Datos)
             </h3>
-            <p className="text-xs text-slate-500 dark:text-gray-500 mt-1">
+            <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
               Las opciones de borrado definitivo se mantienen disponibles para el administrador. Se aplicarán exclusivamente al slot activo ({active_slot_label}).
             </p>
           </div>
