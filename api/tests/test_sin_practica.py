@@ -7,7 +7,7 @@ from sqlalchemy import text
 import main
 from database import engine
 from esquema import aplicar_migraciones
-from helpers import cabeceras, crear_lectura, crear_usuario, payload_sesion
+from helpers import cabeceras, crear_lectura, crear_usuario, entorno_activo_de_prueba, payload_sesion
 from models import (
     ActiveReading, Answer, NpcInteraction, PlayerAnswer, PlayerNote, PlayerSession,
     Question, Reading, UserReading,
@@ -107,11 +107,17 @@ def test_la_api_ya_no_habla_de_practica(client, db):
     admin, _ = crear_usuario(db, "admin@test.com", admin=True)
     lectura = crear_lectura(db, "Única", "Narrativo")
 
-    assert "practice_sessions" not in client.get("/progress/me", headers=cabeceras(usuario)).json()
-    jugadores = client.get("/admin/players", headers=cabeceras(admin)).json()
+    h = cabeceras(admin, entorno_activo_de_prueba(db))
+    respuestas = {
+        ruta: client.get(ruta, headers=cabeceras(usuario) if ruta.startswith("/progress") else h)
+        for ruta in ("/progress/me", "/admin/players", f"/admin/players/{usuario.id}", "/admin/stats")
+    }
+    assert {ruta: r.status_code for ruta, r in respuestas.items()} == {ruta: 200 for ruta in respuestas}
+    assert "practice_sessions" not in respuestas["/progress/me"].json()
+    jugadores = respuestas["/admin/players"].json()
     assert jugadores and all("practice_sessions" not in j for j in jugadores)
-    assert "practice_sessions" not in client.get(f"/admin/players/{usuario.id}", headers=cabeceras(admin)).json()
-    assert "total_practice_sessions" not in client.get("/admin/stats", headers=cabeceras(admin)).json()
+    assert "practice_sessions" not in respuestas[f"/admin/players/{usuario.id}"].json()
+    assert "total_practice_sessions" not in respuestas["/admin/stats"].json()
 
     r = client.get("/readings/random/full", params={"typology": "Narrativo", "practice": "true"})
     assert r.status_code == 200

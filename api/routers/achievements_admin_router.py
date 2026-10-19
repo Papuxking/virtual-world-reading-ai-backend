@@ -18,6 +18,7 @@ from sqlalchemy import func as sqlfunc, Integer, distinct
 from database import get_db
 from models import (
     User, PlayerAchievement, AchievementCatalog, MedalImageHistory, PlayerSlot,
+    Workspace,
 )
 from schemas import (
     AchievementDashboardItem, AchievementDetailResponse,
@@ -25,6 +26,7 @@ from schemas import (
     MedalImageHistoryResponse,
 )
 from auth import get_current_admin
+from workspaces import get_viewed_workspace, ids_jugadores
 
 router = APIRouter(prefix="/admin/achievements", tags=["Admin — Logros y Medallas"])
 
@@ -57,22 +59,24 @@ def resize_image_to_256(data: bytes) -> bytes:
     return output.getvalue()
 
 
-def _get_total_non_admin_players(db: Session) -> int:
-    """Retorna el número total de jugadores (no-admin) con al menos un slot activo."""
+def _get_total_non_admin_players(db: Session, workspace_id: int) -> int:
+    """Retorna el número de jugadores activos del entorno."""
     return (
         db.query(sqlfunc.count(distinct(User.id)))
-        .filter(User.is_admin == False, User.is_active == True)
+        .filter(User.is_admin == False, User.is_active == True, User.workspace_id == workspace_id)
         .scalar()
     ) or 1  # Evitar divisiones por cero
 
 
-def _get_unlock_counts(db: Session) -> dict:
-    """Retorna un dict {achievement_id: count} con el número de desbloqueos únicos por logro."""
+def _get_unlock_counts(db: Session, workspace_id: int) -> dict:
+    """Retorna un dict {achievement_id: count} con el número de desbloqueos
+    únicos por logro entre los jugadores del entorno."""
     rows = (
         db.query(
             PlayerAchievement.achievement_id,
             sqlfunc.count(distinct(PlayerAchievement.user_id)).label("count"),
         )
+        .filter(PlayerAchievement.user_id.in_(ids_jugadores(workspace_id)))
         .group_by(PlayerAchievement.achievement_id)
         .all()
     )
@@ -92,6 +96,7 @@ def list_achievements_dashboard(
     order: str = Query("asc", description="asc o desc"),
     include_inactive: bool = Query(False, description="Incluir logros inactivos"),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Lista todos los logros/medallas con filtros avanzados y estadísticas de desbloqueo."""
@@ -121,8 +126,8 @@ def list_achievements_dashboard(
     achievements = query.all()
 
     # Estadísticas de desbloqueo
-    total_players = _get_total_non_admin_players(db)
-    unlock_counts = _get_unlock_counts(db)
+    total_players = _get_total_non_admin_players(db, entorno.id)
+    unlock_counts = _get_unlock_counts(db, entorno.id)
 
     # Si hay filtro por jugador, obtener sus logros desbloqueados
     player_unlocks = {}
@@ -198,6 +203,7 @@ def list_achievements_dashboard(
 @router.get("/stats", response_model=AchievementStatsResponse)
 def get_achievements_stats(
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Retorna estadísticas globales de logros y medallas."""
@@ -207,13 +213,14 @@ def get_achievements_stats(
         .filter(AchievementCatalog.is_active == True)
         .scalar()
     ) or 0
-    total_unlocks = db.query(sqlfunc.count(PlayerAchievement.id)).scalar() or 0
+    del_entorno = PlayerAchievement.user_id.in_(ids_jugadores(entorno.id))
+    total_unlocks = db.query(sqlfunc.count(PlayerAchievement.id)).filter(del_entorno).scalar() or 0
     unique_players = (
-        db.query(sqlfunc.count(distinct(PlayerAchievement.user_id))).scalar()
+        db.query(sqlfunc.count(distinct(PlayerAchievement.user_id))).filter(del_entorno).scalar()
     ) or 0
 
-    total_players = _get_total_non_admin_players(db)
-    unlock_counts = _get_unlock_counts(db)
+    total_players = _get_total_non_admin_players(db, entorno.id)
+    unlock_counts = _get_unlock_counts(db, entorno.id)
 
     # % de desbloqueo promedio
     if total_active > 0 and total_players > 0:
@@ -275,6 +282,7 @@ def get_achievements_stats(
 def get_achievement_detail(
     achievement_id: str,
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Retorna el detalle completo de un logro/medalla."""
@@ -287,14 +295,14 @@ def get_achievement_detail(
     if not achievement:
         raise HTTPException(status_code=404, detail="Logro no encontrado")
 
-    total_players = _get_total_non_admin_players(db)
+    total_players = _get_total_non_admin_players(db, entorno.id)
 
     # Jugadores que poseen el logro
     player_achievements = (
         db.query(PlayerAchievement, User, PlayerSlot)
         .join(User, PlayerAchievement.user_id == User.id)
         .join(PlayerSlot, PlayerAchievement.slot_id == PlayerSlot.id)
-        .filter(PlayerAchievement.achievement_id == achievement_id)
+        .filter(PlayerAchievement.achievement_id == achievement_id, User.workspace_id == entorno.id)
         .order_by(PlayerAchievement.unlocked_at.desc())
         .all()
     )
@@ -369,6 +377,7 @@ def get_achievement_players(
     achievement_id: str,
     q: str = Query("", description="Buscar por nombre o email"),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Lista los jugadores que poseen un logro específico."""
@@ -380,7 +389,7 @@ def get_achievement_players(
         db.query(PlayerAchievement, User, PlayerSlot)
         .join(User, PlayerAchievement.user_id == User.id)
         .join(PlayerSlot, PlayerAchievement.slot_id == PlayerSlot.id)
-        .filter(PlayerAchievement.achievement_id == achievement_id)
+        .filter(PlayerAchievement.achievement_id == achievement_id, User.workspace_id == entorno.id)
     )
 
     if q:
@@ -669,6 +678,7 @@ def export_achievements_csv(
     category: Optional[str] = Query(None),
     tier: Optional[str] = Query(None),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Exporta todos los logros y medallas en formato CSV."""
@@ -679,8 +689,8 @@ def export_achievements_csv(
         query = query.filter(AchievementCatalog.medal_tier == tier)
 
     achievements = query.order_by(AchievementCatalog.display_order).all()
-    total_players = _get_total_non_admin_players(db)
-    unlock_counts = _get_unlock_counts(db)
+    total_players = _get_total_non_admin_players(db, entorno.id)
+    unlock_counts = _get_unlock_counts(db, entorno.id)
 
     output = io.StringIO()
     writer = csv.writer(output)
@@ -714,6 +724,7 @@ def export_achievements_excel(
     category: Optional[str] = Query(None),
     tier: Optional[str] = Query(None),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Exporta todos los logros y medallas en formato Excel (.xlsx)."""
@@ -733,8 +744,8 @@ def export_achievements_excel(
         query = query.filter(AchievementCatalog.medal_tier == tier)
 
     achievements = query.order_by(AchievementCatalog.display_order).all()
-    total_players = _get_total_non_admin_players(db)
-    unlock_counts = _get_unlock_counts(db)
+    total_players = _get_total_non_admin_players(db, entorno.id)
+    unlock_counts = _get_unlock_counts(db, entorno.id)
 
     wb = Workbook()
     ws = wb.active
@@ -802,6 +813,7 @@ def export_achievements_excel(
 def export_achievement_players_csv(
     achievement_id: str,
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Exporta la lista de jugadores que poseen un logro en formato CSV."""
@@ -813,7 +825,7 @@ def export_achievement_players_csv(
         db.query(PlayerAchievement, User, PlayerSlot)
         .join(User, PlayerAchievement.user_id == User.id)
         .join(PlayerSlot, PlayerAchievement.slot_id == PlayerSlot.id)
-        .filter(PlayerAchievement.achievement_id == achievement_id)
+        .filter(PlayerAchievement.achievement_id == achievement_id, User.workspace_id == entorno.id)
         .order_by(PlayerAchievement.unlocked_at.desc())
         .all()
     )
@@ -845,6 +857,7 @@ def export_achievement_players_csv(
 def export_achievement_players_excel(
     achievement_id: str,
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Exporta la lista de jugadores que poseen un logro en formato Excel."""
@@ -862,7 +875,7 @@ def export_achievement_players_excel(
         db.query(PlayerAchievement, User, PlayerSlot)
         .join(User, PlayerAchievement.user_id == User.id)
         .join(PlayerSlot, PlayerAchievement.slot_id == PlayerSlot.id)
-        .filter(PlayerAchievement.achievement_id == achievement_id)
+        .filter(PlayerAchievement.achievement_id == achievement_id, User.workspace_id == entorno.id)
         .order_by(PlayerAchievement.unlocked_at.desc())
         .all()
     )

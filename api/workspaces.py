@@ -8,9 +8,12 @@ import secrets
 import string
 from typing import Optional
 
+from fastapi import Depends, Header, HTTPException, status
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from auth import hash_password
+from database import get_db
 from game_rules import DIFFICULTY_ORDER
 from models import PlayerSlot, PlayerTypologyProgress, User, Workspace
 
@@ -76,3 +79,25 @@ def crear_jugador(
         ))
     db.flush()
     return usuario
+
+
+def get_viewed_workspace(
+    x_workspace_id: Optional[str] = Header(None),
+    db: Session = Depends(get_db),
+) -> Workspace:
+    """El entorno que mira el dashboard (cabecera X-Workspace-Id). Lo exigen los
+    endpoints de administración que listan o agregan datos de jugadores."""
+    try:
+        workspace_id = int(x_workspace_id)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="WORKSPACE_REQUIRED")
+    entorno = db.get(Workspace, workspace_id)
+    if entorno is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="WORKSPACE_NOT_FOUND")
+    return entorno
+
+
+def ids_jugadores(workspace_id: int):
+    """Consulta con los ids de las cuentas de jugador del entorno, para filtrar
+    con .in_()."""
+    return select(User.id).where(User.workspace_id == workspace_id, User.is_admin == False)  # noqa: E712

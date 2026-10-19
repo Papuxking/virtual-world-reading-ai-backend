@@ -223,6 +223,15 @@ El mismo correo puede tener una cuenta en cada entorno.
 
 Paleta: `#059669`, `#d97706`, `#2563eb`, `#7c3aed`, `#db2777`, `#0891b2`.
 
+**Entorno que se ve en el dashboard:** los endpoints de administración que listan
+o agregan datos de jugadores exigen la cabecera `X-Workspace-Id` y solo devuelven
+lo de ese entorno: `GET /admin/players`, `GET /admin/stats`, los de
+`/admin/achievements` (lista, `stats`, detalle, `/{id}/players` y exportaciones) y
+todos los de `/admin/metrics`. Sin cabecera o con un valor que no es un número:
+400 `WORKSPACE_REQUIRED`; entorno inexistente: 404 `WORKSPACE_NOT_FOUND`. Los
+endpoints de un jugador concreto (`/admin/players/{id}/…`) y los del catálogo de
+logros no la necesitan.
+
 **Alta de jugadores:** `{"players": [{"email": "...", "display_name": "..."}]}` (1-200).
 Cada uno se crea con una contraseña temporal y `must_change_password`, o se salta
 con su motivo: `el correo no es válido`, `está repetido en la lista`,

@@ -14,7 +14,7 @@ from database import get_db
 from models import (
     User, PlayerSession, PlayerAnswer, SessionTool,
     PlayerNote, PlayerTypologyProgress, PlayerAchievement, Reading,
-    PlayerSlot, ActiveReading,
+    PlayerSlot, ActiveReading, Workspace,
 )
 from schemas import (
     PlayerSummary, AdminStatsResponse, UserResponse,
@@ -25,7 +25,7 @@ from schemas import (
 from game_rules import DIFFICULTY_ORDER, score_rules
 from progression import juego_terminado, reevaluate_unlocks
 from auth import get_current_admin, hash_password
-from workspaces import generate_temp_password
+from workspaces import generate_temp_password, get_viewed_workspace, ids_jugadores
 
 router = APIRouter(prefix="/admin", tags=["Administración"])
 
@@ -96,10 +96,11 @@ def list_players(
     q: str = Query("", description="Buscar por nombre o email"),
     is_active: bool = Query(None, description="Filtrar por estado"),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
-    """Lista todos los jugadores con resumen de progreso para el slot activo."""
-    query = db.query(User).filter(User.is_admin == False)
+    """Lista los jugadores del entorno con resumen de progreso para el slot activo."""
+    query = db.query(User).filter(User.is_admin == False, User.workspace_id == entorno.id)
 
     if q:
         search = f"%{q}%"
@@ -314,27 +315,42 @@ def get_player_detail(
 @router.get("/stats", response_model=AdminStatsResponse)
 def get_admin_stats(
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
-    """Retorna estadísticas globales para el dashboard."""
-    total_players = db.query(sqlfunc.count(User.id)).filter(User.is_admin == False).scalar()
+    """Retorna las estadísticas del entorno para el dashboard."""
+    jugadores = ids_jugadores(entorno.id)
+    del_entorno = PlayerSession.user_id.in_(jugadores)
+    total_players = (
+        db.query(sqlfunc.count(User.id))
+        .filter(User.is_admin == False, User.workspace_id == entorno.id)
+        .scalar()
+    )
     active_players = (
         db.query(sqlfunc.count(User.id))
-        .filter(User.is_admin == False, User.is_active == True)
+        .filter(User.is_admin == False, User.is_active == True, User.workspace_id == entorno.id)
         .scalar()
     )
-    total_sessions = db.query(sqlfunc.count(PlayerSession.id)).scalar()
+    total_sessions = db.query(sqlfunc.count(PlayerSession.id)).filter(del_entorno).scalar()
     total_points = (
         db.query(sqlfunc.coalesce(sqlfunc.sum(PlayerTypologyProgress.best_score), 0))
-        .filter(PlayerTypologyProgress.typology.in_(DIFFICULTY_ORDER))
+        .filter(
+            PlayerTypologyProgress.typology.in_(DIFFICULTY_ORDER),
+            PlayerTypologyProgress.user_id.in_(jugadores),
+        )
         .scalar()
     )
-    total_achievements = db.query(sqlfunc.count(PlayerAchievement.id)).scalar()
+    total_achievements = (
+        db.query(sqlfunc.count(PlayerAchievement.id))
+        .filter(PlayerAchievement.user_id.in_(jugadores))
+        .scalar()
+    )
 
     # Precisión promedio
     respuestas = (
         db.query(sqlfunc.count(PlayerAnswer.id))
         .join(PlayerSession, PlayerAnswer.session_id == PlayerSession.id)
+        .filter(del_entorno)
     )
     total_answers = respuestas.scalar()
     correct_answers = respuestas.filter(PlayerAnswer.is_correct == True).scalar()
@@ -343,6 +359,7 @@ def get_admin_stats(
     # Sesiones por tipología
     sessions_by_typ = (
         db.query(PlayerSession.typology, sqlfunc.count(PlayerSession.id))
+        .filter(del_entorno)
         .group_by(PlayerSession.typology)
         .all()
     )
@@ -354,7 +371,7 @@ def get_admin_stats(
             sqlfunc.date(PlayerSession.completed_at).label("day"),
             sqlfunc.count(PlayerSession.id).label("count"),
         )
-        .filter(PlayerSession.completed_at >= seven_days_ago)
+        .filter(PlayerSession.completed_at >= seven_days_ago, del_entorno)
         .group_by(sqlfunc.date(PlayerSession.completed_at))
         .order_by(sqlfunc.date(PlayerSession.completed_at))
         .all()
