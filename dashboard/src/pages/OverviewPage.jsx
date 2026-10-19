@@ -4,7 +4,7 @@ import { getAdminStats, getPlayers } from '../services/api';
 import { TYPOLOGY_ORDER, TYPOLOGY_COLORS } from '../constants/typologies';
 import {
   Users, Target, Star, Activity, Search,
-  ChevronRight, TrendingUp, BookOpen, Award, Sparkles,
+  ChevronRight, TrendingUp, BookOpen, Award,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -76,7 +76,7 @@ export default function OverviewPage() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <StatCard
           icon={<Users className="w-5 h-5" />}
           label="Jugadores"
@@ -88,12 +88,6 @@ export default function OverviewPage() {
           label="Sesiones"
           value={stats?.total_sessions || 0}
           color="from-violet-500 to-purple-500"
-        />
-        <StatCard
-          icon={<Sparkles className="w-5 h-5" />}
-          label="Sesiones de práctica"
-          value={stats?.total_practice_sessions || 0}
-          color="from-emerald-500 to-green-500"
         />
         <StatCard
           icon={<Star className="w-5 h-5" />}

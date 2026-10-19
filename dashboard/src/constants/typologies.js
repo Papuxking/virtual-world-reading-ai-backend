@@ -1,6 +1,6 @@
 // Tipologías de la progresión, en orden de dificultad, y su color en las
 // gráficas. Debe coincidir con DIFFICULTY_ORDER de la API (api/game_rules.py).
-// Instructivo ya no es una tipología del juego: su escenario es la zona de práctica.
+// Instructivo ya no es una tipología del juego.
 export const TYPOLOGY_ORDER = ['Narrativo', 'Descriptivo', 'Argumentativo', 'Expositivo'];
 
 export const TYPOLOGY_COLORS = {
