@@ -1,8 +1,8 @@
 """bootstrap_prod.py — Inicializacion de produccion.
 
 Puebla el catalogo global de logros, crea la cuenta de administrador y una
-cuenta de demostracion. A diferencia de seed_users.py no genera alumnos
-ficticios ni progreso aleatorio, que falsearian las metricas del dashboard.
+cuenta de demostracion en el entorno activo. A diferencia de seed_entorno_prueba.py
+no genera alumnos de prueba ni progreso ficticio, que falsearian las metricas del dashboard.
 
 Idempotente: se puede ejecutar varias veces sin efectos secundarios.
 
@@ -15,7 +15,8 @@ import sys
 from database import SessionLocal
 from models import User, PlayerSlot, PlayerTypologyProgress
 from auth import hash_password
-from seed_users import seed_achievements_catalog
+from catalogo_logros import seed_achievements_catalog
+from workspaces import entorno_activo
 
 from game_rules import DIFFICULTY_ORDER
 
@@ -93,27 +94,32 @@ def main() -> None:
             ))
             print(f"Admin creado: {email}")
 
-        demo = db.query(User).filter(User.email == DEMO_EMAIL).first()
-        if demo:
-            demo.hashed_password = hash_password(DEMO_PASSWORD)
-            demo.is_admin = False
-            demo.is_active = True
-            demo.must_change_password = False
-            print(f"Demo actualizado: {DEMO_EMAIL}")
+        activo = entorno_activo(db)
+        if activo is None:
+            print("No hay entorno activo: la cuenta demo no se crea ni se toca.")
         else:
-            demo = User(
-                email=DEMO_EMAIL,
-                hashed_password=hash_password(DEMO_PASSWORD),
-                display_name="Demo",
-                character="male",
-                is_admin=False,
-                is_active=True,
-                must_change_password=False,
-            )
-            db.add(demo)
-            print(f"Demo creado: {DEMO_EMAIL}")
-        db.flush()
-        _ensure_player_setup(db, demo)
+            demo = db.query(User).filter(User.email == DEMO_EMAIL, User.workspace_id == activo.id).first()
+            if demo:
+                demo.hashed_password = hash_password(DEMO_PASSWORD)
+                demo.is_admin = False
+                demo.is_active = True
+                demo.must_change_password = False
+                print(f"Demo actualizado: {DEMO_EMAIL}")
+            else:
+                demo = User(
+                    email=DEMO_EMAIL,
+                    hashed_password=hash_password(DEMO_PASSWORD),
+                    display_name="Demo",
+                    character="male",
+                    is_admin=False,
+                    is_active=True,
+                    must_change_password=False,
+                    workspace_id=activo.id,
+                )
+                db.add(demo)
+                print(f"Demo creado: {DEMO_EMAIL}")
+            db.flush()
+            _ensure_player_setup(db, demo)
 
         db.commit()
         print("Bootstrap de produccion completado.")

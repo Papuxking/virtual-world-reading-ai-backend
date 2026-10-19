@@ -32,9 +32,11 @@ def test_registro_crea_las_cuatro_filas(client, db):
 
 
 def test_seed_de_prueba_respeta_el_maximo(db):
-    crear_lectura(db, "Base", "Narrativo")
-    import seed_users
-    seed_users.seed()
+    for tipologia in DIFFICULTY_ORDER:
+        for i in range(5):
+            crear_lectura(db, f"{tipologia} {i}", tipologia)
+    import seed_entorno_prueba
+    seed_entorno_prueba.sembrar(db)
     db.expire_all()
     assert db.query(func.max(PlayerTypologyProgress.best_score)).scalar() <= MAX_SESSION_SCORE
     assert db.query(func.max(PlayerSession.session_score)).scalar() <= MAX_SESSION_SCORE

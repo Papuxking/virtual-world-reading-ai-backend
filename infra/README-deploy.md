@@ -114,14 +114,19 @@ ssh vw '/opt/vw/infra/backup.sh'
 ssh vw 'docker exec vw-api-1 python replace_readings.py --json /data/LECTURAS_TIPOLOGIAS_TEXTUALES.json'
 # 3. aplicar
 ssh vw 'docker exec vw-api-1 python replace_readings.py --json /data/LECTURAS_TIPOLOGIAS_TEXTUALES.json --apply'
-# 4. dejar a los jugadores en estado inicial
-ssh vw 'docker exec vw-api-1 python reset_players.py --students 50 --demo --apply'
+# 4. dejar a los jugadores en estado inicial (por defecto en el entorno activo)
+ssh vw 'docker exec vw-api-1 python reset_players.py --entorno Real --students 50 --demo --apply'
 ```
 
 Borrar una lectura arrastra en cascada sus preguntas, respuestas, sesiones de
 alumno y notas. Los logros y el `best_score` por tipología **no** cuelgan de
 `readings` y sobreviven, así que sin el paso 4 queda puntuación sin sesiones
 detrás. El simulacro del paso 2 cuantifica todo eso antes de escribir.
+
+`reset_players.py` opera por entorno (`--entorno NOMBRE`, por defecto el activo).
+Para generar datos de prueba, `seed_entorno_prueba.py` crea el entorno «Pruebas»
+con 50 estudiantes (los 10 últimos con progreso variado coherente); sustituye a
+los antiguos `seed_users.py`, `seed_30_users.py`, `clean_30_students.py` y `clean_50_students.py`.
 
 ### Retirada de la zona de práctica (Beta 2.1)
 
