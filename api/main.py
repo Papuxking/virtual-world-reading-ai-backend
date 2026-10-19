@@ -14,8 +14,8 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func as sqlfunc, text
 
-from database import get_db, SessionLocal, engine, Base
-from esquema import aplicar_migraciones
+from database import get_db, SessionLocal, engine
+from esquema import preparar_base
 from models import Reading, Question, Answer, ActiveReading
 from schemas import (
     ReadingCreate,
@@ -57,10 +57,9 @@ app.add_middleware(
 
 # ── Crear tablas ─────────────────────────────────────────────────────────────
 
-# Crear todas las tablas que no existen (incluye las nuevas de users y progreso)
-Base.metadata.create_all(bind=engine)
-# Y las columnas nuevas de las tablas que ya existían (idempotente).
-aplicar_migraciones(engine)
+# Crear las tablas que no existen y aplicar las migraciones (idempotentes), un
+# proceso detrás de otro.
+preparar_base(engine)
 
 # Asegurar que el directorio de archivos estáticos existe
 from fastapi.staticfiles import StaticFiles

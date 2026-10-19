@@ -1,20 +1,30 @@
 """Fábricas de datos para los tests. Todo se crea directamente en la base."""
 from auth import create_access_token, hash_password
 from game_rules import DIFFICULTY_ORDER
-from models import Answer, PlayerSlot, PlayerTypologyProgress, Question, Reading, User
+from models import Answer, PlayerSlot, PlayerTypologyProgress, Question, Reading, User, Workspace
 
 NIVELES_DE_PRUEBA = ["Literal", "Literal", "Inferencial", "Inferencial", "Critico", "Critico"]
 
 
-def crear_usuario(db, email="alumno@test.com", admin=False, filas=True):
+def crear_entorno(db, nombre, color="#059669", activo=False):
+    """Crea un entorno de trabajo."""
+    entorno = Workspace(name=nombre, color=color, is_active=activo)
+    db.add(entorno)
+    db.commit()
+    return entorno
+
+
+def crear_usuario(db, email="alumno@test.com", admin=False, filas=True, entorno=None):
     """Crea un usuario. Si no es admin, con su slot 1 activo y, si filas=True,
-    con las filas de progreso de las 4 tipologías (solo Narrativo abierta)."""
+    con las filas de progreso de las 4 tipologías (solo Narrativo abierta).
+    Con entorno, la cuenta es de ese entorno."""
     usuario = User(
         email=email,
         hashed_password=hash_password("Test1234!"),
         display_name=email.split("@")[0],
         character="male",
         is_admin=admin,
+        workspace_id=entorno.id if entorno else None,
     )
     db.add(usuario)
     db.flush()

@@ -89,6 +89,30 @@ lecturas y sesiones y las columnas `is_practice` de `readings` y `player_session
 
 **Restricción:** `UNIQUE(user_id, reading_id)`
 
+## Tabla `workspaces` (entornos de trabajo)
+
+| Columna      | Tipo          | Restricciones                                     |
+|-------------|---------------|---------------------------------------------------|
+| `id`        | `SERIAL`      | PRIMARY KEY                                       |
+| `name`      | `VARCHAR(40)` | NOT NULL, único sin distinguir mayúsculas (`ux_workspaces_nombre`) |
+| `color`     | `VARCHAR(7)`  | NOT NULL (uno de la paleta del dashboard)         |
+| `is_active` | `BOOLEAN`     | NOT NULL DEFAULT false; como mucho uno activo (`ux_workspaces_un_activo`) |
+| `created_at`| `TIMESTAMPTZ` | DEFAULT NOW()                                     |
+
+Cada cuenta de jugador es de un entorno: `users.workspace_id` → `workspaces(id)`
+`ON DELETE CASCADE` (borrar un entorno borra sus cuentas y, en cascada, todo lo
+suyo). Los administradores no tienen entorno, y tampoco las cuentas de antes de
+los entornos (no se migraron: no entran al juego ni salen en el dashboard).
+
+El correo es único dentro de cada entorno y entre las cuentas sin entorno:
+`ux_users_workspace_email` sobre `(workspace_id, email) NULLS NOT DISTINCT`. Lo
+crea la migración `011_entornos.sql`, que quita la unicidad vieja
+(`ix_users_email` o `users_email_key`).
+
+Al arrancar, cada proceso de la API prepara la base (`esquema.preparar_base`:
+`create_all` y las migraciones) con un candado de Postgres
+(`pg_advisory_xact_lock`), un proceso detrás de otro.
+
 ## Niveles de comprensión lectora
 
 | Nivel          | Descripción                                    |
@@ -104,6 +128,7 @@ lecturas y sesiones y las columnas `is_practice` de `readings` y `player_session
 | `001_schema.sql` | DDL base: readings, user_readings, índices FTS |
 | `002_questions_schema.sql` | DDL: questions, answers, ALTER readings ADD type |
 | `002_seed.sql` | Seed: lectura Baños de Agua Santa + 12 preguntas |
+| `011_entornos.sql` | Tabla `workspaces`, `users.workspace_id` y correo único por entorno |
 
 ## Resetear la base de datos
 
