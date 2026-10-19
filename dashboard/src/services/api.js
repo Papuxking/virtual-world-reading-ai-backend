@@ -8,6 +8,11 @@ const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 /** Token JWT almacenado en memoria */
 let authToken = localStorage.getItem('vw_admin_token') || '';
 
+/** Entorno visto actualmente en el dashboard */
+let viewedWorkspaceId = localStorage.getItem('vw_admin_workspace')
+  ? Number(localStorage.getItem('vw_admin_workspace'))
+  : null;
+
 /** Configurar token */
 export function setToken(token) {
   authToken = token;
@@ -26,11 +31,28 @@ export function getToken() {
   return authToken;
 }
 
-/** Headers con autenticación */
+/** Configurar entorno que se está viendo */
+export function setViewedWorkspace(id) {
+  if (id !== null && id !== undefined && id !== '') {
+    viewedWorkspaceId = Number(id);
+    localStorage.setItem('vw_admin_workspace', String(id));
+  } else {
+    viewedWorkspaceId = null;
+    localStorage.removeItem('vw_admin_workspace');
+  }
+}
+
+/** Obtener id del entorno que se está viendo */
+export function getViewedWorkspace() {
+  return viewedWorkspaceId;
+}
+
+/** Headers con autenticación y entorno visto */
 function authHeaders() {
   return {
     'Content-Type': 'application/json',
     ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+    ...(viewedWorkspaceId !== null ? { 'X-Workspace-Id': String(viewedWorkspaceId) } : {}),
   };
 }
 
@@ -50,6 +72,9 @@ async function apiFetch(endpoint, options = {}) {
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: 'Error desconocido' }));
+    if (response.status === 404 && error.detail === 'WORKSPACE_NOT_FOUND') {
+      window.dispatchEvent(new Event('vw:workspace-missing'));
+    }
     throw new Error(error.detail || `HTTP ${response.status}`);
   }
 
@@ -301,6 +326,7 @@ async function _downloadFile(endpoint, defaultFilename) {
   const response = await fetch(url, {
     headers: {
       ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+      ...(viewedWorkspaceId !== null ? { 'X-Workspace-Id': String(viewedWorkspaceId) } : {}),
     },
   });
 
@@ -385,6 +411,51 @@ export function downloadMetricsExcel(metric, filters = {}) {
 
 export async function getLeaderboard(limit = 5) {
   return apiFetch(`/leaderboard/top?limit=${limit}`);
+}
+
+// ── Entornos (Workspaces) ───────────────────────────────────────────────────
+
+export async function getWorkspaces() {
+  return apiFetch('/admin/workspaces');
+}
+
+export async function createWorkspace(name, color) {
+  return apiFetch('/admin/workspaces', {
+    method: 'POST',
+    body: JSON.stringify({ name, color }),
+  });
+}
+
+export async function updateWorkspace(id, data) {
+  return apiFetch(`/admin/workspaces/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function activateWorkspace(id) {
+  return apiFetch(`/admin/workspaces/${id}/activate`, {
+    method: 'POST',
+  });
+}
+
+export async function deactivateWorkspace(id) {
+  return apiFetch(`/admin/workspaces/${id}/deactivate`, {
+    method: 'POST',
+  });
+}
+
+export async function deleteWorkspace(id, confirmName) {
+  return apiFetch(`/admin/workspaces/${id}?confirm_name=${encodeURIComponent(confirmName)}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function addPlayers(workspaceId, players) {
+  return apiFetch(`/admin/workspaces/${workspaceId}/players`, {
+    method: 'POST',
+    body: JSON.stringify({ players }),
+  });
 }
 
 

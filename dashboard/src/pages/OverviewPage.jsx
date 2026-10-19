@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAdminStats, getPlayers } from '../services/api';
+import { useWorkspace } from '../context/WorkspaceContext';
+import AddPlayersDialog from '../components/AddPlayersDialog';
 import { TYPOLOGY_ORDER, TYPOLOGY_COLORS } from '../constants/typologies';
 import {
   Users, Target, Star, Activity, Search,
-  ChevronRight, TrendingUp, BookOpen, Award,
+  ChevronRight, TrendingUp, BookOpen, Award, UserPlus,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -12,10 +14,12 @@ import {
 } from 'recharts';
 
 export default function OverviewPage() {
+  const { viewed } = useWorkspace();
   const [stats, setStats] = useState(null);
   const [players, setPlayers] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [addPlayersOpen, setAddPlayersOpen] = useState(false);
   const navigate = useNavigate();
 
   async function loadData() {
@@ -195,15 +199,27 @@ export default function OverviewPage() {
             <Users className="w-5 h-5 text-primary-500 dark:text-primary-400" />
             Jugadores
           </h3>
-          <div className="relative max-w-sm w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-400" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => handleSearch(e.target.value)}
-              placeholder="Buscar por nombre o email..."
-              className="input-field pl-10 text-sm"
-            />
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+            <div className="relative max-w-sm w-full">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-gray-400" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => handleSearch(e.target.value)}
+                placeholder="Buscar por nombre o email..."
+                className="input-field pl-10 text-sm"
+              />
+            </div>
+            {viewed && (
+              <button
+                type="button"
+                onClick={() => setAddPlayersOpen(true)}
+                className="btn-primary flex items-center justify-center gap-2 text-xs font-semibold whitespace-nowrap"
+              >
+                <UserPlus className="w-4 h-4" />
+                Agregar jugadores
+              </button>
+            )}
           </div>
         </div>
 
@@ -275,6 +291,13 @@ export default function OverviewPage() {
           </table>
         </div>
       </div>
+
+      <AddPlayersDialog
+        isOpen={addPlayersOpen}
+        workspace={viewed}
+        onClose={() => setAddPlayersOpen(false)}
+        onSuccess={loadData}
+      />
     </div>
   );
 }
