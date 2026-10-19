@@ -1,12 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { clearToken, getStoredUser } from '../services/api';
+import { useWorkspace } from '../context/WorkspaceContext';
+import WorkspaceSwitcher from './WorkspaceSwitcher';
+import WorkspaceBanner from './WorkspaceBanner';
+import { NewWorkspaceModal } from './WorkspaceDialogs';
 import { LayoutDashboard, LogOut, Gamepad2, Users, Sun, Moon, Menu, X, Trophy, BarChart3 } from 'lucide-react';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
   const user = getStoredUser();
+  const { workspaces, viewed, loading } = useWorkspace();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [newModalOpen, setNewModalOpen] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
 
   useEffect(() => {
@@ -84,9 +90,30 @@ export default function DashboardLayout() {
       {/* Main content */}
       <main className="flex-1 min-w-0 overflow-y-auto">
         <div className="p-6 sm:p-8 max-w-7xl mx-auto">
-          <Outlet />
+          <WorkspaceBanner />
+          {!loading && workspaces.length === 0 ? (
+            <div className="glass-card p-12 text-center">
+              <h2 className="text-xl font-bold text-slate-800 dark:text-gray-100 mb-2">
+                Crea un entorno para empezar.
+              </h2>
+              <p className="text-sm text-slate-500 dark:text-gray-400 mb-6">
+                Necesitas un entorno de trabajo para ver jugadores, logros y métricas.
+              </p>
+              <button
+                type="button"
+                onClick={() => setNewModalOpen(true)}
+                className="btn-primary text-sm font-semibold"
+              >
+                Crear entorno
+              </button>
+            </div>
+          ) : (
+            <Outlet key={viewed?.id ?? 'ninguno'} />
+          )}
         </div>
       </main>
+
+      <NewWorkspaceModal isOpen={newModalOpen} onClose={() => setNewModalOpen(false)} />
     </div>
   );
 }
@@ -95,7 +122,7 @@ function SidebarContent({ user, theme, setTheme, handleLogout, onLinkClick }) {
   return (
     <div className="flex-1 flex flex-col h-full py-6">
       {/* Logo */}
-      <div className="px-6 pb-6 border-b border-slate-200 dark:border-white/5">
+      <div className="px-6 pb-4 border-b border-slate-200 dark:border-white/5">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-violet-500 flex items-center justify-center shadow-lg shadow-primary-500/20">
             <Gamepad2 className="w-5 h-5 text-white" />
@@ -107,8 +134,13 @@ function SidebarContent({ user, theme, setTheme, handleLogout, onLinkClick }) {
         </div>
       </div>
 
+      {/* Selector de entorno (Opción A) */}
+      <div className="px-4 py-3 border-b border-slate-200/60 dark:border-white/5">
+        <WorkspaceSwitcher />
+      </div>
+
       {/* Navigation */}
-      <nav className="flex-1 px-4 py-6 space-y-1">
+      <nav className="flex-1 px-4 py-4 space-y-1">
         <NavLink
           to="/"
           end
@@ -155,7 +187,7 @@ function SidebarContent({ user, theme, setTheme, handleLogout, onLinkClick }) {
       </nav>
 
       {/* Theme Toggle */}
-      <div className="px-4 py-4 border-t border-slate-200 dark:border-white/5">
+      <div className="px-4 py-3 border-t border-slate-200 dark:border-white/5">
         <p className="text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-gray-400 mb-2 px-2">Tema</p>
         <div className="flex p-1 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200/50 dark:border-white/5 transition-all duration-300">
           <button
@@ -184,7 +216,7 @@ function SidebarContent({ user, theme, setTheme, handleLogout, onLinkClick }) {
       </div>
 
       {/* User Info */}
-      <div className="px-4 py-4 border-t border-slate-200 dark:border-white/5">
+      <div className="px-4 py-3 border-t border-slate-200 dark:border-white/5">
         <div className="flex items-center gap-3 mb-3 px-2">
           <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-sm">
             <Users className="w-4 h-4 text-white" />

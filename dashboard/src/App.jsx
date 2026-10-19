@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { getToken, getStoredUser } from './services/api';
+import { WorkspaceProvider } from './context/WorkspaceContext';
 import LoginPage from './pages/LoginPage';
 import DashboardLayout from './components/DashboardLayout';
 import OverviewPage from './pages/OverviewPage';
@@ -26,7 +27,9 @@ export default function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <DashboardLayout />
+              <WorkspaceProvider>
+                <DashboardLayout />
+              </WorkspaceProvider>
             </ProtectedRoute>
           }
         >
