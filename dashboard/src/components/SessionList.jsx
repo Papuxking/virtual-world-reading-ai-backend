@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { CheckCircle2, XCircle, ChevronDown, ChevronUp } from 'lucide-react';
 
-// Lista de sesiones desplegables con sus respuestas. La usan el historial de
-// progresión y la tarjeta de práctica del detalle del jugador.
+// Lista de sesiones desplegables con sus respuestas. La usa el historial de
+// sesiones del detalle del jugador.
 export default function SessionList({ sessions, emptyText }) {
   const [expanded, setExpanded] = useState(null);
 

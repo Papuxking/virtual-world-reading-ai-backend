@@ -1,6 +1,7 @@
 """
 leaderboard_router.py — Endpoint de leaderboard para el Lobby de Godot.
-Retorna Top N jugadores con caché en memoria (TTL 60s).
+Retorna Top N jugadores del entorno activo con caché en memoria (TTL 60s), una
+por entorno.
 """
 import time
 from typing import Optional
@@ -16,29 +17,25 @@ from models import (
 from schemas import LeaderboardResponse, LeaderboardEntry
 from game_rules import DIFFICULTY_ORDER
 from auth import get_current_user
+from workspaces import entorno_activo
 from datetime import datetime, timezone
 
 router = APIRouter(prefix="/leaderboard", tags=["Leaderboard"])
 
 # ── Caché en memoria ─────────────────────────────────────────────────────────
 
-_cache = {
-    "data": None,
-    "timestamp": 0,
-    "ttl": 60,  # Segundos
-}
+CACHE_TTL = 60  # Segundos
+
+# Una entrada por entorno: id del entorno → {"data": [...], "timestamp": float}.
+# Guarda el ranking entero (hasta 50), así sirve para cualquier limit.
+_cache: dict = {}
 
 
-def _is_cache_valid() -> bool:
-    return (
-        _cache["data"] is not None
-        and (time.time() - _cache["timestamp"]) < _cache["ttl"]
-    )
-
-
-def _update_cache(data):
-    _cache["data"] = data
-    _cache["timestamp"] = time.time()
+def _cache_valida(entorno_id: int) -> Optional[dict]:
+    entrada = _cache.get(entorno_id)
+    if entrada and (time.time() - entrada["timestamp"]) < CACHE_TTL:
+        return entrada
+    return None
 
 
 # ── Endpoint de Leaderboard ──────────────────────────────────────────────────
@@ -50,21 +47,28 @@ def get_leaderboard(
     db: Session = Depends(get_db),
 ):
     """
-    Retorna el Top N de jugadores ordenados por puntaje total.
-    Los datos se cachean por 60 segundos para evitar consultas costosas.
+    Retorna el Top N de jugadores del entorno activo ordenados por puntaje
+    total. Los datos se cachean por 60 segundos para evitar consultas costosas.
     El puntaje es la suma de best_score de las tipologías del juego en el slot
     activo de cada jugador.
     """
-    # Verificar caché (solo si el limit coincide o es menor)
-    if _is_cache_valid() and _cache.get("limit", 0) >= limit:
-        cached = _cache["data"]
+    activo = entorno_activo(db)
+    if activo is None:
+        return LeaderboardResponse(players=[], updated_at=datetime.now(timezone.utc))
+
+    cached = _cache_valida(activo.id)
+    if cached:
         return LeaderboardResponse(
-            players=cached[:limit],
-            updated_at=datetime.fromtimestamp(_cache["timestamp"], tz=timezone.utc),
+            players=cached["data"][:limit],
+            updated_at=datetime.fromtimestamp(cached["timestamp"], tz=timezone.utc),
         )
 
-    # Obtener todos los jugadores no-admin
-    users = db.query(User).filter(User.is_admin == False, User.is_active == True).all()
+    # Jugadores del entorno activo
+    users = (
+        db.query(User)
+        .filter(User.workspace_id == activo.id, User.is_admin == False, User.is_active == True)
+        .all()
+    )
 
     entries = []
     for user in users:
@@ -123,8 +127,7 @@ def get_leaderboard(
     ]
 
     # Actualizar caché
-    _update_cache(ranked)
-    _cache["limit"] = max_entries
+    _cache[activo.id] = {"data": ranked, "timestamp": time.time()}
 
     return LeaderboardResponse(
         players=ranked[:limit],

@@ -12,12 +12,12 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
-from sqlalchemy import func as sqlfunc, Integer, case, or_
+from sqlalchemy import func as sqlfunc, Integer, case
 
 from database import get_db
 from models import (
     User, PlayerSession, PlayerAnswer, SessionTool,
-    PlayerTypologyProgress, Question, Reading, NpcInteraction,
+    PlayerTypologyProgress, Question, Reading, NpcInteraction, Workspace,
 )
 from schemas import (
     MetricsReadingTimeResponse, MetricPlayerReadingTime, MetricTypologyReadingTime,
@@ -27,6 +27,7 @@ from schemas import (
     MetricsToolUsageResponse, MetricToolUsage,
 )
 from auth import get_current_admin
+from workspaces import get_viewed_workspace, ids_jugadores
 
 router = APIRouter(prefix="/admin/metrics", tags=["Métricas y Reportes"])
 
@@ -42,13 +43,10 @@ def _apply_date_filter(query, date_col, date_from, date_to):
     return query
 
 
-def _apply_session_filters(query, date_from, date_to, player_id, typology):
-    """Aplica los filtros comunes a queries basadas en PlayerSession.
-
-    La práctica nunca entra en las métricas: el docente la ve aparte, en el
-    detalle de cada jugador.
-    """
-    query = query.filter(PlayerSession.is_practice == False)
+def _apply_session_filters(query, date_from, date_to, player_id, typology, workspace_id):
+    """Aplica los filtros comunes a queries basadas en PlayerSession: solo las
+    sesiones de los jugadores del entorno, y las fechas, jugador y tipología."""
+    query = query.filter(PlayerSession.user_id.in_(ids_jugadores(workspace_id)))
     if date_from:
         query = query.filter(PlayerSession.completed_at >= date_from)
     if date_to:
@@ -69,6 +67,7 @@ def get_reading_time_metrics(
     player_id: Optional[int] = Query(None, description="Filtrar por jugador"),
     typology: Optional[str] = Query(None, description="Filtrar por tipología"),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Tiempo promedio de lectura con desglose por jugador y tipología."""
@@ -76,7 +75,7 @@ def get_reading_time_metrics(
         PlayerSession.reading_time_seconds.isnot(None),
         PlayerSession.reading_time_seconds > 0,
     )
-    base = _apply_session_filters(base, date_from, date_to, player_id, typology)
+    base = _apply_session_filters(base, date_from, date_to, player_id, typology, entorno.id)
 
     # Global
     global_stats = base.with_entities(
@@ -145,11 +144,12 @@ def get_answer_metrics(
     player_id: Optional[int] = Query(None),
     typology: Optional[str] = Query(None),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Respuestas correctas e incorrectas con desglose."""
     base = db.query(PlayerAnswer).join(PlayerSession, PlayerAnswer.session_id == PlayerSession.id)
-    base = _apply_session_filters(base, date_from, date_to, player_id, typology)
+    base = _apply_session_filters(base, date_from, date_to, player_id, typology, entorno.id)
 
     # Global
     total_correct = base.filter(PlayerAnswer.is_correct == True).count()
@@ -215,6 +215,7 @@ def get_question_attempt_metrics(
     typology: Optional[str] = Query(None),
     limit: int = Query(50, ge=1, le=200),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Número de intentos por pregunta con tasa de acierto."""
@@ -224,7 +225,7 @@ def get_question_attempt_metrics(
         .join(Question, PlayerAnswer.question_id == Question.id)
         .join(Reading, Question.reading_id == Reading.id)
     )
-    base = _apply_session_filters(base, date_from, date_to, player_id, typology)
+    base = _apply_session_filters(base, date_from, date_to, player_id, typology, entorno.id)
 
     questions_q = (
         base.with_entities(
@@ -270,16 +271,11 @@ def get_npc_interaction_metrics(
     player_id: Optional[int] = Query(None),
     npc_type: Optional[str] = Query(None, description="Filtrar: 'robot' o 'sabio'"),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Métricas de interacciones con NPCs (robot asistente y sabio)."""
-    # Las interacciones durante una lectura de práctica no cuentan; las que no
-    # tienen lectura asociada, sí.
-    base = (
-        db.query(NpcInteraction)
-        .outerjoin(Reading, NpcInteraction.reading_id == Reading.id)
-        .filter(or_(NpcInteraction.reading_id.is_(None), Reading.is_practice == False))
-    )
+    base = db.query(NpcInteraction).filter(NpcInteraction.user_id.in_(ids_jugadores(entorno.id)))
     base = _apply_date_filter(base, NpcInteraction.created_at, date_from, date_to)
     if player_id:
         base = base.filter(NpcInteraction.user_id == player_id)
@@ -328,6 +324,7 @@ def get_tool_usage_metrics(
     player_id: Optional[int] = Query(None),
     typology: Optional[str] = Query(None),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Frecuencia y tipo de uso de herramientas."""
@@ -335,7 +332,7 @@ def get_tool_usage_metrics(
         db.query(SessionTool)
         .join(PlayerSession, SessionTool.session_id == PlayerSession.id)
     )
-    base = _apply_session_filters(base, date_from, date_to, player_id, typology)
+    base = _apply_session_filters(base, date_from, date_to, player_id, typology, entorno.id)
 
     total_sessions_q = (
         db.query(sqlfunc.count(sqlfunc.distinct(PlayerSession.id)))
@@ -379,6 +376,7 @@ def export_metrics_csv(
     player_id: Optional[int] = Query(None),
     typology: Optional[str] = Query(None),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Exporta métricas en formato CSV."""
@@ -386,31 +384,31 @@ def export_metrics_csv(
     writer = csv.writer(output)
 
     if metric == "reading-time":
-        data = get_reading_time_metrics(date_from, date_to, player_id, typology, admin, db)
+        data = get_reading_time_metrics(date_from, date_to, player_id, typology, admin, entorno, db)
         writer.writerow(["Jugador", "Tiempo Lectura Prom (s)", "Tiempo Total Prom (s)", "Sesiones"])
         for p in data.by_player:
             writer.writerow([p.display_name, p.avg_reading_time, p.avg_total_time, p.total_sessions])
 
     elif metric == "answers":
-        data = get_answer_metrics(date_from, date_to, player_id, typology, admin, db)
+        data = get_answer_metrics(date_from, date_to, player_id, typology, admin, entorno, db)
         writer.writerow(["Jugador", "Correctas", "Incorrectas", "Precisión (%)"])
         for p in data.by_player:
             writer.writerow([p.display_name, p.total_correct, p.total_incorrect, p.accuracy])
 
     elif metric == "npc-interactions":
-        data = get_npc_interaction_metrics(date_from, date_to, player_id, None, admin, db)
+        data = get_npc_interaction_metrics(date_from, date_to, player_id, None, admin, entorno, db)
         writer.writerow(["Jugador", "Robot", "Sabio", "Total"])
         for p in data.by_player:
             writer.writerow([p.display_name, p.robot_interactions, p.sabio_interactions, p.total_interactions])
 
     elif metric == "tool-usage":
-        data = get_tool_usage_metrics(date_from, date_to, player_id, typology, admin, db)
+        data = get_tool_usage_metrics(date_from, date_to, player_id, typology, admin, entorno, db)
         writer.writerow(["Herramienta", "Sesiones Totales", "Veces Usada", "Tasa de Uso (%)"])
         for t in data.tools:
             writer.writerow([t.tool_name, t.total_sessions, t.times_used, t.usage_rate])
 
     elif metric == "question-attempts":
-        data = get_question_attempt_metrics(date_from, date_to, player_id, typology, 200, admin, db)
+        data = get_question_attempt_metrics(date_from, date_to, player_id, typology, 200, admin, entorno, db)
         writer.writerow(["Pregunta", "Lectura", "Tipología", "Nivel", "Intentos", "Correctas", "Incorrectas", "Tasa Acierto (%)"])
         for q in data.questions:
             writer.writerow([q.question_text, q.reading_title, q.typology, q.comprehension_level, q.total_attempts, q.correct_count, q.incorrect_count, q.correct_rate])
@@ -436,6 +434,7 @@ def export_metrics_excel(
     player_id: Optional[int] = Query(None),
     typology: Optional[str] = Query(None),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Exporta métricas en formato Excel (.xlsx)."""
@@ -453,7 +452,7 @@ def export_metrics_excel(
     header_fill = PatternFill(start_color="6366F1", end_color="6366F1", fill_type="solid")
 
     if metric == "reading-time":
-        data = get_reading_time_metrics(date_from, date_to, player_id, typology, admin, db)
+        data = get_reading_time_metrics(date_from, date_to, player_id, typology, admin, entorno, db)
         headers = ["Jugador", "Tiempo Lectura Prom (s)", "Tiempo Total Prom (s)", "Sesiones"]
         for col, h in enumerate(headers, 1):
             cell = ws.cell(row=1, column=col, value=h)
@@ -466,7 +465,7 @@ def export_metrics_excel(
             ws.cell(row=i, column=4, value=p.total_sessions)
 
     elif metric == "answers":
-        data = get_answer_metrics(date_from, date_to, player_id, typology, admin, db)
+        data = get_answer_metrics(date_from, date_to, player_id, typology, admin, entorno, db)
         headers = ["Jugador", "Correctas", "Incorrectas", "Precisión (%)"]
         for col, h in enumerate(headers, 1):
             cell = ws.cell(row=1, column=col, value=h)
@@ -479,7 +478,7 @@ def export_metrics_excel(
             ws.cell(row=i, column=4, value=p.accuracy)
 
     elif metric == "npc-interactions":
-        data = get_npc_interaction_metrics(date_from, date_to, player_id, None, admin, db)
+        data = get_npc_interaction_metrics(date_from, date_to, player_id, None, admin, entorno, db)
         headers = ["Jugador", "Robot", "Sabio", "Total"]
         for col, h in enumerate(headers, 1):
             cell = ws.cell(row=1, column=col, value=h)
@@ -492,7 +491,7 @@ def export_metrics_excel(
             ws.cell(row=i, column=4, value=p.total_interactions)
 
     elif metric == "tool-usage":
-        data = get_tool_usage_metrics(date_from, date_to, player_id, typology, admin, db)
+        data = get_tool_usage_metrics(date_from, date_to, player_id, typology, admin, entorno, db)
         headers = ["Herramienta", "Sesiones Totales", "Veces Usada", "Tasa de Uso (%)"]
         for col, h in enumerate(headers, 1):
             cell = ws.cell(row=1, column=col, value=h)
@@ -505,7 +504,7 @@ def export_metrics_excel(
             ws.cell(row=i, column=4, value=t.usage_rate)
 
     elif metric == "question-attempts":
-        data = get_question_attempt_metrics(date_from, date_to, player_id, typology, 200, admin, db)
+        data = get_question_attempt_metrics(date_from, date_to, player_id, typology, 200, admin, entorno, db)
         headers = ["Pregunta", "Lectura", "Tipología", "Nivel", "Intentos", "Correctas", "Incorrectas", "Tasa Acierto (%)"]
         for col, h in enumerate(headers, 1):
             cell = ws.cell(row=1, column=col, value=h)

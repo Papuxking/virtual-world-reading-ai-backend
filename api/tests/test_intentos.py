@@ -38,18 +38,6 @@ def test_sesion_que_aprueba_tambien_suma(client, db):
     assert (fila.attempts_used, fila.best_score) == (1, 200)
 
 
-def test_practica_no_suma_intentos(client, db):
-    usuario, slot = crear_usuario(db)
-    lectura = crear_lectura(db, "Práctica", "Narrativo", practica=True)
-    client.post(
-        "/progress/sessions",
-        json=payload_sesion(db, lectura, puntaje=60, practica=True),
-        headers=cabeceras(usuario),
-    )
-    db.expire_all()
-    assert _fila(db, slot, "Narrativo").attempts_used == 0
-
-
 def test_progress_me_trae_intentos_y_maximo(client, db):
     usuario, _ = crear_usuario(db)
     lectura = crear_lectura(db, "Progresión", "Narrativo")

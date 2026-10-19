@@ -12,21 +12,16 @@ import {
   ArrowLeft, Star, Trophy, BookOpen, Target, CheckCircle2,
   Lock, Unlock, RotateCcw, AlertTriangle, StickyNote,
   Highlighter, Underline, PenTool, ChevronDown, ChevronUp, Award,
-  Key, Plus, Copy, Check, Trash2, ShieldAlert, Sparkles, Upload, X,
+  Key, Plus, Copy, Check, Trash2, ShieldAlert, Upload, X,
 } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
-
-// Grupo de las lecturas de la zona de práctica en el panel de notas.
-const PRACTICE_GROUP = 'Práctica';
-const NOTES_GROUPS = [...TYPOLOGY_ORDER, PRACTICE_GROUP];
 
 const DIFFICULTY_COLORS = {
   Narrativo: { bg: 'bg-indigo-50 dark:bg-indigo-500/10', text: 'text-indigo-600 dark:text-indigo-400', border: 'border-indigo-100 dark:border-indigo-500/20', bar: 'bg-indigo-500' },
   Descriptivo: { bg: 'bg-violet-50 dark:bg-violet-500/10', text: 'text-violet-600 dark:text-violet-400', border: 'border-violet-100 dark:border-violet-500/20', bar: 'bg-violet-500' },
   Argumentativo: { bg: 'bg-purple-50 dark:bg-purple-500/10', text: 'text-purple-600 dark:text-purple-400', border: 'border-purple-100 dark:border-purple-500/20', bar: 'bg-purple-500' },
   Expositivo: { bg: 'bg-pink-50 dark:bg-pink-500/10', text: 'text-pink-600 dark:text-pink-400', border: 'border-pink-100 dark:border-pink-500/20', bar: 'bg-pink-500' },
-  [PRACTICE_GROUP]: { bg: 'bg-emerald-50 dark:bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400', border: 'border-emerald-100 dark:border-emerald-500/20', bar: 'bg-emerald-500' },
 };
 
 const TIER_COLORS = {
@@ -277,7 +272,7 @@ export default function PlayerDetailPage() {
     );
   }
 
-  const { user, total_score, active_slot_number, active_slot_label, typology_progress, achievements, sessions, practice_sessions, notes, tool_stats, level_stats, score_rules, game_over } = data;
+  const { user, total_score, active_slot_number, active_slot_label, typology_progress, achievements, sessions, notes, tool_stats, level_stats, score_rules, game_over } = data;
   const unlockedAchievementIds = achievements.map((a) => a.achievement_id);
 
   // Filtrar catálogo de logros
@@ -286,15 +281,14 @@ export default function PlayerDetailPage() {
     return achievement.category === selectedCategory;
   });
 
-  // Lecturas que ha abierto el estudiante, agrupadas por tipología. Las de la
-  // zona de práctica van en su propio grupo.
-  const presentedReadingsByTypology = NOTES_GROUPS.reduce((acc, group) => {
-    const isPractice = group === PRACTICE_GROUP;
-    const fromSessions = (isPractice ? practice_sessions : sessions.filter((s) => s.typology === group))
+  // Lecturas que ha abierto el estudiante, agrupadas por tipología.
+  const presentedReadingsByTypology = TYPOLOGY_ORDER.reduce((acc, group) => {
+    const fromSessions = sessions
+      .filter((s) => s.typology === group)
       .map((s) => ({ id: s.reading_id, title: s.reading_title }));
 
     const fromNotes = notes
-      .filter((n) => (isPractice ? n.reading_is_practice : !n.reading_is_practice && n.reading_typology === group))
+      .filter((n) => n.reading_typology === group)
       .map((n) => ({ id: n.reading_id, title: n.reading_title }));
 
     const merged = [...fromSessions, ...fromNotes];
@@ -556,32 +550,6 @@ export default function PlayerDetailPage() {
               <SessionList sessions={sessions} emptyText="Sin sesiones registradas" />
             </div>
           </div>
-
-          {/* Practice */}
-          <div className="glass-card p-6">
-            <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-1 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
-              Práctica ({active_slot_label})
-            </h3>
-            <p className="text-xs text-slate-400 dark:text-gray-400 mb-4">
-              Lecturas de la zona de práctica. No cuentan para el puntaje, los desbloqueos, los logros ni las métricas.
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-              {TYPOLOGY_ORDER.map((typology) => {
-                const colors = DIFFICULTY_COLORS[typology];
-                const count = practice_sessions.filter((s) => s.typology === typology).length;
-                return (
-                  <div key={typology} className={`p-2 rounded-lg border text-center ${colors.border} ${colors.bg}`}>
-                    <p className={`text-lg font-extrabold ${colors.text}`}>{count}</p>
-                    <p className="text-[10px] font-semibold text-slate-500 dark:text-gray-400">{typology}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
-              <SessionList sessions={practice_sessions} emptyText="Todavía no ha usado la zona de práctica" />
-            </div>
-          </div>
         </div>
 
         {/* Right column */}
@@ -795,7 +763,7 @@ export default function PlayerDetailPage() {
 
             {/* Selector de Tipologías */}
             <div className="flex flex-wrap gap-1.5 mb-4">
-              {NOTES_GROUPS.map((typology) => {
+              {TYPOLOGY_ORDER.map((typology) => {
                 const colors = DIFFICULTY_COLORS[typology];
                 const isSelected = selectedNotesTypology === typology;
                 const readingsForTypo = presentedReadingsByTypology[typology] || [];
@@ -832,12 +800,8 @@ export default function PlayerDetailPage() {
                 <BookOpen className="w-8 h-8 text-slate-300 dark:text-gray-600 mb-2" />
                 <p className="text-xs font-bold text-slate-500 dark:text-gray-400">Sin lecturas presentadas</p>
                 <p className="text-[10px] text-slate-400 dark:text-gray-400 max-w-[200px] mt-1 leading-normal">
-                  El estudiante aún no ha abierto ninguna lectura{' '}
-                  {selectedNotesTypology === PRACTICE_GROUP ? (
-                    'de práctica'
-                  ) : (
-                    <>de la tipología <span className="font-semibold text-slate-500 dark:text-gray-400">{selectedNotesTypology}</span></>
-                  )}{' '}
+                  El estudiante aún no ha abierto ninguna lectura de la tipología{' '}
+                  <span className="font-semibold text-slate-500 dark:text-gray-400">{selectedNotesTypology}</span>{' '}
                   en este slot.
                 </p>
               </div>

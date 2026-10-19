@@ -80,7 +80,7 @@ def _validate_slot_header(request: Request, active_slot: PlayerSlot, user: User)
 
 
 def _aciertos_por_nivel(db: Session, user_id: int, slot_id: int) -> dict:
-    """Respuestas correctas del slot por nivel de comprensión, sin la práctica.
+    """Respuestas correctas del slot por nivel de comprensión.
     Siempre con los 3 niveles del juego; un nivel desconocido no cuenta."""
     aciertos = {"Literal": 0, "Inferencial": 0, "Critico": 0}
     filas = (
@@ -89,7 +89,6 @@ def _aciertos_por_nivel(db: Session, user_id: int, slot_id: int) -> dict:
         .filter(
             PlayerSession.user_id == user_id,
             PlayerSession.slot_id == slot_id,
-            PlayerSession.is_practice == False,
             PlayerAnswer.is_correct == True,
         )
         .group_by(PlayerAnswer.comprehension_level)
@@ -141,28 +140,16 @@ def get_my_progress(
         .filter(
             PlayerSession.user_id == current_user.id,
             PlayerSession.slot_id == active_slot.id,
-            PlayerSession.is_practice == False,
         )
         .order_by(PlayerSession.completed_at.desc())
         .limit(10)
         .all()
     )
 
-    practice_sessions = (
-        db.query(sqlfunc.count(PlayerSession.id))
-        .filter(
-            PlayerSession.user_id == current_user.id,
-            PlayerSession.slot_id == active_slot.id,
-            PlayerSession.is_practice == True,
-        )
-        .scalar()
-    )
-
     return PlayerProgressResponse(
         user=UserResponse.model_validate(current_user),
         active_slot_id=active_slot.id,
         total_score=total_score,
-        practice_sessions=practice_sessions or 0,
         max_attempts=MAX_INTENTOS_POR_TIPOLOGIA,
         game_over=juego_terminado(typology_rows),
         correct_by_level=_aciertos_por_nivel(db, current_user.id, active_slot.id),
@@ -189,7 +176,7 @@ def _elegir_lectura(db: Session, user_id: int, slot_id: int, typology: str) -> O
         .filter(ActiveReading.user_id == user_id, ActiveReading.slot_id == slot_id)
         .scalar()
     )
-    candidatas = db.query(Reading.id).filter(Reading.typology == typology, Reading.is_practice == False)
+    candidatas = db.query(Reading.id).filter(Reading.typology == typology)
     if activa is not None:
         candidatas = candidatas.filter(Reading.id != activa)
 
@@ -203,7 +190,6 @@ def _elegir_lectura(db: Session, user_id: int, slot_id: int, typology: str) -> O
             PlayerSession.user_id == user_id,
             PlayerSession.slot_id == slot_id,
             PlayerSession.typology == typology,
-            PlayerSession.is_practice == False,
         )
         .group_by(PlayerSession.reading_id)
         .subquery()
@@ -237,8 +223,7 @@ def get_next_reading(
 ):
     """Lectura de progresión que toca en una tipología: sin repetir las que el
     alumno ya terminó y nunca si se quedó sin intentos (403 SIN_INTENTOS, no
-    409: el juego trata el 409 como sesión invalidada). La práctica sigue con
-    /readings/random/full."""
+    409: el juego trata el 409 como sesión invalidada)."""
     if typology not in DIFFICULTY_ORDER:
         raise HTTPException(status_code=400, detail=f"Tipología fuera de la progresión: {typology}")
 
@@ -271,9 +256,14 @@ def create_session(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Registra una sesión completada desde Godot en el slot activo (práctica incluida)."""
+    """Registra una sesión completada desde Godot en el slot activo."""
     active_slot = _get_active_slot(db, current_user.id)
     _validate_slot_header(request, active_slot, current_user)
+
+    # Un juego viejo puede mandar la sesión de una lectura que ya no existe
+    # (las de la práctica se borraron): sin esto la base la rechaza con un 500.
+    if db.get(Reading, data.reading_id) is None:
+        raise HTTPException(status_code=404, detail="Lectura no encontrada")
 
     # Crear la sesión vinculada al slot activo
     session = PlayerSession(
@@ -288,7 +278,6 @@ def create_session(
         correct_count=data.correct_count,
         incorrect_count=data.incorrect_count,
         tool_bonus=data.tool_bonus,
-        is_practice=data.is_practice,
     )
     db.add(session)
     db.flush()  # Para obtener session.id
@@ -319,10 +308,9 @@ def create_session(
         )
         db.add(tool)
 
-    # La práctica se guarda para el docente pero no toca el progreso. Tampoco lo
-    # toca una tipología que ya no es del juego, que solo puede llegar de un
-    # cliente antiguo.
-    if not data.is_practice and data.typology in DIFFICULTY_ORDER:
+    # Una tipología que ya no es del juego (solo puede llegar de un cliente
+    # antiguo) se guarda, pero no toca el progreso.
+    if data.typology in DIFFICULTY_ORDER:
         _registrar_progreso(db, current_user.id, active_slot.id, data)
 
     db.commit()
@@ -388,7 +376,6 @@ def list_sessions(
         .filter(
             PlayerSession.user_id == current_user.id,
             PlayerSession.slot_id == active_slot.id,
-            PlayerSession.is_practice == False,
         )
     )
     if typology:

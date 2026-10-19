@@ -4,7 +4,9 @@ Incluye schemas de lecturas, autenticación, progreso y administración.
 """
 from datetime import datetime
 from typing import Dict, List, Optional
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, field_validator
+
+from workspaces import PALETA
 
 
 # ── Tipologías válidas ───────────────────────────────────────────────────────
@@ -62,7 +64,6 @@ class ReadingResponse(BaseModel):
     title: str
     typology: str
     type: Optional[str] = None
-    is_practice: bool = False
     content: str
     created_at: datetime
     updated_at: datetime
@@ -111,7 +112,6 @@ class ReadingFullResponse(BaseModel):
     title: str
     typology: str
     type: Optional[str] = None
-    is_practice: bool = False
     content: str
     created_at: datetime
     updated_at: datetime
@@ -268,9 +268,6 @@ class SessionCreate(BaseModel):
     correct_count: int = 0
     incorrect_count: int = 0
     tool_bonus: int = 0
-    # Sesión de la zona de práctica: se guarda, pero no toca el progreso.
-    # Los clientes antiguos no lo mandan y valen como progresión.
-    is_practice: bool = False
     answers: List[PlayerAnswerCreate] = []
     tools: List[SessionToolCreate] = []
 
@@ -362,7 +359,6 @@ class SessionResponse(BaseModel):
     correct_count: int
     incorrect_count: int
     tool_bonus: int
-    is_practice: bool = False
     started_at: datetime
     completed_at: datetime
     answers: List[PlayerAnswerResponse] = []
@@ -439,9 +435,6 @@ class PlayerProgressResponse(BaseModel):
     user: UserResponse
     active_slot_id: Optional[int] = None
     total_score: int
-    # Sesiones de práctica del slot. No cuentan para nada, pero el juego las usa
-    # para saber que el alumno ya ha jugado y no pedirle otra vez el personaje.
-    practice_sessions: int = 0
     # Intentos por tipología y si ya se agotaron en alguna sin aprobarla: con el
     # juego terminado el alumno sigue entrando, pero no puede avanzar.
     max_attempts: int = 5
@@ -449,7 +442,7 @@ class PlayerProgressResponse(BaseModel):
     typology_progress: List[TypologyProgressResponse]
     achievements: List[AchievementResponse]
     recent_sessions: List[SessionResponse] = []
-    # Respuestas correctas acumuladas por nivel (sin la práctica). El juego las
+    # Respuestas correctas acumuladas por nivel. El juego las
     # restaura al iniciar sesión: sin ellas, los logros de las Estrellas solo
     # contaban los aciertos de una misma partida.
     correct_by_level: Dict[str, int] = {}
@@ -466,7 +459,6 @@ class PlayerSummary(BaseModel):
     is_active: bool
     total_score: int = 0
     total_sessions: int = 0
-    practice_sessions: int = 0
     total_achievements: int = 0
     last_played_at: Optional[datetime] = None
     created_at: datetime
@@ -482,7 +474,6 @@ class AdminStatsResponse(BaseModel):
     total_players: int
     active_players: int
     total_sessions: int
-    total_practice_sessions: int = 0
     total_points: int
     total_achievements: int
     average_accuracy: float
@@ -800,4 +791,87 @@ class ActiveReadingResponse(BaseModel):
         from_attributes = True
 
 
+# ── Entornos de trabajo ──────────────────────────────────────────────────────
 
+def _nombre_de_entorno(valor: str) -> str:
+    valor = valor.strip()
+    if not 1 <= len(valor) <= 40:
+        raise ValueError("El nombre debe tener entre 1 y 40 caracteres")
+    return valor
+
+
+def _color_de_entorno(valor: str) -> str:
+    if valor not in PALETA:
+        raise ValueError(f"El color debe ser uno de {list(PALETA)}")
+    return valor
+
+
+class WorkspaceCreate(BaseModel):
+    """Entorno nuevo: nace inactivo."""
+    name: str
+    color: str
+
+    @field_validator("name")
+    @classmethod
+    def _nombre(cls, valor: str) -> str:
+        return _nombre_de_entorno(valor)
+
+    @field_validator("color")
+    @classmethod
+    def _color(cls, valor: str) -> str:
+        return _color_de_entorno(valor)
+
+
+class WorkspaceUpdate(BaseModel):
+    """Cambios de un entorno: nombre, color o los dos."""
+    name: Optional[str] = None
+    color: Optional[str] = None
+
+    @field_validator("name")
+    @classmethod
+    def _nombre(cls, valor: Optional[str]) -> Optional[str]:
+        return None if valor is None else _nombre_de_entorno(valor)
+
+    @field_validator("color")
+    @classmethod
+    def _color(cls, valor: Optional[str]) -> Optional[str]:
+        return None if valor is None else _color_de_entorno(valor)
+
+
+class WorkspaceResponse(BaseModel):
+    """Un entorno con cuántas cuentas de jugador tiene."""
+    id: int
+    name: str
+    color: str
+    is_active: bool
+    player_count: int = 0
+    created_at: Optional[datetime] = None
+
+
+class PlayerToAdd(BaseModel):
+    """Un jugador que el admin agrega: el correo se valida uno a uno en el
+    endpoint, para decir cuál falló sin rechazar la lista entera."""
+    email: str
+    display_name: Optional[str] = None
+
+
+class PlayersAddRequest(BaseModel):
+    players: List[PlayerToAdd] = Field(..., min_length=1, max_length=200)
+
+
+class PlayerAdded(BaseModel):
+    id: int
+    email: str
+    display_name: str
+    # Solo viaja en esta respuesta: no se guarda en claro en ningún sitio.
+    temp_password: str
+
+
+class PlayerSkipped(BaseModel):
+    email: str
+    reason: str
+
+
+class PlayersAddResult(BaseModel):
+    created: List[PlayerAdded]
+    skipped: List[PlayerSkipped]

@@ -1,6 +1,6 @@
 """El admin ve los intentos de cada tipología y quién tiene el juego terminado;
 reiniciar una tipología le devuelve los intentos al alumno."""
-from helpers import cabeceras, crear_usuario
+from helpers import cabeceras, crear_usuario, entorno_activo_de_prueba
 from models import PlayerTypologyProgress
 
 
@@ -40,7 +40,9 @@ def test_lista_marca_game_over(client, db):
     agotado, slot = crear_usuario(db, "agotado@test.com")
     crear_usuario(db, "sigue@test.com")
     _agotar(db, slot)
-    lista = client.get("/admin/players", headers=cabeceras(admin)).json()
+    r = client.get("/admin/players", headers=cabeceras(admin, entorno_activo_de_prueba(db)))
+    assert r.status_code == 200
+    lista = r.json()
     estado = {j["email"]: j["game_over"] for j in lista}
     assert estado == {"agotado@test.com": True, "sigue@test.com": False}
 

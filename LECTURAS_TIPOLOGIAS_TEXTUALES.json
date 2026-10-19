@@ -56,10 +56,10 @@
           "comprehension_level": "Literal",
           "question": "¿Qué aparece en las fotos que la tía Raquel envía a su hermana?",
           "answers": [
-            "A) Un paisaje nevado de Chicago",
+            "A) Un paisaje nevado de Chicago visto desde su ventana",
             "B) Sus hijos en la escuela",
-            "C) Su casa nueva y su automóvil",
-            "D) Ella fumando y bebiendo junto a un perro verde y un arbolito plateado"
+            "C) Su casa nueva, su automóvil y su jardín con flores",
+            "D) Ella fumando y bebiendo cerca de un perro verde"
           ],
           "correct_answer": "D",
           "justification": "El texto describe las fotos en las que aparece “fumando y tomando wisky cerca de un perro verde y un arbolito de navidad plateado”."
@@ -69,10 +69,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué estado de ánimo domina al protagonista respecto de su país de origen?",
           "answers": [
-            "A) Nostalgia serena",
+            "A) Nostalgia serena y gratitud",
             "B) Indiferencia total",
             "C) Hartazgo y deseo de huida",
-            "D) Orgullo y arraigo"
+            "D) Orgullo y profundo arraigo"
           ],
           "correct_answer": "C",
           "justification": "Expresiones como “pequeño paisito polvoroso”, “olvidar tu nombre” y “vida dormida” revelan cansancio y voluntad de escapar."
@@ -82,9 +82,9 @@
           "comprehension_level": "Inferencial",
           "question": "La repetición del verbo “volar” a lo largo del texto sugiere principalmente:",
           "answers": [
-            "A) La obsesión del personaje con la idea de liberarse",
+            "A) Su obsesión por liberarse",
             "B) El miedo a los viajes en avión",
-            "C) Un recuerdo de infancia",
+            "C) Un recuerdo de su infancia",
             "D) Un interés por la aviación"
           ],
           "correct_answer": "A",
@@ -97,8 +97,8 @@
           "answers": [
             "A) Que en Estados Unidos hay más solidaridad",
             "B) Que el protagonista morirá en el viaje",
-            "C) Que la tía piensa regresar al país",
-            "D) Que la independencia prometida también implica soledad"
+            "C) Que la tía piensa regresar pronto al país",
+            "D) Que esa independencia también trae soledad"
           ],
           "correct_answer": "D",
           "justification": "El paréntesis contrapone la autonomía prometida con el aislamiento que trae consigo."
@@ -121,10 +121,10 @@
           "comprehension_level": "Critico",
           "question": "El título “U.S.A. que te usa” funciona sobre todo como:",
           "answers": [
-            "A) Un dato geográfico",
-            "B) Un juego de palabras que anticipa una crítica a la migración idealizada",
-            "C) Una referencia al nombre de la tía",
-            "D) Un homenaje al país de destino"
+            "A) Un dato geográfico sobre el destino",
+            "B) Un juego de palabras crítico con la migración",
+            "C) Una referencia al nombre de la tía que lo recibe",
+            "D) Un homenaje al país que acogerá al protagonista"
           ],
           "correct_answer": "B",
           "justification": "El juego fónico entre “U.S.A.” y “usa” insinúa que el país aprovecha al migrante, lo que cuestiona el sueño migratorio."
@@ -134,9 +134,9 @@
           "comprehension_level": "Critico",
           "question": "¿Qué visión de la migración transmite el fragmento?",
           "answers": [
-            "A) Una decisión tomada desde el desencanto y con final incierto",
-            "B) Una salida segura hacia el éxito",
-            "C) Una experiencia colectiva y organizada",
+            "A) Una huida desencantada y de final incierto",
+            "B) Una salida segura hacia el éxito económico",
+            "C) Una experiencia colectiva, organizada y solidaria",
             "D) Un viaje planificado con apoyo institucional"
           ],
           "correct_answer": "A",
@@ -147,9 +147,9 @@
           "comprehension_level": "Critico",
           "question": "El modo en que se describe a la tía Raquel («la valiente que se fue sola y ahora triunfa») puede leerse como:",
           "answers": [
-            "A) Una descripción neutral y objetiva",
+            "A) Una descripción neutral y objetiva de su vida",
             "B) Una ironía frente al relato del éxito migratorio",
-            "C) Una admiración sin matices",
+            "C) Una admiración sin matices hacia la tía",
             "D) Un reproche a la madre del protagonista"
           ],
           "correct_answer": "B",
@@ -160,10 +160,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué valoración se podría hacer del estilo del autor en este fragmento?",
           "answers": [
-            "A) Es un estilo formal y ordenado, propio de un informe",
-            "B) Es un estilo fragmentado que reproduce la angustia del personaje",
-            "C) Es un estilo didáctico que busca enseñar",
-            "D) Es un estilo humorístico sin carga emocional"
+            "A) Es formal y ordenado, como un informe",
+            "B) Es fragmentado y refleja la angustia del personaje",
+            "C) Es didáctico y busca enseñar algo al lector",
+            "D) Es humorístico y sin carga emocional"
           ],
           "correct_answer": "B",
           "justification": "La acumulación de frases sin puntuación tradicional imita el pensamiento acelerado y angustiado."
@@ -214,9 +214,9 @@
           "question": "¿Cuáles son algunas de las habilidades que se atribuyen a León?",
           "answers": [
             "A) Pintar acuarelas y leer la clave de sol",
-            "B) Montar a caballo y cazar",
+            "B) Montar a caballo y cazar en el bosque",
             "C) Administrar fincas y llevar cuentas",
-            "D) Cocinar y coser"
+            "D) Cocinar, coser y bordar manteles"
           ],
           "correct_answer": "A",
           "justification": "El fragmento menciona que pintaba acuarelas, sabía leer la clave de sol y gustaba de la literatura."
@@ -227,9 +227,9 @@
           "question": "¿Quién es Justin dentro del relato?",
           "answers": [
             "A) El esposo de Emma",
-            "B) Un profesor de música",
-            "C) El mancebo de la botica y pariente pobre de Homais",
-            "D) El hijo mayor de Homais"
+            "B) Un profesor de música de los niños",
+            "C) Un pariente pobre de Homais",
+            "D) El hijo mayor del matrimonio Homais"
           ],
           "correct_answer": "C",
           "justification": "Se lo describe como “el mancebo de la botica, un pariente pobre de Homais, a quien habían recogido por caridad”."
@@ -239,10 +239,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué revela la reacción de Emma al saludo de León desde la ventana?",
           "answers": [
-            "A) Un rechazo definitivo",
-            "B) Una gran euforia",
+            "A) Un rechazo definitivo hacia León",
+            "B) Una euforia difícil de ocultar",
             "C) Una total indiferencia hacia él",
-            "D) Una respuesta breve y contenida por las normas sociales"
+            "D) Una cortesía breve y contenida"
           ],
           "correct_answer": "D",
           "justification": "Emma responde con una inclinación rápida y cierra la ventana: cortesía medida propia del decoro de la época."
@@ -253,9 +253,9 @@
           "question": "¿Por qué León espera con impaciencia que den las seis?",
           "answers": [
             "A) Porque termina su jornada laboral",
-            "B) Porque tiene una cita con Binet",
+            "B) Porque tiene una cita pendiente con Binet",
             "C) Porque debe viajar a otra ciudad",
-            "D) Porque espera reencontrarse con Emma en la fonda"
+            "D) Porque espera ver de nuevo a Emma"
           ],
           "correct_answer": "D",
           "justification": "La cena anterior con Emma lo marcó y su espera se explica por el deseo de volver a verla."
@@ -268,7 +268,7 @@
             "A) Entre su pobreza y su riqueza",
             "B) Entre su honestidad y su engaño",
             "C) Entre su juventud y su vejez",
-            "D) Entre su timidez cotidiana y su locuacidad de esa noche"
+            "D) Entre su timidez y su soltura al hablar"
           ],
           "correct_answer": "D",
           "justification": "El narrador subraya que era tímido y reservado, y se asombra de haber hablado dos horas seguidas."
@@ -278,9 +278,9 @@
           "comprehension_level": "Inferencial",
           "question": "La buena opinión que Yonville tiene de León se debe principalmente a:",
           "answers": [
-            "A) Su cargo político",
-            "B) Su prudencia social y sus buenos modales",
-            "C) Su fortuna familiar",
+            "A) Su cargo político en el ayuntamiento",
+            "B) Su prudencia y sus buenos modales",
+            "C) Su fortuna familiar y sus propiedades",
             "D) Su fama como artista"
           ],
           "correct_answer": "B",
@@ -291,9 +291,9 @@
           "comprehension_level": "Critico",
           "question": "¿Qué función cumple la descripción minuciosa de los personajes secundarios?",
           "answers": [
-            "A) Construir un retrato social del ambiente provinciano",
+            "A) Retratar el ambiente provinciano",
             "B) Explicar el desenlace de la novela",
-            "C) Retrasar la acción sin propósito",
+            "C) Retrasar la acción sin ningún propósito",
             "D) Demostrar la erudición del narrador"
           ],
           "correct_answer": "A",
@@ -304,10 +304,10 @@
           "comprehension_level": "Critico",
           "question": "El uso de comillas en la palabra “dama” sugiere que el narrador:",
           "answers": [
-            "A) Corrige un error de traducción",
-            "B) Introduce un término extranjero",
-            "C) Marca una distancia irónica frente a la idealización de León",
-            "D) Cita textualmente a Emma"
+            "A) Corrige un error de la traducción original",
+            "B) Introduce un término extranjero poco usual",
+            "C) Ironiza sobre la idealización de León",
+            "D) Cita textualmente las palabras de Emma"
           ],
           "correct_answer": "C",
           "justification": "Las comillas señalan que se trata de la percepción exaltada del joven, no de una categoría real."
@@ -330,9 +330,9 @@
           "comprehension_level": "Critico",
           "question": "¿Qué opinión sostendrías sobre el ritmo narrativo del fragmento?",
           "answers": [
-            "A) Es vertiginoso y lleno de acción",
-            "B) Es pausado y se apoya en la observación de detalles",
-            "C) Carece de descripciones",
+            "A) Es vertiginoso y está lleno de acción",
+            "B) Es pausado y atento a los detalles",
+            "C) Carece casi por completo de descripciones",
             "D) Está construido solo con diálogos"
           ],
           "correct_answer": "B",
@@ -362,7 +362,7 @@
           "comprehension_level": "Literal",
           "question": "¿Qué acontecimiento marca el inicio del relato?",
           "answers": [
-            "A) La caída de las primeras lluvias",
+            "A) Las primeras lluvias",
             "B) La llegada del verano",
             "C) Una fiesta del pueblo",
             "D) La crecida del mar"
@@ -376,9 +376,9 @@
           "question": "¿A qué horas silbaban las chicharras en las huertas?",
           "answers": [
             "A) Al mediodía y a medianoche",
-            "B) A las seis de la mañana y a las seis de la tarde",
-            "C) Solo al amanecer",
-            "D) Cada tres horas"
+            "B) A las seis de la mañana y de la tarde",
+            "C) Solo al amanecer, antes de la lluvia",
+            "D) Cada tres horas durante todo el día"
           ],
           "correct_answer": "B",
           "justification": "Se afirma que silbaban “puntuales, a las seis de la mañana y a las seis de la tarde”."
@@ -389,9 +389,9 @@
           "question": "¿Qué hacían los niños después de bañarse bajo la lluvia?",
           "answers": [
             "A) Regresaban a sus casas a dormir",
-            "B) Ayudaban en las huertas",
-            "C) Jugaban con barquichuelos de papel en las cunetas",
-            "D) Pescaban en el río"
+            "B) Ayudaban a sus padres en las huertas",
+            "C) Jugaban con barquitos de papel",
+            "D) Pescaban en el río crecido"
           ],
           "correct_answer": "C",
           "justification": "El texto indica que se amontonaban en las bocacalles a jugar con barquitos de papel."
@@ -401,10 +401,10 @@
           "comprehension_level": "Literal",
           "question": "¿Qué arrastraban los ríos crecidos hacia el mar?",
           "answers": [
-            "A) Matas de plátano, guadúas, yarumos y restos de árboles",
-            "B) Botes y redes de pescadores",
-            "C) Casas enteras",
-            "D) Animales de granja"
+            "A) Matas de plátano y restos de árboles",
+            "B) Botes, canoas y redes de pescadores",
+            "C) Casas enteras y puentes de madera",
+            "D) Ganado y otros animales de granja"
           ],
           "correct_answer": "A",
           "justification": "Se enumeran matas de plátanos arrancadas de raíz junto con guadúas, yarumos, higuerones y caña de azúcar."
@@ -429,8 +429,8 @@
           "answers": [
             "A) Iban a una cascada cercana",
             "B) Se bañaban en una ducha pública",
-            "C) Se bañaban con el agua de la lluvia",
-            "D) Nadaban en el río"
+            "C) Se bañaban bajo la lluvia",
+            "D) Nadaban en el río del pueblo"
           ],
           "correct_answer": "C",
           "justification": "Es una metáfora que identifica la lluvia con una ducha gratuita y al aire libre."
@@ -441,7 +441,7 @@
           "question": "¿Qué efecto produce la personificación “las aguas metían sus brazos cariñosos”?",
           "answers": [
             "A) Indica que había personas escondidas",
-            "B) Presenta a la naturaleza con rasgos humanos y afectivos",
+            "B) Humaniza el agua con rasgos afectivos",
             "C) Sugiere que el agua estaba contaminada",
             "D) Muestra a la naturaleza como una amenaza militar"
           ],
@@ -453,8 +453,8 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué se puede deducir sobre las condiciones de vida del lugar?",
           "answers": [
-            "A) Es una comunidad urbana acomodada",
-            "B) Es una comunidad sencilla, con carencias de higiene y servicios",
+            "A) Es una comunidad urbana y acomodada",
+            "B) Es una comunidad humilde con carencias",
             "C) Es un balneario turístico",
             "D) Es un asentamiento temporal"
           ],
@@ -466,10 +466,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué actitud predomina en la mirada del narrador hacia el paisaje?",
           "answers": [
-            "A) Rechazo y desprecio",
-            "B) Neutralidad científica",
-            "C) Alarma catastrofista",
-            "D) Contemplación afectiva y celebración de la vida"
+            "A) Rechazo y desprecio por el lugar",
+            "B) Neutralidad científica y distante",
+            "C) Alarma catastrofista ante la lluvia",
+            "D) Contemplación afectiva y gozosa"
           ],
           "correct_answer": "D",
           "justification": "Expresiones como “verde alegría” y “gozosos bajo la lluvia” muestran una mirada amorosa hacia el entorno."
@@ -482,7 +482,7 @@
             "A) Solo describe fenómenos meteorológicos",
             "B) Idealiza por completo la vida del pueblo",
             "C) Denuncia únicamente a las autoridades",
-            "D) Combina belleza y miseria sin ocultar ninguna de las dos"
+            "D) Muestra a la vez belleza y miseria"
           ],
           "correct_answer": "D",
           "justification": "El autor celebra la vitalidad del lugar y, a la vez, deja ver el “desaseo de los moradores”."
@@ -492,7 +492,7 @@
           "comprehension_level": "Critico",
           "question": "La frase final sobre el mar “que estaba poniéndose furioso” cumple la función de:",
           "answers": [
-            "A) Cerrar el relato con una nota de calma",
+            "A) Cerrar el relato con una nota de calma y armonía",
             "B) Describir la pesca del día",
             "C) Anticipar una amenaza o tensión próxima",
             "D) Explicar el origen de las lluvias"
@@ -506,9 +506,9 @@
           "question": "¿Qué valor cultural aporta el uso de términos como “guadúas”, “yarumos” o “coco-chiles”?",
           "answers": [
             "A) Dificultan innecesariamente la lectura",
-            "B) Sustituyen a los personajes",
-            "C) Demuestran errores de edición",
-            "D) Anclan el relato en un territorio y una cultura concretos"
+            "B) Sustituyen a los personajes del relato",
+            "C) Demuestran errores de edición del libro",
+            "D) Sitúan el relato en una cultura concreta"
           ],
           "correct_answer": "D",
           "justification": "El léxico regional otorga identidad local y autenticidad al mundo narrado."
@@ -535,10 +535,10 @@
           "comprehension_level": "Literal",
           "question": "¿Qué soñó el Tío antes de despertarse?",
           "answers": [
-            "A) Que corría por el campo",
-            "B) Que el amo lo llamaba",
-            "C) Que un portero lo perseguía con su escoba",
-            "D) Que comía una pata de pollo"
+            "A) Que corría libre por el campo",
+            "B) Que el amo lo llamaba a comer",
+            "C) Que lo perseguía un portero",
+            "D) Que comía una pata de pollo robada"
           ],
           "correct_answer": "C",
           "justification": "El relato comienza indicando que soñó con un portero que lo perseguía con una escoba."
@@ -561,9 +561,9 @@
           "comprehension_level": "Literal",
           "question": "¿Dónde había escondido lo que robó?",
           "answers": [
-            "A) Bajo la cama del amo",
-            "B) En la sala, entre el armario y la pared",
-            "C) En el jardín",
+            "A) Bajo la cama del amo, en su cuarto",
+            "B) Entre el armario y la pared",
+            "C) En el jardín, junto a la cerca",
             "D) En el cobertizo del cerdo"
           ],
           "correct_answer": "B",
@@ -587,10 +587,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué se puede deducir sobre la identidad del Tío?",
           "answers": [
-            "A) Es un niño de la casa",
+            "A) Es un niño pequeño de la casa",
             "B) Es un anciano sirviente",
             "C) Es un gato callejero",
-            "D) Es un perro que vive con su amo"
+            "D) Es un perro de la casa"
           ],
           "correct_answer": "D",
           "justification": "Le entran “ganas de ladrar”, gruñe y mide el tiempo en huesos: rasgos que corresponden a un perro."
@@ -600,10 +600,10 @@
           "comprehension_level": "Inferencial",
           "question": "La comparación “el que se necesitaría para recitar un buen hueso” indica que:",
           "answers": [
-            "A) Ocurrió una escena de comedia",
-            "B) El tiempo se mide desde la perspectiva del animal",
-            "C) Los personajes recitaban poemas",
-            "D) El narrador se equivoca al medir el tiempo"
+            "A) Ocurrió una escena de comedia en la casa",
+            "B) El tiempo se mide como lo haría el animal",
+            "C) Los personajes recitaban poemas de noche",
+            "D) El narrador mide mal el tiempo"
           ],
           "correct_answer": "B",
           "justification": "La medida temporal se adapta al universo mental del perro, no al humano."
@@ -613,10 +613,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Por qué el Tío no va a comprobar si la pata de pollo sigue escondida?",
           "answers": [
-            "A) Porque el amo lo vigila",
-            "B) Porque olvidó dónde la dejó",
+            "A) Porque el amo lo vigila de cerca",
+            "B) Porque olvidó en qué lugar la escondió",
             "C) Porque ya no tiene hambre",
-            "D) Porque una norma le impide salir de la habitación hasta la mañana"
+            "D) Porque una norma le prohíbe salir de noche"
           ],
           "correct_answer": "D",
           "justification": "El texto señala que hasta la mañana no se podía salir de la habitación, tal era la norma establecida."
@@ -626,7 +626,7 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué sensación predomina en el ambiente del relato?",
           "answers": [
-            "A) Melancolía romántica",
+            "A) Melancolía romántica y serena",
             "B) Inquietud y desconcierto",
             "C) Serenidad absoluta",
             "D) Alegría y bullicio"
@@ -639,10 +639,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué logra el autor al narrar desde el punto de vista de un animal?",
           "answers": [
-            "A) Mostrar lo cotidiano desde una mirada extrañada y sensible",
+            "A) Mostrar lo cotidiano con una mirada extrañada",
             "B) Evitar describir a los personajes humanos",
-            "C) Hacer más confuso el relato",
-            "D) Convertir el cuento en una fábula moralizante"
+            "C) Hacer más confuso y lento el relato",
+            "D) Convertir el cuento en una fábula"
           ],
           "correct_answer": "A",
           "justification": "La focalización animal vuelve extraños los hechos comunes y despierta empatía por su percepción."
@@ -652,10 +652,10 @@
           "comprehension_level": "Critico",
           "question": "La frase “Cuando uno piensa en la comida, el alma parece aliviada” puede interpretarse como:",
           "answers": [
-            "A) Una reflexión que mezcla lo trivial y lo existencial con humor",
-            "B) Una crítica al amo",
+            "A) Un humor que une lo trivial y lo existencial",
+            "B) Una crítica velada al amo por dejarlo con hambre",
             "C) Una receta de cocina",
-            "D) Una advertencia médica"
+            "D) Una advertencia médica sobre la dieta"
           ],
           "correct_answer": "A",
           "justification": "El narrador atribuye consuelo espiritual a un impulso elemental, con un humor característico del autor."
@@ -665,9 +665,9 @@
           "comprehension_level": "Critico",
           "question": "¿Qué opinión podrías sostener sobre el desenlace del fragmento?",
           "answers": [
-            "A) Deja la tensión sin explicación y devuelve la calma solo en apariencia",
+            "A) Calma la escena sin explicar el grito",
             "B) Concluye con la muerte del personaje",
-            "C) Anuncia el regreso del portero",
+            "C) Anuncia el regreso del portero de la escoba",
             "D) Resuelve por completo el misterio del grito"
           ],
           "correct_answer": "A",
@@ -680,7 +680,7 @@
           "answers": [
             "A) El narrador se contradice",
             "B) El personaje siempre fue temeroso",
-            "C) Algo ha cambiado en su entorno y lo percibe sin comprenderlo",
+            "C) Percibe un cambio que aún no comprende",
             "D) El calor le provocó una enfermedad"
           ],
           "correct_answer": "C",
@@ -1085,10 +1085,10 @@
           "comprehension_level": "Literal",
           "question": "Según el texto, ¿cuál es el criterio de la rectitud de la comprensión?",
           "answers": [
-            "A) La cantidad de fuentes consultadas",
-            "B) La rapidez de la lectura",
-            "C) La opinión del autor del texto",
-            "D) La confluencia de todos los detalles en el todo"
+            "A) La cantidad de fuentes que se consultan",
+            "B) La rapidez y fluidez de la lectura",
+            "C) La coincidencia con la opinión del propio autor",
+            "D) La confluencia de los detalles en el todo"
           ],
           "correct_answer": "D",
           "justification": "Se señala que la confluencia de todos los detalles en el todo es el criterio de rectitud y que su falta implica fracaso."
@@ -1101,7 +1101,7 @@
             "A) Dilthey",
             "B) Novalis",
             "C) Schleiermacher",
-            "D) Gadamer"
+            "D) Hans-Georg Gadamer"
           ],
           "correct_answer": "C",
           "justification": "El texto atribuye esa distinción explícitamente a Schleiermacher."
@@ -1111,10 +1111,10 @@
           "comprehension_level": "Literal",
           "question": "¿Con qué nociones se relaciona el aporte de Dilthey?",
           "answers": [
-            "A) «Norma» y «uso»",
-            "B) «Signo» y «significado»",
-            "C) «Duda» y «método»",
-            "D) «Estructura» y «centración en un punto medio»"
+            "A) «Norma lingüística» y «uso social»",
+            "B) «Signo», «significado» y «referente»",
+            "C) «Duda metódica» y «evidencia»",
+            "D) «Estructura» y «centración»"
           ],
           "correct_answer": "D",
           "justification": "El autor indica que Dilthey habla de «estructura» y de «centración en un punto medio»."
@@ -1126,7 +1126,7 @@
           "answers": [
             "A) Solo se comprende un texto traducido",
             "B) Comprender exige conocer la biografía del autor",
-            "C) La comprensión es un movimiento circular entre el todo y las partes",
+            "C) Comprender es ir del todo a las partes y volver",
             "D) La retórica antigua es superior a la moderna"
           ],
           "correct_answer": "C",
@@ -1138,8 +1138,8 @@
           "question": "¿Por qué se recurre al ejemplo del aprendizaje de lenguas extranjeras?",
           "answers": [
             "A) Para comparar idiomas antiguos y modernos",
-            "B) Para ilustrar con un caso concreto cómo opera la anticipación del sentido",
-            "C) Para criticar los métodos de enseñanza",
+            "B) Para mostrar la anticipación del sentido",
+            "C) Para criticar los métodos de enseñanza de idiomas",
             "D) Para demostrar que las lenguas son difíciles"
           ],
           "correct_answer": "B",
@@ -1153,7 +1153,7 @@
             "A) Que el lector impone su interpretación",
             "B) Que el texto debe corregirse",
             "C) Que toda interpretación es igualmente válida",
-            "D) Que la comprensión es revisable ante la evidencia del texto"
+            "D) Que la comprensión se corrige a la luz del texto"
           ],
           "correct_answer": "D",
           "justification": "El autor plantea reajustar la expectativa cuando el texto no confluye en la unidad pensada."
@@ -1163,10 +1163,10 @@
           "comprehension_level": "Inferencial",
           "question": "La expresión «ampliar en círculos concéntricos la unidad del sentido» sugiere que la comprensión:",
           "answers": [
-            "A) Se profundiza de manera progresiva y acumulativa",
+            "A) Avanza de forma progresiva",
             "B) Solo alcanza el nivel superficial",
             "C) Es instantánea y definitiva",
-            "D) Depende del azar"
+            "D) Depende sobre todo del azar"
           ],
           "correct_answer": "A",
           "justification": "La imagen de los círculos concéntricos indica un avance gradual que integra cada vez más sentido."
@@ -1176,10 +1176,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué consecuencia práctica tiene esta teoría para un estudiante universitario?",
           "answers": [
-            "A) Debe memorizar definiciones",
-            "B) Debe leer solo fragmentos aislados",
-            "C) Debe releer relacionando cada parte con el sentido global del texto",
-            "D) Debe evitar los textos extensos"
+            "A) Debe memorizar las definiciones principales",
+            "B) Debe leer solo fragmentos aislados del texto",
+            "C) Debe releer vinculando partes y todo",
+            "D) Debe evitar los textos extensos y complejos"
           ],
           "correct_answer": "C",
           "justification": "Si el sentido se construye entre parte y todo, la relectura relacional es la estrategia coherente."
@@ -1189,8 +1189,8 @@
           "comprehension_level": "Critico",
           "question": "El principio de que “es preciso entender un texto desde él mismo” se opone a:",
           "answers": [
-            "A) Consultar el género literario",
-            "B) Imponer al texto ideas ajenas sin verificarlas en él",
+            "A) Consultar el género literario de la obra",
+            "B) Imponerle ideas ajenas al texto",
             "C) Considerar el contexto lingüístico",
             "D) Releer el texto varias veces"
           ],
@@ -1202,10 +1202,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué se podría objetar a la afirmación de que la falta de confluencia significa el fracaso de la comprensión?",
           "answers": [
-            "A) Que hay textos deliberadamente ambiguos o contradictorios cuya comprensión no exige unidad plena",
+            "A) Que algunos textos son ambiguos a propósito",
             "B) Que los detalles no importan",
-            "C) Que la comprensión no existe",
-            "D) Que ningún texto tiene sentido"
+            "C) Que la comprensión no existe realmente",
+            "D) Que ningún texto tiene un sentido propio"
           ],
           "correct_answer": "A",
           "justification": "Obras irónicas, fragmentarias o contradictorias muestran que la unidad total no siempre es alcanzable ni deseable."
@@ -1215,10 +1215,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué tipo de razonamiento predomina en el texto?",
           "answers": [
-            "A) Conceptual y argumentativo, apoyado en autoridades",
+            "A) Conceptual, apoyado en autoridades",
             "B) Estadístico y experimental",
             "C) Publicitario y persuasivo",
-            "D) Narrativo y anecdótico"
+            "D) Narrativo, basado en anécdotas"
           ],
           "correct_answer": "A",
           "justification": "El autor define nociones, encadena razones y se apoya en Schleiermacher y Dilthey."
@@ -1254,9 +1254,9 @@
           "comprehension_level": "Literal",
           "question": "Según el autor, ¿cómo pueden niños y adultos trascender su soledad?",
           "answers": [
-            "A) Mediante los viajes",
+            "A) Mediante los viajes y la aventura",
             "B) Mediante el juego o el trabajo",
-            "C) Mediante el silencio",
+            "C) Mediante el silencio y la oración",
             "D) Mediante la lectura"
           ],
           "correct_answer": "B",
@@ -1280,10 +1280,10 @@
           "comprehension_level": "Literal",
           "question": "¿Con qué imagen se compara la muralla que separa al individuo del mundo?",
           "answers": [
-            "A) Con un muro de piedra",
-            "B) Con una máscara antigua",
-            "C) Con una impalpable y transparente muralla: la conciencia",
-            "D) Con un río caudaloso"
+            "A) Con un muro de piedra que separa al joven del mundo",
+            "B) Con una máscara antigua y sagrada",
+            "C) Con la conciencia, transparente e impalpable",
+            "D) Con un río caudaloso que lo arrastra"
           ],
           "correct_answer": "C",
           "justification": "El texto describe “una impalpable, transparente muralla: la de nuestra conciencia”."
@@ -1293,10 +1293,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Cuál es la analogía central que sostiene el argumento?",
           "answers": [
-            "A) Entre el juego y el trabajo",
+            "A) Entre el juego infantil y el trabajo adulto",
             "B) Entre el niño y el anciano",
-            "C) Entre el adolescente y los pueblos en formación",
-            "D) Entre el sueño y la muerte"
+            "C) Entre el adolescente y los pueblos",
+            "D) Entre el sueño y el despertar"
           ],
           "correct_answer": "C",
           "justification": "El autor traslada la experiencia adolescente de interrogarse a los pueblos “en trance de crecimiento”."
@@ -1306,10 +1306,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué postura adopta el autor frente a la idea de “genio de los pueblos”?",
           "answers": [
-            "A) La rechaza por completo como invención",
-            "B) La acepta como una esencia inmutable",
+            "A) La rechaza por completo como una invención",
+            "B) La acepta como una esencia inmutable del pueblo",
             "C) La atribuye a factores biológicos",
-            "D) La relativiza y la considera un conjunto de reacciones ante estímulos"
+            "D) La relativiza como reacción a estímulos"
           ],
           "correct_answer": "D",
           "justification": "Sostiene que sería “un complejo de reacciones ante un estímulo dado” y que el carácter nacional puede variar."
@@ -1319,10 +1319,10 @@
           "comprehension_level": "Inferencial",
           "question": "La imagen del rostro reflejado y deformado por el agua representa:",
           "answers": [
-            "A) La dificultad de reconocerse a sí mismo",
+            "A) La dificultad para reconocerse",
             "B) La belleza física",
             "C) El paso del tiempo climático",
-            "D) El miedo al agua"
+            "D) El miedo infantil al agua"
           ],
           "correct_answer": "A",
           "justification": "El adolescente se pregunta si ese rostro incierto es el suyo: es una figura de la identidad problemática."
@@ -1332,9 +1332,9 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué significa “despertar a la historia” en el texto?",
           "answers": [
-            "A) Adquirir conciencia de la propia singularidad como pueblo",
-            "B) Iniciar una revolución armada",
-            "C) Olvidar las tradiciones",
+            "A) Tomar conciencia de su singularidad",
+            "B) Iniciar una revolución armada contra el pasado",
+            "C) Olvidar las tradiciones heredadas",
             "D) Estudiar el pasado en la escuela"
           ],
           "correct_answer": "A",
@@ -1345,9 +1345,9 @@
           "comprehension_level": "Critico",
           "question": "¿Qué valor concede el autor a las respuestas que un pueblo se da sobre sí mismo, aunque el tiempo las corrija?",
           "answers": [
-            "A) Conservan valor porque el acto mismo de interrogarse es revelador",
-            "B) Solo valen si son científicas",
-            "C) Ninguno, pues son inútiles",
+            "A) Valen porque interrogarse ya es revelador",
+            "B) Solo valen si tienen base científica",
+            "C) Ninguno, pues el tiempo las vuelve inútiles",
             "D) Valen únicamente si las confirma la historia"
           ],
           "correct_answer": "A",
@@ -1358,10 +1358,10 @@
           "comprehension_level": "Critico",
           "question": "La secuencia “facciones – rostro – máscara – significación – historia” sugiere que la identidad:",
           "answers": [
-            "A) Depende del azar biológico",
+            "A) Depende solo del azar biológico",
             "B) Es una ilusión sin consecuencias",
-            "C) Es un dato natural y fijo",
-            "D) Se construye progresivamente mediante la mirada y el tiempo"
+            "C) Es un dato natural, fijo e invariable",
+            "D) Se construye con el tiempo"
           ],
           "correct_answer": "D",
           "justification": "El encadenamiento describe un proceso de formación, no una esencia dada de antemano."
@@ -1371,10 +1371,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué objeción razonable podría plantearse a la analogía entre el individuo y el pueblo?",
           "answers": [
-            "A) Que la soledad es inexplicable",
+            "A) Que la soledad humana es inexplicable",
             "B) Que los pueblos no tienen historia",
-            "C) Que un colectivo no posee conciencia unitaria como la de una persona",
-            "D) Que la adolescencia no existe"
+            "C) Que un pueblo no tiene una conciencia única",
+            "D) Que la adolescencia no existe como etapa"
           ],
           "correct_answer": "C",
           "justification": "Atribuir a una colectividad heterogénea una conciencia semejante a la individual es una simplificación discutible."
@@ -1385,8 +1385,8 @@
           "question": "¿Qué recurso predominante utiliza el autor para persuadir al lector?",
           "answers": [
             "A) Citas legales",
-            "B) Imágenes poéticas y analogías reflexivas",
-            "C) Datos estadísticos",
+            "B) Imágenes poéticas y analogías",
+            "C) Datos estadísticos y cifras",
             "D) Testimonios de encuestados"
           ],
           "correct_answer": "B",
@@ -1413,8 +1413,8 @@
           "question": "¿Dónde vio el autor el documental que comenta?",
           "answers": [
             "A) En París, en la televisión francesa",
-            "B) En Lima, en un cine",
-            "C) En Madrid, en una conferencia",
+            "B) En Lima, en un cine del centro",
+            "C) En Madrid, en una conferencia sobre educación",
             "D) En un festival de cine documental"
           ],
           "correct_answer": "A",
@@ -1438,9 +1438,9 @@
           "comprehension_level": "Literal",
           "question": "¿Qué disposición se dictó respecto de la circulación dentro del colegio?",
           "answers": [
-            "A) Que nadie circulara solo, siempre al menos en grupos de dos",
+            "A) Circular siempre en grupos de al menos dos",
             "B) Salir del aula solo con permiso escrito",
-            "C) Prohibir la salida al patio",
+            "C) Prohibir la salida al patio en los recreos",
             "D) Cerrar los baños durante las clases"
           ],
           "correct_answer": "A",
@@ -1451,9 +1451,9 @@
           "comprehension_level": "Literal",
           "question": "¿Qué estrategia adoptaban la profesora y sus colegas para llegar al colegio?",
           "answers": [
-            "A) Llegaban antes del amanecer",
-            "B) Se reunían en la boca del metro y caminaban juntos",
-            "C) Viajaban en taxi con escolta",
+            "A) Llegaban mucho antes del amanecer",
+            "B) Caminaban juntos desde el metro",
+            "C) Viajaban en taxi con escolta policial",
             "D) Ingresaban por una puerta secundaria"
           ],
           "correct_answer": "B",
@@ -1465,9 +1465,9 @@
           "question": "¿Cuál es la intención principal del autor al relatar este documental?",
           "answers": [
             "A) Promover el turismo en Francia",
-            "B) Narrar una anécdota personal sin más",
-            "C) Cuestionar el estado de la educación y la resignación ante la violencia",
-            "D) Elogiar las medidas de seguridad escolares"
+            "B) Narrar una anécdota personal sin mayor propósito",
+            "C) Criticar la resignación ante la violencia",
+            "D) Elogiar las medidas de seguridad del liceo"
           ],
           "correct_answer": "C",
           "justification": "El relato sirve para introducir el que llama “problema cultural mayor de nuestro tiempo: la educación”."
@@ -1477,10 +1477,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué actitud del autor revela la frase “iban diariamente a su trabajo como quien va al infierno”?",
           "answers": [
-            "A) Burla hacia los profesores",
-            "B) Admiración por la valentía docente y crítica a la situación",
-            "C) Aprobación de las medidas adoptadas",
-            "D) Neutralidad informativa"
+            "A) Burla hacia los profesores por su miedo",
+            "B) Compasión hacia los docentes y denuncia",
+            "C) Aprobación de las medidas adoptadas por el liceo",
+            "D) Neutralidad informativa y distante"
           ],
           "correct_answer": "B",
           "justification": "La comparación expresa compasión por los docentes y denuncia la anormalidad convertida en rutina."
@@ -1491,9 +1491,9 @@
           "question": "El contraste entre el tono “tranquilizador” del documental y los hechos narrados sugiere que:",
           "answers": [
             "A) La situación estaba realmente resuelta",
-            "B) La aparente normalidad encubre un fracaso profundo",
+            "B) La normalidad es solo aparente",
             "C) El autor no comprendió el francés",
-            "D) El documental era una ficción"
+            "D) El documental era en realidad una ficción"
           ],
           "correct_answer": "B",
           "justification": "Las medidas presentadas como logros (detectores, circular en parejas) evidencian que el problema persiste."
@@ -1503,10 +1503,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué relación establece implícitamente el texto entre contexto social y violencia escolar?",
           "answers": [
-            "A) La violencia depende del clima",
-            "B) La violencia se debe solo a la diversidad cultural",
+            "A) La violencia depende del clima de la ciudad",
+            "B) La violencia se debe a la diversidad cultural",
             "C) Ninguna, son fenómenos independientes",
-            "D) La desocupación y la fractura familiar inciden en la conflictividad del colegio"
+            "D) Las carencias familiares inciden en la violencia"
           ],
           "correct_answer": "D",
           "justification": "El autor menciona familias fracturadas por la desocupación, la delincuencia y la violencia de género."
@@ -1516,10 +1516,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué sugiere el título “Prohibido prohibir” en relación con el contenido?",
           "answers": [
-            "A) Que deben eliminarse todas las normas",
+            "A) Que deben eliminarse todas las normas escolares",
             "B) Que el colegio prohibía el ingreso de padres",
-            "C) Que la ley francesa impide sancionar",
-            "D) Que la renuncia a poner límites tiene consecuencias en la convivencia escolar"
+            "C) Que la ley francesa impide sancionar a los alumnos",
+            "D) Que no poner límites daña la convivencia"
           ],
           "correct_answer": "D",
           "justification": "El lema, asociado a la contracultura de 1968, se retoma críticamente frente a la ausencia de autoridad y límites."
@@ -1529,10 +1529,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué límite tiene la argumentación del autor?",
           "answers": [
-            "A) Se basa en un recuerdo personal de un solo caso, sin datos comparativos",
+            "A) Se basa en el recuerdo de un solo caso",
             "B) Entrevista a los estudiantes involucrados",
             "C) Se apoya en datos oficiales verificados",
-            "D) Cita numerosas investigaciones"
+            "D) Cita numerosas investigaciones académicas"
           ],
           "correct_answer": "A",
           "justification": "El propio autor admite dudas (“si mal no recuerdo”), lo que revela una base anecdótica y no estadística."
@@ -1543,8 +1543,8 @@
           "question": "¿Qué postura alternativa podría oponerse a la del autor?",
           "answers": [
             "A) Que la disciplina es innecesaria en cualquier caso",
-            "B) Que los documentales nunca son fiables",
-            "C) Que el problema exige políticas sociales y no solo mayor autoridad escolar",
+            "B) Que los documentales televisivos nunca son fiables",
+            "C) Que urgen políticas sociales, no solo más autoridad",
             "D) Que la educación no es un tema público"
           ],
           "correct_answer": "C",
@@ -1555,9 +1555,9 @@
           "comprehension_level": "Critico",
           "question": "La inclusión de la frase en francés y su traducción cumple la función de:",
           "answers": [
-            "A) Confundir al lector",
-            "B) Cumplir una norma editorial",
-            "C) Dar autenticidad al testimonio y reforzar su fuerza persuasiva",
+            "A) Confundir al lector que no sabe francés",
+            "B) Cumplir una norma editorial del libro",
+            "C) Dar autenticidad al testimonio",
             "D) Demostrar erudición inútil"
           ],
           "correct_answer": "C",
@@ -1586,7 +1586,7 @@
           "answers": [
             "A) El 12 de octubre",
             "B) El 24 de mayo",
-            "C) El 13 de abril, Día del Maestro",
+            "C) El 13 de abril",
             "D) El 10 de agosto"
           ],
           "correct_answer": "C",
@@ -1597,10 +1597,10 @@
           "comprehension_level": "Literal",
           "question": "¿Qué documento se conserva en la Casa de Montalvo, en Ambato?",
           "answers": [
-            "A) Una carta dirigida a García Moreno",
+            "A) Una carta de Montalvo dirigida a García Moreno",
             "B) El decreto de abolición firmado por Urbina",
-            "C) Un anuncio de venta de un niño esclavizado vinculado a sus antepasados",
-            "D) Un manuscrito inédito de sus ensayos"
+            "C) El anuncio de venta de un niño esclavizado",
+            "D) Un manuscrito inédito de sus primeros ensayos"
           ],
           "correct_answer": "C",
           "justification": "El texto menciona que allí reposa ese anuncio, que estremece al visitante."
@@ -1637,8 +1637,8 @@
           "question": "¿Cuál es la tesis que defiende el autor?",
           "answers": [
             "A) Que Montalvo participó en la compra y venta de esclavizados",
-            "B) Que no se debe juzgar a Montalvo por los actos de sus antepasados, pues él combatió la esclavitud",
-            "C) Que el museo debería retirar el anuncio",
+            "B) Que no debe juzgarse a Montalvo por sus antepasados",
+            "C) Que el museo debería retirar el anuncio de la exhibición",
             "D) Que el Día del Maestro debería cambiar de fecha"
           ],
           "correct_answer": "B",
@@ -1649,10 +1649,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Con qué propósito se menciona a “otros próceres que predicaban libertad en las plazas”?",
           "answers": [
-            "A) Para contrastar su incoherencia con la coherencia atribuida a Montalvo",
-            "B) Para explicar el origen de la república",
-            "C) Para elogiarlos junto a Montalvo",
-            "D) Para citar fuentes históricas"
+            "A) Para resaltar la coherencia de Montalvo",
+            "B) Para explicar el origen de la república ecuatoriana",
+            "C) Para elogiarlos como aliados de Montalvo",
+            "D) Para citar fuentes históricas confiables"
           ],
           "correct_answer": "A",
           "justification": "La comparación busca resaltar por contraste la coherencia ética que el autor atribuye a Montalvo."
@@ -1662,10 +1662,10 @@
           "comprehension_level": "Inferencial",
           "question": "La expresión “nació entre cadenas y decidió dedicar su vida entera a fundirlas” significa que:",
           "answers": [
-            "A) Fue esclavizado por su familia",
+            "A) Fue esclavizado por su propia familia",
             "B) Trabajó en una fundición de metales",
             "C) Estuvo encarcelado durante su infancia",
-            "D) Creció en un entorno esclavista y luchó por eliminarlo"
+            "D) Creció en un medio esclavista y lo combatió"
           ],
           "correct_answer": "D",
           "justification": "Es una metáfora sobre su origen social y su compromiso posterior contra la esclavitud."
@@ -1688,10 +1688,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué debilidad argumentativa se puede señalar en el texto?",
           "answers": [
-            "A) Usa un lenguaje excesivamente técnico",
-            "B) No menciona ninguna fecha",
-            "C) Cita demasiadas fuentes",
-            "D) Afirma con rotundidad la conducta y las motivaciones del personaje sin aportar evidencia documental"
+            "A) Usa un lenguaje excesivamente técnico y oscuro",
+            "B) No menciona ninguna fecha ni lugar concreto",
+            "C) Cita demasiadas fuentes académicas",
+            "D) Afirma con rotundidad sin aportar pruebas"
           ],
           "correct_answer": "D",
           "justification": "Sostiene afirmaciones fuertes (“jamás tuvo participación alguna”, “no fue un cálculo político”) sin respaldo de fuentes."
@@ -1701,10 +1701,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué función cumple mantener el anuncio de venta expuesto en el museo, según el autor?",
           "answers": [
-            "A) Aumentar el número de visitantes",
-            "B) Servir de testimonio del mundo oscuro que el escritor ayudó a iluminar",
+            "A) Aumentar el número de visitantes del museo",
+            "B) Ser testimonio del pasado que él ayudó a superar",
             "C) Desprestigiar a la familia Montalvo",
-            "D) Cumplir con una exigencia legal"
+            "D) Cumplir con una exigencia legal de conservación"
           ],
           "correct_answer": "B",
           "justification": "El texto concluye que el anuncio es el testimonio del pasado que Montalvo contribuyó a superar."
@@ -1714,9 +1714,9 @@
           "comprehension_level": "Critico",
           "question": "¿Qué postura alternativa podría sostener un lector crítico?",
           "answers": [
-            "A) Que la memoria histórica debe abordar también las contradicciones y privilegios del personaje",
+            "A) Que también deben recordarse sus privilegios de cuna",
             "B) Que los museos no deben conservar documentos",
-            "C) Que Montalvo no existió",
+            "C) Que Montalvo nunca existió realmente",
             "D) Que la esclavitud nunca fue abolida"
           ],
           "correct_answer": "A",
@@ -1729,8 +1729,8 @@
           "answers": [
             "A) Una contradicción sin sentido",
             "B) Un dato económico verificable",
-            "C) Una cita textual de Montalvo",
-            "D) Un recurso retórico de cierre que resignifica el verbo comprar"
+            "C) Una cita textual tomada de Montalvo",
+            "D) Una antítesis que resignifica «comprar»"
           ],
           "correct_answer": "D",
           "justification": "La antítesis final busca un efecto persuasivo al transformar el vocabulario mercantil en valor ético."
@@ -2098,8 +2098,8 @@
           "answers": [
             "A) Se mantiene idéntico toda la vida",
             "B) Depende únicamente de su edad",
-            "C) No habla igual a lo largo de su vida ni en distintos momentos del día",
-            "D) Cambia solo si se muda de ciudad"
+            "C) Varía a lo largo de la vida y del día",
+            "D) Cambia solo si se muda a otra ciudad"
           ],
           "correct_answer": "C",
           "justification": "El autor afirma que una misma persona no habla igual a lo largo de su vida ni en distintos momentos del mismo día."
@@ -2125,7 +2125,7 @@
             "A) Traductores e intérpretes",
             "B) Antropólogos y biólogos",
             "C) Profesores y escritores",
-            "D) Lingüistas y filólogos"
+            "D) Lingüistas y filólogos clásicos"
           ],
           "correct_answer": "A",
           "justification": "El texto señala que traductores e intérpretes lo han demostrado a lo largo de la historia."
@@ -2150,7 +2150,7 @@
           "answers": [
             "A) Que es fácil contar las lenguas del mundo",
             "B) Que el español es la lengua más importante",
-            "C) Que las lenguas humanas son variantes de una misma realidad con una base común",
+            "C) Que las lenguas comparten una base común",
             "D) Que los animales también poseen lenguas"
           ],
           "correct_answer": "C",
@@ -2162,9 +2162,9 @@
           "question": "¿Qué significa que la variación lingüística sea un “continuo”?",
           "answers": [
             "A) Que las lenguas se aprenden sin interrupción",
-            "B) Que todas las lenguas son iguales",
+            "B) Que todas las lenguas son exactamente iguales",
             "C) Que las lenguas cambian cada minuto",
-            "D) Que las diferencias son graduales y no tienen fronteras nítidas"
+            "D) Que las diferencias son graduales"
           ],
           "correct_answer": "D",
           "justification": "El autor describe una diferenciación gradual que va del habla individual a las diferencias radicales entre lenguas."
@@ -2176,7 +2176,7 @@
           "answers": [
             "A) Para proponer el estudio de la comunicación animal",
             "B) Para justificar la existencia de traductores",
-            "C) Para delimitar qué es lo específicamente humano en las lenguas",
+            "C) Para delimitar lo propio de las lenguas humanas",
             "D) Para demostrar que los animales pueden aprender idiomas"
           ],
           "correct_answer": "C",
@@ -2187,8 +2187,8 @@
           "comprehension_level": "Inferencial",
           "question": "La analogía entre lenguas y seres humanos permite concluir que:",
           "answers": [
-            "A) Las lenguas dependen de la genética",
-            "B) Las diferencias visibles ocultan una base común compartida",
+            "A) Las lenguas dependen de la genética de cada pueblo",
+            "B) Bajo las diferencias hay una base común",
             "C) Cada lengua pertenece a una raza distinta",
             "D) Las lenguas más antiguas son superiores"
           ],
@@ -2201,9 +2201,9 @@
           "question": "¿Qué postura ideológica se puede reconocer en el texto?",
           "answers": [
             "A) Una defensa de la jerarquía entre lenguas",
-            "B) Un rechazo a las clasificaciones raciales y a la superioridad lingüística",
-            "C) Una crítica a los traductores",
-            "D) Una propuesta de lengua universal"
+            "B) Un rechazo a toda jerarquía racial o lingüística",
+            "C) Una crítica al trabajo de los traductores",
+            "D) Una propuesta de lengua universal y única"
           ],
           "correct_answer": "B",
           "justification": "Al afirmar que todos somos una misma especie y que las razas no marcan diferencias sustanciales, cuestiona esas jerarquías."
@@ -2213,10 +2213,10 @@
           "comprehension_level": "Critico",
           "question": "El uso de ejemplos cotidianos (“mi primo y el mío”) busca principalmente:",
           "answers": [
-            "A) Acercar un concepto abstracto a la experiencia del lector",
-            "B) Cumplir con una norma académica",
-            "C) Restar seriedad al tema",
-            "D) Sustituir la argumentación"
+            "A) Hacer cercano un concepto abstracto",
+            "B) Cumplir con una norma de la escritura académica",
+            "C) Restar seriedad al tema tratado",
+            "D) Sustituir la argumentación por anécdotas"
           ],
           "correct_answer": "A",
           "justification": "Los ejemplos familiares hacen accesible la idea de variación gradual."
@@ -2226,10 +2226,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué dificultad práctica se deriva de la tesis del autor?",
           "answers": [
-            "A) Que ya no se pueden estudiar las lenguas",
-            "B) Que resulta arbitrario decidir dónde termina una lengua y empieza otra",
+            "A) Que ya no se pueden estudiar científicamente las lenguas",
+            "B) Que es difícil fijar dónde acaba una lengua",
             "C) Que las traducciones son imposibles",
-            "D) Que desaparecen los dialectos"
+            "D) Que desaparecen los dialectos regionales"
           ],
           "correct_answer": "B",
           "justification": "Si la variación es continua, cualquier recuento depende de una definición convencional."
@@ -2239,8 +2239,8 @@
           "comprehension_level": "Critico",
           "question": "¿Qué función cumple la enumeración “negros, blancos, amarillos, cobrizos, aceitunados y verde-limón”?",
           "answers": [
-            "A) Ridiculizar mediante la exageración la pretensión de clasificar por color",
-            "B) Enumerar los colores del espectro",
+            "A) Ridiculizar la clasificación por color",
+            "B) Enumerar los colores del espectro visible",
             "C) Clasificar científicamente a la humanidad",
             "D) Describir un fenómeno físico"
           ],
@@ -2311,7 +2311,7 @@
           "answers": [
             "A) Secundarios",
             "B) Primarios",
-            "C) Espectrales",
+            "C) Espectrales puros",
             "D) Complementarios"
           ],
           "correct_answer": "D",
@@ -2324,7 +2324,7 @@
           "answers": [
             "A) Violeta",
             "B) Rojo",
-            "C) Verde",
+            "C) Amarillo",
             "D) Azul"
           ],
           "correct_answer": "A",
@@ -2336,9 +2336,9 @@
           "question": "¿Qué se puede concluir sobre la relación entre refracción y color?",
           "answers": [
             "A) La refracción elimina los colores",
-            "B) El color depende únicamente de la fluorescencia",
+            "B) El color depende solo de la fluorescencia",
             "C) El color existe solo en el prisma",
-            "D) La refracción es una de las formas físicas de generar color"
+            "D) La refracción es una forma de generar color"
           ],
           "correct_answer": "D",
           "justification": "Se afirma que la franja cromática surge por refracción y se enumeran otras formas físicas de crear color."
@@ -2350,8 +2350,8 @@
           "answers": [
             "A) Aumentar el tamaño de la imagen",
             "B) Separar los colores del espectro",
-            "C) Reunir los colores y recomponer la luz blanca",
-            "D) Proyectar sombras"
+            "C) Recomponer la luz blanca",
+            "D) Proyectar sombras de colores"
           ],
           "correct_answer": "C",
           "justification": "Al concentrar la franja cromática con una lente convergente se obtiene de nuevo luz blanca."
@@ -2362,8 +2362,8 @@
           "question": "¿Por qué se compara la percepción del color con la de la música?",
           "answers": [
             "A) Porque los colores producen sonidos",
-            "B) Para explicar la fluorescencia",
-            "C) Para destacar que el oído distingue los componentes de una mezcla y la vista no",
+            "B) Para explicar el fenómeno de la fluorescencia",
+            "C) Porque el oído distingue mezclas y la vista no",
             "D) Porque ambas se estudian en física"
           ],
           "correct_answer": "C",
@@ -2374,10 +2374,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué estructura organizativa predomina en el texto?",
           "answers": [
-            "A) Descripción de un experimento y sus consecuencias conceptuales",
-            "B) Narración cronológica de una vida",
+            "A) Descripción de un experimento y de su alcance",
+            "B) Narración cronológica de la vida de Newton",
             "C) Comparación entre autores",
-            "D) Problema y solución"
+            "D) Planteamiento de un problema y su solución"
           ],
           "correct_answer": "A",
           "justification": "El texto expone el procedimiento experimental y deriva de él la noción de colores complementarios."
@@ -2387,8 +2387,8 @@
           "comprehension_level": "Critico",
           "question": "¿Qué aporta el uso de ejemplos concretos con colores específicos?",
           "answers": [
-            "A) Permite verificar y comprender la regla general enunciada",
-            "B) Introduce opiniones del autor",
+            "A) Permite comprobar la regla general",
+            "B) Introduce opiniones personales del autor",
             "C) Sustituye la definición científica",
             "D) Alarga innecesariamente el texto"
           ],
@@ -2400,10 +2400,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué utilidad práctica puede tener este conocimiento fuera de la física?",
           "answers": [
-            "A) Ninguna",
-            "B) Aplicaciones en artes visuales, diseño e iluminación",
+            "A) Ninguna fuera del laboratorio",
+            "B) Sirve en el arte y el diseño",
             "C) Solo en la fabricación de prismas",
-            "D) Únicamente en astronomía"
+            "D) Únicamente en la astronomía"
           ],
           "correct_answer": "B",
           "justification": "El principio de complementariedad es base del trabajo con color en el arte y el diseño, campo de la obra citada."
@@ -2413,10 +2413,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué tipo de lenguaje utiliza el autor y por qué resulta adecuado?",
           "answers": [
-            "A) Lenguaje persuasivo, para convencer",
-            "B) Lenguaje coloquial, para entretener",
-            "C) Lenguaje objetivo y técnico, adecuado para explicar un fenómeno verificable",
-            "D) Lenguaje literario, para emocionar"
+            "A) Lenguaje persuasivo, para convencer al lector",
+            "B) Lenguaje coloquial, para entretener al público",
+            "C) Lenguaje técnico, para explicar un fenómeno",
+            "D) Lenguaje literario, para emocionar al lector"
           ],
           "correct_answer": "C",
           "justification": "Predomina la precisión terminológica y la objetividad, propias del texto expositivo científico."
@@ -2493,10 +2493,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué se puede deducir de la afirmación de que el Antártico “no tiene límites precisos”?",
           "answers": [
-            "A) Que carece de aguas saladas",
-            "B) Que es el océano más pequeño",
+            "A) Que carece por completo de aguas saladas",
+            "B) Que es el océano más pequeño del planeta",
             "C) Que no existe realmente",
-            "D) Que su delimitación es convencional porque continúa otros océanos"
+            "D) Que sus límites son convencionales"
           ],
           "correct_answer": "D",
           "justification": "Al ser continuación del Atlántico, Índico y Pacífico, sus fronteras son acuerdos y no accidentes naturales."
@@ -2506,10 +2506,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Por qué la navegación es difícil en el Océano Glacial Ártico?",
           "answers": [
-            "A) Por la ausencia de puertos",
-            "B) Porque sus aguas permanecen gran parte del año cubiertas de hielo",
-            "C) Por su escasa profundidad",
-            "D) Por las corrientes cálidas"
+            "A) Por la ausencia de puertos en sus costas",
+            "B) Por el hielo durante gran parte del año",
+            "C) Por su escasa profundidad media",
+            "D) Por las fuertes corrientes cálidas del norte"
           ],
           "correct_answer": "B",
           "justification": "El propio texto atribuye la dificultad a la cobertura de hielo durante gran parte del año."
@@ -2532,9 +2532,9 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué criterio organiza principalmente la información del texto?",
           "answers": [
-            "A) La clasificación y descripción de cada océano",
-            "B) La opinión del autor",
-            "C) El orden cronológico",
+            "A) La descripción de cada océano",
+            "B) La opinión personal de quien escribe",
+            "C) El orden cronológico de los descubrimientos",
             "D) La comparación con otros planetas"
           ],
           "correct_answer": "A",
@@ -2545,9 +2545,9 @@
           "comprehension_level": "Critico",
           "question": "¿Qué limitación presenta el texto respecto del conocimiento geográfico actual?",
           "answers": [
-            "A) Confunde continentes con islas",
+            "A) Confunde los continentes con las islas",
             "B) Ninguna, los datos son definitivos",
-            "C) La denominación y el número de océanos ha variado según convenciones posteriores",
+            "C) Los nombres y el número de océanos han cambiado",
             "D) No menciona ningún dato numérico"
           ],
           "correct_answer": "C",
@@ -2558,9 +2558,9 @@
           "comprehension_level": "Critico",
           "question": "¿Para qué tipo de lector está pensado este texto?",
           "answers": [
-            "A) Navegantes profesionales",
-            "B) Estudiantes escolares que se inician en geografía",
-            "C) Legisladores marítimos",
+            "A) Navegantes profesionales de altura",
+            "B) Escolares que se inician en geografía",
+            "C) Legisladores del derecho marítimo",
             "D) Investigadores en oceanografía"
           ],
           "correct_answer": "B",
@@ -2571,10 +2571,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué función cumplen los datos numéricos en el texto?",
           "answers": [
-            "A) Adornar la exposición",
+            "A) Adornar la exposición del tema",
             "B) Persuadir al lector de una opinión",
-            "C) Dar precisión y objetividad a la descripción",
-            "D) Sustituir las definiciones"
+            "C) Dar precisión a la descripción",
+            "D) Sustituir las definiciones de océano"
           ],
           "correct_answer": "C",
           "justification": "Las cifras de superficie, porcentaje y profundidad respaldan objetivamente la información expuesta."
@@ -2584,9 +2584,9 @@
           "comprehension_level": "Critico",
           "question": "¿Qué recomendación darías para actualizar este texto?",
           "answers": [
-            "A) Eliminar todos los datos",
-            "B) Verificar cifras y denominaciones con fuentes geográficas actuales",
-            "C) Añadir opiniones personales",
+            "A) Eliminar todos los datos numéricos",
+            "B) Contrastar sus datos con fuentes actuales",
+            "C) Añadir opiniones personales del autor",
             "D) Convertirlo en un relato narrativo"
           ],
           "correct_answer": "B",
@@ -2610,10 +2610,10 @@
           "comprehension_level": "Literal",
           "question": "¿Qué definición de creatividad ofrece el diccionario según el texto?",
           "answers": [
-            "A) La habilidad de imitar modelos",
+            "A) La habilidad de imitar modelos ajenos",
             "B) El talento para las artes plásticas",
-            "C) La facultad de crear o la capacidad de creación",
-            "D) La destreza manual"
+            "C) La facultad o capacidad de crear",
+            "D) La destreza manual y técnica"
           ],
           "correct_answer": "C",
           "justification": "El texto cita al diccionario: «la facultad de crear» o «la capacidad de creación»."
@@ -2649,10 +2649,10 @@
           "comprehension_level": "Literal",
           "question": "¿Qué se atribuye a Galileo Galilei en el texto?",
           "answers": [
-            "A) Haber pintado obras célebres",
-            "B) Haber inventado el telescopio y afirmado que la Tierra gira alrededor del Sol",
+            "A) Haber pintado obras célebres del Renacimiento",
+            "B) Haber inventado el telescopio",
             "C) Haber escrito una teoría del color",
-            "D) Haber compuesto música"
+            "D) Haber compuesto música para la corte"
           ],
           "correct_answer": "B",
           "justification": "El texto le atribuye la invención del telescopio y la afirmación heliocéntrica."
@@ -2662,9 +2662,9 @@
           "comprehension_level": "Inferencial",
           "question": "¿Cuál es la idea central del primer párrafo?",
           "answers": [
-            "A) Que la creatividad es una capacidad presente en todas las personas",
+            "A) Que todos tenemos capacidad creativa",
             "B) Que la creatividad es exclusiva de los artistas",
-            "C) Que la creatividad se hereda",
+            "C) Que la creatividad se hereda de los padres",
             "D) Que la creatividad solo se manifiesta en la ciencia"
           ],
           "correct_answer": "A",
@@ -2676,7 +2676,7 @@
           "question": "¿Qué relación establece el texto entre práctica y creatividad?",
           "answers": [
             "A) Son independientes entre sí",
-            "B) El dominio de una esfera de conocimiento requiere horas de práctica o reflexión",
+            "B) Dominar un campo exige horas de práctica",
             "C) La práctica reduce la creatividad",
             "D) Solo los músicos necesitan practicar"
           ],
@@ -2688,9 +2688,9 @@
           "comprehension_level": "Inferencial",
           "question": "¿Por qué se aclara que los creativos “no se centran solo” en una actividad?",
           "answers": [
-            "A) Para criticar a los filósofos",
-            "B) Para desmentir la idea de especialización exclusiva",
-            "C) Para recomendar cambiar de oficio",
+            "A) Para criticar a los filósofos que solo piensan",
+            "B) Para matizar la idea de especialización",
+            "C) Para recomendar cambiar de oficio a menudo",
             "D) Para explicar la autonomía"
           ],
           "correct_answer": "B",
@@ -2701,10 +2701,10 @@
           "comprehension_level": "Inferencial",
           "question": "Los ejemplos de Chaplin y Galileo se emplean para mostrar que la creatividad:",
           "answers": [
-            "A) Solo existe en el pasado",
-            "B) Depende de la fama",
-            "C) Se limita al humor",
-            "D) Aparece tanto en lo cotidiano y artístico como en lo científico"
+            "A) Solo existió en épocas pasadas",
+            "B) Depende de la fama de la persona",
+            "C) Se limita al humor y al cine",
+            "D) Abarca del humor a la ciencia"
           ],
           "correct_answer": "D",
           "justification": "Ambos casos ilustran la amplitud del fenómeno: de una acción cómica a una teoría física."
@@ -2715,9 +2715,9 @@
           "question": "¿Qué debilidad presenta la caracterización de los individuos creativos?",
           "answers": [
             "A) Se apoya en investigaciones recientes",
-            "B) Define demasiados conceptos",
-            "C) Contradice al diccionario",
-            "D) Generaliza rasgos sin citar estudios que los respalden"
+            "B) Define demasiados conceptos técnicos",
+            "C) Contradice la definición del diccionario",
+            "D) Generaliza sin citar estudios"
           ],
           "correct_answer": "D",
           "justification": "Atribuye autonomía e inconformismo como rasgos generales sin aportar fuentes ni evidencia empírica."
@@ -2741,9 +2741,9 @@
           "question": "¿Qué implicación educativa se desprende del texto?",
           "answers": [
             "A) La creatividad depende del coeficiente intelectual",
-            "B) Solo deben formarse artistas",
-            "C) La creatividad puede desarrollarse en cualquier área mediante la práctica",
-            "D) La creatividad no puede enseñarse"
+            "B) Solo deben formarse artistas en la escuela",
+            "C) La creatividad se cultiva con la práctica",
+            "D) La creatividad no puede enseñarse en clase"
           ],
           "correct_answer": "C",
           "justification": "Si es una capacidad común que se cultiva con dedicación, la escuela puede fomentarla en todas las asignaturas."
@@ -2753,8 +2753,8 @@
           "comprehension_level": "Critico",
           "question": "¿Qué añadirías al texto para mejorarlo?",
           "answers": [
-            "A) Ejemplos cotidianos del contexto del estudiante y referencias de investigación",
-            "B) Más ejemplos de personajes famosos únicamente",
+            "A) Ejemplos cercanos y fuentes de investigación",
+            "B) Más ejemplos de personajes famosos",
             "C) Una lista de definiciones del diccionario",
             "D) Un resumen de historia del arte"
           ],
@@ -3178,9 +3178,9 @@
           "comprehension_level": "Inferencial",
           "question": "¿Cuál es la idea principal del artículo?",
           "answers": [
-            "A) Que la toga debe eliminarse",
+            "A) Que la toga debe eliminarse de los tribunales",
             "B) La historia de la vestimenta judicial",
-            "C) Que los símbolos no bastan si no se corrigen las deficiencias del sistema judicial",
+            "C) Que el símbolo no basta sin reformas",
             "D) Que Ecuador lidera la región en justicia"
           ],
           "correct_answer": "C",
@@ -3192,9 +3192,9 @@
           "question": "¿Con qué propósito se comparan las puntuaciones de Ecuador, Perú y Colombia?",
           "answers": [
             "A) Para elogiar al sistema judicial ecuatoriano",
-            "B) Para promover el turismo regional",
+            "B) Para promover el turismo en la región andina",
             "C) Para explicar el origen de la toga",
-            "D) Para dimensionar el rezago ecuatoriano mediante datos comparables"
+            "D) Para mostrar el rezago de Ecuador"
           ],
           "correct_answer": "D",
           "justification": "La comparación con vecinos que obtienen 51 y 50 puntos evidencia la posición desfavorable del país."
@@ -3205,8 +3205,8 @@
           "question": "La comparación entre la toga y el uniforme blanco de los médicos sirve para:",
           "answers": [
             "A) Proponer un cambio de color en la toga",
-            "B) Mostrar el valor identitario de los símbolos profesionales",
-            "C) Explicar una norma sanitaria",
+            "B) Mostrar el valor de los símbolos",
+            "C) Explicar una norma sanitaria de los hospitales",
             "D) Criticar a los profesionales de la salud"
           ],
           "correct_answer": "B",
@@ -3217,9 +3217,9 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué se puede deducir de la frase “como sucedió en la década pasada”?",
           "answers": [
-            "A) Que hubo injerencia gubernamental en la justicia",
+            "A) Que el gobierno influyó en la justicia",
             "B) Que la justicia fue independiente en ese período",
-            "C) Que no existían jueces",
+            "C) Que en ese tiempo no existían jueces",
             "D) Que se aplicaron reformas exitosas"
           ],
           "correct_answer": "A",
@@ -3230,10 +3230,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué recurso retórico estructura el título y el cierre del texto?",
           "answers": [
-            "A) Una hipérbole",
+            "A) Una hipérbole sobre los jueces",
             "B) La adaptación de un refrán popular",
             "C) Una pregunta retórica",
-            "D) Una cita bíblica"
+            "D) Una cita bíblica del Evangelio"
           ],
           "correct_answer": "B",
           "justification": "Se retoma el refrán “el hábito no hace al monje” para construir la tesis del artículo."
@@ -3245,8 +3245,8 @@
           "answers": [
             "A) El uso de anécdotas personales",
             "B) El uso de adjetivos emotivos",
-            "C) La cita de un índice internacional con datos verificables",
-            "D) La extensión del texto"
+            "C) Los datos de un índice internacional",
+            "D) La extensión y el tono del texto"
           ],
           "correct_answer": "C",
           "justification": "El respaldo en el Índice del Estado de Derecho del World Justice Project sustenta la valoración con evidencia."
@@ -3257,9 +3257,9 @@
           "question": "¿Qué objeción podría hacerse a la postura del autor?",
           "answers": [
             "A) Que la toga es ilegal",
-            "B) Que los datos no existen",
-            "C) Que las medidas simbólicas también pueden acompañar reformas de fondo",
-            "D) Que la justicia no importa"
+            "B) Que los datos del índice no existen",
+            "C) Que los símbolos pueden acompañar reformas",
+            "D) Que la justicia no importa a la ciudadanía"
           ],
           "correct_answer": "C",
           "justification": "Se puede sostener que los símbolos, sin ser suficientes, contribuyen a construir cultura institucional."
@@ -3269,10 +3269,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué condiciones plantea el autor para que la ciudadanía confíe en los jueces?",
           "answers": [
-            "A) Aplicación igualitaria de la ley, independencia, celeridad y ausencia de corrupción",
-            "B) Reducción de los procesos penales",
-            "C) Mayor número de magistrados",
-            "D) Uniformes nuevos y mayor solemnidad"
+            "A) Igualdad ante la ley y ausencia de corrupción",
+            "B) Reducción del número de procesos penales",
+            "C) Mayor número de magistrados y juzgados",
+            "D) Uniformes nuevos y mayor solemnidad en las audiencias"
           ],
           "correct_answer": "A",
           "justification": "El tercer párrafo enumera esas condiciones como requisitos de un verdadero estado de derecho."
@@ -3299,9 +3299,9 @@
           "question": "¿Cómo se caracteriza a la plaza de los ponchos?",
           "answers": [
             "A) Como un centro ceremonial",
-            "B) Como la mayor feria artesanal del norte del país",
-            "C) Como un mercado de alimentos",
-            "D) Como un museo de arte"
+            "B) Como la mayor feria artesanal del norte",
+            "C) Como un mercado de alimentos y ganado",
+            "D) Como un museo de arte indígena"
           ],
           "correct_answer": "B",
           "justification": "El texto la presenta como la mayor feria artesanal del norte del país."
@@ -3337,10 +3337,10 @@
           "comprehension_level": "Literal",
           "question": "¿Qué especies se protegen en el centro de rescate de aves rapaces?",
           "answers": [
-            "A) Patos y garzas",
-            "B) Loros y colibríes",
-            "C) Cóndores, búhos, buitres, gavilanes, águilas y halcones",
-            "D) Gallinazos y palomas"
+            "A) Patos, garzas y aves acuáticas",
+            "B) Loros, colibríes y tucanes",
+            "C) Cóndores, búhos, águilas y halcones",
+            "D) Gallinazos, palomas y gorriones"
           ],
           "correct_answer": "C",
           "justification": "El texto enumera esas especies de aves rapaces."
@@ -3350,8 +3350,8 @@
           "comprehension_level": "Inferencial",
           "question": "¿Por qué se recomienda visitar las lagunas en las mañanas?",
           "answers": [
-            "A) Por la baja temperatura promedio y las condiciones del clima de altura",
-            "B) Porque hay menos turistas",
+            "A) Por el frío propio de la altura",
+            "B) Porque a esa hora hay menos turistas",
             "C) Porque el transporte solo funciona temprano",
             "D) Porque cierran al mediodía"
           ],
@@ -3363,10 +3363,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué se puede deducir sobre la diversidad cultural de Otavalo?",
           "answers": [
-            "A) Solo habitan mestizos",
-            "B) Conviven varios pueblos y nacionalidades en la actividad artesanal",
-            "C) La población es principalmente extranjera",
-            "D) Es una comunidad homogénea"
+            "A) Solo habitan mestizos en la ciudad",
+            "B) Conviven varios pueblos en la artesanía",
+            "C) La mayoría de habitantes es extranjera",
+            "D) Es una comunidad homogénea y cerrada"
           ],
           "correct_answer": "B",
           "justification": "Se nombran artesanos otavalos, kichwas, cayambis, natabuelas, caranquis, afroecuatorianos y mestizos."
@@ -3378,8 +3378,8 @@
           "answers": [
             "A) Porque hay guías especializados",
             "B) Porque tiene hoteles cercanos",
-            "C) Porque el clima es cálido",
-            "D) Porque su altura y entorno montañoso preparan al visitante antes de un ascenso"
+            "C) Porque el clima es cálido todo el año",
+            "D) Porque su altura prepara para un ascenso"
           ],
           "correct_answer": "D",
           "justification": "El texto asocia la altitud y la cercanía de montañas como el Fuya Fuya con la preparación para ascender."
@@ -3389,10 +3389,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué tipo de valor se atribuye a la cascada de Peguche?",
           "answers": [
-            "A) Únicamente económico",
-            "B) Exclusivamente científico",
-            "C) Espiritual y ceremonial además de natural",
-            "D) Solamente deportivo"
+            "A) Únicamente económico y comercial",
+            "B) Exclusivamente científico y geológico",
+            "C) Espiritual, ceremonial y natural",
+            "D) Solamente deportivo y recreativo"
           ],
           "correct_answer": "C",
           "justification": "Se la describe como centro ceremonial de purificación donde los danzantes se bañan tras la fiesta."
@@ -3402,10 +3402,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué intención comunicativa predomina en el texto?",
           "answers": [
-            "A) Narrar una experiencia personal",
-            "B) Describir y promocionar los atractivos turísticos del cantón",
+            "A) Narrar una experiencia personal de viaje",
+            "B) Promocionar los atractivos turísticos",
             "C) Argumentar sobre políticas culturales",
-            "D) Denunciar el deterioro ambiental"
+            "D) Denunciar el deterioro ambiental de la zona"
           ],
           "correct_answer": "B",
           "justification": "La acumulación de datos, cifras y atractivos responde a un propósito descriptivo y promocional."
@@ -3416,9 +3416,9 @@
           "question": "¿Qué aportan los datos numéricos (kilómetros, hectáreas, temperaturas) al texto?",
           "answers": [
             "A) Sustituyen la descripción sensorial",
-            "B) Confunden al lector",
-            "C) Demuestran una investigación científica",
-            "D) Precisión informativa útil para planificar la visita"
+            "B) Confunden al lector con cifras excesivas",
+            "C) Demuestran una investigación científica rigurosa",
+            "D) Orientan al visitante con datos precisos"
           ],
           "correct_answer": "D",
           "justification": "Las cifras ofrecen referencias concretas de distancia, tamaño y clima para el visitante."
@@ -3428,10 +3428,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué debilidad de redacción presenta el primer párrafo?",
           "answers": [
-            "A) La enumeración de productos queda sin un verbo que la articule",
+            "A) A la enumeración le falta un verbo",
             "B) Utiliza tecnicismos incomprensibles",
-            "C) No menciona ningún producto",
-            "D) Repite excesivamente los verbos"
+            "C) No menciona ningún producto artesanal",
+            "D) Repite excesivamente los mismos verbos"
           ],
           "correct_answer": "A",
           "justification": "La frase de los puestos de venta queda incompleta gramaticalmente, lo que dificulta la lectura."
@@ -3441,10 +3441,10 @@
           "comprehension_level": "Critico",
           "question": "La afirmación sobre el cóndor como “símbolo de sabiduría” y “mensaje de lo divino” cumple la función de:",
           "answers": [
-            "A) Vincular la conservación con el valor cultural del ave",
-            "B) Aportar un dato biológico",
-            "C) Describir su hábitat",
-            "D) Justificar la caza tradicional"
+            "A) Unir conservación y valor cultural",
+            "B) Aportar un dato biológico sobre el ave",
+            "C) Describir su hábitat en los Andes",
+            "D) Justificar la caza tradicional del cóndor"
           ],
           "correct_answer": "A",
           "justification": "El cierre conecta la labor del centro de rescate con el significado cultural del cóndor para los pueblos de la región."
@@ -3471,7 +3471,7 @@
             "A) Madrid",
             "B) Sevilla",
             "C) Alicante",
-            "D) Alfafar, a las afueras de Valencia"
+            "D) Alfafar"
           ],
           "correct_answer": "D",
           "justification": "El texto sitúa el barrio de Orba en Alfafar, a las afueras de Valencia."
@@ -3520,9 +3520,9 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué caracteriza urbanísticamente al barrio antes de la intervención?",
           "answers": [
-            "A) Edificios históricos protegidos",
-            "B) Casas unifamiliares con jardín",
-            "C) Bloques homogéneos alineados en cuadrículas con solo dos tipos de vivienda",
+            "A) Edificios históricos protegidos por ley",
+            "B) Casas unifamiliares con jardín propio",
+            "C) Bloques idénticos alineados en cuadrícula",
             "D) Viviendas variadas y personalizadas"
           ],
           "correct_answer": "C",
@@ -3533,10 +3533,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Cuál es el principio central de la propuesta de los arquitectos?",
           "answers": [
-            "A) Reutilizar y compartir espacios infrautilizados para uso comunitario",
+            "A) Compartir espacios infrautilizados",
             "B) Demoler los bloques y construir de nuevo",
             "C) Ampliar todas las viviendas por igual",
-            "D) Privatizar las zonas comunes"
+            "D) Privatizar las zonas comunes del barrio"
           ],
           "correct_answer": "A",
           "justification": "Se plantea aprovechar cubiertas, viviendas desocupadas y superficies sobrantes para servicios vecinales."
@@ -3559,10 +3559,10 @@
           "comprehension_level": "Inferencial",
           "question": "La comparación con el barrio idéntico de Sevilla sirve para destacar que:",
           "answers": [
-            "A) Lo diferente no es la arquitectura original, sino el proyecto de rehabilitación",
-            "B) El promotor fue sancionado",
+            "A) Lo distintivo es el plan de rehabilitación",
+            "B) El promotor fue sancionado por sus obras",
             "C) Sevilla ganó el mismo premio",
-            "D) Los planos eran defectuosos"
+            "D) Los planos originales eran defectuosos"
           ],
           "correct_answer": "A",
           "justification": "Ambos vecindarios comparten origen, plano y nombre; la distinción proviene del nuevo plan."
@@ -3572,8 +3572,8 @@
           "comprehension_level": "Critico",
           "question": "¿Qué valor social tiene la propuesta descrita?",
           "answers": [
-            "A) Mejorar la convivencia y la habitabilidad sin grandes demoliciones",
-            "B) Aumentar el precio del suelo",
+            "A) Mejorar la convivencia sin demoler",
+            "B) Aumentar el precio del suelo del barrio",
             "C) Convertir el barrio en zona turística",
             "D) Reducir el número de habitantes"
           ],
@@ -3585,9 +3585,9 @@
           "comprehension_level": "Critico",
           "question": "¿Qué dificultad podría enfrentar la aplicación del plan?",
           "answers": [
-            "A) La falta de espacio físico",
+            "A) La falta de espacio físico disponible",
             "B) La imposibilidad técnica de reformar",
-            "C) Lograr acuerdos entre vecinos sobre el uso compartido de superficies",
+            "C) Poner de acuerdo a los vecinos",
             "D) La ausencia de premios internacionales"
           ],
           "correct_answer": "C",
@@ -3598,10 +3598,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué función cumplen las citas textuales de los arquitectos en el reportaje?",
           "answers": [
-            "A) Rellenar espacio",
-            "B) Introducir opiniones del lector",
+            "A) Rellenar espacio en la página",
+            "B) Introducir opiniones de los lectores",
             "C) Contradecir al periodista",
-            "D) Dar voz a los responsables y respaldar la información con su explicación"
+            "D) Dar voz a los responsables del proyecto"
           ],
           "correct_answer": "D",
           "justification": "Las declaraciones directas de García y Navarrete aportan autoridad y detalle al relato periodístico."
@@ -3611,10 +3611,10 @@
           "comprehension_level": "Critico",
           "question": "El título anticipa una valoración porque:",
           "answers": [
-            "A) Describe la ubicación del barrio",
-            "B) Presenta el caso como modelo potencial mediante la expresión “puede convertirse”",
-            "C) Menciona el nombre del promotor",
-            "D) Afirma un hecho consumado"
+            "A) Describe la ubicación exacta del barrio",
+            "B) Lo presenta como un modelo posible",
+            "C) Menciona el nombre del promotor original",
+            "D) Afirma un hecho ya consumado"
           ],
           "correct_answer": "B",
           "justification": "La formulación condicional proyecta al barrio como referente internacional posible, no como hecho probado."
@@ -3643,7 +3643,7 @@
           "answers": [
             "A) Barraganete, maqueño y dominico",
             "B) Orito, seda y morado",
-            "C) Guineo, plátano rojo y dominico",
+            "C) Guineo, plátano rojo y plátano dominico",
             "D) Barraganete, banano y orito"
           ],
           "correct_answer": "A",
@@ -3667,7 +3667,7 @@
           "comprehension_level": "Literal",
           "question": "¿Qué ingredientes acompañan a la cazuela de verde?",
           "answers": [
-            "A) Arroz y menestra",
+            "A) Arroz, menestra y carne asada",
             "B) Maní, vegetales y mariscos",
             "C) Queso y pollo",
             "D) Huevo y cebolla"
@@ -3680,10 +3680,10 @@
           "comprehension_level": "Literal",
           "question": "¿Qué beneficios nutricionales se atribuyen al plátano verde?",
           "answers": [
-            "A) Aumenta el colesterol",
+            "A) Aumenta el colesterol en la sangre",
             "B) Sustituye a las proteínas",
-            "C) Aporta grasas saturadas",
-            "D) Es fuente de fibra, vitaminas y minerales"
+            "C) Aporta grasas saturadas y azúcares",
+            "D) Aporta fibra, vitaminas y minerales"
           ],
           "correct_answer": "D",
           "justification": "Se afirma que es una buena fuente de fibra, vitaminas y minerales."
@@ -3693,10 +3693,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué significa que el plátano verde “traspasó fronteras”?",
           "answers": [
-            "A) Que su consumo se extendió de la Costa a la Sierra",
-            "B) Que se exporta a otros países",
-            "C) Que cambió de nombre",
-            "D) Que se cultiva en la Sierra"
+            "A) Que llegó de la Costa a la Sierra",
+            "B) Que se exporta a otros países del mundo",
+            "C) Que cambió de nombre en la Sierra",
+            "D) Que ahora se cultiva en la Sierra"
           ],
           "correct_answer": "A",
           "justification": "El propio título y el primer párrafo aluden a su llegada a la Sierra Central."
@@ -3706,10 +3706,10 @@
           "comprehension_level": "Inferencial",
           "question": "¿Qué se puede deducir sobre la identidad culinaria de la Costa?",
           "answers": [
-            "A) Se limita a los patacones",
-            "B) Es reciente y sin raíces",
-            "C) Depende exclusivamente de los mariscos",
-            "D) El plátano verde es un elemento central de su tradición gastronómica"
+            "A) Se limita a los patacones y los chifles",
+            "B) Es reciente y no tiene raíces propias",
+            "C) Depende exclusivamente de los mariscos y el pescado",
+            "D) El plátano verde es central en su cocina"
           ],
           "correct_answer": "D",
           "justification": "El texto lo presenta como ingrediente principal y de larga data en la región."
@@ -3721,8 +3721,8 @@
           "answers": [
             "A) Que el producto tiene poca demanda",
             "B) Que los locales son de la Costa",
-            "C) Que los precios son elevados",
-            "D) Que existe una oferta consolidada en la ciudad"
+            "C) Que los precios son muy elevados",
+            "D) Que hay una oferta consolidada"
           ],
           "correct_answer": "D",
           "justification": "La abundancia de locales indica que la demanda del producto ya está afianzada localmente."
@@ -3733,9 +3733,9 @@
           "question": "¿Con qué propósito se enumeran platos como chifles, patacones y tigrillo?",
           "answers": [
             "A) Para ofrecer recetas detalladas",
-            "B) Para mostrar la versatilidad culinaria del producto",
+            "B) Para mostrar su versatilidad",
             "C) Para criticar la cocina serrana",
-            "D) Para comparar precios"
+            "D) Para comparar precios entre platos"
           ],
           "correct_answer": "B",
           "justification": "La enumeración evidencia la variedad de preparaciones posibles con un mismo ingrediente."
@@ -3758,10 +3758,10 @@
           "comprehension_level": "Critico",
           "question": "¿Qué cautela debería tener el lector ante las afirmaciones de salud del texto?",
           "answers": [
-            "A) Están tomadas de un manual médico",
+            "A) Están tomadas de un manual médico oficial",
             "B) Se contradicen con el resto del artículo",
-            "C) No se citan estudios ni especialistas que las respalden",
-            "D) Ninguna, son verificadas"
+            "C) No citan fuentes que las respalden",
+            "D) Ninguna, pues son datos verificados"
           ],
           "correct_answer": "C",
           "justification": "Las propiedades se enuncian sin fuente, por lo que conviene contrastarlas con información especializada."
@@ -3771,9 +3771,9 @@
           "comprehension_level": "Critico",
           "question": "¿Qué valor cultural transmite la nota?",
           "answers": [
-            "A) Que la comida costeña es superior",
-            "B) Que los intercambios entre regiones enriquecen la gastronomía nacional",
-            "C) Que las tradiciones regionales se mantienen aisladas",
+            "A) Que la comida costeña es superior a la serrana",
+            "B) Que el intercambio regional enriquece la cocina",
+            "C) Que las tradiciones regionales no se mezclan",
             "D) Que la Sierra carece de platos propios"
           ],
           "correct_answer": "B",
@@ -3784,9 +3784,9 @@
           "comprehension_level": "Critico",
           "question": "El uso de la expresión “nuestra ciudad” revela que el texto:",
           "answers": [
-            "A) Se dirige a lectores locales desde un medio de la ciudad",
+            "A) Se dirige a lectores locales",
             "B) Está escrito para un público internacional",
-            "C) Fue traducido de otro idioma",
+            "C) Fue traducido de otro idioma al español",
             "D) Corresponde a un texto académico"
           ],
           "correct_answer": "A",

@@ -40,8 +40,6 @@ curl http://localhost:8000/typologies
 }
 ```
 
-Cuenta solo las lecturas de progresión; las de la zona de práctica no aparecen.
-
 ---
 
 ## Lecturas (retrocompatibles v1.0)
@@ -75,11 +73,9 @@ Lectura aleatoria (**sin preguntas**).
 | Parámetro  | Tipo   | Default | Descripción |
 |-----------|--------|---------|-------------|
 | `typology`| string | `null`  | Filtrar por tipología |
-| `practice`| bool   | `false` | `true`: solo lecturas de la zona de práctica; `false`: solo de la progresión |
 
 ```bash
 curl "http://localhost:8000/readings/random?typology=Descriptivo"
-curl "http://localhost:8000/readings/random?typology=Descriptivo&practice=true"
 ```
 
 ### `POST /readings`
@@ -173,22 +169,14 @@ Lectura aleatoria **con preguntas**, con filtro opcional por tipología.
 | Parámetro  | Tipo   | Default | Descripción |
 |-----------|--------|---------|-------------|
 | `typology`| string | `null`  | Filtrar por tipología |
-| `practice`| bool   | `false` | `true`: solo lecturas de la zona de práctica; `false`: solo de la progresión |
 
 ```bash
 curl "http://localhost:8000/readings/random/full?typology=Argumentativo"
-curl "http://localhost:8000/readings/random/full?typology=Narrativo&practice=true"
 ```
 
----
-
-## Zona de práctica
-
-- Las lecturas llevan `is_practice`. El juego pide las de práctica con `practice=true`.
-- `POST /progress/sessions` acepta `"is_practice": true`: la sesión se guarda (el
-  dashboard la muestra aparte) pero no toca el progreso, los desbloqueos, el ranking
-  ni las métricas. Sin el campo, la sesión cuenta como progresión.
-- `GET /progress/me` devuelve solo las 4 tipologías del juego y `practice_sessions`.
+La zona de práctica se retiró en la Beta 2.1: ya no hay lecturas ni sesiones de
+práctica. `POST /progress/sessions` responde 404 `Lectura no encontrada` si la
+lectura no existe (por ejemplo, una de práctica enviada por un juego viejo).
 
 ---
 
@@ -201,8 +189,59 @@ docker-compose exec api python import_json_readings.py
 # Archivos personalizados
 docker-compose exec api python import_json_readings.py /data/mi_archivo.json
 
-# Como lecturas de la zona de práctica
-docker-compose exec api python import_json_readings.py --practice /data/LECTURAS_PRACTICA.json
+```
+
+---
+
+## Entornos de trabajo (Beta 2.1)
+
+Cada cuenta de jugador es de un entorno y, como mucho, uno está activo: solo sus
+jugadores entran al juego. Los administradores no tienen entorno y entran siempre.
+El mismo correo puede tener una cuenta en cada entorno.
+
+**Acceso de los jugadores:**
+- `POST /auth/login` usa la cuenta del administrador con ese correo o, si no, la
+  del entorno activo. Con la contraseña de una cuenta de otro entorno (o de antes
+  de los entornos): 403 `Tu cuenta no pertenece al entorno activo del juego.`; sin
+  entorno activo: 403 `El juego no está disponible en este momento.`; si no, 401.
+- `POST /auth/register` crea la cuenta en el entorno activo (403 si no hay).
+- Cualquier petición de un jugador cuyo entorno no está activo responde
+  409 `WORKSPACE_INACTIVE`; el juego lo trata como una sesión invalidada.
+- `GET /leaderboard/top` solo trae jugadores del entorno activo.
+
+**Administración** (solo administradores):
+
+| Método y ruta | Qué hace |
+|---|---|
+| `GET /admin/workspaces` | Lista: `id`, `name`, `color`, `is_active`, `player_count`, `created_at` |
+| `POST /admin/workspaces` | Crea (`name` de 1-40 caracteres, `color` de la paleta); nace inactivo. 409 si el nombre existe (sin distinguir mayúsculas) |
+| `PATCH /admin/workspaces/{id}` | Cambia `name` y/o `color` |
+| `POST /admin/workspaces/{id}/activate` | Lo activa y apaga los demás; devuelve la lista |
+| `POST /admin/workspaces/{id}/deactivate` | Lo apaga (puede no quedar ninguno activo); devuelve la lista |
+| `DELETE /admin/workspaces/{id}?confirm_name=…` | Solo inactivo, no el último y con el nombre exacto: borra sus cuentas con todo lo suyo (204) |
+| `POST /admin/workspaces/{id}/players` | Alta de jugadores (abajo) |
+
+Paleta: `#059669`, `#d97706`, `#2563eb`, `#7c3aed`, `#db2777`, `#0891b2`.
+
+**Entorno que se ve en el dashboard:** los endpoints de administración que listan
+o agregan datos de jugadores exigen la cabecera `X-Workspace-Id` y solo devuelven
+lo de ese entorno: `GET /admin/players`, `GET /admin/stats`, los de
+`/admin/achievements` (lista, `stats`, detalle, `/{id}/players` y exportaciones) y
+todos los de `/admin/metrics`. Sin cabecera o con un valor que no es un número:
+400 `WORKSPACE_REQUIRED`; entorno inexistente: 404 `WORKSPACE_NOT_FOUND`. Los
+endpoints de un jugador concreto (`/admin/players/{id}/…`) y los del catálogo de
+logros no la necesitan.
+
+**Alta de jugadores:** `{"players": [{"email": "...", "display_name": "..."}]}` (1-200).
+Cada uno se crea con una contraseña temporal y `must_change_password`, o se salta
+con su motivo: `el correo no es válido`, `está repetido en la lista`,
+`ya tiene cuenta en este entorno` o `es el correo de un administrador`. Sin nombre,
+se usa lo que va antes de la @. Respuesta: `{"created": [{"id", "email",
+"display_name", "temp_password"}], "skipped": [{"email", "reason"}]}`; las
+contraseñas temporales solo viajan aquí.
+
+```bash
+curl -X POST http://localhost:8001/admin/workspaces/2/players   -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json"   -d '{"players": [{"email": "ana@correo.com", "display_name": "Ana Torres"}]}'
 ```
 
 ---

@@ -3,8 +3,6 @@ admin_router.py — Endpoints administrativos para el dashboard.
 Lista de jugadores, detalle, estadísticas, reinicio por tipología y reinicio total.
 Todos los endpoints requieren rol de administrador.
 """
-import secrets
-import string
 from datetime import datetime, timedelta, timezone
 from typing import List
 
@@ -16,7 +14,7 @@ from database import get_db
 from models import (
     User, PlayerSession, PlayerAnswer, SessionTool,
     PlayerNote, PlayerTypologyProgress, PlayerAchievement, Reading,
-    PlayerSlot, ActiveReading,
+    PlayerSlot, ActiveReading, Workspace,
 )
 from schemas import (
     PlayerSummary, AdminStatsResponse, UserResponse,
@@ -27,17 +25,9 @@ from schemas import (
 from game_rules import DIFFICULTY_ORDER, score_rules
 from progression import juego_terminado, reevaluate_unlocks
 from auth import get_current_admin, hash_password
+from workspaces import generate_temp_password, get_viewed_workspace, ids_jugadores
 
 router = APIRouter(prefix="/admin", tags=["Administración"])
-
-
-def generate_temp_password(length=10) -> str:
-    """Genera una contraseña temporal segura con al menos una mayúscula y un número."""
-    alphabet = string.ascii_letters + string.digits
-    while True:
-        password = ''.join(secrets.choice(alphabet) for _ in range(length))
-        if any(c.isupper() for c in password) and any(c.isdigit() for c in password):
-            return password
 
 
 def _sesion_a_dict(s: PlayerSession) -> dict:
@@ -47,7 +37,6 @@ def _sesion_a_dict(s: PlayerSession) -> dict:
         "reading_id": s.reading_id,
         "reading_title": s.reading.title if s.reading else "Desconocida",
         "typology": s.typology,
-        "is_practice": s.is_practice,
         "session_score": s.session_score,
         "reading_time_seconds": s.reading_time_seconds,
         "total_time_seconds": s.total_time_seconds,
@@ -79,11 +68,10 @@ def _sesiones_del_slot(
     db: Session,
     player_id: int,
     slot_id: int,
-    practica: bool,
     limite: int = 50,
     typology: str | None = None,
 ) -> list:
-    """Sesiones de progresión (practica=False) o de práctica del slot, más recientes primero."""
+    """Sesiones del slot, más recientes primero."""
     query = (
         db.query(PlayerSession)
         .options(
@@ -94,7 +82,6 @@ def _sesiones_del_slot(
         .filter(
             PlayerSession.user_id == player_id,
             PlayerSession.slot_id == slot_id,
-            PlayerSession.is_practice == practica,
         )
     )
     if typology:
@@ -109,10 +96,11 @@ def list_players(
     q: str = Query("", description="Buscar por nombre o email"),
     is_active: bool = Query(None, description="Filtrar por estado"),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
-    """Lista todos los jugadores con resumen de progreso para el slot activo."""
-    query = db.query(User).filter(User.is_admin == False)
+    """Lista los jugadores del entorno con resumen de progreso para el slot activo."""
+    query = db.query(User).filter(User.is_admin == False, User.workspace_id == entorno.id)
 
     if q:
         search = f"%{q}%"
@@ -143,13 +131,7 @@ def list_players(
         )
         total_sessions = (
             db.query(sqlfunc.count(PlayerSession.id))
-            .filter(PlayerSession.user_id == user.id, PlayerSession.is_practice == False)
-            .filter(sess_filter)
-            .scalar()
-        )
-        practice_sessions = (
-            db.query(sqlfunc.count(PlayerSession.id))
-            .filter(PlayerSession.user_id == user.id, PlayerSession.is_practice == True)
+            .filter(PlayerSession.user_id == user.id)
             .filter(sess_filter)
             .scalar()
         )
@@ -180,7 +162,6 @@ def list_players(
             is_active=user.is_active,
             total_score=total_score or 0,
             total_sessions=total_sessions or 0,
-            practice_sessions=practice_sessions or 0,
             total_achievements=total_achievements or 0,
             last_played_at=last_played,
             created_at=user.created_at,
@@ -198,8 +179,7 @@ def get_player_detail(
     admin: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
-    """Retorna el detalle de un jugador para su slot activo. La práctica va
-    aparte (practice_sessions) y no entra en puntaje, historial ni estadísticas."""
+    """Retorna el detalle de un jugador para su slot activo."""
     user = db.query(User).filter(User.id == player_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="Jugador no encontrado")
@@ -238,20 +218,18 @@ def get_player_detail(
         .all()
     )
 
-    # Sesiones: progresión y práctica por separado
-    sessions = _sesiones_del_slot(db, player_id, active_slot.id, practica=False)
-    practice_sessions = _sesiones_del_slot(db, player_id, active_slot.id, practica=True)
+    sessions = _sesiones_del_slot(db, player_id, active_slot.id)
 
     # Notas con título de lectura en el slot activo
     notes_query = (
-        db.query(PlayerNote, Reading.title, Reading.typology, Reading.is_practice)
+        db.query(PlayerNote, Reading.title, Reading.typology)
         .join(Reading, PlayerNote.reading_id == Reading.id)
         .filter(PlayerNote.user_id == player_id, PlayerNote.slot_id == active_slot.id)
         .order_by(PlayerNote.created_at.desc())
         .all()
     )
 
-    # Estadísticas de herramientas (solo progresión)
+    # Estadísticas de herramientas
     tool_stats = (
         db.query(
             SessionTool.tool_name,
@@ -262,13 +240,12 @@ def get_player_detail(
         .filter(
             PlayerSession.user_id == player_id,
             PlayerSession.slot_id == active_slot.id,
-            PlayerSession.is_practice == False,
         )
         .group_by(SessionTool.tool_name)
         .all()
     )
 
-    # Estadísticas por nivel de comprensión (solo progresión)
+    # Estadísticas por nivel de comprensión
     level_stats = (
         db.query(
             PlayerAnswer.comprehension_level,
@@ -279,7 +256,6 @@ def get_player_detail(
         .filter(
             PlayerSession.user_id == player_id,
             PlayerSession.slot_id == active_slot.id,
-            PlayerSession.is_practice == False,
         )
         .group_by(PlayerAnswer.comprehension_level)
         .all()
@@ -301,19 +277,17 @@ def get_player_detail(
             AchievementResponse.model_validate(a) for a in achievements
         ],
         "sessions": [_sesion_a_dict(s) for s in sessions],
-        "practice_sessions": [_sesion_a_dict(s) for s in practice_sessions],
         "notes": [
             {
                 "id": note.id,
                 "reading_id": note.reading_id,
                 "reading_title": title,
                 "reading_typology": typology,
-                "reading_is_practice": is_practice,
                 "note_content": note.note_content,
                 "note_type": note.note_type,
                 "created_at": note.created_at.isoformat() if note.created_at else None,
             }
-            for note, title, typology, is_practice in notes_query
+            for note, title, typology in notes_query
         ],
         "tool_stats": [
             {
@@ -341,35 +315,42 @@ def get_player_detail(
 @router.get("/stats", response_model=AdminStatsResponse)
 def get_admin_stats(
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
-    """Retorna estadísticas globales para el dashboard."""
-    total_players = db.query(sqlfunc.count(User.id)).filter(User.is_admin == False).scalar()
+    """Retorna las estadísticas del entorno para el dashboard."""
+    jugadores = ids_jugadores(entorno.id)
+    del_entorno = PlayerSession.user_id.in_(jugadores)
+    total_players = (
+        db.query(sqlfunc.count(User.id))
+        .filter(User.is_admin == False, User.workspace_id == entorno.id)
+        .scalar()
+    )
     active_players = (
         db.query(sqlfunc.count(User.id))
-        .filter(User.is_admin == False, User.is_active == True)
+        .filter(User.is_admin == False, User.is_active == True, User.workspace_id == entorno.id)
         .scalar()
     )
-    progresion = PlayerSession.is_practice == False
-
-    total_sessions = db.query(sqlfunc.count(PlayerSession.id)).filter(progresion).scalar()
-    total_practice_sessions = (
-        db.query(sqlfunc.count(PlayerSession.id))
-        .filter(PlayerSession.is_practice == True)
-        .scalar()
-    )
+    total_sessions = db.query(sqlfunc.count(PlayerSession.id)).filter(del_entorno).scalar()
     total_points = (
         db.query(sqlfunc.coalesce(sqlfunc.sum(PlayerTypologyProgress.best_score), 0))
-        .filter(PlayerTypologyProgress.typology.in_(DIFFICULTY_ORDER))
+        .filter(
+            PlayerTypologyProgress.typology.in_(DIFFICULTY_ORDER),
+            PlayerTypologyProgress.user_id.in_(jugadores),
+        )
         .scalar()
     )
-    total_achievements = db.query(sqlfunc.count(PlayerAchievement.id)).scalar()
+    total_achievements = (
+        db.query(sqlfunc.count(PlayerAchievement.id))
+        .filter(PlayerAchievement.user_id.in_(jugadores))
+        .scalar()
+    )
 
-    # Precisión promedio (solo respuestas de progresión)
+    # Precisión promedio
     respuestas = (
         db.query(sqlfunc.count(PlayerAnswer.id))
         .join(PlayerSession, PlayerAnswer.session_id == PlayerSession.id)
-        .filter(progresion)
+        .filter(del_entorno)
     )
     total_answers = respuestas.scalar()
     correct_answers = respuestas.filter(PlayerAnswer.is_correct == True).scalar()
@@ -378,7 +359,7 @@ def get_admin_stats(
     # Sesiones por tipología
     sessions_by_typ = (
         db.query(PlayerSession.typology, sqlfunc.count(PlayerSession.id))
-        .filter(progresion)
+        .filter(del_entorno)
         .group_by(PlayerSession.typology)
         .all()
     )
@@ -390,7 +371,7 @@ def get_admin_stats(
             sqlfunc.date(PlayerSession.completed_at).label("day"),
             sqlfunc.count(PlayerSession.id).label("count"),
         )
-        .filter(PlayerSession.completed_at >= seven_days_ago, progresion)
+        .filter(PlayerSession.completed_at >= seven_days_ago, del_entorno)
         .group_by(sqlfunc.date(PlayerSession.completed_at))
         .order_by(sqlfunc.date(PlayerSession.completed_at))
         .all()
@@ -400,7 +381,6 @@ def get_admin_stats(
         total_players=total_players or 0,
         active_players=active_players or 0,
         total_sessions=total_sessions or 0,
-        total_practice_sessions=total_practice_sessions or 0,
         total_points=total_points or 0,
         total_achievements=total_achievements or 0,
         average_accuracy=avg_accuracy,
@@ -423,7 +403,6 @@ def reset_typology(
     """
     Reinicia el progreso de una tipología Y TODAS LAS SUPERIORES en el SLOT ACTIVO.
     Ejemplo: reiniciar Argumentativo también borra Expositivo.
-    Las sesiones y notas de práctica no se tocan.
     """
     user = db.query(User).filter(User.id == player_id).first()
     if not user:
@@ -468,7 +447,6 @@ def reset_typology(
                 PlayerSession.user_id == player_id,
                 PlayerSession.slot_id == active_slot.id,
                 PlayerSession.typology == typology,
-                PlayerSession.is_practice == False,
             )
             .all()
         ]
@@ -493,7 +471,7 @@ def reset_typology(
         # Borrar notas de lecturas de esta tipología en el slot activo
         reading_ids_of_typology = [
             r.id for r in
-            db.query(Reading.id).filter(Reading.typology == typology, Reading.is_practice == False).all()
+            db.query(Reading.id).filter(Reading.typology == typology).all()
         ]
         if reading_ids_of_typology:
             note_count = db.query(PlayerNote).filter(
@@ -650,7 +628,6 @@ def reset_all_progress(
 def get_player_sessions(
     player_id: int,
     typology: str = Query(None),
-    practice: bool = Query(False, description="true: sesiones de la zona de práctica"),
     limit: int = Query(50, ge=1, le=200),
     admin: User = Depends(get_current_admin),
     db: Session = Depends(get_db),
@@ -660,7 +637,7 @@ def get_player_sessions(
     if not active_slot:
         return []
     sesiones = _sesiones_del_slot(
-        db, player_id, active_slot.id, practica=practice, limite=limit, typology=typology,
+        db, player_id, active_slot.id, limite=limit, typology=typology,
     )
     return [_sesion_a_dict(s) for s in sesiones]
 
@@ -733,7 +710,6 @@ def get_player_slots(
             .filter(
                 PlayerSession.user_id == player_id,
                 PlayerSession.slot_id == slot.id,
-                PlayerSession.is_practice == False,
             )
             .scalar()
         )

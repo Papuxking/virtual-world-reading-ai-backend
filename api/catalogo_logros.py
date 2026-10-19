@@ -1,0 +1,148 @@
+"""catalogo_logros.py — Catálogo global de logros iniciales y función de siembra."""
+from models import AchievementCatalog
+
+INITIAL_ACHIEVEMENTS = [
+    {
+        "id": "first_reading",
+        "name": "📖 Primera lectura",
+        "description": "Has completado tu primera sesión de lectura.",
+        "how_to_unlock": "Completar al menos 1 sesión de lectura en cualquier tipología.",
+        "category": "progreso",
+        "icon": "📖",
+        "medal_name": "Lector novato",
+        "medal_tier": "bronce",
+        "medal_description": "Tu primer paso en el mundo de la lectura.",
+        "medal_placeholder_emoji": "📖",
+        "display_order": 1,
+    },
+    {
+        "id": "improvement",
+        "name": "📈 En mejora",
+        "description": "Has demostrado una mejora constante en tus intentos.",
+        "how_to_unlock": "Completar al menos 3 sesiones de lectura mostrando un aumento progresivo de puntaje.",
+        "category": "superación",
+        "icon": "📈",
+        "medal_name": "Crecimiento firme",
+        "medal_tier": "bronce",
+        "medal_description": "El esfuerzo continuo rinde frutos.",
+        "medal_placeholder_emoji": "📈",
+        "display_order": 2,
+    },
+    {
+        "id": "explorer",
+        "name": "🏅 Explorador",
+        "description": "Has explorado todas las tipologías textuales del juego.",
+        "how_to_unlock": "Completar al menos 1 sesión en cada una de las 4 tipologías textuales.",
+        "category": "exploración",
+        "icon": "🏅",
+        "medal_name": "Explorador intrépido",
+        "medal_tier": "plata",
+        "medal_description": "Dominas los viajes a través de todos los estilos textuales.",
+        "medal_placeholder_emoji": "🧭",
+        "display_order": 3,
+    },
+    {
+        "id": "avid_reader",
+        "name": "📚 Lector ávido",
+        "description": "Has completado muchas sesiones de lectura.",
+        "how_to_unlock": "Completar un total de 4 sesiones de lectura en cualquier combinación de tipologías.",
+        "category": "progreso",
+        "icon": "📚",
+        "medal_name": "Devorador de páginas",
+        "medal_tier": "plata",
+        "medal_description": "La lectura es tu hábito favorito.",
+        "medal_placeholder_emoji": "📚",
+        "display_order": 4,
+    },
+    {
+        "id": "star_literal",
+        "name": "⭐ Estrella literal",
+        "description": "Tienes una precisión perfecta en preguntas de nivel literal.",
+        "how_to_unlock": "Acumular 6 respuestas correctas de nivel literal.",
+        "category": "maestría",
+        "icon": "⭐",
+        "medal_name": "Ojo de halcón",
+        "medal_tier": "plata",
+        "medal_description": "No se te escapa ningún detalle explícito del texto.",
+        "medal_placeholder_emoji": "👁️",
+        "display_order": 5,
+    },
+    {
+        "id": "perfectionist",
+        "name": "🎯 Perfeccionista",
+        "description": "Has completado sesiones de lectura con puntajes perfectos.",
+        "how_to_unlock": "Responder correctamente todas las preguntas en al menos 3 sesiones de lectura.",
+        "category": "maestría",
+        "icon": "🎯",
+        "medal_name": "Lector impecable",
+        "medal_tier": "oro",
+        "medal_description": "Precisión absoluta en la comprensión de textos.",
+        "medal_placeholder_emoji": "🎯",
+        "display_order": 6,
+    },
+    {
+        "id": "star_inferencial",
+        "name": "🌟 Estrella inferencial",
+        "description": "Dominas la lectura entre líneas y deducciones complejas.",
+        "how_to_unlock": "Acumular 6 respuestas correctas de nivel inferencial.",
+        "category": "maestría",
+        "icon": "🌟",
+        "medal_name": "Sabueso deductivo",
+        "medal_tier": "oro",
+        "medal_description": "Descifras el significado oculto del autor con facilidad.",
+        "medal_placeholder_emoji": "🔍",
+        "display_order": 7,
+    },
+    {
+        "id": "centurion",
+        "name": "💯 Centurión",
+        "description": "Has acumulado una gran puntuación en tipologías específicas.",
+        "how_to_unlock": "Superar los 300 puntos en la puntuación máxima de cualquier tipología.",
+        "category": "progreso",
+        "icon": "💯",
+        "medal_name": "Guerrero intelectual",
+        "medal_tier": "oro",
+        "medal_description": "Has roto la barrera de los 300 puntos de maestría.",
+        "medal_placeholder_emoji": "🛡️",
+        "display_order": 8,
+    },
+    {
+        "id": "star_critico",
+        "name": "💎 Estrella crítica",
+        "description": "Excelente capacidad para valorar y juzgar intenciones del autor.",
+        "how_to_unlock": "Acumular 6 respuestas correctas de nivel crítico.",
+        "category": "maestría",
+        "icon": "💎",
+        "medal_name": "Pensador analítico",
+        "medal_tier": "platino",
+        "medal_description": "Ningún sesgo ni intención oculta pasa desapercibido ante tu criterio.",
+        "medal_placeholder_emoji": "💎",
+        "display_order": 9,
+    },
+    {
+        "id": "half_millennium",
+        "name": "🏆 Medio milenio",
+        "description": "Has acumulado una impresionante puntuación en tus mejores tipologías.",
+        "how_to_unlock": "Superar los 500 puntos totales combinados de mejores puntuaciones.",
+        "category": "progreso",
+        "icon": "🏆",
+        "medal_name": "Sabio del reino",
+        "medal_tier": "platino",
+        "medal_description": "Una leyenda de la comprensión lectora en el mundo virtual.",
+        "medal_placeholder_emoji": "👑",
+        "display_order": 10,
+    },
+]
+
+
+def seed_achievements_catalog(db) -> None:
+    """Puebla o actualiza el catálogo global de logros."""
+    for item in INITIAL_ACHIEVEMENTS:
+        existing = db.query(AchievementCatalog).filter(AchievementCatalog.id == item["id"]).first()
+        if existing:
+            for key, val in item.items():
+                setattr(existing, key, val)
+        else:
+            catalog_item = AchievementCatalog(**item)
+            db.add(catalog_item)
+    db.commit()

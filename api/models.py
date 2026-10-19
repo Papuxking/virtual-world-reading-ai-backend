@@ -4,7 +4,7 @@ Incluye modelos de lecturas, preguntas, respuestas, usuarios y progreso.
 """
 from sqlalchemy import (
     Column, Integer, SmallInteger, String, Text, DateTime, Boolean,
-    UniqueConstraint, ForeignKey, false,
+    UniqueConstraint, ForeignKey, Index, text,
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -26,9 +26,6 @@ class Reading(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     external_id = Column(Integer, nullable=True, index=True)
-    # Lecturas exclusivas de la zona de práctica: el juego nunca las ofrece en
-    # la progresión, y en la práctica solo ofrece estas.
-    is_practice = Column(Boolean, nullable=False, default=False, server_default=false())
 
     # Relación 1:N con preguntas
     questions = relationship(
@@ -111,12 +108,42 @@ class UserReading(Base):
 
 # ── Modelo de Usuarios ──────────────────────────────────────────────────────
 
+class Workspace(Base):
+    """Entorno de trabajo: agrupa las cuentas de jugador y todo lo que generan.
+    Como mucho uno está activo, y solo sus jugadores entran al juego."""
+    __tablename__ = "workspaces"
+    __table_args__ = (
+        Index("ux_workspaces_un_activo", "is_active", unique=True, postgresql_where=text("is_active")),
+    )
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(40), nullable=False)
+    color = Column(String(7), nullable=False)
+    is_active = Column(Boolean, nullable=False, default=False, server_default=text("false"))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Las cuentas las borra la base en cascada al borrar el entorno.
+    users = relationship("User", back_populates="workspace", passive_deletes=True)
+
+
+# Nombre único sin distinguir mayúsculas.
+Index("ux_workspaces_nombre", func.lower(Workspace.name), unique=True)
+
+
 class User(Base):
-    """Modelo ORM para la tabla 'users'."""
+    """Modelo ORM para la tabla 'users'. Los jugadores son de un entorno; los
+    administradores (y las cuentas de antes de los entornos) no tienen."""
     __tablename__ = "users"
+    __table_args__ = (
+        Index("ix_users_email_login", "email"),
+        # El mismo correo puede estar en varios entornos, una vez en cada uno.
+        Index("ux_users_workspace_email", "workspace_id", "email",
+              unique=True, postgresql_nulls_not_distinct=True),
+    )
 
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String(255), unique=True, nullable=False, index=True)
+    workspace_id = Column(Integer, ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=True, index=True)
+    email = Column(String(255), nullable=False)
     hashed_password = Column(String(255), nullable=False)
     display_name = Column(String(100), nullable=False)
     character = Column(String(10), default="male")
@@ -128,6 +155,7 @@ class User(Base):
     last_login_at = Column(DateTime(timezone=True), nullable=True)
 
     # Relaciones
+    workspace = relationship("Workspace", back_populates="users")
     slots = relationship("PlayerSlot", back_populates="user", cascade="all, delete-orphan", foreign_keys="[PlayerSlot.user_id]")
     sessions = relationship("PlayerSession", back_populates="user", cascade="all, delete-orphan")
     achievements = relationship("PlayerAchievement", back_populates="user", cascade="all, delete-orphan")
@@ -227,9 +255,6 @@ class PlayerSession(Base):
     correct_count = Column(Integer, nullable=False, default=0)
     incorrect_count = Column(Integer, nullable=False, default=0)
     tool_bonus = Column(Integer, nullable=False, default=0)
-    # Sesión de la zona de práctica: se guarda para el docente, pero no cuenta
-    # en puntaje, desbloqueos, logros, ranking ni métricas.
-    is_practice = Column(Boolean, nullable=False, default=False, server_default=false())
     started_at = Column(DateTime(timezone=True), server_default=func.now())
     completed_at = Column(DateTime(timezone=True), server_default=func.now())
 

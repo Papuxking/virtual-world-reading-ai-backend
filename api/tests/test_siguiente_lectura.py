@@ -10,7 +10,7 @@ def _terminar(db, usuario, slot, lectura, hace_dias=0):
     """Sesión de progresión terminada con esa lectura, en ese slot."""
     db.add(PlayerSession(
         user_id=usuario.id, slot_id=slot.id, reading_id=lectura.id, typology=lectura.typology,
-        session_score=60, is_practice=False,
+        session_score=60,
         completed_at=datetime.now(timezone.utc) - timedelta(days=hace_dias),
     ))
     db.commit()
@@ -38,7 +38,6 @@ def test_devuelve_la_lectura_completa(client, db):
     lectura = crear_lectura(db, "Única")
     datos = _siguiente(client, usuario).json()
     assert datos["id"] == lectura.id
-    assert datos["is_practice"] is False
     assert len(datos["questions"]) == 6
     assert len(datos["questions"][0]["answers"]) == 4
 
@@ -83,9 +82,8 @@ def test_si_solo_queda_la_activa_la_devuelve(client, db):
     assert _siguiente(client, usuario).json()["id"] == a.id
 
 
-def test_no_ofrece_practica_ni_otra_tipologia(client, db):
+def test_no_ofrece_otra_tipologia(client, db):
     usuario, _ = crear_usuario(db)
-    crear_lectura(db, "Práctica", "Narrativo", practica=True)
     crear_lectura(db, "Otra", "Descriptivo")
     buena = crear_lectura(db, "Buena", "Narrativo")
     for _ in range(10):
