@@ -3,8 +3,6 @@ admin_router.py — Endpoints administrativos para el dashboard.
 Lista de jugadores, detalle, estadísticas, reinicio por tipología y reinicio total.
 Todos los endpoints requieren rol de administrador.
 """
-import secrets
-import string
 from datetime import datetime, timedelta, timezone
 from typing import List
 
@@ -27,17 +25,9 @@ from schemas import (
 from game_rules import DIFFICULTY_ORDER, score_rules
 from progression import juego_terminado, reevaluate_unlocks
 from auth import get_current_admin, hash_password
+from workspaces import generate_temp_password
 
 router = APIRouter(prefix="/admin", tags=["Administración"])
-
-
-def generate_temp_password(length=10) -> str:
-    """Genera una contraseña temporal segura con al menos una mayúscula y un número."""
-    alphabet = string.ascii_letters + string.digits
-    while True:
-        password = ''.join(secrets.choice(alphabet) for _ in range(length))
-        if any(c.isupper() for c in password) and any(c.isdigit() for c in password):
-            return password
 
 
 def _sesion_a_dict(s: PlayerSession) -> dict:

@@ -4,6 +4,8 @@ workspaces.py — Entornos de trabajo.
 Cada cuenta de jugador es de un entorno y, como mucho, uno está activo: solo
 sus jugadores entran al juego. Los administradores no tienen entorno.
 """
+import secrets
+import string
 from typing import Optional
 
 from sqlalchemy.orm import Session
@@ -14,6 +16,15 @@ from models import PlayerSlot, PlayerTypologyProgress, User, Workspace
 
 # Colores que se pueden elegir para un entorno, en el orden del dashboard.
 PALETA = ("#059669", "#d97706", "#2563eb", "#7c3aed", "#db2777", "#0891b2")
+
+
+def generate_temp_password(length=10) -> str:
+    """Genera una contraseña temporal segura con al menos una mayúscula y un número."""
+    alphabet = string.ascii_letters + string.digits
+    while True:
+        password = ''.join(secrets.choice(alphabet) for _ in range(length))
+        if any(c.isupper() for c in password) and any(c.isdigit() for c in password):
+            return password
 
 
 def entorno_activo(db: Session) -> Optional[Workspace]:
