@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS active_readings (
     session_score INTEGER NOT NULL DEFAULT 0,
     results_json TEXT DEFAULT '[]',
     tools_used_json TEXT DEFAULT '{"highlight":false,"underline":false,"notes":false}',
-    reading_start_time FLOAT DEFAULT 0,
+    reading_start_time VARCHAR(50) DEFAULT '0',
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '24 hours'),
