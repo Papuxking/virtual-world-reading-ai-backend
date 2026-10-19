@@ -37,9 +37,9 @@ def cabeceras(usuario):
     return {"Authorization": f"Bearer {token}"}
 
 
-def crear_lectura(db, titulo="Lectura", tipologia="Narrativo", practica=False):
+def crear_lectura(db, titulo="Lectura", tipologia="Narrativo"):
     """Lectura con 6 preguntas (2 por nivel); la correcta es siempre la A."""
-    lectura = Reading(title=titulo, typology=tipologia, content="Texto " * 40, is_practice=practica)
+    lectura = Reading(title=titulo, typology=tipologia, content="Texto " * 40)
     db.add(lectura)
     db.flush()
     for numero, nivel in enumerate(NIVELES_DE_PRUEBA, start=1):
@@ -55,9 +55,8 @@ def crear_lectura(db, titulo="Lectura", tipologia="Narrativo", practica=False):
     return lectura
 
 
-def payload_sesion(db, lectura, tipologia=None, puntaje=200, practica=None, correctas=6):
-    """Cuerpo de POST /progress/sessions tal como lo manda el juego.
-    Con practica=None imita a un cliente antiguo que no conoce el campo."""
+def payload_sesion(db, lectura, tipologia=None, puntaje=200, correctas=6):
+    """Cuerpo de POST /progress/sessions tal como lo manda el juego."""
     preguntas = (
         db.query(Question)
         .filter(Question.reading_id == lectura.id)
@@ -93,16 +92,14 @@ def payload_sesion(db, lectura, tipologia=None, puntaje=200, practica=None, corr
             {"tool_name": "notes", "was_used": False, "usage_count": 0},
         ],
     }
-    if practica is not None:
-        datos["is_practice"] = practica
     return datos
 
 
 def lectura_json(titulo, tipologia):
-    """Lectura en el formato de los JSON de corpus (con la errata 'activites').
-    Es válida para validar_lecturas_practica: unos 2.800 caracteres, 4 preguntas
-    por nivel y respuestas correctas repartidas entre A, B, C y D."""
-    parrafo = ("Texto de prueba para una lectura de práctica. " * 10).strip()
+    """Lectura en el formato de los JSON de corpus (con la errata 'activites'):
+    unos 2.800 caracteres, 4 preguntas por nivel y respuestas correctas
+    repartidas entre A, B, C y D."""
+    parrafo = ("Texto de prueba para una lectura del corpus. " * 10).strip()
     niveles = ["Literal"] * 4 + ["Inferencial"] * 4 + ["Critico"] * 4
     letras = "ABCD" * 3
     return {

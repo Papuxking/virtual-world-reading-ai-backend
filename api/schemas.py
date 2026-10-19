@@ -62,7 +62,6 @@ class ReadingResponse(BaseModel):
     title: str
     typology: str
     type: Optional[str] = None
-    is_practice: bool = False
     content: str
     created_at: datetime
     updated_at: datetime
@@ -111,7 +110,6 @@ class ReadingFullResponse(BaseModel):
     title: str
     typology: str
     type: Optional[str] = None
-    is_practice: bool = False
     content: str
     created_at: datetime
     updated_at: datetime
@@ -268,9 +266,6 @@ class SessionCreate(BaseModel):
     correct_count: int = 0
     incorrect_count: int = 0
     tool_bonus: int = 0
-    # Sesión de la zona de práctica: se guarda, pero no toca el progreso.
-    # Los clientes antiguos no lo mandan y valen como progresión.
-    is_practice: bool = False
     answers: List[PlayerAnswerCreate] = []
     tools: List[SessionToolCreate] = []
 
@@ -362,7 +357,6 @@ class SessionResponse(BaseModel):
     correct_count: int
     incorrect_count: int
     tool_bonus: int
-    is_practice: bool = False
     started_at: datetime
     completed_at: datetime
     answers: List[PlayerAnswerResponse] = []
@@ -439,9 +433,6 @@ class PlayerProgressResponse(BaseModel):
     user: UserResponse
     active_slot_id: Optional[int] = None
     total_score: int
-    # Sesiones de práctica del slot. No cuentan para nada, pero el juego las usa
-    # para saber que el alumno ya ha jugado y no pedirle otra vez el personaje.
-    practice_sessions: int = 0
     # Intentos por tipología y si ya se agotaron en alguna sin aprobarla: con el
     # juego terminado el alumno sigue entrando, pero no puede avanzar.
     max_attempts: int = 5
@@ -449,7 +440,7 @@ class PlayerProgressResponse(BaseModel):
     typology_progress: List[TypologyProgressResponse]
     achievements: List[AchievementResponse]
     recent_sessions: List[SessionResponse] = []
-    # Respuestas correctas acumuladas por nivel (sin la práctica). El juego las
+    # Respuestas correctas acumuladas por nivel. El juego las
     # restaura al iniciar sesión: sin ellas, los logros de las Estrellas solo
     # contaban los aciertos de una misma partida.
     correct_by_level: Dict[str, int] = {}
@@ -466,7 +457,6 @@ class PlayerSummary(BaseModel):
     is_active: bool
     total_score: int = 0
     total_sessions: int = 0
-    practice_sessions: int = 0
     total_achievements: int = 0
     last_played_at: Optional[datetime] = None
     created_at: datetime
@@ -482,7 +472,6 @@ class AdminStatsResponse(BaseModel):
     total_players: int
     active_players: int
     total_sessions: int
-    total_practice_sessions: int = 0
     total_points: int
     total_achievements: int
     average_accuracy: float

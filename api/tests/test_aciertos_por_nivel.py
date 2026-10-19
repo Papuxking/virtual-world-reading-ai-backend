@@ -25,14 +25,6 @@ def test_suma_los_aciertos_de_todas_las_sesiones(client, db):
     assert _aciertos(client, usuario) == {"Literal": 4, "Inferencial": 4, "Critico": 2}
 
 
-def test_la_practica_no_suma(client, db):
-    usuario, _ = crear_usuario(db)
-    practica = crear_lectura(db, "Práctica", "Narrativo", practica=True)
-    client.post("/progress/sessions", json=payload_sesion(db, practica, practica=True, correctas=6),
-                headers=cabeceras(usuario))
-    assert _aciertos(client, usuario) == CEROS
-
-
 def test_no_cuenta_los_de_otro_alumno(client, db):
     alumno, _ = crear_usuario(db, "uno@test.com")
     otro, _ = crear_usuario(db, "otro@test.com")

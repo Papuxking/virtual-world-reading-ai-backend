@@ -4,7 +4,7 @@ Incluye modelos de lecturas, preguntas, respuestas, usuarios y progreso.
 """
 from sqlalchemy import (
     Column, Integer, SmallInteger, String, Text, DateTime, Boolean,
-    UniqueConstraint, ForeignKey, false,
+    UniqueConstraint, ForeignKey,
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -26,9 +26,6 @@ class Reading(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     external_id = Column(Integer, nullable=True, index=True)
-    # Lecturas exclusivas de la zona de práctica: el juego nunca las ofrece en
-    # la progresión, y en la práctica solo ofrece estas.
-    is_practice = Column(Boolean, nullable=False, default=False, server_default=false())
 
     # Relación 1:N con preguntas
     questions = relationship(
@@ -227,9 +224,6 @@ class PlayerSession(Base):
     correct_count = Column(Integer, nullable=False, default=0)
     incorrect_count = Column(Integer, nullable=False, default=0)
     tool_bonus = Column(Integer, nullable=False, default=0)
-    # Sesión de la zona de práctica: se guarda para el docente, pero no cuenta
-    # en puntaje, desbloqueos, logros, ranking ni métricas.
-    is_practice = Column(Boolean, nullable=False, default=False, server_default=false())
     started_at = Column(DateTime(timezone=True), server_default=func.now())
     completed_at = Column(DateTime(timezone=True), server_default=func.now())
 

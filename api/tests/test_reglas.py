@@ -1,5 +1,3 @@
-from sqlalchemy import text
-
 from game_rules import DIFFICULTY_ORDER, MAX_SESSION_SCORE, UNLOCK_THRESHOLDS, score_rules
 from helpers import crear_usuario
 from models import PlayerTypologyProgress
@@ -34,16 +32,6 @@ def test_score_rules_devuelve_copias():
     reglas["unlock_thresholds"]["Instructivo"] = 250
     assert "Instructivo" not in DIFFICULTY_ORDER
     assert "Instructivo" not in UNLOCK_THRESHOLDS
-
-
-def test_is_practice_vale_false_por_defecto_en_la_base(db):
-    # Los scripts de corpus insertan con SQL crudo sin nombrar la columna.
-    valor = db.execute(text(
-        "INSERT INTO readings (title, typology, content) "
-        "VALUES ('Cruda', 'Narrativo', 'texto') RETURNING is_practice"
-    )).scalar()
-    db.commit()
-    assert valor is False
 
 
 def test_ensure_typology_rows_crea_las_que_faltan(db):
