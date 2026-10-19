@@ -14,7 +14,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from database import get_db
-from models import User
+from models import User, Workspace
 
 # ── Configuración ────────────────────────────────────────────────────────────
 
@@ -96,7 +96,21 @@ def get_current_user(
             detail="Usuario no encontrado o inactivo",
         )
 
+    # Un jugador solo juega mientras su entorno está activo; los
+    # administradores no tienen entorno. El juego trata este 409 como una
+    # sesión invalidada: vuelve al login con un aviso.
+    if not user.is_admin and not _entorno_activo(db, user):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="WORKSPACE_INACTIVE")
+
     return user
+
+
+def _entorno_activo(db: Session, user: User) -> bool:
+    if user.workspace_id is None:
+        return False
+    return bool(
+        db.query(Workspace.is_active).filter(Workspace.id == user.workspace_id).scalar()
+    )
 
 
 def get_current_admin(user: User = Depends(get_current_user)) -> User:

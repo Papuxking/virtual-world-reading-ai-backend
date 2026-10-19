@@ -14,17 +14,36 @@ def crear_entorno(db, nombre, color="#059669", activo=False):
     return entorno
 
 
+def entorno_activo_de_prueba(db):
+    """El entorno activo; si no hay ninguno, «Tests», que se crea o se activa."""
+    activo = db.query(Workspace).filter_by(is_active=True).first()
+    if activo:
+        return activo
+    tests = db.query(Workspace).filter_by(name="Tests").first()
+    if tests is None:
+        return crear_entorno(db, "Tests", activo=True)
+    tests.is_active = True
+    db.commit()
+    return tests
+
+
 def crear_usuario(db, email="alumno@test.com", admin=False, filas=True, entorno=None):
     """Crea un usuario. Si no es admin, con su slot 1 activo y, si filas=True,
     con las filas de progreso de las 4 tipologías (solo Narrativo abierta).
-    Con entorno, la cuenta es de ese entorno."""
+    Un jugador va al entorno indicado o, sin él, al activo (para que pueda
+    jugar); con entorno=False queda sin entorno, como las cuentas de antes de
+    los entornos. Los administradores nunca tienen entorno."""
+    if admin or entorno is False:
+        workspace_id = None
+    else:
+        workspace_id = (entorno or entorno_activo_de_prueba(db)).id
     usuario = User(
         email=email,
         hashed_password=hash_password("Test1234!"),
         display_name=email.split("@")[0],
         character="male",
         is_admin=admin,
-        workspace_id=entorno.id if entorno else None,
+        workspace_id=workspace_id,
     )
     db.add(usuario)
     db.flush()
@@ -42,9 +61,13 @@ def crear_usuario(db, email="alumno@test.com", admin=False, filas=True, entorno=
     return usuario, slot
 
 
-def cabeceras(usuario):
+def cabeceras(usuario, entorno=None):
+    """Token del usuario y, si se da, el entorno que mira el dashboard."""
     token = create_access_token(usuario.id, usuario.email, usuario.is_admin)
-    return {"Authorization": f"Bearer {token}"}
+    datos = {"Authorization": f"Bearer {token}"}
+    if entorno is not None:
+        datos["X-Workspace-Id"] = str(entorno.id)
+    return datos
 
 
 def crear_lectura(db, titulo="Lectura", tipologia="Narrativo"):
