@@ -129,6 +129,7 @@ Al arrancar, cada proceso de la API prepara la base (`esquema.preparar_base`:
 | `002_questions_schema.sql` | DDL: questions, answers, ALTER readings ADD type |
 | `002_seed.sql` | Seed: lectura Baños de Agua Santa + 12 preguntas |
 | `011_entornos.sql` | Tabla `workspaces`, `users.workspace_id` y correo único por entorno |
+| `012_conversaciones_asistente.sql` | `npc_interactions.user_message` y `assistant_reply`: lo que el jugador habla con el asistente IA |
 
 ## Resetear la base de datos
 

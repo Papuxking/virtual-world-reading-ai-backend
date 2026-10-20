@@ -7,7 +7,7 @@ Incluye exportación CSV y Excel.
 import io
 import csv
 from datetime import datetime, timezone
-from typing import Optional
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import StreamingResponse
@@ -23,7 +23,7 @@ from schemas import (
     MetricsReadingTimeResponse, MetricPlayerReadingTime, MetricTypologyReadingTime,
     MetricsAnswersResponse, MetricPlayerAnswers, MetricLevelAnswers,
     MetricsQuestionAttemptsResponse, MetricQuestionAttempt,
-    MetricsNpcInteractionsResponse, MetricNpcPlayer,
+    MetricsNpcInteractionsResponse, MetricNpcPlayer, NpcConversationMessage,
     MetricsToolUsageResponse, MetricToolUsage,
 )
 from auth import get_current_admin
@@ -313,6 +313,41 @@ def get_npc_interaction_metrics(
             ) for p in by_player_q
         ],
     )
+
+
+@router.get("/npc-conversations", response_model=List[NpcConversationMessage])
+def get_npc_conversations(
+    player_id: int = Query(..., description="Jugador cuya conversación se muestra"),
+    reading_id: Optional[int] = Query(None),
+    limit: int = Query(500, ge=1, le=2000),
+    admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
+    db: Session = Depends(get_db),
+):
+    """Lo que el jugador habló con el asistente IA, en orden cronológico. Solo
+    las interacciones con texto (las de antes de la migración 012 no lo tienen)
+    y solo si el jugador es del entorno que se mira."""
+    query = (
+        db.query(NpcInteraction, Reading.title, Reading.typology)
+        .outerjoin(Reading, NpcInteraction.reading_id == Reading.id)
+        .filter(
+            NpcInteraction.user_id == player_id,
+            NpcInteraction.user_id.in_(ids_jugadores(entorno.id)),
+            NpcInteraction.user_message.isnot(None),
+        )
+    )
+    if reading_id:
+        query = query.filter(NpcInteraction.reading_id == reading_id)
+    filas = query.order_by(NpcInteraction.created_at, NpcInteraction.id).limit(limit).all()
+    return [
+        NpcConversationMessage(
+            id=i.id, npc_type=i.npc_type, reading_id=i.reading_id,
+            reading_title=titulo, typology=tipologia,
+            user_message=i.user_message, assistant_reply=i.assistant_reply,
+            created_at=i.created_at,
+        )
+        for i, titulo, tipologia in filas
+    ]
 
 
 # ── Uso de Herramientas ─────────────────────────────────────────────────────

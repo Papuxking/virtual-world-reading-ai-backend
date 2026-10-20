@@ -382,6 +382,11 @@ export async function getMetricsQuestionAttempts(filters = {}) {
   return apiFetch(`/admin/metrics/question-attempts${qs ? '?' + qs : ''}`);
 }
 
+/** Lo que un jugador habló con el asistente IA (pregunta y respuesta). */
+export async function getNpcConversations(playerId) {
+  return apiFetch(`/admin/metrics/npc-conversations?player_id=${playerId}`);
+}
+
 export async function getMetricsNpcInteractions(filters = {}) {
   const params = _buildMetricParams(filters);
   if (filters.npc_type) params.set('npc_type', filters.npc_type);

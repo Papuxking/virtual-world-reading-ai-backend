@@ -603,6 +603,9 @@ class NpcInteractionCreate(BaseModel):
     npc_type: str = Field(..., max_length=30, description="Tipo de NPC: 'robot' o 'sabio'")
     session_id: Optional[int] = None
     reading_id: Optional[int] = None
+    # Texto de la conversación. Opcionales: un juego viejo no los manda.
+    user_message: Optional[str] = Field(None, max_length=4000)
+    assistant_reply: Optional[str] = Field(None, max_length=8000)
 
 
 class NpcInteractionResponse(BaseModel):
@@ -720,6 +723,31 @@ class MetricsNpcInteractionsResponse(BaseModel):
     total_sabio: int
     total_all: int
     by_player: List[MetricNpcPlayer]
+
+
+class NpcConversationMessage(BaseModel):
+    """Una pregunta del jugador al asistente IA y la respuesta que recibió."""
+    id: int
+    npc_type: str
+    reading_id: Optional[int] = None
+    reading_title: Optional[str] = None
+    typology: Optional[str] = None
+    user_message: Optional[str] = None
+    assistant_reply: Optional[str] = None
+    created_at: Optional[datetime] = None
+
+
+class MedalResponse(BaseModel):
+    """Medalla por desempeño (medallas.py). tier es None mientras está bloqueada."""
+    id: str
+    name: str
+    description: str
+    how_to_unlock: str
+    emoji: str
+    typology: Optional[str] = None
+    is_unlocked: bool
+    tier: Optional[str] = None
+    attempts: Optional[int] = None
 
 
 class MetricToolUsage(BaseModel):

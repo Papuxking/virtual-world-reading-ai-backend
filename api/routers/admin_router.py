@@ -25,6 +25,7 @@ from schemas import (
 from game_rules import DIFFICULTY_ORDER, score_rules
 from progression import juego_terminado, reevaluate_unlocks
 from auth import get_current_admin, hash_password
+from medallas import medallas_del_jugador
 from workspaces import generate_temp_password, get_viewed_workspace, ids_jugadores
 
 router = APIRouter(prefix="/admin", tags=["Administración"])
@@ -276,6 +277,7 @@ def get_player_detail(
         "achievements": [
             AchievementResponse.model_validate(a) for a in achievements
         ],
+        "medals": medallas_del_jugador(typology_progress),
         "sessions": [_sesion_a_dict(s) for s in sessions],
         "notes": [
             {

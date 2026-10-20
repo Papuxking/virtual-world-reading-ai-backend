@@ -23,6 +23,7 @@ CANDADO_ESQUEMA = 7202610
 MIGRACIONES_AL_ARRANCAR = [
     SQL_DIR / "010_intentos_y_reanudacion.sql",
     SQL_DIR / "011_entornos.sql",
+    SQL_DIR / "012_conversaciones_asistente.sql",
 ]
 
 
