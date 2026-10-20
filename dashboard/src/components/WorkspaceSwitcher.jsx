@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ChevronDown, Check, Plus, Settings } from 'lucide-react';
-import { useWorkspace } from '../context/WorkspaceContext';
+import { useWorkspace } from '../context/workspace';
 import {
   NewWorkspaceModal,
   ManageWorkspacesModal,
@@ -77,7 +77,12 @@ export default function WorkspaceSwitcher() {
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') setDropdownOpen((prev) => !prev);
+          // Solo las teclas de la propia tarjeta: las del interruptor no abren el menú.
+          if (e.target !== e.currentTarget) return;
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setDropdownOpen((prev) => !prev);
+          }
         }}
         className="flex cursor-pointer items-center justify-between gap-2.5 rounded-xl border border-slate-200/80 bg-slate-50/80 p-2.5 transition-all duration-200 hover:border-slate-300 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-white/20"
       >
@@ -94,30 +99,41 @@ export default function WorkspaceSwitcher() {
             <h2 className="truncate text-xs font-bold text-slate-800 dark:text-gray-100">
               {viewed?.name || 'Seleccionar entorno'}
             </h2>
-            <p className="text-[11px] text-slate-500 dark:text-gray-400">
+            <p className="whitespace-nowrap text-[11px] text-slate-500 dark:text-gray-400">
               {viewed ? `${viewed.player_count} ${viewed.player_count === 1 ? 'jugador' : 'jugadores'}` : ''}
             </p>
           </div>
         </div>
 
-        {/* Interruptor ACTIVO / INACTIVO */}
+        {/* Interruptor ACTIVO / INACTIVO del entorno que se ve (pide confirmación) */}
         {viewed && (
           <button
             type="button"
-            onClick={handleToggleActive}
+            role="switch"
+            aria-checked={viewed.is_active}
+            aria-label={viewed.is_active ? `Desactivar «${viewed.name}»` : `Activar «${viewed.name}»`}
             title={viewed.is_active ? 'Desactivar entorno' : 'Activar entorno'}
-            className={`flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider transition-colors ${
-              viewed.is_active
-                ? 'bg-emerald-500/20 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300 hover:bg-emerald-500/30'
-                : 'bg-slate-200 text-slate-600 dark:bg-white/10 dark:text-gray-400 hover:bg-slate-300 dark:hover:bg-white/15'
-            }`}
+            onClick={handleToggleActive}
+            className="flex flex-shrink-0 flex-col items-center gap-0.5 rounded-lg p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/60"
           >
             <span
-              className={`h-1.5 w-1.5 rounded-full ${
-                viewed.is_active ? 'bg-emerald-500' : 'bg-slate-400 dark:bg-gray-500'
+              className={`relative h-5 w-9 rounded-full transition-colors duration-200 ${
+                viewed.is_active ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'
               }`}
-            />
-            {viewed.is_active ? 'ACTIVO' : 'INACTIVO'}
+            >
+              <span
+                className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-all duration-200 ${
+                  viewed.is_active ? 'left-[18px]' : 'left-0.5'
+                }`}
+              />
+            </span>
+            <span
+              className={`text-[9px] font-bold tracking-wider ${
+                viewed.is_active ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-gray-400'
+              }`}
+            >
+              {viewed.is_active ? 'ACTIVO' : 'INACTIVO'}
+            </span>
           </button>
         )}
 

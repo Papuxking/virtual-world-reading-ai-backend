@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { clearToken, getStoredUser } from '../services/api';
-import { useWorkspace } from '../context/WorkspaceContext';
+import { useWorkspace } from '../context/workspace';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
 import WorkspaceBanner from './WorkspaceBanner';
 import { NewWorkspaceModal } from './WorkspaceDialogs';
@@ -91,7 +91,9 @@ export default function DashboardLayout() {
       <main className="flex-1 min-w-0 overflow-y-auto">
         <div className="p-6 sm:p-8 max-w-7xl mx-auto">
           <WorkspaceBanner />
-          {!loading && workspaces.length === 0 ? (
+          {/* Las páginas piden datos con la cabecera del entorno: no se montan
+              hasta saber cuál es (sin entorno, la API respondería 400). */}
+          {loading ? null : !viewed || workspaces.length === 0 ? (
             <div className="glass-card p-12 text-center">
               <h2 className="text-xl font-bold text-slate-800 dark:text-gray-100 mb-2">
                 Crea un entorno para empezar.
@@ -108,7 +110,7 @@ export default function DashboardLayout() {
               </button>
             </div>
           ) : (
-            <Outlet key={viewed?.id ?? 'ninguno'} />
+            <Outlet key={viewed.id} />
           )}
         </div>
       </main>

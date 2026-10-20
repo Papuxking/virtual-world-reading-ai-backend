@@ -1,27 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { X, Copy, Download, Check, AlertCircle } from 'lucide-react';
 import { parsearLineas, aTexto, aCsv } from '../utils/jugadores';
 import { addPlayers } from '../services/api';
+import Capa from './Capa';
 
+// El formulario se monta al abrirse el diálogo: así empieza limpio, sin
+// reiniciar el estado con un efecto.
 export default function AddPlayersDialog({ isOpen, workspace, onClose, onSuccess }) {
+  if (!isOpen || !workspace) return null;
+  return <AgregarJugadores workspace={workspace} onClose={onClose} onSuccess={onSuccess} />;
+}
+
+function AgregarJugadores({ workspace, onClose, onSuccess }) {
   const [step, setStep] = useState(1); // 1 = entrada, 2 = resultado
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState({ created: [], skipped: [] });
   const [copied, setCopied] = useState(false);
-
-  React.useEffect(() => {
-    if (isOpen) {
-      setStep(1);
-      setText('');
-      setError('');
-      setResult({ created: [], skipped: [] });
-      setCopied(false);
-    }
-  }, [isOpen]);
-
-  if (!isOpen || !workspace) return null;
 
   const parsed = parsearLineas(text);
   const count = parsed.length;
@@ -57,7 +53,11 @@ export default function AddPlayersDialog({ isOpen, workspace, onClose, onSuccess
     if (!result.created.length) return;
     const csvContent = aCsv(result.created);
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const hoy = new Date().toISOString().slice(0, 10);
+    // Fecha local (toISOString da la de UTC: por la noche ya sería mañana).
+    const ahora = new Date();
+    const hoy = [ahora.getFullYear(), ahora.getMonth() + 1, ahora.getDate()]
+      .map((x) => String(x).padStart(2, '0'))
+      .join('-');
     const safeName = workspace.name.replace(/[^\w\d-]/g, '_');
     const filename = `jugadores_${safeName}_${hoy}.csv`;
 
@@ -70,14 +70,15 @@ export default function AddPlayersDialog({ isOpen, workspace, onClose, onSuccess
     URL.revokeObjectURL(a.href);
   }
 
+  // Cerrar de cualquier forma tras agregar (Listo o la X) recarga la tabla.
   function handleFinish() {
     onClose();
-    if (onSuccess) onSuccess();
+    if (step === 2 && onSuccess) onSuccess();
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-      <div className="glass-card w-full max-w-2xl p-6">
+    <Capa>
+      <div className="glass-card dark:bg-surface-800 shadow-2xl w-full max-w-2xl p-6">
         {/* Cabecera */}
         <div className="flex items-center justify-between pb-3">
           <h3 className="text-lg font-bold text-slate-800 dark:text-gray-100">
@@ -125,7 +126,7 @@ export default function AddPlayersDialog({ isOpen, workspace, onClose, onSuccess
                 {count > 0 ? `${count} ${count === 1 ? 'jugador detectado' : 'jugadores detectados'}` : ''}
               </span>
               <div className="flex gap-2">
-                <button type="button" onClick={onClose} className="btn-ghost text-sm" disabled={loading}>
+                <button type="button" onClick={handleFinish} className="btn-ghost text-sm" disabled={loading}>
                   Cancelar
                 </button>
                 <button
@@ -227,6 +228,6 @@ export default function AddPlayersDialog({ isOpen, workspace, onClose, onSuccess
           </div>
         )}
       </div>
-    </div>
+    </Capa>
   );
 }

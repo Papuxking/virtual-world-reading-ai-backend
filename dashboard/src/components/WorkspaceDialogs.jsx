@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { X, AlertTriangle } from 'lucide-react';
-import { useWorkspace, PALETA_ENTORNOS } from '../context/WorkspaceContext';
+import { useState } from 'react';
+import { X } from 'lucide-react';
+import { useWorkspace, PALETA_ENTORNOS } from '../context/workspace';
 import {
   createWorkspace,
   updateWorkspace,
@@ -8,6 +8,7 @@ import {
   deactivateWorkspace,
   deleteWorkspace,
 } from '../services/api';
+import Capa from './Capa';
 
 export function ColorPicker({ value, onChange }) {
   return (
@@ -30,14 +31,19 @@ export function ColorPicker({ value, onChange }) {
   );
 }
 
+// Cada diálogo monta su formulario al abrirse: así empieza limpio, sin tener
+// que reiniciar el estado con un efecto.
 export function NewWorkspaceModal({ isOpen, onClose }) {
+  if (!isOpen) return null;
+  return <NuevoEntorno onClose={onClose} />;
+}
+
+function NuevoEntorno({ onClose }) {
   const { refresh } = useWorkspace();
   const [name, setName] = useState('');
   const [color, setColor] = useState(PALETA_ENTORNOS[0]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  if (!isOpen) return null;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -51,8 +57,6 @@ export function NewWorkspaceModal({ isOpen, onClose }) {
     try {
       const created = await createWorkspace(cleanName, color);
       await refresh(created.id);
-      setName('');
-      setColor(PALETA_ENTORNOS[0]);
       onClose();
     } catch (err) {
       setError(err.message || 'Error al crear el entorno');
@@ -62,8 +66,8 @@ export function NewWorkspaceModal({ isOpen, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-      <div className="glass-card w-full max-w-md p-6">
+    <Capa>
+      <div className="glass-card dark:bg-surface-800 shadow-2xl w-full max-w-md p-6">
         <div className="flex items-center justify-between pb-3">
           <h3 className="text-lg font-bold text-slate-800 dark:text-gray-100">Nuevo entorno</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-gray-200">
@@ -111,26 +115,21 @@ export function NewWorkspaceModal({ isOpen, onClose }) {
           </div>
         </form>
       </div>
-    </div>
+    </Capa>
   );
 }
 
 export function EditWorkspaceModal({ isOpen, workspace, onClose }) {
+  if (!isOpen || !workspace) return null;
+  return <EditarEntorno key={workspace.id} workspace={workspace} onClose={onClose} />;
+}
+
+function EditarEntorno({ workspace, onClose }) {
   const { refresh } = useWorkspace();
-  const [name, setName] = useState(workspace?.name || '');
-  const [color, setColor] = useState(workspace?.color || PALETA_ENTORNOS[0]);
+  const [name, setName] = useState(workspace.name);
+  const [color, setColor] = useState(workspace.color);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  React.useEffect(() => {
-    if (workspace) {
-      setName(workspace.name);
-      setColor(workspace.color);
-      setError('');
-    }
-  }, [workspace]);
-
-  if (!isOpen || !workspace) return null;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -153,8 +152,8 @@ export function EditWorkspaceModal({ isOpen, workspace, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-      <div className="glass-card w-full max-w-md p-6">
+    <Capa>
+      <div className="glass-card dark:bg-surface-800 shadow-2xl w-full max-w-md p-6">
         <div className="flex items-center justify-between pb-3">
           <h3 className="text-lg font-bold text-slate-800 dark:text-gray-100">Editar entorno</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-gray-200">
@@ -197,22 +196,20 @@ export function EditWorkspaceModal({ isOpen, workspace, onClose }) {
           </div>
         </form>
       </div>
-    </div>
+    </Capa>
   );
 }
 
 export function DeleteWorkspaceModal({ isOpen, workspace, onClose }) {
+  if (!isOpen || !workspace) return null;
+  return <EliminarEntorno key={workspace.id} workspace={workspace} onClose={onClose} />;
+}
+
+function EliminarEntorno({ workspace, onClose }) {
   const { refresh } = useWorkspace();
   const [confirmName, setConfirmName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  React.useEffect(() => {
-    setConfirmName('');
-    setError('');
-  }, [isOpen, workspace]);
-
-  if (!isOpen || !workspace) return null;
 
   const matches = confirmName.trim() === workspace.name;
 
@@ -232,8 +229,8 @@ export function DeleteWorkspaceModal({ isOpen, workspace, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-      <div className="glass-card w-full max-w-md p-6">
+    <Capa>
+      <div className="glass-card dark:bg-surface-800 shadow-2xl w-full max-w-md p-6">
         <div className="flex items-center justify-between pb-3">
           <h3 className="text-lg font-bold text-slate-800 dark:text-gray-100">
             ¿Eliminar «{workspace.name}»?
@@ -280,7 +277,7 @@ export function DeleteWorkspaceModal({ isOpen, workspace, onClose }) {
           </button>
         </div>
       </div>
-    </div>
+    </Capa>
   );
 }
 
@@ -293,8 +290,8 @@ export function ManageWorkspacesModal({ isOpen, onClose }) {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-        <div className="glass-card w-full max-w-lg p-6">
+      <Capa>
+        <div className="glass-card dark:bg-surface-800 shadow-2xl w-full max-w-lg p-6">
           <div className="flex items-center justify-between pb-3">
             <h3 className="text-lg font-bold text-slate-800 dark:text-gray-100">Administrar entornos</h3>
             <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-gray-200">
@@ -365,7 +362,7 @@ export function ManageWorkspacesModal({ isOpen, onClose }) {
             </button>
           </div>
         </div>
-      </div>
+      </Capa>
 
       <EditWorkspaceModal
         isOpen={Boolean(editingWorkspace)}
@@ -406,8 +403,8 @@ export function ConfirmActivateModal({ isOpen, workspace, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-      <div className="glass-card w-full max-w-md p-6">
+    <Capa>
+      <div className="glass-card dark:bg-surface-800 shadow-2xl w-full max-w-md p-6">
         <div className="flex items-center justify-between pb-3">
           <h3 className="text-lg font-bold text-slate-800 dark:text-gray-100">
             ¿Activar «{workspace.name}»?
@@ -442,7 +439,7 @@ export function ConfirmActivateModal({ isOpen, workspace, onClose }) {
           </button>
         </div>
       </div>
-    </div>
+    </Capa>
   );
 }
 
@@ -468,8 +465,8 @@ export function ConfirmDeactivateModal({ isOpen, workspace, onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-      <div className="glass-card w-full max-w-md p-6">
+    <Capa>
+      <div className="glass-card dark:bg-surface-800 shadow-2xl w-full max-w-md p-6">
         <div className="flex items-center justify-between pb-3">
           <h3 className="text-lg font-bold text-slate-800 dark:text-gray-100">
             ¿Desactivar «{workspace.name}»?
@@ -502,6 +499,6 @@ export function ConfirmDeactivateModal({ isOpen, workspace, onClose }) {
           </button>
         </div>
       </div>
-    </div>
+    </Capa>
   );
 }

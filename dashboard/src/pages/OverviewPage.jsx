@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAdminStats, getPlayers } from '../services/api';
-import { useWorkspace } from '../context/WorkspaceContext';
+import { useWorkspace } from '../context/workspace';
 import AddPlayersDialog from '../components/AddPlayersDialog';
 import { TYPOLOGY_ORDER, TYPOLOGY_COLORS } from '../constants/typologies';
 import {
@@ -14,7 +14,7 @@ import {
 } from 'recharts';
 
 export default function OverviewPage() {
-  const { viewed } = useWorkspace();
+  const { viewed, refresh } = useWorkspace();
   const [stats, setStats] = useState(null);
   const [players, setPlayers] = useState([]);
   const [search, setSearch] = useState('');
@@ -296,7 +296,11 @@ export default function OverviewPage() {
         isOpen={addPlayersOpen}
         workspace={viewed}
         onClose={() => setAddPlayersOpen(false)}
-        onSuccess={loadData}
+        onSuccess={() => {
+          loadData();
+          // El número de jugadores del selector también cambia.
+          refresh(viewed?.id ?? null);
+        }}
       />
     </div>
   );

@@ -78,6 +78,8 @@ async function apiFetch(endpoint, options = {}) {
     throw new Error(error.detail || `HTTP ${response.status}`);
   }
 
+  // 204 (p. ej. al eliminar un entorno) no trae cuerpo.
+  if (response.status === 204) return null;
   return response.json();
 }
 
