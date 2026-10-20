@@ -268,6 +268,9 @@ def sembrar(db, nombre: str = "Pruebas") -> dict:
         db.delete(u)
     db.flush()
 
+    # bcrypt es lento: la misma contraseña se calcula una vez para las 50 cuentas.
+    hash_clave = hash_password(PASSWORD)
+
     # 6. Crear alumnos 1..40 (recién creados)
     usuarios: dict[int, User] = {}
     slots: dict[int, PlayerSlot] = {}
@@ -279,6 +282,7 @@ def sembrar(db, nombre: str = "Pruebas") -> dict:
             email=email,
             display_name=f"Alumno {n}",
             password=PASSWORD,
+            hashed_password=hash_clave,
             must_change_password=False,
             character="male" if n % 2 != 0 else "women",
         )
@@ -295,6 +299,7 @@ def sembrar(db, nombre: str = "Pruebas") -> dict:
             email=email,
             display_name=f"Alumno {n}",
             password=PASSWORD,
+            hashed_password=hash_clave,
             must_change_password=False,
             character="male" if n % 2 != 0 else "women",
         )

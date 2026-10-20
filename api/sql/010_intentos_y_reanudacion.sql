@@ -5,7 +5,7 @@
 -- cuentan desde que se aplica esta migración.
 -- reading_seconds / total_seconds acumulan el tiempo de una lectura a medias
 -- entre interrupciones. La lectura en curso deja de caducar.
--- reading_start_time pasa a texto, como en el modelo: create_active_readings.sql
+-- reading_start_time pasa a texto, como en el modelo: 009_create_active_readings.sql
 -- la creó FLOAT y con FLOAT la API respondía 500 al guardar o leer la lectura en
 -- curso (la respuesta exige texto). Si ya es texto, no cambia nada.
 -- Idempotente. La API lo aplica al arrancar (esquema.aplicar_migraciones); en

@@ -221,3 +221,14 @@ def test_reset_players_por_entorno(db, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["reset_players.py", "--students", "1", "--apply"])  # el activo
     assert reset_players.main() == 0
     assert sesiones(real) == 0
+
+
+def test_bootstrap_no_convierte_en_admin_una_cuenta_de_jugador(db, monkeypatch):
+    real = crear_entorno(db, "Real", activo=True)
+    jugador, _ = crear_usuario(db, "jefe@test.com", entorno=real)
+    monkeypatch.setenv("ADMIN_EMAIL", "jefe@test.com")
+    monkeypatch.setenv("ADMIN_PASSWORD", "UnaClaveLarga123")
+    bootstrap_prod.main()
+    db.expire_all()
+    assert db.get(User, jugador.id).is_admin is False
+    assert db.query(User).filter_by(email="jefe@test.com", is_admin=True, workspace_id=None).count() == 1

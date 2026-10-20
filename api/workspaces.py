@@ -53,6 +53,7 @@ def crear_jugador(
     password: str,
     must_change_password: bool = False,
     character: str = "male",
+    hashed_password: Optional[str] = None,
 ) -> User:
     """Cuenta de jugador lista para jugar: con su slot 1 activo y las filas de
     progreso de las 4 tipologías (solo Narrativo abierta). Hace flush, no
@@ -60,7 +61,9 @@ def crear_jugador(
     usuario = User(
         workspace_id=workspace_id,
         email=email,
-        hashed_password=hash_password(password),
+        # Con el hash ya calculado se evita repetir bcrypt (lento) al crear muchas
+        # cuentas con la misma contraseña.
+        hashed_password=hashed_password or hash_password(password),
         display_name=display_name,
         character=character,
         must_change_password=must_change_password,
