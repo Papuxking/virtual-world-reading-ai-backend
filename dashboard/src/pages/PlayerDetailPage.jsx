@@ -7,6 +7,7 @@ import {
   uploadMedalImage, deleteMedalImage
 } from '../services/api';
 import SessionList from '../components/SessionList';
+import AssistantConversation from '../components/AssistantConversation';
 import { TYPOLOGY_ORDER } from '../constants/typologies';
 import {
   ArrowLeft, Star, Trophy, BookOpen, Target, CheckCircle2,
@@ -273,6 +274,7 @@ export default function PlayerDetailPage() {
   }
 
   const { user, total_score, active_slot_number, active_slot_label, typology_progress, achievements, sessions, notes, tool_stats, level_stats, score_rules, game_over } = data;
+  const medals = data.medals || [];
   const unlockedAchievementIds = achievements.map((a) => a.achievement_id);
 
   // Filtrar catálogo de logros
@@ -550,6 +552,8 @@ export default function PlayerDetailPage() {
               <SessionList sessions={sessions} emptyText="Sin sesiones registradas" />
             </div>
           </div>
+
+          <AssistantConversation key={playerId} playerId={playerId} />
         </div>
 
         {/* Right column */}
@@ -592,7 +596,6 @@ export default function PlayerDetailPage() {
                 {filteredCatalog.map((achievement) => {
                   const unlocked = unlockedAchievementIds.includes(achievement.id);
                   const unlockRecord = achievements.find((a) => a.achievement_id === achievement.id);
-                  const tierStyles = TIER_COLORS[achievement.medal_tier] || TIER_COLORS.bronce;
 
                   return (
                     <div
@@ -604,7 +607,36 @@ export default function PlayerDetailPage() {
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <span className="text-xl flex-shrink-0">{achievement.icon}</span>
+                        <div className="relative w-9 h-9 flex-shrink-0 flex items-center justify-center group">
+                          {achievement.medal_image_path ? (
+                            <img
+                              src={`${API_BASE}${achievement.medal_image_path}`}
+                              alt={achievement.name}
+                              className="w-9 h-9 object-contain rounded-lg"
+                            />
+                          ) : (
+                            <span className="text-xl">{achievement.icon}</span>
+                          )}
+                          {achievement.medal_image_path ? (
+                            <button
+                              onClick={() => handleDeleteMedal(achievement.id)}
+                              className="absolute -top-1 -right-1 p-0.5 bg-red-100 hover:bg-red-200 dark:bg-red-950/80 dark:hover:bg-red-900 rounded-full border border-red-300 dark:border-red-500/40 text-red-600 dark:text-red-400 shadow-sm opacity-0 group-hover:opacity-100"
+                              title="Borrar la insignia del logro"
+                            >
+                              <X className="w-2.5 h-2.5" />
+                            </button>
+                          ) : (
+                            <label className="absolute -bottom-1 -right-1 p-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-full shadow-sm cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 opacity-0 group-hover:opacity-100" title="Subir insignia del logro (PNG 256x256)">
+                              <Upload className="w-2.5 h-2.5" />
+                              <input
+                                type="file"
+                                accept=".png"
+                                className="hidden"
+                                onChange={(e) => handleUploadMedal(achievement.id, e.target.files[0])}
+                              />
+                            </label>
+                          )}
+                        </div>
                         <div className="min-w-0">
                           <h4 className={`text-xs font-bold truncate ${unlocked ? 'text-slate-800 dark:text-white' : 'text-slate-500 dark:text-gray-400'}`}>
                             {achievement.name}
@@ -615,7 +647,7 @@ export default function PlayerDetailPage() {
                         </div>
                       </div>
                       
-                      <div className="flex-shrink-0 text-right">
+                      <div className="text-right max-w-[45%]">
                         {unlocked ? (
                           <div className="flex flex-col items-end">
                             <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
@@ -638,90 +670,59 @@ export default function PlayerDetailPage() {
             )}
           </div>
 
-          {/* Medals (Medallas Coleccionadas) */}
+          {/* Medallas por desempeño (medallas.py en la API) */}
           <div className="glass-card p-6">
             <div className="mb-4">
               <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
                 <Award className="w-5 h-5 text-primary-500 dark:text-primary-400" />
-                Medallas Coleccionadas ({active_slot_label})
+                Medallas ({active_slot_label})
               </h3>
               <p className="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
-                Coleccionadas: <span className="font-extrabold text-primary-500 dark:text-primary-400">{achievements.length}/10</span> cromos/medallas
+                Ganadas: <span className="font-extrabold text-primary-500 dark:text-primary-400">{medals.filter((m) => m.is_unlocked).length}/{medals.length}</span>
+                {' '}· oro al primer intento, plata al segundo, bronce después
               </p>
             </div>
 
-            {catalogLoading ? (
-              <div className="py-8 text-center text-xs text-slate-400 animate-pulse">Cargando medallas...</div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-[350px] overflow-y-auto pr-1">
-                {catalog.map((achievement) => {
-                  const unlocked = unlockedAchievementIds.includes(achievement.id);
-                  const tierStyles = TIER_COLORS[achievement.medal_tier] || TIER_COLORS.bronce;
-
-                  return (
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {medals.map((medal) => {
+                const tierStyles = TIER_COLORS[medal.tier] || TIER_COLORS.bronce;
+                return (
+                  <div
+                    key={medal.id}
+                    className={`p-3 rounded-xl border flex flex-col items-center text-center ${
+                      medal.is_unlocked
+                        ? `${tierStyles.bg} ${tierStyles.border} shadow-sm`
+                        : 'bg-slate-100/[0.4] dark:bg-white/[0.01] border-slate-200/60 dark:border-white/5 opacity-50 grayscale'
+                    }`}
+                    title={medal.is_unlocked ? medal.description : medal.how_to_unlock}
+                  >
                     <div
-                      key={achievement.id}
-                      className={`p-3 rounded-xl border transition-all flex flex-col items-center justify-between text-center relative group ${
-                        unlocked
-                          ? `${tierStyles.bg} ${tierStyles.border} shadow-sm shadow-emerald-500/5`
-                          : 'bg-slate-100/[0.4] dark:bg-white/[0.01] border-slate-200/60 dark:border-white/5 opacity-40 grayscale'
+                      className={`w-14 h-14 mb-2 rounded-full flex items-center justify-center shadow-sm ${
+                        medal.is_unlocked ? `ring-4 ${tierStyles.ring}` : 'border border-dashed border-slate-300 dark:border-gray-700 bg-slate-100 dark:bg-white/5'
                       }`}
-                      title={unlocked ? `${achievement.medal_name} (${achievement.medal_tier})` : 'Medalla Bloqueada'}
+                      style={medal.is_unlocked ? { backgroundColor: tierStyles.medalBg.replace('bg-[', '').replace(']', '') } : undefined}
                     >
-                      {/* Medalla Image or Fallback */}
-                      <div className="relative w-16 h-16 mb-2 flex items-center justify-center">
-                        {achievement.medal_image_path ? (
-                          <div className="w-16 h-16 rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-sm relative bg-white dark:bg-slate-900 flex items-center justify-center">
-                            <img
-                              src={`${API_BASE}${achievement.medal_image_path}`}
-                              alt={achievement.medal_name}
-                              className="w-full h-full object-contain"
-                            />
-                            {/* Delete custom image */}
-                            <button
-                              onClick={() => handleDeleteMedal(achievement.id)}
-                              className="absolute -top-1 -right-1 p-0.5 bg-red-100 hover:bg-red-200 dark:bg-red-950/80 dark:hover:bg-red-900 rounded-full border border-red-300 dark:border-red-500/40 text-red-600 dark:text-red-400 shadow-sm transition-opacity opacity-0 group-hover:opacity-100"
-                              title="Borrar imagen personalizada"
-                            >
-                              <X className="w-2.5 h-2.5" />
-                            </button>
-                          </div>
-                        ) : (
-                          <div className={`w-16 h-16 rounded-xl flex flex-col items-center justify-center border border-dashed shadow-sm relative overflow-hidden ${
-                            unlocked ? 'border-white/60' : 'border-slate-300 dark:border-gray-700 bg-slate-100 dark:bg-white/5'
-                          }`} style={unlocked ? { backgroundColor: tierStyles.medalBg.replace('bg-[', '').replace(']', '') } : undefined}>
-                            <span className="text-2xl filter drop-shadow-sm">{unlocked ? achievement.icon : '?'}</span>
-                            <span className={`text-[6px] font-extrabold uppercase tracking-wider absolute bottom-0.5 ${unlocked ? 'text-slate-800' : 'text-slate-400 dark:text-gray-400'}`}>
-                              {achievement.medal_tier}
-                            </span>
-                            {/* Admin Upload file input */}
-                            <label className="absolute -bottom-1 -right-1 p-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-full shadow-sm cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 opacity-0 group-hover:opacity-100" title="Subir medalla manual (PNG 256x256)">
-                              <Upload className="w-2.5 h-2.5" />
-                              <input
-                                type="file"
-                                accept=".png"
-                                className="hidden"
-                                onChange={(e) => handleUploadMedal(achievement.id, e.target.files[0])}
-                              />
-                            </label>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Medal Text */}
-                      <div className="leading-tight">
-                        <h4 className="text-[10px] font-extrabold text-slate-700 dark:text-gray-200 truncate max-w-[90px]">
-                          {unlocked ? achievement.medal_name : '???'}
-                        </h4>
-                        <span className={`px-1.5 py-0.2 rounded text-[6px] font-extrabold uppercase tracking-wider block mt-1 ${tierStyles.badge}`}>
-                          {achievement.medal_tier}
-                        </span>
-                      </div>
+                      <span className="text-2xl drop-shadow-sm">{medal.is_unlocked ? medal.emoji : '?'}</span>
                     </div>
-                  );
-                })}
-              </div>
-            )}
+                    <h4 className="text-[11px] font-extrabold text-slate-700 dark:text-gray-200 leading-tight">{medal.name}</h4>
+                    {medal.is_unlocked ? (
+                      <>
+                        <span className={`px-1.5 rounded text-[8px] font-extrabold uppercase tracking-wider mt-1 ${tierStyles.badge}`}>
+                          {medal.tier}
+                        </span>
+                        {medal.attempts && (
+                          <span className="text-[9px] text-slate-500 dark:text-gray-400 mt-0.5">
+                            {medal.attempts === 1 ? 'al primer intento' : `en ${medal.attempts} intentos`}
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <span className="text-[9px] text-slate-400 dark:text-gray-400 mt-1">{medal.typology || 'Recorrido completo'}</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* Tools Usage */}

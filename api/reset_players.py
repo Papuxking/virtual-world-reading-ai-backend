@@ -3,12 +3,14 @@
 Resetea el progreso de jugadores dejandolos como cuentas nuevas.
 
     docker exec vw-api-1 python reset_players.py --students 50 --demo --apply
+    docker exec vw-api-1 python reset_players.py --entorno "Pruebas" --students 50 --apply
 
-Reutiliza la misma limpieza que clean_50_students.py (sesiones, respuestas,
-herramientas, notas, logros, interacciones con el NPC, lecturas activas, slots
-extra y progreso de tipologias), pero:
+Trabaja dentro de un entorno: --entorno NOMBRE o, sin el, el activo. Solo busca
+los correos en ese entorno (el mismo correo puede tener cuenta en otros).
+Borra sesiones, respuestas, herramientas, notas, logros, interacciones con el
+NPC, lecturas activas, slots extra y progreso de tipologias, y:
 
-  - Acepta ademas la cuenta de demostracion, que clean_50_students.py no cubre.
+  - Acepta ademas la cuenta de demostracion (--demo).
   - NO trae un DATABASE_URL por defecto. Los scripts antiguos caian a
     localhost:5433, que hoy es el Postgres de LecturaIA: ejecutarlos fuera del
     contenedor sin la variable puesta habria escrito en la base de otro autor.
@@ -22,7 +24,7 @@ import argparse
 import os
 import sys
 
-from sqlalchemy import inspect
+from sqlalchemy import func, inspect
 
 from database import SessionLocal, engine
 from models import (
@@ -150,7 +152,8 @@ def main() -> int:
         from workspaces import entorno_activo
 
         if args.entorno:
-            entorno = db.query(Workspace).filter(Workspace.name == args.entorno).first()
+            # Los nombres de entorno son únicos sin distinguir mayúsculas.
+            entorno = db.query(Workspace).filter(func.lower(Workspace.name) == args.entorno.strip().lower()).first()
             if not entorno:
                 print(f"ERROR: No se encontró el entorno '{args.entorno}'.", file=sys.stderr)
                 return 2

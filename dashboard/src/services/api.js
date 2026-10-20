@@ -78,6 +78,8 @@ async function apiFetch(endpoint, options = {}) {
     throw new Error(error.detail || `HTTP ${response.status}`);
   }
 
+  // 204 (p. ej. al eliminar un entorno) no trae cuerpo.
+  if (response.status === 204) return null;
   return response.json();
 }
 
@@ -378,6 +380,11 @@ export async function getMetricsQuestionAttempts(filters = {}) {
   if (filters.limit) params.set('limit', filters.limit);
   const qs = params.toString();
   return apiFetch(`/admin/metrics/question-attempts${qs ? '?' + qs : ''}`);
+}
+
+/** Lo que un jugador habló con el asistente IA (pregunta y respuesta). */
+export async function getNpcConversations(playerId) {
+  return apiFetch(`/admin/metrics/npc-conversations?player_id=${playerId}`);
 }
 
 export async function getMetricsNpcInteractions(filters = {}) {

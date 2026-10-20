@@ -17,6 +17,7 @@ from models import (
     PlayerSlot, AchievementCatalog, NpcInteraction, ActiveReading,
 )
 from schemas import (
+    MedalResponse,
     SessionCreate, SessionResponse, NoteCreate, NoteResponse,
     AchievementCreate, AchievementResponse, TypologyProgressResponse,
     PlayerProgressResponse, UserResponse,
@@ -26,6 +27,7 @@ from schemas import (
 from game_rules import DIFFICULTY_ORDER, MAX_INTENTOS_POR_TIPOLOGIA
 from progression import agotada, ensure_typology_rows, juego_terminado, reevaluate_unlocks
 from auth import get_current_user
+from medallas import medallas_del_jugador
 
 router = APIRouter(prefix="/progress", tags=["Progreso del Jugador"])
 
@@ -602,6 +604,20 @@ def get_achievements_full(
     return result
 
 
+# ── Medallas ─────────────────────────────────────────────────────────────────
+
+@router.get("/medals", response_model=List[MedalResponse])
+def get_my_medals(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Medallas por desempeño del slot activo (ver medallas.py)."""
+    active_slot = _get_active_slot(db, current_user.id)
+    filas = ensure_typology_rows(db, current_user.id, active_slot.id)
+    db.commit()
+    return medallas_del_jugador(filas)
+
+
 # ── Interacciones NPC ────────────────────────────────────────────────────────
 
 @router.post("/npc-interaction", response_model=NpcInteractionResponse, status_code=201)
@@ -624,6 +640,8 @@ def register_npc_interaction(
         npc_type=data.npc_type,
         session_id=data.session_id,
         reading_id=data.reading_id,
+        user_message=data.user_message,
+        assistant_reply=data.assistant_reply,
     )
     db.add(interaction)
     db.commit()

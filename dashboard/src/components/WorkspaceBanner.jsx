@@ -1,6 +1,5 @@
-import React from 'react';
 import { AlertTriangle } from 'lucide-react';
-import { useWorkspace } from '../context/WorkspaceContext';
+import { useWorkspace } from '../context/workspace';
 
 export default function WorkspaceBanner() {
   const { viewed } = useWorkspace();

@@ -1,16 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getWorkspaces, setViewedWorkspace, getViewedWorkspace } from '../services/api';
-
-const WorkspaceContext = createContext(null);
-
-export const PALETA_ENTORNOS = [
-  '#059669',
-  '#d97706',
-  '#2563eb',
-  '#7c3aed',
-  '#db2777',
-  '#0891b2',
-];
+import { WorkspaceContext } from './workspace';
 
 export function WorkspaceProvider({ children }) {
   const [workspaces, setWorkspaces] = useState([]);
@@ -29,20 +19,22 @@ export function WorkspaceProvider({ children }) {
     return lista[0];
   };
 
+  const aplicar = useCallback((lista, preferId = null) => {
+    setWorkspaces(lista);
+    const sel = _elegirPorDefecto(lista, preferId);
+    setViewed(sel);
+    setViewedWorkspace(sel ? sel.id : null);
+  }, []);
+
   const refresh = useCallback(async (preferId = null) => {
     try {
-      setLoading(true);
-      const lista = await getWorkspaces();
-      setWorkspaces(lista);
-      const sel = _elegirPorDefecto(lista, preferId);
-      setViewed(sel);
-      setViewedWorkspace(sel ? sel.id : null);
+      aplicar(await getWorkspaces(), preferId);
     } catch (err) {
       console.error('Error al cargar entornos:', err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [aplicar]);
 
   const selectWorkspace = useCallback((id) => {
     const sel = workspaces.find(w => w.id === Number(id)) || null;
@@ -51,7 +43,12 @@ export function WorkspaceProvider({ children }) {
   }, [workspaces]);
 
   useEffect(() => {
-    refresh();
+    // Primera carga: el estado se actualiza cuando llega la respuesta.
+    let vivo = true;
+    getWorkspaces()
+      .then((lista) => { if (vivo) aplicar(lista); })
+      .catch((err) => console.error('Error al cargar entornos:', err))
+      .finally(() => { if (vivo) setLoading(false); });
 
     const handleMissing = () => {
       refresh();
@@ -59,21 +56,14 @@ export function WorkspaceProvider({ children }) {
 
     window.addEventListener('vw:workspace-missing', handleMissing);
     return () => {
+      vivo = false;
       window.removeEventListener('vw:workspace-missing', handleMissing);
     };
-  }, [refresh]);
+  }, [aplicar, refresh]);
 
   return (
     <WorkspaceContext.Provider value={{ workspaces, viewed, loading, selectWorkspace, refresh }}>
       {children}
     </WorkspaceContext.Provider>
   );
-}
-
-export function useWorkspace() {
-  const context = useContext(WorkspaceContext);
-  if (!context) {
-    throw new Error('useWorkspace debe usarse dentro de un WorkspaceProvider');
-  }
-  return context;
 }

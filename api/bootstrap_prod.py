@@ -76,7 +76,9 @@ def main() -> None:
     try:
         seed_achievements_catalog(db)
 
-        admin = db.query(User).filter(User.email == email).first()
+        # El administrador no tiene entorno: no confundirlo con una cuenta de jugador
+        # que use el mismo correo en algún entorno.
+        admin = db.query(User).filter(User.email == email, User.workspace_id.is_(None)).first()
         if admin:
             admin.hashed_password = hash_password(password)
             admin.is_admin = True
