@@ -63,6 +63,24 @@ const TIER_COLORS = {
 const TOOL_ICONS = { highlight: Highlighter, underline: Underline, notes: PenTool };
 const TOOL_LABELS = { highlight: 'Resaltar', underline: 'Subrayar', notes: 'Notas' };
 
+// Cómo se presenta cada tipo de apunte. El juego guarda lo resaltado como
+// 'annotation' y lo subrayado como 'margin_note'; sin esto el panel
+// mostraba esas claves en crudo y no se distinguían entre sí.
+const NOTE_STYLES = {
+  annotation: {
+    label: 'Resaltado',
+    badge: 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-500/20 dark:text-yellow-300 dark:border-yellow-500/20',
+  },
+  margin_note: {
+    label: 'Subrayado',
+    badge: 'bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-500/20 dark:text-sky-300 dark:border-sky-500/20',
+  },
+  default: {
+    label: 'Nota',
+    badge: 'bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 border-primary-100 dark:border-primary-500/20',
+  },
+};
+
 export default function PlayerDetailPage() {
   const { playerId } = useParams();
   const navigate = useNavigate();
@@ -856,21 +874,34 @@ export default function PlayerDetailPage() {
                               </p>
                             </div>
                           ) : (
-                            readingNotes.map((note) => (
-                              <div key={note.id} className="p-2.5 bg-white dark:bg-white/5 rounded-lg border border-slate-100 dark:border-white/5 shadow-sm">
-                                <div className="flex items-center justify-between gap-2 mb-1.5">
-                                  <span className="px-1.5 py-0.5 rounded text-[8px] font-extrabold bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20">
-                                    {note.note_type}
-                                  </span>
-                                  <span className="text-[9px] text-slate-400 dark:text-gray-400 font-semibold">
-                                    {note.created_at ? new Date(note.created_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}
-                                  </span>
+                            readingNotes.map((note) => {
+                              const marca = NOTE_STYLES[note.note_type] ?? NOTE_STYLES.default;
+                              return (
+                                <div key={note.id} className="p-2.5 bg-white dark:bg-white/5 rounded-lg border border-slate-100 dark:border-white/5 shadow-sm">
+                                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                                    <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold border ${marca.badge}`}>
+                                      {marca.label}
+                                    </span>
+                                    <span className="text-[9px] text-slate-400 dark:text-gray-400 font-semibold">
+                                      {note.created_at ? new Date(note.created_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}
+                                    </span>
+                                  </div>
+                                  <p className="text-xs text-slate-600 dark:text-gray-300 leading-relaxed font-semibold whitespace-pre-wrap">
+                                    {note.note_type === 'annotation' ? (
+                                      <mark className="bg-yellow-200 dark:bg-yellow-500/40 text-slate-800 dark:text-yellow-50 rounded px-0.5">
+                                        {note.note_content}
+                                      </mark>
+                                    ) : note.note_type === 'margin_note' ? (
+                                      <span className="underline decoration-sky-500 decoration-2 underline-offset-2">
+                                        {note.note_content}
+                                      </span>
+                                    ) : (
+                                      note.note_content
+                                    )}
+                                  </p>
                                 </div>
-                                <p className="text-xs text-slate-600 dark:text-gray-300 leading-relaxed font-semibold whitespace-pre-wrap">
-                                  {note.note_content}
-                                </p>
-                              </div>
-                            ))
+                              );
+                            })
                           )}
                         </div>
                       )}
