@@ -457,18 +457,16 @@ export default function AchievementsPage() {
                   {/* Medal Image */}
                   <td className="px-6 py-4">
                     <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center overflow-hidden border border-slate-200/50 dark:border-white/10">
-                      {ach.medal_image_path ? (
-                        <img
-                          src={`${API_BASE}${ach.medal_image_path}`}
-                          alt={ach.medal_name}
-                          className="w-full h-full object-cover"
-                          onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                        />
-                      ) : null}
-                      <span
-                        className="text-2xl"
-                        style={ach.medal_image_path ? { display: 'none' } : {}}
-                      >
+                      {/* Sin insignia propia se usa la que trae el juego; el emoji
+                          queda de reserva si tampoco esa carga. */}
+                      <img
+                        src={API_BASE + (ach.medal_image_path || '/static/medals/defecto/' + ach.id + '.png')}
+                        alt={ach.medal_name}
+                        className="w-full h-full object-contain"
+                        style={{ imageRendering: 'pixelated' }}
+                        onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                      />
+                      <span className="text-2xl" style={{ display: 'none' }}>
                         {ach.medal_placeholder_emoji || ach.icon}
                       </span>
                     </div>

@@ -17,28 +17,24 @@ MEDALLAS_TIPOLOGIA = {
         "name": "Medalla del Narrador",
         "description": "Sigues los hilos de cualquier historia.",
         "emoji": "📜",
-        "imagen": "/static/medals/medalla_narrativo.png?v=2",
     },
     "Descriptivo": {
         "id": "medalla_descriptivo",
         "name": "Medalla del Observador",
         "description": "Ningún detalle se escapa de tu mirada.",
         "emoji": "🔍",
-        "imagen": "/static/medals/medalla_descriptivo.png?v=2",
     },
     "Argumentativo": {
         "id": "medalla_argumentativo",
         "name": "Medalla del Orador",
         "description": "Distingues una buena razón de una trampa.",
         "emoji": "💬",
-        "imagen": "/static/medals/medalla_argumentativo.png?v=2",
     },
     "Expositivo": {
         "id": "medalla_expositivo",
         "name": "Medalla del Divulgador",
         "description": "Conviertes la información en conocimiento.",
         "emoji": "🧪",
-        "imagen": "/static/medals/medalla_expositivo.png?v=2",
     },
 }
 
@@ -47,7 +43,6 @@ GRAN_LECTOR = {
     "name": "Gran lector",
     "description": "Recorriste todas las tipologías textuales del mundo virtual.",
     "emoji": "👑",
-    "imagen": "/static/medals/gran_lector.png?v=2",
     "how_to_unlock": "Aprueba las cuatro tipologías.",
 }
 

@@ -626,15 +626,14 @@ export default function PlayerDetailPage() {
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="relative w-9 h-9 flex-shrink-0 flex items-center justify-center group">
-                          {achievement.medal_image_path ? (
-                            <img
-                              src={`${API_BASE}${achievement.medal_image_path}`}
-                              alt={achievement.name}
-                              className="w-9 h-9 object-contain rounded-lg"
-                            />
-                          ) : (
-                            <span className="text-xl">{achievement.icon}</span>
-                          )}
+                          <img
+                            src={API_BASE + (achievement.medal_image_path || '/static/medals/defecto/' + achievement.id + '.png')}
+                            alt={achievement.name}
+                            className="w-9 h-9 object-contain rounded-lg"
+                            style={{ imageRendering: 'pixelated' }}
+                            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }}
+                          />
+                          <span className="text-xl" style={{ display: 'none' }}>{achievement.icon}</span>
                           {achievement.medal_image_path ? (
                             <button
                               onClick={() => handleDeleteMedal(achievement.id)}
@@ -720,7 +719,23 @@ export default function PlayerDetailPage() {
                       }`}
                       style={medal.is_unlocked ? { backgroundColor: tierStyles.medalBg.replace('bg-[', '').replace(']', '') } : undefined}
                     >
-                      <span className="text-2xl drop-shadow-sm">{medal.is_unlocked ? medal.emoji : '?'}</span>
+                      {medal.is_unlocked ? (
+                        <>
+                          {/* 32 px nativos: la insignia es pixel art y a otro
+                              tamano el navegador la emborrona. El metal lo
+                              sigue poniendo el aro de color de alrededor. */}
+                          <img
+                            src={API_BASE + (medal.imagen || '/static/medals/defecto/' + medal.id + '.png')}
+                            alt={medal.name}
+                            className="w-8 h-8 object-contain drop-shadow-sm"
+                            style={{ imageRendering: 'pixelated' }}
+                            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }}
+                          />
+                          <span className="text-2xl drop-shadow-sm" style={{ display: 'none' }}>{medal.emoji}</span>
+                        </>
+                      ) : (
+                        <span className="text-2xl drop-shadow-sm">?</span>
+                      )}
                     </div>
                     <h4 className="text-[11px] font-extrabold text-slate-700 dark:text-gray-200 leading-tight">{medal.name}</h4>
                     {medal.is_unlocked ? (
