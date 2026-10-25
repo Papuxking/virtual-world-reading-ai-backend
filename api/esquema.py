@@ -26,6 +26,7 @@ MIGRACIONES_AL_ARRANCAR = [
     SQL_DIR / "011_entornos.sql",
     SQL_DIR / "012_conversaciones_asistente.sql",
     SQL_DIR / "013_alias_y_vitrina.sql",
+    SQL_DIR / "014_insignias_logros.sql",
 ]
 
 

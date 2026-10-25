@@ -18,7 +18,9 @@ def elementos_desbloqueados(db, slot, filas):
                 "tipo": "medalla", "id": medalla["id"],
                 "nombre": medalla["name"], "emoji": medalla["emoji"],
                 "tier": medalla["tier"],
-                "imagen": catalogo.medal_image_path if catalogo else None,
+                # La insignia la define medallas.py; el catalogo solo es respaldo
+                # para una medalla que algun dia tenga tambien fila de logro.
+                "imagen": medalla.get("imagen") or (catalogo.medal_image_path if catalogo else None),
             }
     logros = db.query(PlayerAchievement).filter_by(
         user_id=slot.user_id, slot_id=slot.id,

@@ -771,6 +771,7 @@ class MedalResponse(BaseModel):
     description: str
     how_to_unlock: str
     emoji: str
+    imagen: Optional[str] = None
     typology: Optional[str] = None
     is_unlocked: bool
     tier: Optional[str] = None
