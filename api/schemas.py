@@ -3,7 +3,7 @@ schemas.py — Schemas Pydantic para validación de request/response
 Incluye schemas de lecturas, autenticación, progreso y administración.
 """
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Literal
 from pydantic import BaseModel, Field, EmailStr, field_validator
 
 from workspaces import PALETA
@@ -620,6 +620,31 @@ class NpcInteractionResponse(BaseModel):
 
 # ── Schemas de Leaderboard ───────────────────────────────────────────────────
 
+class VitrinaSeleccion(BaseModel):
+    tipo: Literal["logro", "medalla"]
+    id: str
+
+
+class PerfilJugador(BaseModel):
+    alias: Optional[str] = None
+    vitrina: List[VitrinaSeleccion] = Field(default_factory=list, max_length=3)
+
+    @field_validator("vitrina")
+    @classmethod
+    def sin_repetidos(cls, elementos):
+        claves = [(elemento.tipo, elemento.id) for elemento in elementos]
+        if len(claves) != len(set(claves)):
+            raise ValueError("La vitrina no permite elementos repetidos")
+        return elementos
+
+
+class VitrinaItem(VitrinaSeleccion):
+    nombre: str
+    emoji: str
+    tier: Optional[str] = None
+    imagen: Optional[str] = None
+
+
 class LeaderboardEntry(BaseModel):
     """Entrada individual del leaderboard."""
     rank: int
@@ -627,6 +652,8 @@ class LeaderboardEntry(BaseModel):
     character: str
     total_score: int
     total_achievements: int
+    alias: Optional[str] = None
+    vitrina: List[VitrinaItem] = Field(default_factory=list)
 
 
 class LeaderboardResponse(BaseModel):

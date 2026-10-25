@@ -16,6 +16,8 @@ from models import (
 )
 from schemas import LeaderboardResponse, LeaderboardEntry
 from game_rules import DIFFICULTY_ORDER
+from alias import ALIAS_POR_ID
+from perfiles import progreso_del_slot, elementos_desbloqueados, resolver_vitrina
 from auth import get_current_user
 from workspaces import entorno_activo
 from datetime import datetime, timezone
@@ -104,6 +106,10 @@ def get_leaderboard(
 
         if total_score > 0 or total_achievements > 0:
             entries.append({
+                "alias": ALIAS_POR_ID.get(active_slot.alias or "intuicion", {}).get("nombre"),
+                "vitrina": resolver_vitrina(active_slot, elementos_desbloqueados(
+                    db, active_slot, progreso_del_slot(db, active_slot),
+                )),
                 "display_name": user.display_name,
                 "character": user.character,
                 "total_score": total_score,
@@ -118,6 +124,8 @@ def get_leaderboard(
     ranked = [
         LeaderboardEntry(
             rank=i + 1,
+            alias=e["alias"],
+            vitrina=e["vitrina"],
             display_name=e["display_name"],
             character=e["character"],
             total_score=e["total_score"],

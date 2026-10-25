@@ -17,7 +17,7 @@ from models import (
     PlayerSlot, AchievementCatalog, NpcInteraction, ActiveReading,
 )
 from schemas import (
-    MedalResponse,
+    MedalResponse, PerfilJugador,
     SessionCreate, SessionResponse, NoteCreate, NoteResponse,
     AchievementCreate, AchievementResponse, TypologyProgressResponse,
     PlayerProgressResponse, UserResponse,
@@ -28,6 +28,8 @@ from game_rules import DIFFICULTY_ORDER, MAX_INTENTOS_POR_TIPOLOGIA
 from progression import agotada, ensure_typology_rows, juego_terminado, reevaluate_unlocks
 from auth import get_current_user
 from medallas import medallas_del_jugador
+from alias import ALIAS_POR_ID
+from perfiles import progreso_del_slot, elementos_desbloqueados
 
 router = APIRouter(prefix="/progress", tags=["Progreso del Jugador"])
 
@@ -786,3 +788,47 @@ def clear_active_reading(
         db.commit()
 
     return None
+
+
+@router.get("/profile", response_model=PerfilJugador)
+def obtener_perfil(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, slot, current_user)
+    return PerfilJugador(alias=slot.alias, vitrina=slot.vitrina)
+
+
+@router.put("/profile", response_model=PerfilJugador)
+def guardar_perfil(
+    data: PerfilJugador,
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, slot, current_user)
+    filas = progreso_del_slot(db, slot)
+    if data.alias is not None:
+        elegido = ALIAS_POR_ID.get(data.alias)
+        if elegido is None:
+            raise HTTPException(status_code=422, detail="El alias no existe")
+        lecturas = sum(fila.total_sessions or 0 for fila in filas)
+        if lecturas < elegido["lecturas"]:
+            raise HTTPException(
+                status_code=422,
+                detail=f"El alias {elegido['nombre']} requiere {elegido['lecturas']} lecturas completadas",
+            )
+    desbloqueados = elementos_desbloqueados(db, slot, filas)
+    for item in data.vitrina:
+        if (item.tipo, item.id) not in desbloqueados:
+            raise HTTPException(
+                status_code=422, detail=f"No has desbloqueado {item.tipo}: {item.id} en esta partida",
+            )
+    slot.alias = data.alias
+    slot.vitrina = [item.model_dump() for item in data.vitrina]
+    db.commit()
+    db.refresh(slot)
+    return PerfilJugador(alias=slot.alias, vitrina=slot.vitrina)

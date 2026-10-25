@@ -6,6 +6,7 @@ from sqlalchemy import (
     Column, Integer, SmallInteger, String, Text, DateTime, Boolean,
     UniqueConstraint, ForeignKey, Index, text,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -173,6 +174,8 @@ class PlayerSlot(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     slot_number = Column(SmallInteger, nullable=False)
     label = Column(String(50), default="Sesión 1")
+    alias = Column(String(40), nullable=True)
+    vitrina = Column(JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb"))
     is_active = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
