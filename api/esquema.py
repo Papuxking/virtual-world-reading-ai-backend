@@ -28,6 +28,7 @@ MIGRACIONES_AL_ARRANCAR = [
     SQL_DIR / "013_alias_y_vitrina.sql",
     SQL_DIR / "014_insignias_logros.sql",
     SQL_DIR / "015_comics.sql",
+    SQL_DIR / "016_encuesta_sus_tam.sql",
 ]
 
 

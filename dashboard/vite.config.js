@@ -31,6 +31,10 @@ export default defineConfig({
         target: 'http://api:8000',
         changeOrigin: true,
       },
+      '/evaluation': {
+        target: 'http://api:8000',
+        changeOrigin: true,
+      },
       '/static': {
         target: 'http://api:8000',
         changeOrigin: true,

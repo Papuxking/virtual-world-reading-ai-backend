@@ -987,3 +987,64 @@ class ComicJugadorResponse(BaseModel):
     episodios_terminados: int
     paginas_leidas: int
     ultima_visita: Optional[datetime] = None
+
+
+# ── Encuesta obligatoria SUS + TAM ───────────────────────────────────────────
+
+class TechnologySurveySubmit(BaseModel):
+    """Los 22 valores crudos del instrumento, sin preguntas opcionales."""
+    sus: List[int] = Field(..., min_length=10, max_length=10)
+    tam_usefulness: List[int] = Field(..., min_length=6, max_length=6)
+    tam_ease: List[int] = Field(..., min_length=6, max_length=6)
+
+    @field_validator("sus")
+    @classmethod
+    def validar_sus(cls, valores):
+        if any(v < 1 or v > 5 for v in valores):
+            raise ValueError("Cada respuesta SUS debe estar entre 1 y 5")
+        return valores
+
+    @field_validator("tam_usefulness", "tam_ease")
+    @classmethod
+    def validar_tam(cls, valores):
+        if any(v < 1 or v > 7 for v in valores):
+            raise ValueError("Cada respuesta TAM debe estar entre 1 y 7")
+        return valores
+
+
+class TechnologySurveyStatus(BaseModel):
+    completed: bool
+    submitted_at: Optional[datetime] = None
+
+
+class TechnologySurveyResult(TechnologySurveyStatus):
+    instrument_version: str = "sus10_tam12_v1"
+    sus_score: Optional[float] = None
+    tam_usefulness_score: Optional[float] = None
+    tam_ease_score: Optional[float] = None
+
+
+class TechnologySurveyAdminRow(BaseModel):
+    player_id: int
+    display_name: str
+    email: str
+    slot_number: int
+    slot_label: str
+    instrument_version: str
+    sus: List[int]
+    tam_usefulness: List[int]
+    tam_ease: List[int]
+    sus_score: float
+    tam_usefulness_score: float
+    tam_ease_score: float
+    submitted_at: datetime
+
+
+class TechnologySurveyAdminSummary(BaseModel):
+    eligible_slots: int
+    responses: int
+    response_rate: float
+    sus_average: Optional[float] = None
+    tam_usefulness_average: Optional[float] = None
+    tam_ease_average: Optional[float] = None
+    item_distributions: Dict[str, List[int]]

@@ -9,6 +9,7 @@ import AchievementsPage from './pages/AchievementsPage';
 import AchievementDetailPage from './pages/AchievementDetailPage';
 import MetricsPage from './pages/MetricsPage';
 import ComicsPage from './pages/ComicsPage';
+import EvaluationPage from './pages/EvaluationPage';
 
 function ProtectedRoute({ children }) {
   const token = getToken();
@@ -40,6 +41,7 @@ export default function App() {
           <Route path="achievements/:achievementId" element={<AchievementDetailPage />} />
           <Route path="metrics" element={<MetricsPage />} />
           <Route path="comics" element={<ComicsPage />} />
+          <Route path="evaluation" element={<EvaluationPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -246,6 +246,31 @@ curl -X POST http://localhost:8001/admin/workspaces/2/players   -H "Authorizatio
 
 ---
 
+## Encuesta SUS + TAM
+
+La encuesta evalúa el mundo virtual completo y es la puerta de acceso a los
+cómics. Cada escritura del jugador valida `X-Slot-Id` y `X-Session-Version`.
+
+| Método y ruta | Acceso | Qué hace |
+|---|---|---|
+| `GET /evaluation/survey/status` | Jugador | Indica si el slot activo ya respondió |
+| `POST /evaluation/survey` | Jugador | Guarda los 10 valores SUS (1–5), 6 TAM-utilidad y 6 TAM-facilidad (1–7) |
+| `GET /evaluation/admin/summary` | Admin + `X-Workspace-Id` | Tasa, promedios y distribuciones por ítem |
+| `GET /evaluation/admin/responses` | Admin + `X-Workspace-Id` | Valores crudos y puntajes por alumno y slot |
+| `GET /evaluation/admin/export.csv` | Admin + `X-Workspace-Id` | Exportación UTF-8 de todas las respuestas del entorno |
+
+El `POST` solo está disponible tras aprobar las cuatro tipologías; antes responde
+403 `SURVEY_NOT_AVAILABLE`. Es idempotente e inmutable: si el cliente reintenta
+después de perder la respuesta HTTP, devuelve la primera fila sin reemplazarla.
+SUS se calcula alternando ítems directos e inversos y multiplicando la suma por
+2,5. Las dos dimensiones TAM son la media de sus seis ítems.
+
+El instrumento se basa en SUS de Brooke y las escalas finales de utilidad
+percibida y facilidad de uso de Davis (1989), adaptadas al mundo virtual y
+versionadas como `sus10_tam12_v1`.
+
+---
+
 ## Códigos de error
 
 | Código | Significado                        |

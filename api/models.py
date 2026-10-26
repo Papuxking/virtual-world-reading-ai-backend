@@ -3,8 +3,8 @@ models.py — Modelos SQLAlchemy para la base de datos de lecturas
 Incluye modelos de lecturas, preguntas, respuestas, usuarios y progreso.
 """
 from sqlalchemy import (
-    Column, Integer, SmallInteger, String, Text, DateTime, Boolean,
-    UniqueConstraint, ForeignKey, Index, text,
+    Column, Integer, SmallInteger, Float, String, Text, DateTime, Boolean,
+    UniqueConstraint, CheckConstraint, ForeignKey, Index, text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
@@ -477,4 +477,65 @@ class ComicZoneVisit(Base):
 
     __table_args__ = (
         UniqueConstraint("user_id", "slot_id", name="uq_user_slot_comic_zone_visit"),
+    )
+
+
+class TechnologySurveyResponse(Base):
+    """Respuesta inmutable SUS + TAM que habilita los cómics.
+
+    Se conserva por slot tanto el dato crudo como los puntajes derivados para
+    que el instrumento siga siendo auditable y los agregados sean baratos.
+    """
+    __tablename__ = "technology_survey_responses"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
+    instrument_version = Column(String(40), nullable=False, default="sus10_tam12_v1")
+
+    sus_1 = Column(SmallInteger, nullable=False)
+    sus_2 = Column(SmallInteger, nullable=False)
+    sus_3 = Column(SmallInteger, nullable=False)
+    sus_4 = Column(SmallInteger, nullable=False)
+    sus_5 = Column(SmallInteger, nullable=False)
+    sus_6 = Column(SmallInteger, nullable=False)
+    sus_7 = Column(SmallInteger, nullable=False)
+    sus_8 = Column(SmallInteger, nullable=False)
+    sus_9 = Column(SmallInteger, nullable=False)
+    sus_10 = Column(SmallInteger, nullable=False)
+    tam_pu_1 = Column(SmallInteger, nullable=False)
+    tam_pu_2 = Column(SmallInteger, nullable=False)
+    tam_pu_3 = Column(SmallInteger, nullable=False)
+    tam_pu_4 = Column(SmallInteger, nullable=False)
+    tam_pu_5 = Column(SmallInteger, nullable=False)
+    tam_pu_6 = Column(SmallInteger, nullable=False)
+    tam_peou_1 = Column(SmallInteger, nullable=False)
+    tam_peou_2 = Column(SmallInteger, nullable=False)
+    tam_peou_3 = Column(SmallInteger, nullable=False)
+    tam_peou_4 = Column(SmallInteger, nullable=False)
+    tam_peou_5 = Column(SmallInteger, nullable=False)
+    tam_peou_6 = Column(SmallInteger, nullable=False)
+
+    sus_score = Column(Float, nullable=False)
+    tam_usefulness_score = Column(Float, nullable=False)
+    tam_ease_score = Column(Float, nullable=False)
+    submitted_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    user = relationship("User")
+    slot = relationship("PlayerSlot")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "slot_id", name="uq_user_slot_technology_survey"),
+        *(
+            CheckConstraint(f"sus_{i} BETWEEN 1 AND 5", name=f"ck_survey_sus_{i}")
+            for i in range(1, 11)
+        ),
+        *(
+            CheckConstraint(f"tam_pu_{i} BETWEEN 1 AND 7", name=f"ck_survey_tam_pu_{i}")
+            for i in range(1, 7)
+        ),
+        *(
+            CheckConstraint(f"tam_peou_{i} BETWEEN 1 AND 7", name=f"ck_survey_tam_peou_{i}")
+            for i in range(1, 7)
+        ),
     )
