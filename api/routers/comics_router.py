@@ -103,7 +103,7 @@ def register_comic_visit(
 EPISODIOS_TOP = 5
 
 
-def _aprobo_las_cuatro():
+def _tipologia_aprobada():
     """Condición SQL «tipología aprobada»: el mismo umbral que progression.aprobada
     (pass_threshold), expresado como filtro para contar en la base."""
     return or_(*[
@@ -124,7 +124,7 @@ def resumen_comics(
     # Un jugador desbloquea si en algún slot tiene aprobadas las cuatro tipologías.
     completos = (
         select(PlayerTypologyProgress.user_id)
-        .where(PlayerTypologyProgress.user_id.in_(jugadores), _aprobo_las_cuatro())
+        .where(PlayerTypologyProgress.user_id.in_(jugadores), _tipologia_aprobada())
         .group_by(PlayerTypologyProgress.user_id, PlayerTypologyProgress.slot_id)
         .having(func.count(distinct(PlayerTypologyProgress.typology)) == len(DIFFICULTY_ORDER))
         .subquery()

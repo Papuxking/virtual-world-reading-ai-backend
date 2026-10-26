@@ -120,16 +120,16 @@ export default function PlayerDetailPage() {
   const [selectedReadingId, setSelectedReadingId] = useState(null);
 
   // Cómics: la lista ya viene acotada al entorno; se filtra aquí por alumno.
-  // { id, fila }: fila es null si no entró o no se pudo leer.
+  // { id, fila, error }: fila es null si no entró; error es true si no se pudo preguntar.
   const [comics, setComics] = useState(null);
 
   useEffect(() => {
     let vivo = true;
     getComicsJugadores()
       .then((lista) => {
-        if (vivo) setComics({ id: playerId, fila: lista.find((j) => String(j.player_id) === String(playerId)) || null });
+        if (vivo) setComics({ id: playerId, fila: lista.find((j) => String(j.player_id) === String(playerId)) || null, error: false });
       })
-      .catch(() => { if (vivo) setComics({ id: playerId, fila: null }); });
+      .catch(() => { if (vivo) setComics({ id: playerId, fila: null, error: true }); });
     return () => { vivo = false; };
   }, [playerId]);
 
@@ -780,6 +780,8 @@ export default function PlayerDetailPage() {
             </h3>
             {comics?.id !== playerId ? (
               <p className="text-sm text-slate-400 dark:text-gray-400">Cargando…</p>
+            ) : comics.error ? (
+              <p className="text-sm text-red-500 dark:text-red-400">No se pudo consultar la zona de cómics.</p>
             ) : comics.fila === null ? (
               <p className="text-sm text-slate-400 dark:text-gray-400">No ha entrado en la zona de cómics.</p>
             ) : (

@@ -41,7 +41,7 @@ export default function ComicsPage() {
   const entraron = resumen?.entraron ?? 0;
   const lectores = resumen?.lectores ?? 0;
   const top = resumen?.episodios_top ?? [];
-  const vacio = !error && entraron === 0 && lectores === 0 && jugadores.length === 0;
+  const vacio = entraron === 0 && lectores === 0 && jugadores.length === 0;
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -61,13 +61,16 @@ export default function ComicsPage() {
         <div className="glass-card p-4 text-sm text-red-500 dark:text-red-400">{error}</div>
       )}
 
+      {/* Con error no se pinta nada de datos: unos ceros dirían «nadie» cuando lo cierto es «no se pudo preguntar». */}
+      {!error && (
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard icon={<Unlock className="w-5 h-5" />} label="Desbloquearon la zona" value={desbloquearon} color="from-amber-500 to-orange-500" />
         <StatCard icon={<DoorOpen className="w-5 h-5" />} label="Entraron" value={entraron} color="from-sky-500 to-cyan-500" />
         <StatCard icon={<BookOpen className="w-5 h-5" />} label="Leyeron algún episodio" value={lectores} color="from-rose-500 to-pink-500" />
       </div>
+      )}
 
-      {vacio ? (
+      {!error && (vacio ? (
         <div className="glass-card p-10 text-center text-slate-500 dark:text-gray-400">
           Todavía nadie ha entrado en la zona.
         </div>
@@ -122,7 +125,7 @@ export default function ComicsPage() {
             </div>
           </div>
         </>
-      )}
+      ))}
     </div>
   );
 }
