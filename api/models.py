@@ -434,3 +434,47 @@ class ActiveReading(Base):
     __table_args__ = (
         UniqueConstraint("user_id", "slot_id", name="uq_user_slot_active_reading"),
     )
+
+
+class ComicProgress(Base):
+    """Progreso de un jugador en un episodio de la zona de cómics.
+    Una fila por jugador, slot y episodio (UNIQUE constraint)."""
+    __tablename__ = "comic_progress"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
+    episode_id = Column(String(20), nullable=False)
+    last_page = Column(Integer, nullable=False, default=0)
+    finished = Column(Boolean, nullable=False, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+    # Relaciones
+    user = relationship("User")
+    slot = relationship("PlayerSlot")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "slot_id", "episode_id", name="uq_user_slot_comic_episode"),
+    )
+
+
+class ComicZoneVisit(Base):
+    """Visitas de un jugador a la sala de cómics. Una fila por jugador y slot
+    (UNIQUE constraint) que cuenta las entradas y guarda la primera y la última."""
+    __tablename__ = "comic_zone_visits"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
+    visits = Column(Integer, nullable=False, default=1)
+    first_visit_at = Column(DateTime(timezone=True), server_default=func.now())
+    last_visit_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relaciones
+    user = relationship("User")
+    slot = relationship("PlayerSlot")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "slot_id", name="uq_user_slot_comic_zone_visit"),
+    )
