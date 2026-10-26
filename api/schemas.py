@@ -931,3 +931,33 @@ class PlayerSkipped(BaseModel):
 class PlayersAddResult(BaseModel):
     created: List[PlayerAdded]
     skipped: List[PlayerSkipped]
+
+
+# ── Schemas de la zona de cómics (jugador) ───────────────────────────────────
+
+class ComicProgressSave(BaseModel):
+    """Schema para guardar la página en la que va el jugador en un episodio."""
+    last_page: int = Field(..., ge=0)
+    finished: bool = False
+
+
+class ComicProgressResponse(BaseModel):
+    """Progreso del jugador en un episodio."""
+    episode_id: str
+    last_page: int
+    finished: bool
+    updated_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class ComicProgressList(BaseModel):
+    """Progreso de todos los episodios del slot activo y visitas a la sala."""
+    episodios: List[ComicProgressResponse]
+    visitas: int
+
+
+class ComicVisitResponse(BaseModel):
+    """Total de visitas del slot activo a la sala de cómics."""
+    visitas: int
