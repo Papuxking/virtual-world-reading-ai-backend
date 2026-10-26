@@ -242,6 +242,26 @@ export async function getAchievementsStats() {
   return apiFetch('/admin/achievements/stats');
 }
 
+export async function getComicsResumen() {
+  return apiFetch('/comics/admin/resumen');
+}
+
+export async function getComicsJugadores() {
+  return apiFetch('/comics/admin/jugadores');
+}
+
+export async function getEvaluationSummary() {
+  return apiFetch('/evaluation/admin/summary');
+}
+
+export async function getEvaluationResponses() {
+  return apiFetch('/evaluation/admin/responses');
+}
+
+export function downloadEvaluationCSV() {
+  return _downloadFile('/evaluation/admin/export.csv', 'encuesta_sus_tam.csv');
+}
+
 export async function getAchievementDetail(achievementId) {
   return apiFetch(`/admin/achievements/${achievementId}`);
 }
@@ -464,5 +484,4 @@ export async function addPlayers(workspaceId, players) {
     body: JSON.stringify({ players }),
   });
 }
-
 

@@ -179,18 +179,14 @@ export default function AchievementDetailPage() {
           {/* Medal Card */}
           <div className="glass-card p-6 text-center">
             <div className="w-40 h-40 mx-auto rounded-2xl bg-slate-100 dark:bg-white/5 border-2 border-slate-200/50 dark:border-white/10 flex items-center justify-center overflow-hidden mb-4 shadow-inner">
-              {ach.medal_image_path ? (
-                <img
-                  src={`${API_BASE}${ach.medal_image_path}`}
-                  alt={ach.medal_name}
-                  className="w-full h-full object-cover"
-                  onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                />
-              ) : null}
-              <span
-                className="text-7xl"
-                style={ach.medal_image_path ? { display: 'none' } : { display: 'flex' }}
-              >
+              <img
+                src={API_BASE + (ach.medal_image_path || '/static/medals/defecto/' + ach.id + '.png')}
+                alt={ach.medal_name}
+                className="w-full h-full object-contain"
+                style={{ imageRendering: 'pixelated' }}
+                onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+              />
+              <span className="text-7xl" style={{ display: 'none' }}>
                 {ach.medal_placeholder_emoji || ach.icon}
               </span>
             </div>

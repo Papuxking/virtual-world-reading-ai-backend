@@ -121,6 +121,23 @@ Al arrancar, cada proceso de la API prepara la base (`esquema.preparar_base`:
 | `Inferencial` | Deducciones a partir del texto                 |
 | `Critico`     | Análisis, evaluación y juicio del lector       |
 
+## Tabla `technology_survey_responses`
+
+Una respuesta inmutable por jugador y slot, recogida después de aprobar las
+cuatro tipologías y antes de desbloquear la zona de cómics.
+
+| Grupo | Columnas | Rango |
+|---|---|---|
+| Identidad | `user_id`, `slot_id`, `instrument_version`, `submitted_at` | `UNIQUE(user_id, slot_id)` |
+| SUS | `sus_1` … `sus_10` | enteros 1–5 |
+| TAM utilidad | `tam_pu_1` … `tam_pu_6` | enteros 1–7 |
+| TAM facilidad | `tam_peou_1` … `tam_peou_6` | enteros 1–7 |
+| Derivados | `sus_score`, `tam_usefulness_score`, `tam_ease_score` | SUS 0–100; TAM 1–7 |
+
+Las claves foráneas a `users` y `player_slots` usan `ON DELETE CASCADE`. Los
+valores crudos se conservan junto a los puntajes para auditar y volver a
+analizar el instrumento. La versión inicial es `sus10_tam12_v1`.
+
 ## Archivos SQL
 
 | Archivo | Descripción |
@@ -130,6 +147,8 @@ Al arrancar, cada proceso de la API prepara la base (`esquema.preparar_base`:
 | `002_seed.sql` | Seed: lectura Baños de Agua Santa + 12 preguntas |
 | `011_entornos.sql` | Tabla `workspaces`, `users.workspace_id` y correo único por entorno |
 | `012_conversaciones_asistente.sql` | `npc_interactions.user_message` y `assistant_reply`: lo que el jugador habla con el asistente IA |
+| `015_comics.sql` | Progreso por episodio y visitas a la zona de cómics |
+| `016_encuesta_sus_tam.sql` | Respuestas SUS/TAM obligatorias por jugador y slot |
 
 ## Resetear la base de datos
 

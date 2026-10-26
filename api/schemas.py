@@ -3,7 +3,7 @@ schemas.py — Schemas Pydantic para validación de request/response
 Incluye schemas de lecturas, autenticación, progreso y administración.
 """
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Literal
 from pydantic import BaseModel, Field, EmailStr, field_validator
 
 from workspaces import PALETA
@@ -620,6 +620,31 @@ class NpcInteractionResponse(BaseModel):
 
 # ── Schemas de Leaderboard ───────────────────────────────────────────────────
 
+class VitrinaSeleccion(BaseModel):
+    tipo: Literal["logro", "medalla"]
+    id: str
+
+
+class PerfilJugador(BaseModel):
+    alias: Optional[str] = None
+    vitrina: List[VitrinaSeleccion] = Field(default_factory=list, max_length=3)
+
+    @field_validator("vitrina")
+    @classmethod
+    def sin_repetidos(cls, elementos):
+        claves = [(elemento.tipo, elemento.id) for elemento in elementos]
+        if len(claves) != len(set(claves)):
+            raise ValueError("La vitrina no permite elementos repetidos")
+        return elementos
+
+
+class VitrinaItem(VitrinaSeleccion):
+    nombre: str
+    emoji: str
+    tier: Optional[str] = None
+    imagen: Optional[str] = None
+
+
 class LeaderboardEntry(BaseModel):
     """Entrada individual del leaderboard."""
     rank: int
@@ -627,6 +652,8 @@ class LeaderboardEntry(BaseModel):
     character: str
     total_score: int
     total_achievements: int
+    alias: Optional[str] = None
+    vitrina: List[VitrinaItem] = Field(default_factory=list)
 
 
 class LeaderboardResponse(BaseModel):
@@ -744,6 +771,7 @@ class MedalResponse(BaseModel):
     description: str
     how_to_unlock: str
     emoji: str
+    imagen: Optional[str] = None
     typology: Optional[str] = None
     is_unlocked: bool
     tier: Optional[str] = None
@@ -903,3 +931,120 @@ class PlayerSkipped(BaseModel):
 class PlayersAddResult(BaseModel):
     created: List[PlayerAdded]
     skipped: List[PlayerSkipped]
+
+
+# ── Schemas de la zona de cómics (jugador) ───────────────────────────────────
+
+class ComicProgressSave(BaseModel):
+    """Schema para guardar la página en la que va el jugador en un episodio."""
+    last_page: int = Field(..., ge=0)
+    finished: bool = False
+
+
+class ComicProgressResponse(BaseModel):
+    """Progreso del jugador en un episodio."""
+    episode_id: str
+    last_page: int
+    finished: bool
+    updated_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class ComicProgressList(BaseModel):
+    """Progreso de todos los episodios del slot activo y visitas a la sala."""
+    episodios: List[ComicProgressResponse]
+    visitas: int
+
+
+class ComicVisitResponse(BaseModel):
+    """Total de visitas del slot activo a la sala de cómics."""
+    visitas: int
+
+
+# ── Schemas de la zona de cómics (dashboard) ─────────────────────────────────
+
+class ComicEpisodioTop(BaseModel):
+    """Episodio y cuántos alumnos del entorno lo han abierto."""
+    episode_id: str
+    lecturas: int
+
+
+class ComicResumenResponse(BaseModel):
+    """Embudo de la recompensa: desbloquearon, entraron a la sala, leyeron."""
+    desbloquearon: int
+    entraron: int
+    lectores: int
+    episodios_top: List[ComicEpisodioTop]
+
+
+class ComicJugadorResponse(BaseModel):
+    """Lectura de un alumno en la zona de cómics."""
+    player_id: int
+    display_name: str
+    email: str
+    episodios_terminados: int
+    paginas_leidas: int
+    ultima_visita: Optional[datetime] = None
+
+
+# ── Encuesta obligatoria SUS + TAM ───────────────────────────────────────────
+
+class TechnologySurveySubmit(BaseModel):
+    """Los 22 valores crudos del instrumento, sin preguntas opcionales."""
+    sus: List[int] = Field(..., min_length=10, max_length=10)
+    tam_usefulness: List[int] = Field(..., min_length=6, max_length=6)
+    tam_ease: List[int] = Field(..., min_length=6, max_length=6)
+
+    @field_validator("sus")
+    @classmethod
+    def validar_sus(cls, valores):
+        if any(v < 1 or v > 5 for v in valores):
+            raise ValueError("Cada respuesta SUS debe estar entre 1 y 5")
+        return valores
+
+    @field_validator("tam_usefulness", "tam_ease")
+    @classmethod
+    def validar_tam(cls, valores):
+        if any(v < 1 or v > 7 for v in valores):
+            raise ValueError("Cada respuesta TAM debe estar entre 1 y 7")
+        return valores
+
+
+class TechnologySurveyStatus(BaseModel):
+    completed: bool
+    submitted_at: Optional[datetime] = None
+
+
+class TechnologySurveyResult(TechnologySurveyStatus):
+    instrument_version: str = "sus10_tam12_v1"
+    sus_score: Optional[float] = None
+    tam_usefulness_score: Optional[float] = None
+    tam_ease_score: Optional[float] = None
+
+
+class TechnologySurveyAdminRow(BaseModel):
+    player_id: int
+    display_name: str
+    email: str
+    slot_number: int
+    slot_label: str
+    instrument_version: str
+    sus: List[int]
+    tam_usefulness: List[int]
+    tam_ease: List[int]
+    sus_score: float
+    tam_usefulness_score: float
+    tam_ease_score: float
+    submitted_at: datetime
+
+
+class TechnologySurveyAdminSummary(BaseModel):
+    eligible_slots: int
+    responses: int
+    response_rate: float
+    sus_average: Optional[float] = None
+    tam_usefulness_average: Optional[float] = None
+    tam_ease_average: Optional[float] = None
+    item_distributions: Dict[str, List[int]]

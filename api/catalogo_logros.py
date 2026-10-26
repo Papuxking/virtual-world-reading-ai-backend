@@ -4,7 +4,7 @@ from models import AchievementCatalog
 INITIAL_ACHIEVEMENTS = [
     {
         "id": "first_reading",
-        "name": "📖 Primera lectura",
+        "name": "Primera lectura",
         "description": "Has completado tu primera sesión de lectura.",
         "how_to_unlock": "Completar al menos 1 sesión de lectura en cualquier tipología.",
         "category": "progreso",
@@ -17,7 +17,7 @@ INITIAL_ACHIEVEMENTS = [
     },
     {
         "id": "improvement",
-        "name": "📈 En mejora",
+        "name": "En mejora",
         "description": "Has demostrado una mejora constante en tus intentos.",
         "how_to_unlock": "Completar al menos 3 sesiones de lectura mostrando un aumento progresivo de puntaje.",
         "category": "superación",
@@ -30,7 +30,7 @@ INITIAL_ACHIEVEMENTS = [
     },
     {
         "id": "explorer",
-        "name": "🏅 Explorador",
+        "name": "Explorador",
         "description": "Has explorado todas las tipologías textuales del juego.",
         "how_to_unlock": "Completar al menos 1 sesión en cada una de las 4 tipologías textuales.",
         "category": "exploración",
@@ -43,7 +43,7 @@ INITIAL_ACHIEVEMENTS = [
     },
     {
         "id": "avid_reader",
-        "name": "📚 Lector ávido",
+        "name": "Lector ávido",
         "description": "Has completado muchas sesiones de lectura.",
         "how_to_unlock": "Completar un total de 4 sesiones de lectura en cualquier combinación de tipologías.",
         "category": "progreso",
@@ -56,7 +56,7 @@ INITIAL_ACHIEVEMENTS = [
     },
     {
         "id": "star_literal",
-        "name": "⭐ Estrella literal",
+        "name": "Estrella literal",
         "description": "Tienes una precisión perfecta en preguntas de nivel literal.",
         "how_to_unlock": "Acumular 6 respuestas correctas de nivel literal.",
         "category": "maestría",
@@ -69,7 +69,7 @@ INITIAL_ACHIEVEMENTS = [
     },
     {
         "id": "perfectionist",
-        "name": "🎯 Perfeccionista",
+        "name": "Perfeccionista",
         "description": "Has completado sesiones de lectura con puntajes perfectos.",
         "how_to_unlock": "Responder correctamente todas las preguntas en al menos 3 sesiones de lectura.",
         "category": "maestría",
@@ -82,7 +82,7 @@ INITIAL_ACHIEVEMENTS = [
     },
     {
         "id": "star_inferencial",
-        "name": "🌟 Estrella inferencial",
+        "name": "Estrella inferencial",
         "description": "Dominas la lectura entre líneas y deducciones complejas.",
         "how_to_unlock": "Acumular 6 respuestas correctas de nivel inferencial.",
         "category": "maestría",
@@ -95,7 +95,7 @@ INITIAL_ACHIEVEMENTS = [
     },
     {
         "id": "centurion",
-        "name": "💯 Centurión",
+        "name": "Centurión",
         "description": "Has acumulado una gran puntuación en tipologías específicas.",
         "how_to_unlock": "Superar los 300 puntos en la puntuación máxima de cualquier tipología.",
         "category": "progreso",
@@ -108,7 +108,7 @@ INITIAL_ACHIEVEMENTS = [
     },
     {
         "id": "star_critico",
-        "name": "💎 Estrella crítica",
+        "name": "Estrella crítica",
         "description": "Excelente capacidad para valorar y juzgar intenciones del autor.",
         "how_to_unlock": "Acumular 6 respuestas correctas de nivel crítico.",
         "category": "maestría",
@@ -121,7 +121,7 @@ INITIAL_ACHIEVEMENTS = [
     },
     {
         "id": "half_millennium",
-        "name": "🏆 Medio milenio",
+        "name": "Medio milenio",
         "description": "Has acumulado una impresionante puntuación en tus mejores tipologías.",
         "how_to_unlock": "Superar los 500 puntos totales combinados de mejores puntuaciones.",
         "category": "progreso",

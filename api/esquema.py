@@ -6,6 +6,7 @@ existen. Las migraciones de aquí son sentencias idempotentes (IF NOT EXISTS),
 así que se ejecutan en cada arranque y un despliegue no puede olvidarse de
 ellas.
 """
+import logging
 from pathlib import Path
 
 from sqlalchemy import text
@@ -24,6 +25,10 @@ MIGRACIONES_AL_ARRANCAR = [
     SQL_DIR / "010_intentos_y_reanudacion.sql",
     SQL_DIR / "011_entornos.sql",
     SQL_DIR / "012_conversaciones_asistente.sql",
+    SQL_DIR / "013_alias_y_vitrina.sql",
+    SQL_DIR / "014_insignias_logros.sql",
+    SQL_DIR / "015_comics.sql",
+    SQL_DIR / "016_encuesta_sus_tam.sql",
 ]
 
 
@@ -84,4 +89,5 @@ def _migrar(conn) -> None:
     for ruta in MIGRACIONES_AL_ARRANCAR:
         for sentencia in sentencias_sql(ruta):
             conn.execute(text(sentencia))
+        logging.getLogger("uvicorn.error").info("Migración aplicada: %s", ruta.name)
     quitar_practica(conn)

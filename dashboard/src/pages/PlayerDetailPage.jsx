@@ -4,7 +4,7 @@ import {
   getPlayerDetail, resetTypology, resetAllProgress,
   getPlayerSlots, createPlayerSlot, activatePlayerSlot,
   resetPlayerPassword, getAchievementsCatalog,
-  uploadMedalImage, deleteMedalImage
+  uploadMedalImage, deleteMedalImage, getComicsJugadores
 } from '../services/api';
 import SessionList from '../components/SessionList';
 import AssistantConversation from '../components/AssistantConversation';
@@ -13,7 +13,7 @@ import {
   ArrowLeft, Star, Trophy, BookOpen, Target, CheckCircle2,
   Lock, Unlock, RotateCcw, AlertTriangle, StickyNote,
   Highlighter, Underline, PenTool, ChevronDown, ChevronUp, Award,
-  Key, Plus, Copy, Check, Trash2, ShieldAlert, Upload, X,
+  Key, Plus, BookImage, Copy, Check, Trash2, ShieldAlert, Upload, X,
 } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
@@ -63,6 +63,24 @@ const TIER_COLORS = {
 const TOOL_ICONS = { highlight: Highlighter, underline: Underline, notes: PenTool };
 const TOOL_LABELS = { highlight: 'Resaltar', underline: 'Subrayar', notes: 'Notas' };
 
+// Cómo se presenta cada tipo de apunte. El juego guarda lo resaltado como
+// 'annotation' y lo subrayado como 'margin_note'; sin esto el panel
+// mostraba esas claves en crudo y no se distinguían entre sí.
+const NOTE_STYLES = {
+  annotation: {
+    label: 'Resaltado',
+    badge: 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-500/20 dark:text-yellow-300 dark:border-yellow-500/20',
+  },
+  margin_note: {
+    label: 'Subrayado',
+    badge: 'bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-500/20 dark:text-sky-300 dark:border-sky-500/20',
+  },
+  default: {
+    label: 'Nota',
+    badge: 'bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 border-primary-100 dark:border-primary-500/20',
+  },
+};
+
 export default function PlayerDetailPage() {
   const { playerId } = useParams();
   const navigate = useNavigate();
@@ -100,6 +118,20 @@ export default function PlayerDetailPage() {
   // Notes view filtering
   const [selectedNotesTypology, setSelectedNotesTypology] = useState('Narrativo');
   const [selectedReadingId, setSelectedReadingId] = useState(null);
+
+  // Cómics: la lista ya viene acotada al entorno; se filtra aquí por alumno.
+  // { id, fila, error }: fila es null si no entró; error es true si no se pudo preguntar.
+  const [comics, setComics] = useState(null);
+
+  useEffect(() => {
+    let vivo = true;
+    getComicsJugadores()
+      .then((lista) => {
+        if (vivo) setComics({ id: playerId, fila: lista.find((j) => String(j.player_id) === String(playerId)) || null, error: false });
+      })
+      .catch(() => { if (vivo) setComics({ id: playerId, fila: null, error: true }); });
+    return () => { vivo = false; };
+  }, [playerId]);
 
   useEffect(() => {
     loadData();
@@ -608,15 +640,14 @@ export default function PlayerDetailPage() {
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="relative w-9 h-9 flex-shrink-0 flex items-center justify-center group">
-                          {achievement.medal_image_path ? (
-                            <img
-                              src={`${API_BASE}${achievement.medal_image_path}`}
-                              alt={achievement.name}
-                              className="w-9 h-9 object-contain rounded-lg"
-                            />
-                          ) : (
-                            <span className="text-xl">{achievement.icon}</span>
-                          )}
+                          <img
+                            src={API_BASE + (achievement.medal_image_path || '/static/medals/defecto/' + achievement.id + '.png')}
+                            alt={achievement.name}
+                            className="w-9 h-9 object-contain rounded-lg"
+                            style={{ imageRendering: 'pixelated' }}
+                            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }}
+                          />
+                          <span className="text-xl" style={{ display: 'none' }}>{achievement.icon}</span>
                           {achievement.medal_image_path ? (
                             <button
                               onClick={() => handleDeleteMedal(achievement.id)}
@@ -702,7 +733,23 @@ export default function PlayerDetailPage() {
                       }`}
                       style={medal.is_unlocked ? { backgroundColor: tierStyles.medalBg.replace('bg-[', '').replace(']', '') } : undefined}
                     >
-                      <span className="text-2xl drop-shadow-sm">{medal.is_unlocked ? medal.emoji : '?'}</span>
+                      {medal.is_unlocked ? (
+                        <>
+                          {/* 32 px nativos: la insignia es pixel art y a otro
+                              tamano el navegador la emborrona. El metal lo
+                              sigue poniendo el aro de color de alrededor. */}
+                          <img
+                            src={API_BASE + (medal.imagen || '/static/medals/defecto/' + medal.id + '.png')}
+                            alt={medal.name}
+                            className="w-8 h-8 object-contain drop-shadow-sm"
+                            style={{ imageRendering: 'pixelated' }}
+                            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }}
+                          />
+                          <span className="text-2xl drop-shadow-sm" style={{ display: 'none' }}>{medal.emoji}</span>
+                        </>
+                      ) : (
+                        <span className="text-2xl drop-shadow-sm">?</span>
+                      )}
                     </div>
                     <h4 className="text-[11px] font-extrabold text-slate-700 dark:text-gray-200 leading-tight">{medal.name}</h4>
                     {medal.is_unlocked ? (
@@ -723,6 +770,38 @@ export default function PlayerDetailPage() {
                 );
               })}
             </div>
+          </div>
+
+          {/* Zona de cómics */}
+          <div className="glass-card p-6">
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+              <BookImage className="w-4 h-4 text-rose-500 dark:text-rose-400" />
+              Zona de cómics
+            </h3>
+            {comics?.id !== playerId ? (
+              <p className="text-sm text-slate-400 dark:text-gray-400">Cargando…</p>
+            ) : comics.error ? (
+              <p className="text-sm text-red-500 dark:text-red-400">No se pudo consultar la zona de cómics.</p>
+            ) : comics.fila === null ? (
+              <p className="text-sm text-slate-400 dark:text-gray-400">No ha entrado en la zona de cómics.</p>
+            ) : (
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div>
+                  <p className="text-xl font-extrabold text-slate-800 dark:text-white">{comics.fila.episodios_terminados ?? 0}</p>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-gray-400">Episodios terminados</p>
+                </div>
+                <div>
+                  <p className="text-xl font-extrabold text-slate-800 dark:text-white">{comics.fila.paginas_leidas ?? 0}</p>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-gray-400">Páginas leídas</p>
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-800 dark:text-white pt-1.5">
+                    {comics.fila.ultima_visita ? new Date(comics.fila.ultima_visita).toLocaleDateString('es-EC') : '—'}
+                  </p>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-gray-400 pt-1">Última visita</p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Tools Usage */}
@@ -856,21 +935,34 @@ export default function PlayerDetailPage() {
                               </p>
                             </div>
                           ) : (
-                            readingNotes.map((note) => (
-                              <div key={note.id} className="p-2.5 bg-white dark:bg-white/5 rounded-lg border border-slate-100 dark:border-white/5 shadow-sm">
-                                <div className="flex items-center justify-between gap-2 mb-1.5">
-                                  <span className="px-1.5 py-0.5 rounded text-[8px] font-extrabold bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20">
-                                    {note.note_type}
-                                  </span>
-                                  <span className="text-[9px] text-slate-400 dark:text-gray-400 font-semibold">
-                                    {note.created_at ? new Date(note.created_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}
-                                  </span>
+                            readingNotes.map((note) => {
+                              const marca = NOTE_STYLES[note.note_type] ?? NOTE_STYLES.default;
+                              return (
+                                <div key={note.id} className="p-2.5 bg-white dark:bg-white/5 rounded-lg border border-slate-100 dark:border-white/5 shadow-sm">
+                                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                                    <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold border ${marca.badge}`}>
+                                      {marca.label}
+                                    </span>
+                                    <span className="text-[9px] text-slate-400 dark:text-gray-400 font-semibold">
+                                      {note.created_at ? new Date(note.created_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}
+                                    </span>
+                                  </div>
+                                  <p className="text-xs text-slate-600 dark:text-gray-300 leading-relaxed font-semibold whitespace-pre-wrap">
+                                    {note.note_type === 'annotation' ? (
+                                      <mark className="bg-yellow-200 dark:bg-yellow-500/40 text-slate-800 dark:text-yellow-50 rounded px-0.5">
+                                        {note.note_content}
+                                      </mark>
+                                    ) : note.note_type === 'margin_note' ? (
+                                      <span className="underline decoration-sky-500 decoration-2 underline-offset-2">
+                                        {note.note_content}
+                                      </span>
+                                    ) : (
+                                      note.note_content
+                                    )}
+                                  </p>
                                 </div>
-                                <p className="text-xs text-slate-600 dark:text-gray-300 leading-relaxed font-semibold whitespace-pre-wrap">
-                                  {note.note_content}
-                                </p>
-                              </div>
-                            ))
+                              );
+                            })
                           )}
                         </div>
                       )}

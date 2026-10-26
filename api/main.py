@@ -31,6 +31,8 @@ from schemas import (
 # Importar routers
 from routers.auth_router import router as auth_router
 from routers.progress_router import router as progress_router
+from routers.comics_router import router as comics_router
+from routers.evaluation_router import router as evaluation_router
 from routers.admin_router import router as admin_router
 from routers.catalog_router import router as catalog_router
 from routers.achievements_admin_router import router as achievements_admin_router
@@ -88,6 +90,8 @@ app.include_router(achievements_admin_router)
 app.include_router(metrics_router)
 app.include_router(leaderboard_router)
 app.include_router(workspaces_router)
+app.include_router(comics_router)
+app.include_router(evaluation_router)
 
 # ── Configuración de sincronización ──────────────────────────────────────────
 
