@@ -5,7 +5,7 @@ import { useWorkspace } from '../context/workspace';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
 import WorkspaceBanner from './WorkspaceBanner';
 import { NewWorkspaceModal } from './WorkspaceDialogs';
-import { LayoutDashboard, LogOut, Gamepad2, Users, Sun, Moon, Menu, X, Trophy, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, LogOut, Gamepad2, Users, Sun, Moon, Menu, X, Trophy, BarChart3, BookImage } from 'lucide-react';
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
@@ -185,6 +185,20 @@ function SidebarContent({ user, theme, setTheme, handleLogout, onLinkClick }) {
         >
           <BarChart3 className="w-5 h-5" />
           Métricas y Reportes
+        </NavLink>
+        <NavLink
+          to="/comics"
+          onClick={onLinkClick}
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold border transition-all duration-200 ${
+              isActive
+                ? 'bg-rose-500/10 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400 border-rose-500/20 dark:border-rose-500/25'
+                : 'text-slate-600 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-white/5 border-transparent'
+            }`
+          }
+        >
+          <BookImage className="w-5 h-5" />
+          Zona de cómics
         </NavLink>
       </nav>
 

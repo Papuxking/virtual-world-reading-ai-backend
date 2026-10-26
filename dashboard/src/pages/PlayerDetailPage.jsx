@@ -4,7 +4,7 @@ import {
   getPlayerDetail, resetTypology, resetAllProgress,
   getPlayerSlots, createPlayerSlot, activatePlayerSlot,
   resetPlayerPassword, getAchievementsCatalog,
-  uploadMedalImage, deleteMedalImage
+  uploadMedalImage, deleteMedalImage, getComicsJugadores
 } from '../services/api';
 import SessionList from '../components/SessionList';
 import AssistantConversation from '../components/AssistantConversation';
@@ -13,7 +13,7 @@ import {
   ArrowLeft, Star, Trophy, BookOpen, Target, CheckCircle2,
   Lock, Unlock, RotateCcw, AlertTriangle, StickyNote,
   Highlighter, Underline, PenTool, ChevronDown, ChevronUp, Award,
-  Key, Plus, Copy, Check, Trash2, ShieldAlert, Upload, X,
+  Key, Plus, BookImage, Copy, Check, Trash2, ShieldAlert, Upload, X,
 } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
@@ -118,6 +118,20 @@ export default function PlayerDetailPage() {
   // Notes view filtering
   const [selectedNotesTypology, setSelectedNotesTypology] = useState('Narrativo');
   const [selectedReadingId, setSelectedReadingId] = useState(null);
+
+  // Cómics: la lista ya viene acotada al entorno; se filtra aquí por alumno.
+  // { id, fila }: fila es null si no entró o no se pudo leer.
+  const [comics, setComics] = useState(null);
+
+  useEffect(() => {
+    let vivo = true;
+    getComicsJugadores()
+      .then((lista) => {
+        if (vivo) setComics({ id: playerId, fila: lista.find((j) => String(j.player_id) === String(playerId)) || null });
+      })
+      .catch(() => { if (vivo) setComics({ id: playerId, fila: null }); });
+    return () => { vivo = false; };
+  }, [playerId]);
 
   useEffect(() => {
     loadData();
@@ -756,6 +770,36 @@ export default function PlayerDetailPage() {
                 );
               })}
             </div>
+          </div>
+
+          {/* Zona de cómics */}
+          <div className="glass-card p-6">
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+              <BookImage className="w-4 h-4 text-rose-500 dark:text-rose-400" />
+              Zona de cómics
+            </h3>
+            {comics?.id !== playerId ? (
+              <p className="text-sm text-slate-400 dark:text-gray-400">Cargando…</p>
+            ) : comics.fila === null ? (
+              <p className="text-sm text-slate-400 dark:text-gray-400">No ha entrado en la zona de cómics.</p>
+            ) : (
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div>
+                  <p className="text-xl font-extrabold text-slate-800 dark:text-white">{comics.fila.episodios_terminados ?? 0}</p>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-gray-400">Episodios terminados</p>
+                </div>
+                <div>
+                  <p className="text-xl font-extrabold text-slate-800 dark:text-white">{comics.fila.paginas_leidas ?? 0}</p>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-gray-400">Páginas leídas</p>
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-800 dark:text-white pt-1.5">
+                    {comics.fila.ultima_visita ? new Date(comics.fila.ultima_visita).toLocaleDateString('es-EC') : '—'}
+                  </p>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-gray-400 pt-1">Última visita</p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Tools Usage */}

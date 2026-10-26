@@ -242,6 +242,14 @@ export async function getAchievementsStats() {
   return apiFetch('/admin/achievements/stats');
 }
 
+export async function getComicsResumen() {
+  return apiFetch('/comics/admin/resumen');
+}
+
+export async function getComicsJugadores() {
+  return apiFetch('/comics/admin/jugadores');
+}
+
 export async function getAchievementDetail(achievementId) {
   return apiFetch(`/admin/achievements/${achievementId}`);
 }
