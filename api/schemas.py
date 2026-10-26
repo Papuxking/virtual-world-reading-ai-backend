@@ -961,3 +961,29 @@ class ComicProgressList(BaseModel):
 class ComicVisitResponse(BaseModel):
     """Total de visitas del slot activo a la sala de cómics."""
     visitas: int
+
+
+# ── Schemas de la zona de cómics (dashboard) ─────────────────────────────────
+
+class ComicEpisodioTop(BaseModel):
+    """Episodio y cuántos alumnos del entorno lo han abierto."""
+    episode_id: str
+    lecturas: int
+
+
+class ComicResumenResponse(BaseModel):
+    """Embudo de la recompensa: desbloquearon, entraron a la sala, leyeron."""
+    desbloquearon: int
+    entraron: int
+    lectores: int
+    episodios_top: List[ComicEpisodioTop]
+
+
+class ComicJugadorResponse(BaseModel):
+    """Lectura de un alumno en la zona de cómics."""
+    player_id: int
+    display_name: str
+    email: str
+    episodios_terminados: int
+    paginas_leidas: int
+    ultima_visita: Optional[datetime] = None
