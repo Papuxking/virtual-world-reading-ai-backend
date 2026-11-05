@@ -32,8 +32,11 @@ services:
       - 8001:8000
     depends_on:
       - db
+    networks:
+      - default
+      - lecturaia
     environment:
-      DATABASE_URL: postgresql://DB-virtual-world-reading-ai:GodotWorldAdmin@db:5432/godot_readings
+      DATABASE_URL: postgresql://postgres:StevenLoor24@lecturaia-db-1:5432/lecturaia?options=-csearch_path%3Dvw
       SYNC_SECRET_KEY: lecturaia-vw-sync-2024
       LECTURAIA_API_URL: http://host.docker.internal:8000
       JWT_SECRET_KEY: virtual-world-jwt-secret-2026-change-in-production
@@ -61,3 +64,8 @@ services:
 volumes:
   pgdata:
   dashboard_modules:
+
+networks:
+  lecturaia:
+    external: true
+    name: lecturaia_default
