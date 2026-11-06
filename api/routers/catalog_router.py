@@ -19,29 +19,8 @@ router = APIRouter(prefix="/achievements", tags=["Catálogo de Logros y Medallas
 MEDALS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static", "medals")
 
 
-def resize_image_to_256(data: bytes) -> bytes:
-    """Redimensiona cualquier imagen a 256x256 píxeles en formato PNG.
-    Acepta PNG, JPEG, WebP, BMP y GIF.
-    Retorna los bytes de la imagen PNG redimensionada.
-    Lanza ValueError si los datos no son una imagen válida.
-    """
-    from PIL import Image
-    try:
-        img = Image.open(io.BytesIO(data))
-    except Exception:
-        raise ValueError("El archivo no es una imagen válida")
-
-    # Convertir a RGBA para mantener transparencia en PNG
-    if img.mode not in ("RGBA", "RGB"):
-        img = img.convert("RGBA")
-
-    # Redimensionar a 256x256 con alta calidad
-    img = img.resize((256, 256), Image.LANCZOS)
-
-    # Guardar como PNG en memoria
-    output = io.BytesIO()
-    img.save(output, format="PNG", optimize=True)
-    return output.getvalue()
+from safe_images import resize_image_to_256, read_bounded
+from starlette.concurrency import run_in_threadpool
 
 
 # ── Catálogo Público ─────────────────────────────────────────────────────────
@@ -89,14 +68,14 @@ async def upload_medal_image(
 
     # 1. Validar extensión y formato
     allowed_extensions = (".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif")
-    if not any(file.filename.lower().endswith(ext) for ext in allowed_extensions):
+    if not any((file.filename or "").lower().endswith(ext) for ext in allowed_extensions):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Formato no soportado. Se aceptan: PNG, JPG, WebP, BMP, GIF",
         )
 
     # 2. Leer archivo y validar tamaño máximo (10MB)
-    raw_content = await file.read()
+    raw_content = await read_bounded(file)
     max_size = 10 * 1024 * 1024  # 10 MB para imágenes grandes que serán redimensionadas
     if len(raw_content) > max_size:
         raise HTTPException(
@@ -106,7 +85,7 @@ async def upload_medal_image(
 
     # 3. Redimensionar automáticamente a 256x256 PNG
     try:
-        content = resize_image_to_256(raw_content)
+        content = await run_in_threadpool(resize_image_to_256, raw_content)
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

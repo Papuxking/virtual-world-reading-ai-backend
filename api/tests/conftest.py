@@ -11,10 +11,9 @@ import pytest
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
 
-_URL_PRUEBAS = os.environ.get(
-    "TEST_DATABASE_URL",
-    "postgresql://DB-virtual-world-reading-ai:GodotWorldAdmin@db:5432/godot_readings_test",
-)
+_URL_PRUEBAS = os.environ.get("TEST_DATABASE_URL", "")
+if not _URL_PRUEBAS:
+    raise pytest.UsageError("Usa infra/compose.test.yaml o configura TEST_DATABASE_URL con una base *_test aislada")
 _NOMBRE_BASE = make_url(_URL_PRUEBAS).database or ""
 if not _NOMBRE_BASE.endswith("_test"):
     raise pytest.UsageError(
@@ -35,7 +34,8 @@ def _crear_base_si_falta() -> None:
             {"nombre": url.database},
         ).scalar()
         if not existe:
-            conn.execute(text(f'CREATE DATABASE "{url.database}"'))
+            quoted = servidor.dialect.identifier_preparer.quote(url.database)
+            conn.execute(text(f'CREATE DATABASE {quoted}'))
     servidor.dispose()
 
 

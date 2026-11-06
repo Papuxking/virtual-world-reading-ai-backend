@@ -29,5 +29,5 @@ def test_no_cuenta_los_de_otro_alumno(client, db):
     alumno, _ = crear_usuario(db, "uno@test.com")
     otro, _ = crear_usuario(db, "otro@test.com")
     lectura = crear_lectura(db, "Progresión", "Narrativo")
-    client.post("/progress/sessions", json=payload_sesion(db, lectura, correctas=6), headers=cabeceras(otro))
+    client.post("/progress/sessions", json=payload_sesion(db, lectura, correctas=6, usuario=otro), headers=cabeceras(otro))
     assert _aciertos(client, alumno) == CEROS

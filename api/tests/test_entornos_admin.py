@@ -120,8 +120,6 @@ def test_eliminar_borra_todo_lo_del_entorno(client, db):
                    session_id=sesion_id, note_content="Nota"),
         NpcInteraction(user_id=jugador.id, slot_id=slot.id, npc_type="sabio", reading_id=lectura.id),
         ActiveReading(user_id=jugador.id, slot_id=slot.id, reading_id=lectura.id, typology="Narrativo"),
-        PlayerAchievement(user_id=jugador.id, slot_id=slot.id, achievement_id="first_reading",
-                          achievement_name="Primera lectura"),
         PlayerSlot(user_id=jugador.id, slot_number=2, label="Sesión 2", is_active=False,
                    created_by=admin.id),
     ])

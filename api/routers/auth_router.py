@@ -4,14 +4,18 @@ Registro, login, datos del usuario actual y refresco de token.
 """
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, status
+import logging
+import os
+from fastapi import APIRouter, Depends, HTTPException, Response, status
+from sqlalchemy import update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from database import get_db
 from models import User
 from schemas import UserRegister, UserLogin, UserResponse, TokenResponse, ChangePasswordRequest
-from auth import hash_password, verify_password, create_access_token, get_current_user
+from auth import (hash_password, verify_password, create_access_token, get_current_user,
+                  get_authenticated_user, ADMIN_COOKIE, ACCESS_TOKEN_EXPIRE_MINUTES)
 from workspaces import crear_jugador, entorno_activo, es_correo_de_admin
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
@@ -84,6 +88,10 @@ def register_user(data: UserRegister, db: Session = Depends(get_db)):
 def login_user(data: UserLogin, db: Session = Depends(get_db)):
     """Inicia sesión con correo y contraseña, retorna JWT. Un administrador
     entra siempre; un jugador, solo con su cuenta del entorno activo."""
+    return _login(data, db)
+
+
+def _login(data: UserLogin, db: Session, admin_only: bool = False):
     user = _cuenta_para_login(db, data.email, data.password)
     if not user or not verify_password(data.password, user.hashed_password):
         raise HTTPException(
@@ -97,13 +105,18 @@ def login_user(data: UserLogin, db: Session = Depends(get_db)):
             detail="La cuenta está desactivada",
         )
 
+    if admin_only and not user.is_admin:
+        raise HTTPException(403, "Se requieren permisos de administrador")
+
     # Sesión única: cada login invalida la anterior.
     # El juego se publica en web y un mismo alumno puede abrirlo desde otro
     # navegador o equipo, donde el cerrojo de pestañas del cliente ya no llega.
     # Al subir session_version, la ventana antigua recibe 409 SESSION_INVALIDATED
     # en su siguiente petición y se cierra sola, de modo que solo una sesión
     # escribe progreso a la vez.
-    user.session_version = (user.session_version or 1) + 1
+    version = db.execute(update(User).where(User.id == user.id)
+                         .values(session_version=User.session_version + 1)
+                         .returning(User.session_version)).scalar_one()
 
     # Actualizar último login
     user.last_login_at = datetime.now(timezone.utc)
@@ -111,7 +124,8 @@ def login_user(data: UserLogin, db: Session = Depends(get_db)):
     db.refresh(user)
 
     # Generar token
-    token = create_access_token(user.id, user.email, user.is_admin)
+    token = create_access_token(user.id, session_version=version)
+    logging.getLogger("uvicorn.error").info("security.login_success user_id=%s admin=%s", user.id, user.is_admin)
 
     return TokenResponse(
         access_token=token,
@@ -119,6 +133,23 @@ def login_user(data: UserLogin, db: Session = Depends(get_db)):
         user=UserResponse.model_validate(user),
         must_change_password=user.must_change_password,
     )
+
+
+@router.post("/admin/login", response_model=UserResponse)
+def login_admin(data: UserLogin, response: Response, db: Session = Depends(get_db)):
+    result = _login(data, db, admin_only=True)
+    response.set_cookie(ADMIN_COOKIE, result.access_token, httponly=True, samesite="strict",
+                        secure=os.getenv("PUBLIC_ORIGIN", "").startswith("https://"),
+                        max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60, path="/")
+    response.headers["Cache-Control"] = "no-store"
+    return result.user
+
+
+@router.post("/logout", status_code=204)
+def logout(response: Response, user: User = Depends(get_authenticated_user), db: Session = Depends(get_db)):
+    db.execute(update(User).where(User.id == user.id).values(session_version=User.session_version + 1))
+    db.commit()
+    response.delete_cookie(ADMIN_COOKIE, path="/")
 
 
 def _cuenta_para_login(db: Session, email: str, password: str):
@@ -151,7 +182,7 @@ def _cuenta_para_login(db: Session, email: str, password: str):
 
 
 @router.get("/me", response_model=UserResponse)
-def get_me(current_user: User = Depends(get_current_user)):
+def get_me(current_user: User = Depends(get_authenticated_user)):
     """Retorna los datos del usuario autenticado."""
     return current_user
 
@@ -165,6 +196,8 @@ def update_me(
 ):
     """Actualiza el perfil del usuario autenticado."""
     if display_name is not None:
+        if not 1 <= len(display_name.strip()) <= 100:
+            raise HTTPException(422, "El nombre debe tener entre 1 y 100 caracteres")
         current_user.display_name = display_name
     if character is not None:
         if character not in ("male", "women"):
@@ -175,13 +208,15 @@ def update_me(
     return current_user
 
 
-@router.post("/change-password", status_code=200)
+@router.post("/change-password", response_model=TokenResponse)
 def change_password(
     data: ChangePasswordRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_authenticated_user),
     db: Session = Depends(get_db),
 ):
     """Permite al usuario cambiar su contraseña (útil tras un reset del administrador)."""
+    if not verify_password(data.current_password, current_user.hashed_password):
+        raise HTTPException(403, "Contraseña actual incorrecta")
     # Validar longitud
     if len(data.new_password) < 8:
         raise HTTPException(
@@ -204,7 +239,12 @@ def change_password(
     # Actualizar hash y quitar flag de cambio obligatorio
     current_user.hashed_password = hash_password(data.new_password)
     current_user.must_change_password = False
+    version = db.execute(update(User).where(User.id == current_user.id)
+                         .values(session_version=User.session_version + 1)
+                         .returning(User.session_version)).scalar_one()
     db.commit()
     db.refresh(current_user)
 
-    return {"detail": "Contraseña cambiada exitosamente"}
+    logging.getLogger("uvicorn.error").info("security.password_changed user_id=%s", current_user.id)
+    return TokenResponse(access_token=create_access_token(current_user.id, session_version=version),
+                         user=UserResponse.model_validate(current_user), must_change_password=False)

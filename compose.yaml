@@ -11,47 +11,62 @@ services:
     restart: always
     environment:
       POSTGRES_USER: DB-virtual-world-reading-ai
-      POSTGRES_PASSWORD: GodotWorldAdmin
+      POSTGRES_PASSWORD: ${LOCAL_DB_PASSWORD:?Configura .env con infra/configure_local_security.py}
       POSTGRES_DB: godot_readings
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./api/sql:/docker-entrypoint-initdb.d
     ports:
-      - 5433:5432
+      - "127.0.0.1:5433:5432"
 
   api:
-    image: python:3.10-slim
+    image: vw-api:local-secure
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.api
     working_dir: /app
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: [/tmp]
     volumes:
-      - ./api:/app
-      - .:/data:ro
-    command: >
-      sh -c "pip install -r requirements.txt &&
-             uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4"
+      - ./api:/app:ro
+      - ./api/static/medals:/app/static/medals
+      - ./LECTURAS_TIPOLOGIAS_TEXTUALES.json:/data/LECTURAS_TIPOLOGIAS_TEXTUALES.json:ro
     ports:
-      - 8001:8000
+      - "127.0.0.1:8001:8000"
     depends_on:
       - db
     networks:
       - default
       - lecturaia
     environment:
-      DATABASE_URL: postgresql://postgres:StevenLoor24@lecturaia-db-1:5432/lecturaia?options=-csearch_path%3Dvw
-      SYNC_SECRET_KEY: lecturaia-vw-sync-2024
-      LECTURAIA_API_URL: http://host.docker.internal:8000
-      JWT_SECRET_KEY: virtual-world-jwt-secret-2026-change-in-production
-      PUBLIC_ORIGIN: http://localhost:5173
+      DATABASE_URL: ${DATABASE_URL:?Configura .env}
+      SYNC_SECRET_KEY: ${SYNC_SECRET_KEY:-}
+      LECTURAIA_API_URL: ${LECTURAIA_API_URL:-http://lecturaia-backend-1:8000}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?Configura .env}
+      VW_DATA_ENCRYPTION_KEY: ${VW_DATA_ENCRYPTION_KEY:?Configura .env}
+      AUTO_MIGRATE: "0"
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://localhost:5173}
+
+  migrate:
+    image: vw-api:local-secure
+    profiles: [maintenance]
+    command: ["python", "migrate.py"]
+    environment:
+      DATABASE_URL: ${MIGRATION_DATABASE_URL:?Configura .env}
+    networks: [default, lecturaia]
 
   dashboard:
-    image: node:20-slim
+    image: node:24-slim
     working_dir: /app
     volumes:
       - ./dashboard:/app
       - dashboard_modules:/app/node_modules
     command: >
-      sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+      sh -c "npm ci && npm run dev -- --host 0.0.0.0 --port 5173"
     ports:
-      - 5173:5173
+      - "127.0.0.1:5173:5173"
     depends_on:
       - api
 
@@ -59,7 +74,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - "127.0.0.1:8080:8080"
 
 volumes:
   pgdata:

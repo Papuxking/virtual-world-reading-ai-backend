@@ -119,7 +119,7 @@ def test_la_api_ya_no_habla_de_practica(client, db):
     assert "practice_sessions" not in respuestas[f"/admin/players/{usuario.id}"].json()
     assert "total_practice_sessions" not in respuestas["/admin/stats"].json()
 
-    r = client.get("/readings/random/full", params={"typology": "Narrativo", "practice": "true"})
+    r = client.get("/readings/random/full", params={"typology": "Narrativo", "practice": "true"}, headers=cabeceras(usuario))
     assert r.status_code == 200
     assert r.json()["id"] == lectura.id
     assert "is_practice" not in r.json()

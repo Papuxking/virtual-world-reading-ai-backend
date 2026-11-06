@@ -6,29 +6,26 @@
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
 /** Token JWT almacenado en memoria */
-let authToken = localStorage.getItem('vw_admin_token') || '';
+let authenticatedUser = null;
+// Retirar credenciales persistidas por versiones anteriores.
+localStorage.removeItem('vw_admin_token');
+localStorage.removeItem('vw_admin_user');
 
 /** Entorno visto actualmente en el dashboard */
 let viewedWorkspaceId = localStorage.getItem('vw_admin_workspace')
   ? Number(localStorage.getItem('vw_admin_workspace'))
   : null;
 
-/** Configurar token */
-export function setToken(token) {
-  authToken = token;
-  localStorage.setItem('vw_admin_token', token);
-}
-
 /** Limpiar token */
 export function clearToken() {
-  authToken = '';
+  authenticatedUser = null;
   localStorage.removeItem('vw_admin_token');
   localStorage.removeItem('vw_admin_user');
 }
 
 /** Obtener token actual */
 export function getToken() {
-  return authToken;
+  return authenticatedUser ? 'cookie-session' : '';
 }
 
 /** Configurar entorno que se está viendo */
@@ -51,7 +48,7 @@ export function getViewedWorkspace() {
 function authHeaders() {
   return {
     'Content-Type': 'application/json',
-    ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+
     ...(viewedWorkspaceId !== null ? { 'X-Workspace-Id': String(viewedWorkspaceId) } : {}),
   };
 }
@@ -60,11 +57,12 @@ function authHeaders() {
 async function apiFetch(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
   const response = await fetch(url, {
+    credentials: 'include',
     headers: authHeaders(),
     ...options,
   });
 
-  if (response.status === 401) {
+  if (endpoint !== '/auth/admin/login' && (response.status === 401 || (response.status === 409 && (await response.clone().json().catch(() => ({}))).detail === 'SESSION_INVALIDATED'))) {
     clearToken();
     window.location.href = '/dashboard/login';
     throw new Error('Sesión expirada');
@@ -86,25 +84,34 @@ async function apiFetch(endpoint, options = {}) {
 // ── Autenticación ───────────────────────────────────────────────────────────
 
 export async function login(email, password) {
-  const data = await apiFetch('/auth/login', {
+  const user = await apiFetch('/auth/admin/login', {
     method: 'POST',
     body: JSON.stringify({ email, password }),
   });
-  setToken(data.access_token);
-  localStorage.setItem('vw_admin_user', JSON.stringify(data.user));
-  return data;
+  authenticatedUser = user;
+  return { user };
 }
 
 export async function getMe() {
-  return apiFetch('/auth/me');
+  const response = await fetch(`${API_BASE}/auth/me`, { credentials: 'include' });
+  if (!response.ok) {
+    clearToken();
+    throw new Error('Sesión no disponible');
+  }
+  authenticatedUser = await response.json();
+  return authenticatedUser;
+}
+
+export async function logout() {
+  try {
+    await apiFetch('/auth/logout', { method: 'POST' });
+  } finally {
+    clearToken();
+  }
 }
 
 export function getStoredUser() {
-  try {
-    return JSON.parse(localStorage.getItem('vw_admin_user'));
-  } catch {
-    return null;
-  }
+  return authenticatedUser;
 }
 
 // ── Dashboard Admin ─────────────────────────────────────────────────────────
@@ -188,12 +195,10 @@ export async function updateCatalogAchievement(achievementId, data) {
 export async function uploadMedalImage(achievementId, file) {
   const formData = new FormData();
   formData.append('file', file);
-  
+
   const response = await fetch(`${API_BASE}/achievements/admin/${achievementId}/medal-image`, {
+    credentials: 'include',
     method: 'PUT',
-    headers: {
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-    },
     body: formData,
   });
 
@@ -280,9 +285,10 @@ export async function uploadMedalImageAdmin(achievementId, file) {
   formData.append('file', file);
 
   const response = await fetch(`${API_BASE}/admin/achievements/${achievementId}/medal-image`, {
+    credentials: 'include',
     method: 'PUT',
     headers: {
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+
     },
     body: formData,
   });
@@ -346,8 +352,9 @@ export function downloadAchievementPlayersExcel(achievementId) {
 async function _downloadFile(endpoint, defaultFilename) {
   const url = `${API_BASE}${endpoint}`;
   const response = await fetch(url, {
+    credentials: 'include',
     headers: {
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+
       ...(viewedWorkspaceId !== null ? { 'X-Workspace-Id': String(viewedWorkspaceId) } : {}),
     },
   });

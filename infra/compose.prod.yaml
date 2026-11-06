@@ -38,13 +38,26 @@ services:
       SYNC_SECRET_KEY: ${SYNC_SECRET_KEY}
       LECTURAIA_API_URL: ${LECTURAIA_API_URL}
       PUBLIC_ORIGIN: ${PUBLIC_ORIGIN}
+      VW_DATA_ENCRYPTION_KEY: ${VW_DATA_ENCRYPTION_KEY:?Configura el cifrado de conversaciones}
+      AUTO_MIGRATE: "0"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: [/tmp]
     volumes:
       # Las medallas subidas por el admin deben sobrevivir a un rebuild
       - medals:/app/static/medals
       # JSON de lecturas para import_json_readings.py
-      - ..:/data:ro
+      - ../LECTURAS_TIPOLOGIAS_TEXTUALES.json:/data/LECTURAS_TIPOLOGIAS_TEXTUALES.json:ro
     ports:
       - "127.0.0.1:8001:8000"
+
+  migrate:
+    image: vw-api:${API_TAG:-latest}
+    profiles: [maintenance]
+    command: ["python", "migrate.py"]
+    environment:
+      DATABASE_URL: ${MIGRATION_DATABASE_URL:?Configura el rol migrador}
 
 volumes:
   pgdata:
