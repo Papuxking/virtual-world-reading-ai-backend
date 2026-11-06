@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { clearToken, getStoredUser } from '../services/api';
+import { logout, getStoredUser } from '../services/api';
 import { useWorkspace } from '../context/workspace';
 import WorkspaceSwitcher from './WorkspaceSwitcher';
 import WorkspaceBanner from './WorkspaceBanner';
@@ -25,9 +25,8 @@ export default function DashboardLayout() {
     }
   }, [theme]);
 
-  function handleLogout() {
-    clearToken();
-    navigate('/login');
+  async function handleLogout() {
+    try { await logout(); } finally { navigate('/login'); }
   }
 
   return (

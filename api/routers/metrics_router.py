@@ -4,6 +4,9 @@ Tiempo de lectura, respuestas, intentos por pregunta, interacciones NPC,
 uso de herramientas. Todos con filtros por fecha, jugador y tipología.
 Incluye exportación CSV y Excel.
 """
+
+from safe_exports import SafeWriter, SafeDictWriter, secure_workbook
+from conversation_crypto import decrypt_message
 import io
 import csv
 from datetime import datetime, timezone
@@ -343,7 +346,7 @@ def get_npc_conversations(
         NpcConversationMessage(
             id=i.id, npc_type=i.npc_type, reading_id=i.reading_id,
             reading_title=titulo, typology=tipologia,
-            user_message=i.user_message, assistant_reply=i.assistant_reply,
+            user_message=decrypt_message(i.user_message, i), assistant_reply=decrypt_message(i.assistant_reply, i),
             created_at=i.created_at,
         )
         for i, titulo, tipologia in filas
@@ -416,7 +419,7 @@ def export_metrics_csv(
 ):
     """Exporta métricas en formato CSV."""
     output = io.StringIO()
-    writer = csv.writer(output)
+    writer = SafeWriter(output)
 
     if metric == "reading-time":
         data = get_reading_time_metrics(date_from, date_to, player_id, typology, admin, entorno, db)
@@ -567,7 +570,7 @@ def export_metrics_excel(
         ws.column_dimensions[col[0].column_letter].width = min(max_length + 4, 40)
 
     output = io.BytesIO()
-    wb.save(output)
+    secure_workbook(wb).save(output)
     output.seek(0)
 
     return StreamingResponse(

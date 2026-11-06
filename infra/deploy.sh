@@ -139,6 +139,9 @@ cmd_api() {
     log "construyendo vw-api:$tag"
     API_TAG="$tag" "${COMPOSE[@]}" build api
 
+    log "aplicando migraciones con el rol de mantenimiento"
+    API_TAG="$tag" "${COMPOSE[@]}" run --rm migrate
+
     log "promocionando"
     API_TAG="$tag" "${COMPOSE[@]}" up -d api
 

@@ -63,7 +63,7 @@ def crear_usuario(db, email="alumno@test.com", admin=False, filas=True, entorno=
 
 def cabeceras(usuario, entorno=None):
     """Token del usuario y, si se da, el entorno que mira el dashboard."""
-    token = create_access_token(usuario.id, usuario.email, usuario.is_admin)
+    token = create_access_token(usuario.id, session_version=usuario.session_version)
     datos = {"Authorization": f"Bearer {token}"}
     if entorno is not None:
         datos["X-Workspace-Id"] = str(entorno.id)
@@ -88,8 +88,12 @@ def crear_lectura(db, titulo="Lectura", tipologia="Narrativo"):
     return lectura
 
 
-def payload_sesion(db, lectura, tipologia=None, puntaje=200, correctas=6):
+def payload_sesion(db, lectura, tipologia=None, puntaje=200, correctas=6, usuario=None):
     """Cuerpo de POST /progress/sessions tal como lo manda el juego."""
+    from grading import start_attempt, grade_answer
+    if usuario is None:
+        usuario = db.query(User).filter_by(is_admin=False).order_by(User.id).first()
+    intento = start_attempt(db, usuario.id, lectura, reuse=False)
     preguntas = (
         db.query(Question)
         .filter(Question.reading_id == lectura.id)
@@ -97,6 +101,8 @@ def payload_sesion(db, lectura, tipologia=None, puntaje=200, correctas=6):
         .all()
     )
     respuestas = []
+    preguntas = sorted([p for p in preguntas if p.id in intento.question_ids],
+                       key=lambda p: (NIVELES_DE_PRUEBA.index(p.comprehension_level), p.question_number))
     for i, pregunta in enumerate(preguntas):
         acierta = i < correctas
         respuestas.append({
@@ -108,8 +114,11 @@ def payload_sesion(db, lectura, tipologia=None, puntaje=200, correctas=6):
             "points_earned": 10 if acierta else 0,
             "penalty_applied": 0 if acierta else 3,
         })
+        grade_answer(db, usuario.id, lectura.id, pregunta.id, "A" if acierta else "B", intento.id)
+    db.commit()
     datos = {
         "reading_id": lectura.id,
+        "attempt_id": intento.id,
         "typology": tipologia or lectura.typology,
         "session_score": puntaje,
         "reading_time_seconds": 120,

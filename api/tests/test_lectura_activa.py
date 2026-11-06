@@ -41,7 +41,10 @@ def test_lectura_con_caducidad_pasada_no_se_borra(client, db):
     db.commit()
     r = client.get("/progress/active-reading", headers=cabeceras(usuario))
     assert r.status_code == 200
-    assert (r.json()["reading_id"], r.json()["current_level_index"]) == (lectura.id, 2)
+    assert r.json()["reading_id"] == lectura.id
+    assert r.json()["attempt_id"]
+    # Un checkpoint previo a la corrección en servidor no acredita respuestas.
+    assert r.json()["current_level_index"] == 0
     db.expire_all()
     assert db.query(ActiveReading).filter_by(user_id=usuario.id).count() == 1
 

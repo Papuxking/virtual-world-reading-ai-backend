@@ -24,10 +24,7 @@ from sqlalchemy.orm import sessionmaker
 
 # ── Configuración por defecto ────────────────────────────────────────────────
 
-DEFAULT_DB_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://DB-virtual-world-reading-ai:GodotWorldAdmin@db:5432/godot_readings"
-)
+DEFAULT_DB_URL = os.environ.get("DATABASE_URL", "")
 
 # Rutas por defecto para los JSON (dentro del contenedor, montados en /data)
 DEFAULT_JSON_FILES = [

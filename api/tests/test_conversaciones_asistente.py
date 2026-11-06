@@ -1,6 +1,7 @@
 """Lo que el jugador habla con el asistente IA queda guardado y el dashboard lo
 muestra, solo para los jugadores del entorno que mira."""
 from helpers import cabeceras, crear_entorno, crear_lectura, crear_usuario, entorno_activo_de_prueba
+from models import NpcInteraction
 
 
 def _hablar(client, usuario, lectura, pregunta, respuesta, npc="robot"):
@@ -16,6 +17,9 @@ def test_guarda_pregunta_y_respuesta(client, db):
     lectura = crear_lectura(db, "El zorro", "Narrativo")
     assert _hablar(client, usuario, lectura, "¿Quién es el protagonista?", "Piensa en quién actúa.").status_code == 201
     _hablar(client, usuario, lectura, "¿Y el final?", "Relee el último párrafo.", npc="sabio")
+    stored = db.query(NpcInteraction).order_by(NpcInteraction.id).first()
+    assert stored.user_message.startswith('enc:v1:')
+    assert stored.user_message != '¿Quién es el protagonista?'
 
     entorno = entorno_activo_de_prueba(db)
     r = client.get("/admin/metrics/npc-conversations", params={"player_id": usuario.id},

@@ -269,6 +269,20 @@ class PlayerSession(Base):
     tools = relationship("SessionTool", back_populates="session", cascade="all, delete-orphan")
 
 
+class GameAttempt(Base):
+    """Preguntas asignadas y elecciones confirmadas por el servidor."""
+    __tablename__ = "game_attempts"
+    id = Column(String(36), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
+    reading_id = Column(Integer, ForeignKey("readings.id", ondelete="CASCADE"), nullable=False)
+    question_ids = Column(JSONB, nullable=False)
+    results = Column(JSONB, nullable=False, default=list)
+    session_id = Column(Integer, ForeignKey("player_sessions.id", ondelete="SET NULL"), nullable=True)
+    finalized = Column(Boolean, nullable=False, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
 class PlayerAnswer(Base):
     """Respuesta individual del jugador a una pregunta."""
     __tablename__ = "player_answers"

@@ -87,7 +87,10 @@ export default function MetricsPage() {
     }
   }, [activeTab, appliedFilters]);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  useEffect(() => {
+    const timer = setTimeout(loadData, 0);
+    return () => clearTimeout(timer);
+  }, [loadData]);
 
   function applyFilters() {
     const clean = {};
@@ -608,7 +611,7 @@ function NpcInteractionsPanel({ data, tooltipStyle }) {
 
 // ── Panel: Uso de Herramientas ───────────────────────────────────────────────
 
-function ToolUsagePanel({ data, tooltipStyle }) {
+function ToolUsagePanel({ data }) {
   const tools = data.tools || [];
 
   const radarData = tools.map((t) => ({

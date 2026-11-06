@@ -15,6 +15,10 @@ from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func as sqlfunc, text
 
 from database import get_db, SessionLocal, engine
+from auth import get_current_admin, get_current_user
+from grading import assigned_payload
+from security_middleware import SecurityMiddleware
+import secrets
 from esquema import preparar_base
 from models import Reading, Question, Answer, ActiveReading
 from schemas import (
@@ -57,12 +61,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(SecurityMiddleware)
 
 # ── Crear tablas ─────────────────────────────────────────────────────────────
 
 # Crear las tablas que no existen y aplicar las migraciones (idempotentes), un
 # proceso detrás de otro.
-preparar_base(engine)
+if os.getenv("AUTO_MIGRATE", "1") == "1":
+    preparar_base(engine)
 
 # Asegurar que el directorio de archivos estáticos existe
 from fastapi.staticfiles import StaticFiles
@@ -100,7 +106,7 @@ _LECTURAIA_URL = os.getenv("LECTURAIA_API_URL", "http://localhost:8000")
 
 
 def _verify_sync_key(x_sync_key: str = Header(...)):
-    if not _SYNC_SECRET or x_sync_key != _SYNC_SECRET:
+    if not _SYNC_SECRET or not secrets.compare_digest(x_sync_key.encode(), _SYNC_SECRET.encode()):
         raise HTTPException(status_code=403, detail="Clave de sincronización inválida")
 
 
@@ -172,8 +178,8 @@ def health_check(db: Session = Depends(get_db)):
     try:
         db.execute(text("SELECT 1"))
         return {"status": "ok", "database": "connected"}
-    except Exception as e:
-        return {"status": "degraded", "database": str(e)}
+    except Exception:
+        raise HTTPException(503, "Base de datos no disponible")
 
 
 # ── Sincronización: recibir desde LecturaIA ───────────────────────────────────
@@ -258,6 +264,7 @@ def list_typologies(db: Session = Depends(get_db)):
 def get_random_reading_full(
     typology: str | None = Query(None, description="Filtrar por tipología"),
     db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
 ):
     if typology and typology not in VALID_TYPOLOGIES:
         raise HTTPException(status_code=400, detail=f"Tipología inválida. Opciones: {VALID_TYPOLOGIES}")
@@ -273,7 +280,7 @@ def get_random_reading_full(
         .filter(Reading.id == random_id_row[0])
         .first()
     )
-    return reading
+    return assigned_payload(db, current_user.id, reading)
 
 
 @app.get("/readings/random", response_model=ReadingResponse, tags=["Lecturas"])
@@ -325,7 +332,7 @@ def list_readings(
 
 
 @app.get("/readings/{reading_id}/full", response_model=ReadingFullResponse, tags=["Lecturas"])
-def get_reading_full(reading_id: int, db: Session = Depends(get_db)):
+def get_reading_full(reading_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     reading = (
         db.query(Reading)
         .options(joinedload(Reading.questions).joinedload(Question.answers))
@@ -334,7 +341,7 @@ def get_reading_full(reading_id: int, db: Session = Depends(get_db)):
     )
     if not reading:
         raise HTTPException(status_code=404, detail="Lectura no encontrada")
-    return reading
+    return assigned_payload(db, current_user.id, reading)
 
 
 @app.get("/readings/{reading_id}/questions", response_model=List[QuestionResponse], tags=["Preguntas"])
@@ -342,20 +349,15 @@ def get_reading_questions(
     reading_id: int,
     level: str | None = Query(None),
     db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
 ):
     reading = db.query(Reading).filter(Reading.id == reading_id).first()
     if not reading:
         raise HTTPException(status_code=404, detail="Lectura no encontrada")
     if level and level not in VALID_COMPREHENSION_LEVELS:
         raise HTTPException(status_code=400, detail=f"Nivel inválido. Opciones: {VALID_COMPREHENSION_LEVELS}")
-    query = (
-        db.query(Question)
-        .options(joinedload(Question.answers))
-        .filter(Question.reading_id == reading_id)
-    )
-    if level:
-        query = query.filter(Question.comprehension_level == level)
-    return query.order_by(Question.question_number).all()
+    questions = assigned_payload(db, current_user.id, reading)['questions']
+    return [q for q in questions if level is None or q['comprehension_level'] == level]
 
 
 @app.get("/readings/{reading_id}", response_model=ReadingResponse, tags=["Lecturas"])
@@ -370,6 +372,7 @@ def get_reading(reading_id: int, db: Session = Depends(get_db)):
 def create_reading(
     data: ReadingCreate,
     background_tasks: BackgroundTasks,
+    admin = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
     if data.typology not in VALID_TYPOLOGIES:
@@ -387,6 +390,7 @@ def update_reading(
     reading_id: int,
     data: ReadingUpdate,
     background_tasks: BackgroundTasks,
+    admin = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
     reading = db.query(Reading).filter(Reading.id == reading_id).first()
@@ -414,6 +418,7 @@ def update_reading(
 def delete_reading(
     reading_id: int,
     background_tasks: BackgroundTasks,
+    admin = Depends(get_current_admin),
     db: Session = Depends(get_db),
 ):
     reading = db.query(Reading).filter(Reading.id == reading_id).first()

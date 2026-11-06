@@ -510,7 +510,7 @@ def reset_typology(
     reevaluate_unlocks(db, player_id, active_slot.id)
 
     # Incrementar versión de sesión para notificar al cliente Godot en tiempo real
-    user.session_version += 1
+    user.session_version = User.session_version + 1
 
     db.commit()
 
@@ -614,7 +614,7 @@ def reset_all_progress(
         db.add(p)
 
     # Incrementar versión de sesión para notificar al cliente Godot en tiempo real
-    user.session_version += 1
+    user.session_version = User.session_version + 1
 
     db.commit()
 
@@ -782,7 +782,7 @@ def create_player_slot(
     db.add(new_slot)
 
     # Incrementar versión de sesión para notificar al cliente Godot en tiempo real
-    user.session_version += 1
+    user.session_version = User.session_version + 1
 
     db.commit()
     db.refresh(new_slot)
@@ -837,7 +837,7 @@ def activate_player_slot(
     slot.is_active = True
 
     # Incrementar versión de sesión para notificar al cliente Godot en tiempo real
-    user.session_version += 1
+    user.session_version = User.session_version + 1
 
     db.commit()
 
@@ -863,6 +863,7 @@ def reset_player_password_admin(
     # Actualizar usuario
     user.hashed_password = hash_password(temp_password)
     user.must_change_password = True
+    user.session_version = User.session_version + 1
     db.commit()
     db.refresh(user)
 

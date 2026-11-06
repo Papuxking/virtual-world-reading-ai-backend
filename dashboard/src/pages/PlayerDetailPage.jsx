@@ -115,6 +115,13 @@ export default function PlayerDetailPage() {
   const [countdown, setCountdown] = useState(10);
   const [canDelete, setCanDelete] = useState(false);
 
+  function openResetModal(details) {
+    setCountdown(10);
+    setCanDelete(false);
+    setAgreed(false);
+    setResetModal(details);
+  }
+
   // Notes view filtering
   const [selectedNotesTypology, setSelectedNotesTypology] = useState('Narrativo');
   const [selectedReadingId, setSelectedReadingId] = useState(null);
@@ -141,8 +148,6 @@ export default function PlayerDetailPage() {
   useEffect(() => {
     let timer;
     if (resetModal && agreed) {
-      setCountdown(10);
-      setCanDelete(false);
       timer = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
@@ -153,9 +158,6 @@ export default function PlayerDetailPage() {
           return prev - 1;
         });
       }, 1000);
-    } else {
-      setCountdown(10);
-      setCanDelete(false);
     }
     return () => clearInterval(timer);
   }, [resetModal, agreed]);
@@ -305,7 +307,7 @@ export default function PlayerDetailPage() {
     );
   }
 
-  const { user, total_score, active_slot_number, active_slot_label, typology_progress, achievements, sessions, notes, tool_stats, level_stats, score_rules, game_over } = data;
+  const { user, total_score, active_slot_label, typology_progress, achievements, sessions, notes, tool_stats, level_stats, score_rules, game_over } = data;
   const medals = data.medals || [];
   const unlockedAchievementIds = achievements.map((a) => a.achievement_id);
 
@@ -541,7 +543,7 @@ export default function PlayerDetailPage() {
                     </span>
                     {progress?.is_unlocked && progress?.total_sessions > 0 && (
                       <button
-                        onClick={() => setResetModal({ type: 'typology', typology })}
+                        onClick={() => openResetModal({ type: 'typology', typology })}
                         className="text-xs text-slate-400 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors flex items-center gap-1 font-semibold"
                         title="Reiniciar esta tipología y las superiores"
                       >
@@ -989,7 +991,7 @@ export default function PlayerDetailPage() {
           </div>
           <div className="flex gap-2">
             <button
-              onClick={() => setResetModal({ type: 'all' })}
+              onClick={() => openResetModal({ type: 'all' })}
               className="btn-danger text-xs py-2 px-4 inline-flex items-center gap-1"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -1128,7 +1130,7 @@ export default function PlayerDetailPage() {
               <input
                 type="checkbox"
                 checked={agreed}
-                onChange={(e) => setAgreed(e.target.checked)}
+                onChange={(e) => { setCountdown(10); setCanDelete(false); setAgreed(e.target.checked); }}
                 className="mt-1 rounded text-red-600 focus:ring-red-500 border-slate-300"
               />
               <span className="text-xs font-bold text-slate-700 dark:text-gray-300 leading-normal">

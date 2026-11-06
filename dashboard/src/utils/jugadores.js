@@ -44,7 +44,8 @@ export function aTexto(filas) {
 }
 
 function escaparCsv(valor) {
-  const str = valor !== null && valor !== undefined ? String(valor) : '';
+  let str = valor !== null && valor !== undefined ? String(valor) : '';
+  if (/^[\t\r\n]/.test(str) || /^[\s\uFEFF]*[=+\-@]/.test(str)) str = "'" + str;
   if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
     return `"${str.replace(/"/g, '""')}"`;
   }

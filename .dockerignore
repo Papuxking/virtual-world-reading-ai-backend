@@ -1,0 +1,9 @@
+.git
+dashboard
+docs
+api/__pycache__
+api/**/__pycache__
+api/.pytest_cache
+api/tests
+.env
+infra/.env

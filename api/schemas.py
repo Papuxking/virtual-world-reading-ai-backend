@@ -98,8 +98,6 @@ class QuestionResponse(BaseModel):
     question_number: int
     comprehension_level: str
     question_text: str
-    correct_answer: str
-    justification: Optional[str] = None
     answers: List[AnswerResponse]
 
     class Config:
@@ -107,6 +105,7 @@ class QuestionResponse(BaseModel):
 
 
 class ReadingFullResponse(BaseModel):
+    attempt_id: Optional[str] = None
     """Lectura completa con todas sus preguntas y respuestas (para caché local)."""
     id: int
     title: str
@@ -144,7 +143,7 @@ class UserRegister(BaseModel):
 class UserLogin(BaseModel):
     """Schema para iniciar sesión."""
     email: EmailStr
-    password: str = Field(..., min_length=1)
+    password: str = Field(..., min_length=1, max_length=128)
 
 
 class UserResponse(BaseModel):
@@ -198,6 +197,7 @@ class PlayerSlotCreate(BaseModel):
 
 
 class ChangePasswordRequest(BaseModel):
+    current_password: str = Field(..., min_length=1, max_length=128)
     """Schema para cambiar la contraseña del jugador."""
     new_password: str = Field(..., min_length=8, max_length=128)
 
@@ -253,23 +253,39 @@ class SessionToolCreate(BaseModel):
     """Schema para registrar uso de herramienta."""
     tool_name: str = Field(..., max_length=30)
     was_used: bool
-    usage_count: int = 0
-    duration_seconds: Optional[int] = None
+    usage_count: int = Field(0, ge=0, le=10000)
+    duration_seconds: Optional[int] = Field(None, ge=0, le=86400)
+
+
+class ReadingAnswerSubmit(BaseModel):
+    reading_id: int = Field(gt=0)
+    question_id: int = Field(gt=0)
+    selected_answer: Literal["A", "B", "C", "D"]
+    attempt_id: Optional[str] = Field(None, max_length=36)
 
 
 class SessionCreate(BaseModel):
+    attempt_id: Optional[str] = Field(None, max_length=36)
     """Schema para registrar una sesión completada desde Godot."""
     reading_id: int
     typology: str
     session_score: int
-    reading_time_seconds: Optional[int] = None
-    total_time_seconds: Optional[int] = None
+    reading_time_seconds: Optional[int] = Field(None, ge=0, le=86400)
+    total_time_seconds: Optional[int] = Field(None, ge=0, le=86400)
     is_perfect: bool = False
     correct_count: int = 0
     incorrect_count: int = 0
     tool_bonus: int = 0
-    answers: List[PlayerAnswerCreate] = []
-    tools: List[SessionToolCreate] = []
+    answers: List[PlayerAnswerCreate] = Field(default_factory=list, max_length=6)
+    tools: List[SessionToolCreate] = Field(default_factory=list, max_length=3)
+
+    @field_validator("tools")
+    @classmethod
+    def valid_tools(cls, values):
+        names = [t.tool_name for t in values]
+        if len(set(names)) != len(names) or not set(names).issubset({"highlight", "underline", "notes"}):
+            raise ValueError("Herramientas desconocidas o repetidas")
+        return values
 
     class Config:
         json_schema_extra = {
@@ -802,9 +818,9 @@ class ActiveReadingSave(BaseModel):
     current_question_index: int = 0
     reading_completed: bool = False
     session_score: int = 0
-    results_json: str = "[]"
-    tools_used_json: str = '{"highlight":false,"underline":false,"notes":false}'
-    reading_start_time: str = "0"
+    results_json: str = Field("[]", max_length=25000)
+    tools_used_json: str = Field('{"highlight":false,"underline":false,"notes":false}', max_length=512)
+    reading_start_time: str = Field("0", max_length=50)
     # Segundos acumulados hasta este guardado (los clientes antiguos no los mandan).
     reading_seconds: int = Field(0, ge=0)
     total_seconds: int = Field(0, ge=0)
@@ -826,6 +842,7 @@ class ActiveReadingSave(BaseModel):
 
 
 class ActiveReadingResponse(BaseModel):
+    attempt_id: Optional[str] = None
     """Schema de respuesta para la lectura activa del jugador."""
     id: int
     reading_id: int

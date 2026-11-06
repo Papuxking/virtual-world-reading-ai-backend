@@ -43,7 +43,10 @@ export default function AchievementDetailPage() {
     }
   }, [achievementId]);
 
-  useEffect(() => { loadDetail(); }, [loadDetail]);
+  useEffect(() => {
+    const timer = setTimeout(loadDetail, 0);
+    return () => clearTimeout(timer);
+  }, [loadDetail]);
 
   function showToast(message, type = 'success') {
     setToast({ message, type });

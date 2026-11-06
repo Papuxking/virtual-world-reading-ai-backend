@@ -35,7 +35,8 @@ def test_sesion_que_aprueba_tambien_suma(client, db):
     client.post("/progress/sessions", json=payload_sesion(db, lectura, puntaje=200), headers=cabeceras(usuario))
     db.expire_all()
     fila = _fila(db, slot, "Narrativo")
-    assert (fila.attempts_used, fila.best_score) == (1, 200)
+    # La API calcula 240 por seis aciertos + 20 por la herramienta registrada.
+    assert (fila.attempts_used, fila.best_score) == (1, 260)
 
 
 def test_progress_me_trae_intentos_y_maximo(client, db):

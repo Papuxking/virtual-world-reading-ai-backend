@@ -1,4 +1,6 @@
 """Encuesta SUS + TAM que el alumno completa antes de abrir los cómics."""
+
+from safe_exports import SafeWriter, SafeDictWriter, secure_workbook
 import csv
 import io
 
@@ -215,7 +217,7 @@ def admin_export_csv(
     campos += [f"sus_{i}" for i in range(1, 11)]
     campos += [f"tam_pu_{i}" for i in range(1, 7)]
     campos += [f"tam_peou_{i}" for i in range(1, 7)]
-    writer = csv.DictWriter(salida, fieldnames=campos)
+    writer = SafeDictWriter(salida, fieldnames=campos)
     writer.writeheader()
     for encuesta, usuario, slot in _filas_entorno(db, entorno.id):
         fila = _fila_admin(encuesta, usuario, slot)

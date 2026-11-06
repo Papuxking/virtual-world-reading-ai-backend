@@ -101,8 +101,14 @@ export default function AchievementsPage() {
     }
   }, [search, filterCategory, filterTier, filterPlayerId, filterStatus, sortBy, sortOrder]);
 
-  useEffect(() => { loadData(); }, [loadData]);
-  useEffect(() => { loadAchievements(); }, [loadAchievements]);
+  useEffect(() => {
+    const timer = setTimeout(loadData, 0);
+    return () => clearTimeout(timer);
+  }, [loadData]);
+  useEffect(() => {
+    const timer = setTimeout(loadAchievements, 0);
+    return () => clearTimeout(timer);
+  }, [loadAchievements]);
 
   // Debounced search
   const [searchTimeout, setSearchTimeout] = useState(null);

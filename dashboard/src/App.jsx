@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { getToken, getStoredUser } from './services/api';
+import { useEffect, useState } from 'react';
+import { getToken, getStoredUser, getMe } from './services/api';
 import { WorkspaceProvider } from './context/WorkspaceContext';
 import LoginPage from './pages/LoginPage';
 import DashboardLayout from './components/DashboardLayout';
@@ -12,6 +13,13 @@ import ComicsPage from './pages/ComicsPage';
 import EvaluationPage from './pages/EvaluationPage';
 
 function ProtectedRoute({ children }) {
+  const [loading, setLoading] = useState(!getStoredUser());
+  useEffect(() => {
+    let active = true;
+    getMe().catch(() => {}).finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
+  if (loading) return <p className="p-6">Cargando sesión...</p>;
   const token = getToken();
   const user = getStoredUser();
   if (!token || !user?.is_admin) {

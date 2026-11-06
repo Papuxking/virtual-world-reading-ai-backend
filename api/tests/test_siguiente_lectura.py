@@ -115,14 +115,14 @@ def test_403_sin_intentos(client, db):
     assert r.json()["detail"] == "SIN_INTENTOS"
 
 
-def test_con_intentos_agotados_pero_aprobada_no_bloquea(client, db):
+def test_nunca_inicia_mas_de_cinco_intentos_aunque_ya_aprobo(client, db):
     usuario, slot = crear_usuario(db)
     crear_lectura(db, "A")
     fila = db.query(PlayerTypologyProgress).filter_by(slot_id=slot.id, typology="Narrativo").one()
     fila.attempts_used = 5
     fila.best_score = 200
     db.commit()
-    assert _siguiente(client, usuario).status_code == 200
+    assert _siguiente(client, usuario).status_code == 403
 
 
 def test_400_tipologia_fuera_del_juego(client, db):
