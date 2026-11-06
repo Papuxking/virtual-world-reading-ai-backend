@@ -114,47 +114,34 @@ ssh vw '/opt/vw/infra/backup.sh'
 ssh vw 'docker exec vw-api-1 python replace_readings.py --json /data/LECTURAS_TIPOLOGIAS_TEXTUALES.json'
 # 3. aplicar
 ssh vw 'docker exec vw-api-1 python replace_readings.py --json /data/LECTURAS_TIPOLOGIAS_TEXTUALES.json --apply'
-# 4. dejar a los jugadores en estado inicial
-ssh vw 'docker exec vw-api-1 python reset_players.py --students 50 --demo --apply'
+# 4. dejar a los jugadores en estado inicial (por defecto en el entorno activo)
+ssh vw 'docker exec vw-api-1 python reset_players.py --entorno Real --students 50 --demo --apply'
 ```
 
 Borrar una lectura arrastra en cascada sus preguntas, respuestas, sesiones de
 alumno y notas. Los logros y el `best_score` por tipología **no** cuelgan de
 `readings` y sobreviven, así que sin el paso 4 queda puntuación sin sesiones
-detrás. El simulacro del paso 2 cuantifica todo eso antes de escribir. Las
-lecturas de la zona de práctica nunca se borran con este script: tienen su
-propio corpus (`LECTURAS_PRACTICA.json`).
+detrás. El simulacro del paso 2 cuantifica todo eso antes de escribir.
 
-### Migración a 4 tipologías y zona de práctica (una sola vez)
+`reset_players.py` opera por entorno (`--entorno NOMBRE`, por defecto el activo).
+Para generar datos de prueba, `seed_entorno_prueba.py` crea el entorno «Pruebas»
+con 50 estudiantes (los 10 últimos con progreso variado coherente); sustituye a
+los antiguos `seed_users.py`, `seed_30_users.py`, `clean_30_students.py` y `clean_50_students.py`.
 
-Retira Instructivo de la progresión (borra sus lecturas, sesiones, notas y
-puntajes) y carga las lecturas de práctica. **Borra datos reales del piloto**: el
-simulacro enseña exactamente qué y de quién antes de escribir nada.
+### Retirada de la zona de práctica (Beta 2.1)
 
-El orden importa. La API nueva lee la columna `is_practice` y, si arranca antes
-de que exista, falla con "column does not exist". La API vieja, en cambio,
-tolera la columna. Por eso las columnas van primero:
+La API la aplica sola al arrancar (`esquema.quitar_practica`): borra las
+lecturas y sesiones de práctica (con sus respuestas, herramientas, notas y
+lecturas en curso) y las columnas `is_practice`. **El historial de práctica de los
+alumnos no se puede recuperar** sin la copia previa, así que antes de desplegar:
 
 ```bash
-# 1. copia previa (obligatoria) y copia a local
 ssh vw '/opt/vw/infra/backup.sh'
 bash Docker/infra/pull-backups.sh
-# 2. columnas nuevas, con la API vieja todavía en marcha
-ssh vw 'docker exec -i vw-db-1 sh -c "psql -v ON_ERROR_STOP=1 -U \$POSTGRES_USER -d \$POSTGRES_DB"' \
-  < Docker/api/sql/009_practice_mode.sql
-# 3. API nueva (tras mergear a main y pushear)
-bash Docker/infra/push.sh code
-# 4. simulacro: revisar con calma quién pierde puntos y qué se borra
-ssh vw 'docker exec vw-api-1 python migrate_practice_mode.py'
-# 5. aplicar
-ssh vw 'docker exec vw-api-1 python migrate_practice_mode.py --apply'
-# 6. juego nuevo (exportado desde la rama que se despliega)
-bash Docker/infra/push.sh web
 ```
 
-Entre los pasos 5 y 6, un cliente viejo que entre en la estación Instructivo
-recibe "sin lecturas": haz el 6 justo después. No hay routers nuevos (solo
-parámetros), así que la lista blanca de nginx no cambia.
+Antes de la Beta 2.1, la práctica se creó con `migrate_practice_mode.py` y
+`009_practice_mode.sql`, que ya no existen (ver el historial de git).
 
 ### Tipologías aprobadas, fuentes y sonido (una sola vez)
 

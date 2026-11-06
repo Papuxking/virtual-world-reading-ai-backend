@@ -3,9 +3,10 @@ models.py — Modelos SQLAlchemy para la base de datos de lecturas
 Incluye modelos de lecturas, preguntas, respuestas, usuarios y progreso.
 """
 from sqlalchemy import (
-    Column, Integer, SmallInteger, String, Text, DateTime, Boolean,
-    UniqueConstraint, ForeignKey, false,
+    Column, Integer, SmallInteger, Float, String, Text, DateTime, Boolean,
+    UniqueConstraint, CheckConstraint, ForeignKey, Index, text,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -26,9 +27,6 @@ class Reading(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     external_id = Column(Integer, nullable=True, index=True)
-    # Lecturas exclusivas de la zona de práctica: el juego nunca las ofrece en
-    # la progresión, y en la práctica solo ofrece estas.
-    is_practice = Column(Boolean, nullable=False, default=False, server_default=false())
 
     # Relación 1:N con preguntas
     questions = relationship(
@@ -111,12 +109,42 @@ class UserReading(Base):
 
 # ── Modelo de Usuarios ──────────────────────────────────────────────────────
 
+class Workspace(Base):
+    """Entorno de trabajo: agrupa las cuentas de jugador y todo lo que generan.
+    Como mucho uno está activo, y solo sus jugadores entran al juego."""
+    __tablename__ = "workspaces"
+    __table_args__ = (
+        Index("ux_workspaces_un_activo", "is_active", unique=True, postgresql_where=text("is_active")),
+    )
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(40), nullable=False)
+    color = Column(String(7), nullable=False)
+    is_active = Column(Boolean, nullable=False, default=False, server_default=text("false"))
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Las cuentas las borra la base en cascada al borrar el entorno.
+    users = relationship("User", back_populates="workspace", passive_deletes=True)
+
+
+# Nombre único sin distinguir mayúsculas.
+Index("ux_workspaces_nombre", func.lower(Workspace.name), unique=True)
+
+
 class User(Base):
-    """Modelo ORM para la tabla 'users'."""
+    """Modelo ORM para la tabla 'users'. Los jugadores son de un entorno; los
+    administradores (y las cuentas de antes de los entornos) no tienen."""
     __tablename__ = "users"
+    __table_args__ = (
+        Index("ix_users_email_login", "email"),
+        # El mismo correo puede estar en varios entornos, una vez en cada uno.
+        Index("ux_users_workspace_email", "workspace_id", "email",
+              unique=True, postgresql_nulls_not_distinct=True),
+    )
 
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String(255), unique=True, nullable=False, index=True)
+    workspace_id = Column(Integer, ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=True, index=True)
+    email = Column(String(255), nullable=False)
     hashed_password = Column(String(255), nullable=False)
     display_name = Column(String(100), nullable=False)
     character = Column(String(10), default="male")
@@ -128,6 +156,7 @@ class User(Base):
     last_login_at = Column(DateTime(timezone=True), nullable=True)
 
     # Relaciones
+    workspace = relationship("Workspace", back_populates="users")
     slots = relationship("PlayerSlot", back_populates="user", cascade="all, delete-orphan", foreign_keys="[PlayerSlot.user_id]")
     sessions = relationship("PlayerSession", back_populates="user", cascade="all, delete-orphan")
     achievements = relationship("PlayerAchievement", back_populates="user", cascade="all, delete-orphan")
@@ -145,6 +174,8 @@ class PlayerSlot(Base):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     slot_number = Column(SmallInteger, nullable=False)
     label = Column(String(50), default="Sesión 1")
+    alias = Column(String(40), nullable=True)
+    vitrina = Column(JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb"))
     is_active = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
@@ -227,9 +258,6 @@ class PlayerSession(Base):
     correct_count = Column(Integer, nullable=False, default=0)
     incorrect_count = Column(Integer, nullable=False, default=0)
     tool_bonus = Column(Integer, nullable=False, default=0)
-    # Sesión de la zona de práctica: se guarda para el docente, pero no cuenta
-    # en puntaje, desbloqueos, logros, ranking ni métricas.
-    is_practice = Column(Boolean, nullable=False, default=False, server_default=false())
     started_at = Column(DateTime(timezone=True), server_default=func.now())
     completed_at = Column(DateTime(timezone=True), server_default=func.now())
 
@@ -239,6 +267,20 @@ class PlayerSession(Base):
     reading = relationship("Reading", back_populates="player_sessions")
     answers = relationship("PlayerAnswer", back_populates="session", cascade="all, delete-orphan")
     tools = relationship("SessionTool", back_populates="session", cascade="all, delete-orphan")
+
+
+class GameAttempt(Base):
+    """Preguntas asignadas y elecciones confirmadas por el servidor."""
+    __tablename__ = "game_attempts"
+    id = Column(String(36), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
+    reading_id = Column(Integer, ForeignKey("readings.id", ondelete="CASCADE"), nullable=False)
+    question_ids = Column(JSONB, nullable=False)
+    results = Column(JSONB, nullable=False, default=list)
+    session_id = Column(Integer, ForeignKey("player_sessions.id", ondelete="SET NULL"), nullable=True)
+    finalized = Column(Boolean, nullable=False, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 
 class PlayerAnswer(Base):
@@ -358,6 +400,10 @@ class NpcInteraction(Base):
     npc_type = Column(String(30), nullable=False)  # "robot" o "sabio"
     session_id = Column(Integer, ForeignKey("player_sessions.id", ondelete="SET NULL"), nullable=True)
     reading_id = Column(Integer, ForeignKey("readings.id", ondelete="SET NULL"), nullable=True)
+    # Lo que preguntó el jugador y lo que respondió el tutor (migración 012).
+    # NULL en las interacciones de antes, que solo se contaban.
+    user_message = Column(Text, nullable=True)
+    assistant_reply = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relaciones
@@ -401,4 +447,109 @@ class ActiveReading(Base):
 
     __table_args__ = (
         UniqueConstraint("user_id", "slot_id", name="uq_user_slot_active_reading"),
+    )
+
+
+class ComicProgress(Base):
+    """Progreso de un jugador en un episodio de la zona de cómics.
+    Una fila por jugador, slot y episodio (UNIQUE constraint)."""
+    __tablename__ = "comic_progress"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
+    episode_id = Column(String(20), nullable=False)
+    last_page = Column(Integer, nullable=False, default=0)
+    finished = Column(Boolean, nullable=False, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+    # Relaciones
+    user = relationship("User")
+    slot = relationship("PlayerSlot")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "slot_id", "episode_id", name="uq_user_slot_comic_episode"),
+    )
+
+
+class ComicZoneVisit(Base):
+    """Visitas de un jugador a la sala de cómics. Una fila por jugador y slot
+    (UNIQUE constraint) que cuenta las entradas y guarda la primera y la última."""
+    __tablename__ = "comic_zone_visits"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
+    visits = Column(Integer, nullable=False, default=1)
+    first_visit_at = Column(DateTime(timezone=True), server_default=func.now())
+    last_visit_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    # Relaciones
+    user = relationship("User")
+    slot = relationship("PlayerSlot")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "slot_id", name="uq_user_slot_comic_zone_visit"),
+    )
+
+
+class TechnologySurveyResponse(Base):
+    """Respuesta inmutable SUS + TAM que habilita los cómics.
+
+    Se conserva por slot tanto el dato crudo como los puntajes derivados para
+    que el instrumento siga siendo auditable y los agregados sean baratos.
+    """
+    __tablename__ = "technology_survey_responses"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    slot_id = Column(Integer, ForeignKey("player_slots.id", ondelete="CASCADE"), nullable=False, index=True)
+    instrument_version = Column(String(40), nullable=False, default="sus10_tam12_v1")
+
+    sus_1 = Column(SmallInteger, nullable=False)
+    sus_2 = Column(SmallInteger, nullable=False)
+    sus_3 = Column(SmallInteger, nullable=False)
+    sus_4 = Column(SmallInteger, nullable=False)
+    sus_5 = Column(SmallInteger, nullable=False)
+    sus_6 = Column(SmallInteger, nullable=False)
+    sus_7 = Column(SmallInteger, nullable=False)
+    sus_8 = Column(SmallInteger, nullable=False)
+    sus_9 = Column(SmallInteger, nullable=False)
+    sus_10 = Column(SmallInteger, nullable=False)
+    tam_pu_1 = Column(SmallInteger, nullable=False)
+    tam_pu_2 = Column(SmallInteger, nullable=False)
+    tam_pu_3 = Column(SmallInteger, nullable=False)
+    tam_pu_4 = Column(SmallInteger, nullable=False)
+    tam_pu_5 = Column(SmallInteger, nullable=False)
+    tam_pu_6 = Column(SmallInteger, nullable=False)
+    tam_peou_1 = Column(SmallInteger, nullable=False)
+    tam_peou_2 = Column(SmallInteger, nullable=False)
+    tam_peou_3 = Column(SmallInteger, nullable=False)
+    tam_peou_4 = Column(SmallInteger, nullable=False)
+    tam_peou_5 = Column(SmallInteger, nullable=False)
+    tam_peou_6 = Column(SmallInteger, nullable=False)
+
+    sus_score = Column(Float, nullable=False)
+    tam_usefulness_score = Column(Float, nullable=False)
+    tam_ease_score = Column(Float, nullable=False)
+    submitted_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    user = relationship("User")
+    slot = relationship("PlayerSlot")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "slot_id", name="uq_user_slot_technology_survey"),
+        *(
+            CheckConstraint(f"sus_{i} BETWEEN 1 AND 5", name=f"ck_survey_sus_{i}")
+            for i in range(1, 11)
+        ),
+        *(
+            CheckConstraint(f"tam_pu_{i} BETWEEN 1 AND 7", name=f"ck_survey_tam_pu_{i}")
+            for i in range(1, 7)
+        ),
+        *(
+            CheckConstraint(f"tam_peou_{i} BETWEEN 1 AND 7", name=f"ck_survey_tam_peou_{i}")
+            for i in range(1, 7)
+        ),
     )

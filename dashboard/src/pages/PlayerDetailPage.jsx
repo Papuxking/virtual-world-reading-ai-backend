@@ -4,29 +4,25 @@ import {
   getPlayerDetail, resetTypology, resetAllProgress,
   getPlayerSlots, createPlayerSlot, activatePlayerSlot,
   resetPlayerPassword, getAchievementsCatalog,
-  uploadMedalImage, deleteMedalImage
+  uploadMedalImage, deleteMedalImage, getComicsJugadores
 } from '../services/api';
 import SessionList from '../components/SessionList';
+import AssistantConversation from '../components/AssistantConversation';
 import { TYPOLOGY_ORDER } from '../constants/typologies';
 import {
   ArrowLeft, Star, Trophy, BookOpen, Target, CheckCircle2,
   Lock, Unlock, RotateCcw, AlertTriangle, StickyNote,
   Highlighter, Underline, PenTool, ChevronDown, ChevronUp, Award,
-  Key, Plus, Copy, Check, Trash2, ShieldAlert, Sparkles, Upload, X,
+  Key, Plus, BookImage, Copy, Check, Trash2, ShieldAlert, Upload, X,
 } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
-
-// Grupo de las lecturas de la zona de práctica en el panel de notas.
-const PRACTICE_GROUP = 'Práctica';
-const NOTES_GROUPS = [...TYPOLOGY_ORDER, PRACTICE_GROUP];
 
 const DIFFICULTY_COLORS = {
   Narrativo: { bg: 'bg-indigo-50 dark:bg-indigo-500/10', text: 'text-indigo-600 dark:text-indigo-400', border: 'border-indigo-100 dark:border-indigo-500/20', bar: 'bg-indigo-500' },
   Descriptivo: { bg: 'bg-violet-50 dark:bg-violet-500/10', text: 'text-violet-600 dark:text-violet-400', border: 'border-violet-100 dark:border-violet-500/20', bar: 'bg-violet-500' },
   Argumentativo: { bg: 'bg-purple-50 dark:bg-purple-500/10', text: 'text-purple-600 dark:text-purple-400', border: 'border-purple-100 dark:border-purple-500/20', bar: 'bg-purple-500' },
   Expositivo: { bg: 'bg-pink-50 dark:bg-pink-500/10', text: 'text-pink-600 dark:text-pink-400', border: 'border-pink-100 dark:border-pink-500/20', bar: 'bg-pink-500' },
-  [PRACTICE_GROUP]: { bg: 'bg-emerald-50 dark:bg-emerald-500/10', text: 'text-emerald-600 dark:text-emerald-400', border: 'border-emerald-100 dark:border-emerald-500/20', bar: 'bg-emerald-500' },
 };
 
 const TIER_COLORS = {
@@ -67,6 +63,24 @@ const TIER_COLORS = {
 const TOOL_ICONS = { highlight: Highlighter, underline: Underline, notes: PenTool };
 const TOOL_LABELS = { highlight: 'Resaltar', underline: 'Subrayar', notes: 'Notas' };
 
+// Cómo se presenta cada tipo de apunte. El juego guarda lo resaltado como
+// 'annotation' y lo subrayado como 'margin_note'; sin esto el panel
+// mostraba esas claves en crudo y no se distinguían entre sí.
+const NOTE_STYLES = {
+  annotation: {
+    label: 'Resaltado',
+    badge: 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-500/20 dark:text-yellow-300 dark:border-yellow-500/20',
+  },
+  margin_note: {
+    label: 'Subrayado',
+    badge: 'bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-500/20 dark:text-sky-300 dark:border-sky-500/20',
+  },
+  default: {
+    label: 'Nota',
+    badge: 'bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 border-primary-100 dark:border-primary-500/20',
+  },
+};
+
 export default function PlayerDetailPage() {
   const { playerId } = useParams();
   const navigate = useNavigate();
@@ -101,9 +115,30 @@ export default function PlayerDetailPage() {
   const [countdown, setCountdown] = useState(10);
   const [canDelete, setCanDelete] = useState(false);
 
+  function openResetModal(details) {
+    setCountdown(10);
+    setCanDelete(false);
+    setAgreed(false);
+    setResetModal(details);
+  }
+
   // Notes view filtering
   const [selectedNotesTypology, setSelectedNotesTypology] = useState('Narrativo');
   const [selectedReadingId, setSelectedReadingId] = useState(null);
+
+  // Cómics: la lista ya viene acotada al entorno; se filtra aquí por alumno.
+  // { id, fila, error }: fila es null si no entró; error es true si no se pudo preguntar.
+  const [comics, setComics] = useState(null);
+
+  useEffect(() => {
+    let vivo = true;
+    getComicsJugadores()
+      .then((lista) => {
+        if (vivo) setComics({ id: playerId, fila: lista.find((j) => String(j.player_id) === String(playerId)) || null, error: false });
+      })
+      .catch(() => { if (vivo) setComics({ id: playerId, fila: null, error: true }); });
+    return () => { vivo = false; };
+  }, [playerId]);
 
   useEffect(() => {
     loadData();
@@ -113,8 +148,6 @@ export default function PlayerDetailPage() {
   useEffect(() => {
     let timer;
     if (resetModal && agreed) {
-      setCountdown(10);
-      setCanDelete(false);
       timer = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
@@ -125,9 +158,6 @@ export default function PlayerDetailPage() {
           return prev - 1;
         });
       }, 1000);
-    } else {
-      setCountdown(10);
-      setCanDelete(false);
     }
     return () => clearInterval(timer);
   }, [resetModal, agreed]);
@@ -277,7 +307,8 @@ export default function PlayerDetailPage() {
     );
   }
 
-  const { user, total_score, active_slot_number, active_slot_label, typology_progress, achievements, sessions, practice_sessions, notes, tool_stats, level_stats, score_rules, game_over } = data;
+  const { user, total_score, active_slot_label, typology_progress, achievements, sessions, notes, tool_stats, level_stats, score_rules, game_over } = data;
+  const medals = data.medals || [];
   const unlockedAchievementIds = achievements.map((a) => a.achievement_id);
 
   // Filtrar catálogo de logros
@@ -286,15 +317,14 @@ export default function PlayerDetailPage() {
     return achievement.category === selectedCategory;
   });
 
-  // Lecturas que ha abierto el estudiante, agrupadas por tipología. Las de la
-  // zona de práctica van en su propio grupo.
-  const presentedReadingsByTypology = NOTES_GROUPS.reduce((acc, group) => {
-    const isPractice = group === PRACTICE_GROUP;
-    const fromSessions = (isPractice ? practice_sessions : sessions.filter((s) => s.typology === group))
+  // Lecturas que ha abierto el estudiante, agrupadas por tipología.
+  const presentedReadingsByTypology = TYPOLOGY_ORDER.reduce((acc, group) => {
+    const fromSessions = sessions
+      .filter((s) => s.typology === group)
       .map((s) => ({ id: s.reading_id, title: s.reading_title }));
 
     const fromNotes = notes
-      .filter((n) => (isPractice ? n.reading_is_practice : !n.reading_is_practice && n.reading_typology === group))
+      .filter((n) => n.reading_typology === group)
       .map((n) => ({ id: n.reading_id, title: n.reading_title }));
 
     const merged = [...fromSessions, ...fromNotes];
@@ -513,7 +543,7 @@ export default function PlayerDetailPage() {
                     </span>
                     {progress?.is_unlocked && progress?.total_sessions > 0 && (
                       <button
-                        onClick={() => setResetModal({ type: 'typology', typology })}
+                        onClick={() => openResetModal({ type: 'typology', typology })}
                         className="text-xs text-slate-400 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors flex items-center gap-1 font-semibold"
                         title="Reiniciar esta tipología y las superiores"
                       >
@@ -557,31 +587,7 @@ export default function PlayerDetailPage() {
             </div>
           </div>
 
-          {/* Practice */}
-          <div className="glass-card p-6">
-            <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-1 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
-              Práctica ({active_slot_label})
-            </h3>
-            <p className="text-xs text-slate-400 dark:text-gray-400 mb-4">
-              Lecturas de la zona de práctica. No cuentan para el puntaje, los desbloqueos, los logros ni las métricas.
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-              {TYPOLOGY_ORDER.map((typology) => {
-                const colors = DIFFICULTY_COLORS[typology];
-                const count = practice_sessions.filter((s) => s.typology === typology).length;
-                return (
-                  <div key={typology} className={`p-2 rounded-lg border text-center ${colors.border} ${colors.bg}`}>
-                    <p className={`text-lg font-extrabold ${colors.text}`}>{count}</p>
-                    <p className="text-[10px] font-semibold text-slate-500 dark:text-gray-400">{typology}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
-              <SessionList sessions={practice_sessions} emptyText="Todavía no ha usado la zona de práctica" />
-            </div>
-          </div>
+          <AssistantConversation key={playerId} playerId={playerId} />
         </div>
 
         {/* Right column */}
@@ -624,7 +630,6 @@ export default function PlayerDetailPage() {
                 {filteredCatalog.map((achievement) => {
                   const unlocked = unlockedAchievementIds.includes(achievement.id);
                   const unlockRecord = achievements.find((a) => a.achievement_id === achievement.id);
-                  const tierStyles = TIER_COLORS[achievement.medal_tier] || TIER_COLORS.bronce;
 
                   return (
                     <div
@@ -636,7 +641,35 @@ export default function PlayerDetailPage() {
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <span className="text-xl flex-shrink-0">{achievement.icon}</span>
+                        <div className="relative w-9 h-9 flex-shrink-0 flex items-center justify-center group">
+                          <img
+                            src={API_BASE + (achievement.medal_image_path || '/static/medals/defecto/' + achievement.id + '.png')}
+                            alt={achievement.name}
+                            className="w-9 h-9 object-contain rounded-lg"
+                            style={{ imageRendering: 'pixelated' }}
+                            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }}
+                          />
+                          <span className="text-xl" style={{ display: 'none' }}>{achievement.icon}</span>
+                          {achievement.medal_image_path ? (
+                            <button
+                              onClick={() => handleDeleteMedal(achievement.id)}
+                              className="absolute -top-1 -right-1 p-0.5 bg-red-100 hover:bg-red-200 dark:bg-red-950/80 dark:hover:bg-red-900 rounded-full border border-red-300 dark:border-red-500/40 text-red-600 dark:text-red-400 shadow-sm opacity-0 group-hover:opacity-100"
+                              title="Borrar la insignia del logro"
+                            >
+                              <X className="w-2.5 h-2.5" />
+                            </button>
+                          ) : (
+                            <label className="absolute -bottom-1 -right-1 p-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-full shadow-sm cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 opacity-0 group-hover:opacity-100" title="Subir insignia del logro (PNG 256x256)">
+                              <Upload className="w-2.5 h-2.5" />
+                              <input
+                                type="file"
+                                accept=".png"
+                                className="hidden"
+                                onChange={(e) => handleUploadMedal(achievement.id, e.target.files[0])}
+                              />
+                            </label>
+                          )}
+                        </div>
                         <div className="min-w-0">
                           <h4 className={`text-xs font-bold truncate ${unlocked ? 'text-slate-800 dark:text-white' : 'text-slate-500 dark:text-gray-400'}`}>
                             {achievement.name}
@@ -647,7 +680,7 @@ export default function PlayerDetailPage() {
                         </div>
                       </div>
                       
-                      <div className="flex-shrink-0 text-right">
+                      <div className="text-right max-w-[45%]">
                         {unlocked ? (
                           <div className="flex flex-col items-end">
                             <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
@@ -670,88 +703,105 @@ export default function PlayerDetailPage() {
             )}
           </div>
 
-          {/* Medals (Medallas Coleccionadas) */}
+          {/* Medallas por desempeño (medallas.py en la API) */}
           <div className="glass-card p-6">
             <div className="mb-4">
               <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
                 <Award className="w-5 h-5 text-primary-500 dark:text-primary-400" />
-                Medallas Coleccionadas ({active_slot_label})
+                Medallas ({active_slot_label})
               </h3>
               <p className="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
-                Coleccionadas: <span className="font-extrabold text-primary-500 dark:text-primary-400">{achievements.length}/10</span> cromos/medallas
+                Ganadas: <span className="font-extrabold text-primary-500 dark:text-primary-400">{medals.filter((m) => m.is_unlocked).length}/{medals.length}</span>
+                {' '}· oro al primer intento, plata al segundo, bronce después
               </p>
             </div>
 
-            {catalogLoading ? (
-              <div className="py-8 text-center text-xs text-slate-400 animate-pulse">Cargando medallas...</div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-h-[350px] overflow-y-auto pr-1">
-                {catalog.map((achievement) => {
-                  const unlocked = unlockedAchievementIds.includes(achievement.id);
-                  const tierStyles = TIER_COLORS[achievement.medal_tier] || TIER_COLORS.bronce;
-
-                  return (
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {medals.map((medal) => {
+                const tierStyles = TIER_COLORS[medal.tier] || TIER_COLORS.bronce;
+                return (
+                  <div
+                    key={medal.id}
+                    className={`p-3 rounded-xl border flex flex-col items-center text-center ${
+                      medal.is_unlocked
+                        ? `${tierStyles.bg} ${tierStyles.border} shadow-sm`
+                        : 'bg-slate-100/[0.4] dark:bg-white/[0.01] border-slate-200/60 dark:border-white/5 opacity-50 grayscale'
+                    }`}
+                    title={medal.is_unlocked ? medal.description : medal.how_to_unlock}
+                  >
                     <div
-                      key={achievement.id}
-                      className={`p-3 rounded-xl border transition-all flex flex-col items-center justify-between text-center relative group ${
-                        unlocked
-                          ? `${tierStyles.bg} ${tierStyles.border} shadow-sm shadow-emerald-500/5`
-                          : 'bg-slate-100/[0.4] dark:bg-white/[0.01] border-slate-200/60 dark:border-white/5 opacity-40 grayscale'
+                      className={`w-14 h-14 mb-2 rounded-full flex items-center justify-center shadow-sm ${
+                        medal.is_unlocked ? `ring-4 ${tierStyles.ring}` : 'border border-dashed border-slate-300 dark:border-gray-700 bg-slate-100 dark:bg-white/5'
                       }`}
-                      title={unlocked ? `${achievement.medal_name} (${achievement.medal_tier})` : 'Medalla Bloqueada'}
+                      style={medal.is_unlocked ? { backgroundColor: tierStyles.medalBg.replace('bg-[', '').replace(']', '') } : undefined}
                     >
-                      {/* Medalla Image or Fallback */}
-                      <div className="relative w-16 h-16 mb-2 flex items-center justify-center">
-                        {achievement.medal_image_path ? (
-                          <div className="w-16 h-16 rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-sm relative bg-white dark:bg-slate-900 flex items-center justify-center">
-                            <img
-                              src={`${API_BASE}${achievement.medal_image_path}`}
-                              alt={achievement.medal_name}
-                              className="w-full h-full object-contain"
-                            />
-                            {/* Delete custom image */}
-                            <button
-                              onClick={() => handleDeleteMedal(achievement.id)}
-                              className="absolute -top-1 -right-1 p-0.5 bg-red-100 hover:bg-red-200 dark:bg-red-950/80 dark:hover:bg-red-900 rounded-full border border-red-300 dark:border-red-500/40 text-red-600 dark:text-red-400 shadow-sm transition-opacity opacity-0 group-hover:opacity-100"
-                              title="Borrar imagen personalizada"
-                            >
-                              <X className="w-2.5 h-2.5" />
-                            </button>
-                          </div>
-                        ) : (
-                          <div className={`w-16 h-16 rounded-xl flex flex-col items-center justify-center border border-dashed shadow-sm relative overflow-hidden ${
-                            unlocked ? 'border-white/60' : 'border-slate-300 dark:border-gray-700 bg-slate-100 dark:bg-white/5'
-                          }`} style={unlocked ? { backgroundColor: tierStyles.medalBg.replace('bg-[', '').replace(']', '') } : undefined}>
-                            <span className="text-2xl filter drop-shadow-sm">{unlocked ? achievement.icon : '?'}</span>
-                            <span className={`text-[6px] font-extrabold uppercase tracking-wider absolute bottom-0.5 ${unlocked ? 'text-slate-800' : 'text-slate-400 dark:text-gray-400'}`}>
-                              {achievement.medal_tier}
-                            </span>
-                            {/* Admin Upload file input */}
-                            <label className="absolute -bottom-1 -right-1 p-0.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/10 rounded-full shadow-sm cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 opacity-0 group-hover:opacity-100" title="Subir medalla manual (PNG 256x256)">
-                              <Upload className="w-2.5 h-2.5" />
-                              <input
-                                type="file"
-                                accept=".png"
-                                className="hidden"
-                                onChange={(e) => handleUploadMedal(achievement.id, e.target.files[0])}
-                              />
-                            </label>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Medal Text */}
-                      <div className="leading-tight">
-                        <h4 className="text-[10px] font-extrabold text-slate-700 dark:text-gray-200 truncate max-w-[90px]">
-                          {unlocked ? achievement.medal_name : '???'}
-                        </h4>
-                        <span className={`px-1.5 py-0.2 rounded text-[6px] font-extrabold uppercase tracking-wider block mt-1 ${tierStyles.badge}`}>
-                          {achievement.medal_tier}
-                        </span>
-                      </div>
+                      {medal.is_unlocked ? (
+                        <>
+                          {/* 32 px nativos: la insignia es pixel art y a otro
+                              tamano el navegador la emborrona. El metal lo
+                              sigue poniendo el aro de color de alrededor. */}
+                          <img
+                            src={API_BASE + (medal.imagen || '/static/medals/defecto/' + medal.id + '.png')}
+                            alt={medal.name}
+                            className="w-8 h-8 object-contain drop-shadow-sm"
+                            style={{ imageRendering: 'pixelated' }}
+                            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline'; }}
+                          />
+                          <span className="text-2xl drop-shadow-sm" style={{ display: 'none' }}>{medal.emoji}</span>
+                        </>
+                      ) : (
+                        <span className="text-2xl drop-shadow-sm">?</span>
+                      )}
                     </div>
-                  );
-                })}
+                    <h4 className="text-[11px] font-extrabold text-slate-700 dark:text-gray-200 leading-tight">{medal.name}</h4>
+                    {medal.is_unlocked ? (
+                      <>
+                        <span className={`px-1.5 rounded text-[8px] font-extrabold uppercase tracking-wider mt-1 ${tierStyles.badge}`}>
+                          {medal.tier}
+                        </span>
+                        {medal.attempts && (
+                          <span className="text-[9px] text-slate-500 dark:text-gray-400 mt-0.5">
+                            {medal.attempts === 1 ? 'al primer intento' : `en ${medal.attempts} intentos`}
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <span className="text-[9px] text-slate-400 dark:text-gray-400 mt-1">{medal.typology || 'Recorrido completo'}</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Zona de cómics */}
+          <div className="glass-card p-6">
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+              <BookImage className="w-4 h-4 text-rose-500 dark:text-rose-400" />
+              Zona de cómics
+            </h3>
+            {comics?.id !== playerId ? (
+              <p className="text-sm text-slate-400 dark:text-gray-400">Cargando…</p>
+            ) : comics.error ? (
+              <p className="text-sm text-red-500 dark:text-red-400">No se pudo consultar la zona de cómics.</p>
+            ) : comics.fila === null ? (
+              <p className="text-sm text-slate-400 dark:text-gray-400">No ha entrado en la zona de cómics.</p>
+            ) : (
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div>
+                  <p className="text-xl font-extrabold text-slate-800 dark:text-white">{comics.fila.episodios_terminados ?? 0}</p>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-gray-400">Episodios terminados</p>
+                </div>
+                <div>
+                  <p className="text-xl font-extrabold text-slate-800 dark:text-white">{comics.fila.paginas_leidas ?? 0}</p>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-gray-400">Páginas leídas</p>
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-800 dark:text-white pt-1.5">
+                    {comics.fila.ultima_visita ? new Date(comics.fila.ultima_visita).toLocaleDateString('es-EC') : '—'}
+                  </p>
+                  <p className="text-xs font-semibold text-slate-400 dark:text-gray-400 pt-1">Última visita</p>
+                </div>
               </div>
             )}
           </div>
@@ -795,7 +845,7 @@ export default function PlayerDetailPage() {
 
             {/* Selector de Tipologías */}
             <div className="flex flex-wrap gap-1.5 mb-4">
-              {NOTES_GROUPS.map((typology) => {
+              {TYPOLOGY_ORDER.map((typology) => {
                 const colors = DIFFICULTY_COLORS[typology];
                 const isSelected = selectedNotesTypology === typology;
                 const readingsForTypo = presentedReadingsByTypology[typology] || [];
@@ -832,12 +882,8 @@ export default function PlayerDetailPage() {
                 <BookOpen className="w-8 h-8 text-slate-300 dark:text-gray-600 mb-2" />
                 <p className="text-xs font-bold text-slate-500 dark:text-gray-400">Sin lecturas presentadas</p>
                 <p className="text-[10px] text-slate-400 dark:text-gray-400 max-w-[200px] mt-1 leading-normal">
-                  El estudiante aún no ha abierto ninguna lectura{' '}
-                  {selectedNotesTypology === PRACTICE_GROUP ? (
-                    'de práctica'
-                  ) : (
-                    <>de la tipología <span className="font-semibold text-slate-500 dark:text-gray-400">{selectedNotesTypology}</span></>
-                  )}{' '}
+                  El estudiante aún no ha abierto ninguna lectura de la tipología{' '}
+                  <span className="font-semibold text-slate-500 dark:text-gray-400">{selectedNotesTypology}</span>{' '}
                   en este slot.
                 </p>
               </div>
@@ -891,21 +937,34 @@ export default function PlayerDetailPage() {
                               </p>
                             </div>
                           ) : (
-                            readingNotes.map((note) => (
-                              <div key={note.id} className="p-2.5 bg-white dark:bg-white/5 rounded-lg border border-slate-100 dark:border-white/5 shadow-sm">
-                                <div className="flex items-center justify-between gap-2 mb-1.5">
-                                  <span className="px-1.5 py-0.5 rounded text-[8px] font-extrabold bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 border border-primary-100 dark:border-primary-500/20">
-                                    {note.note_type}
-                                  </span>
-                                  <span className="text-[9px] text-slate-400 dark:text-gray-400 font-semibold">
-                                    {note.created_at ? new Date(note.created_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}
-                                  </span>
+                            readingNotes.map((note) => {
+                              const marca = NOTE_STYLES[note.note_type] ?? NOTE_STYLES.default;
+                              return (
+                                <div key={note.id} className="p-2.5 bg-white dark:bg-white/5 rounded-lg border border-slate-100 dark:border-white/5 shadow-sm">
+                                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                                    <span className={`px-1.5 py-0.5 rounded text-[8px] font-extrabold border ${marca.badge}`}>
+                                      {marca.label}
+                                    </span>
+                                    <span className="text-[9px] text-slate-400 dark:text-gray-400 font-semibold">
+                                      {note.created_at ? new Date(note.created_at).toLocaleDateString('es-EC', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : ''}
+                                    </span>
+                                  </div>
+                                  <p className="text-xs text-slate-600 dark:text-gray-300 leading-relaxed font-semibold whitespace-pre-wrap">
+                                    {note.note_type === 'annotation' ? (
+                                      <mark className="bg-yellow-200 dark:bg-yellow-500/40 text-slate-800 dark:text-yellow-50 rounded px-0.5">
+                                        {note.note_content}
+                                      </mark>
+                                    ) : note.note_type === 'margin_note' ? (
+                                      <span className="underline decoration-sky-500 decoration-2 underline-offset-2">
+                                        {note.note_content}
+                                      </span>
+                                    ) : (
+                                      note.note_content
+                                    )}
+                                  </p>
                                 </div>
-                                <p className="text-xs text-slate-600 dark:text-gray-300 leading-relaxed font-semibold whitespace-pre-wrap">
-                                  {note.note_content}
-                                </p>
-                              </div>
-                            ))
+                              );
+                            })
                           )}
                         </div>
                       )}
@@ -932,7 +991,7 @@ export default function PlayerDetailPage() {
           </div>
           <div className="flex gap-2">
             <button
-              onClick={() => setResetModal({ type: 'all' })}
+              onClick={() => openResetModal({ type: 'all' })}
               className="btn-danger text-xs py-2 px-4 inline-flex items-center gap-1"
             >
               <Trash2 className="w-3.5 h-3.5" />
@@ -1071,7 +1130,7 @@ export default function PlayerDetailPage() {
               <input
                 type="checkbox"
                 checked={agreed}
-                onChange={(e) => setAgreed(e.target.checked)}
+                onChange={(e) => { setCountdown(10); setCanDelete(false); setAgreed(e.target.checked); }}
                 className="mt-1 rounded text-red-600 focus:ring-red-500 border-slate-300"
               />
               <span className="text-xs font-bold text-slate-700 dark:text-gray-300 leading-normal">

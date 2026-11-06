@@ -1,5 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import process from 'node:process'
+
+const apiTarget = process.env.VITE_API_PROXY_TARGET || 'http://api:8000';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -8,27 +11,35 @@ export default defineConfig({
   server: {
     proxy: {
       '/auth': {
-        target: 'http://api:8000',
+        target: apiTarget,
         changeOrigin: true,
       },
       '/admin': {
-        target: 'http://api:8000',
+        target: apiTarget,
         changeOrigin: true,
       },
       '/health': {
-        target: 'http://api:8000',
+        target: apiTarget,
         changeOrigin: true,
       },
       '/achievements': {
-        target: 'http://api:8000',
+        target: apiTarget,
         changeOrigin: true,
       },
       '/leaderboard': {
-        target: 'http://api:8000',
+        target: apiTarget,
+        changeOrigin: true,
+      },
+      '/comics': {
+        target: apiTarget,
+        changeOrigin: true,
+      },
+      '/evaluation': {
+        target: apiTarget,
         changeOrigin: true,
       },
       '/static': {
-        target: 'http://api:8000',
+        target: apiTarget,
         changeOrigin: true,
       },
     },

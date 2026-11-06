@@ -13,8 +13,7 @@ Sin imports a propósito: lo usan también scripts que corren fuera del
 contenedor (import_readings.py).
 """
 
-# Orden de dificultad de la progresión. Instructivo ya no forma parte del
-# juego: su escenario es ahora la zona de práctica.
+# Orden de dificultad de la progresión. Instructivo ya no forma parte del juego.
 DIFFICULTY_ORDER = ["Narrativo", "Descriptivo", "Argumentativo", "Expositivo"]
 
 # Puntaje mínimo en la tipología ANTERIOR para desbloquear cada una.

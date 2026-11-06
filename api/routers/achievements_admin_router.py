@@ -3,6 +3,8 @@ achievements_admin_router.py — Endpoints administrativos para el módulo de Lo
 Dashboard con filtros avanzados, detalle, historial de imágenes, exportación CSV/Excel.
 Todos los endpoints requieren rol de administrador.
 """
+
+from safe_exports import SafeWriter, SafeDictWriter, secure_workbook
 import csv
 import io
 import os
@@ -18,6 +20,7 @@ from sqlalchemy import func as sqlfunc, Integer, distinct
 from database import get_db
 from models import (
     User, PlayerAchievement, AchievementCatalog, MedalImageHistory, PlayerSlot,
+    Workspace,
 )
 from schemas import (
     AchievementDashboardItem, AchievementDetailResponse,
@@ -25,6 +28,7 @@ from schemas import (
     MedalImageHistoryResponse,
 )
 from auth import get_current_admin
+from workspaces import get_viewed_workspace, ids_jugadores
 
 router = APIRouter(prefix="/admin/achievements", tags=["Admin — Logros y Medallas"])
 
@@ -32,47 +36,28 @@ MEDALS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file
 MEDALS_HISTORY_DIR = os.path.join(MEDALS_DIR, "history")
 
 
-def resize_image_to_256(data: bytes) -> bytes:
-    """Redimensiona cualquier imagen a 256x256 píxeles en formato PNG.
-    Acepta PNG, JPEG, WebP, BMP y GIF.
-    Retorna los bytes de la imagen PNG redimensionada.
-    Lanza ValueError si los datos no son una imagen válida.
-    """
-    from PIL import Image
-    try:
-        img = Image.open(io.BytesIO(data))
-    except Exception:
-        raise ValueError("El archivo no es una imagen válida")
-
-    # Convertir a RGBA para mantener transparencia en PNG
-    if img.mode not in ("RGBA", "RGB"):
-        img = img.convert("RGBA")
-
-    # Redimensionar a 256x256 con alta calidad
-    img = img.resize((256, 256), Image.LANCZOS)
-
-    # Guardar como PNG en memoria
-    output = io.BytesIO()
-    img.save(output, format="PNG", optimize=True)
-    return output.getvalue()
+from safe_images import resize_image_to_256, read_bounded
+from starlette.concurrency import run_in_threadpool
 
 
-def _get_total_non_admin_players(db: Session) -> int:
-    """Retorna el número total de jugadores (no-admin) con al menos un slot activo."""
+def _get_total_non_admin_players(db: Session, workspace_id: int) -> int:
+    """Retorna el número de jugadores activos del entorno."""
     return (
         db.query(sqlfunc.count(distinct(User.id)))
-        .filter(User.is_admin == False, User.is_active == True)
+        .filter(User.is_admin == False, User.is_active == True, User.workspace_id == workspace_id)
         .scalar()
     ) or 1  # Evitar divisiones por cero
 
 
-def _get_unlock_counts(db: Session) -> dict:
-    """Retorna un dict {achievement_id: count} con el número de desbloqueos únicos por logro."""
+def _get_unlock_counts(db: Session, workspace_id: int) -> dict:
+    """Retorna un dict {achievement_id: count} con el número de desbloqueos
+    únicos por logro entre los jugadores del entorno."""
     rows = (
         db.query(
             PlayerAchievement.achievement_id,
             sqlfunc.count(distinct(PlayerAchievement.user_id)).label("count"),
         )
+        .filter(PlayerAchievement.user_id.in_(ids_jugadores(workspace_id)))
         .group_by(PlayerAchievement.achievement_id)
         .all()
     )
@@ -92,6 +77,7 @@ def list_achievements_dashboard(
     order: str = Query("asc", description="asc o desc"),
     include_inactive: bool = Query(False, description="Incluir logros inactivos"),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Lista todos los logros/medallas con filtros avanzados y estadísticas de desbloqueo."""
@@ -121,8 +107,8 @@ def list_achievements_dashboard(
     achievements = query.all()
 
     # Estadísticas de desbloqueo
-    total_players = _get_total_non_admin_players(db)
-    unlock_counts = _get_unlock_counts(db)
+    total_players = _get_total_non_admin_players(db, entorno.id)
+    unlock_counts = _get_unlock_counts(db, entorno.id)
 
     # Si hay filtro por jugador, obtener sus logros desbloqueados
     player_unlocks = {}
@@ -198,6 +184,7 @@ def list_achievements_dashboard(
 @router.get("/stats", response_model=AchievementStatsResponse)
 def get_achievements_stats(
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Retorna estadísticas globales de logros y medallas."""
@@ -207,13 +194,14 @@ def get_achievements_stats(
         .filter(AchievementCatalog.is_active == True)
         .scalar()
     ) or 0
-    total_unlocks = db.query(sqlfunc.count(PlayerAchievement.id)).scalar() or 0
+    del_entorno = PlayerAchievement.user_id.in_(ids_jugadores(entorno.id))
+    total_unlocks = db.query(sqlfunc.count(PlayerAchievement.id)).filter(del_entorno).scalar() or 0
     unique_players = (
-        db.query(sqlfunc.count(distinct(PlayerAchievement.user_id))).scalar()
+        db.query(sqlfunc.count(distinct(PlayerAchievement.user_id))).filter(del_entorno).scalar()
     ) or 0
 
-    total_players = _get_total_non_admin_players(db)
-    unlock_counts = _get_unlock_counts(db)
+    total_players = _get_total_non_admin_players(db, entorno.id)
+    unlock_counts = _get_unlock_counts(db, entorno.id)
 
     # % de desbloqueo promedio
     if total_active > 0 and total_players > 0:
@@ -275,6 +263,7 @@ def get_achievements_stats(
 def get_achievement_detail(
     achievement_id: str,
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Retorna el detalle completo de un logro/medalla."""
@@ -287,14 +276,14 @@ def get_achievement_detail(
     if not achievement:
         raise HTTPException(status_code=404, detail="Logro no encontrado")
 
-    total_players = _get_total_non_admin_players(db)
+    total_players = _get_total_non_admin_players(db, entorno.id)
 
     # Jugadores que poseen el logro
     player_achievements = (
         db.query(PlayerAchievement, User, PlayerSlot)
         .join(User, PlayerAchievement.user_id == User.id)
         .join(PlayerSlot, PlayerAchievement.slot_id == PlayerSlot.id)
-        .filter(PlayerAchievement.achievement_id == achievement_id)
+        .filter(PlayerAchievement.achievement_id == achievement_id, User.workspace_id == entorno.id)
         .order_by(PlayerAchievement.unlocked_at.desc())
         .all()
     )
@@ -369,6 +358,7 @@ def get_achievement_players(
     achievement_id: str,
     q: str = Query("", description="Buscar por nombre o email"),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Lista los jugadores que poseen un logro específico."""
@@ -380,7 +370,7 @@ def get_achievement_players(
         db.query(PlayerAchievement, User, PlayerSlot)
         .join(User, PlayerAchievement.user_id == User.id)
         .join(PlayerSlot, PlayerAchievement.slot_id == PlayerSlot.id)
-        .filter(PlayerAchievement.achievement_id == achievement_id)
+        .filter(PlayerAchievement.achievement_id == achievement_id, User.workspace_id == entorno.id)
     )
 
     if q:
@@ -467,14 +457,14 @@ async def upload_medal_image_with_history(
 
     # Validar extensión
     allowed_extensions = (".png", ".jpg", ".jpeg", ".webp", ".bmp", ".gif")
-    if not any(file.filename.lower().endswith(ext) for ext in allowed_extensions):
+    if not any((file.filename or "").lower().endswith(ext) for ext in allowed_extensions):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Formato no soportado. Se aceptan: PNG, JPG, WebP, BMP, GIF",
         )
 
     # Leer y validar tamaño
-    raw_content = await file.read()
+    raw_content = await read_bounded(file)
     max_size = 10 * 1024 * 1024  # 10 MB para imágenes grandes que serán redimensionadas
     if len(raw_content) > max_size:
         raise HTTPException(
@@ -484,7 +474,7 @@ async def upload_medal_image_with_history(
 
     # Redimensionar automáticamente a 256x256 PNG
     try:
-        content = resize_image_to_256(raw_content)
+        content = await run_in_threadpool(resize_image_to_256, raw_content)
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -669,6 +659,7 @@ def export_achievements_csv(
     category: Optional[str] = Query(None),
     tier: Optional[str] = Query(None),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Exporta todos los logros y medallas en formato CSV."""
@@ -679,11 +670,11 @@ def export_achievements_csv(
         query = query.filter(AchievementCatalog.medal_tier == tier)
 
     achievements = query.order_by(AchievementCatalog.display_order).all()
-    total_players = _get_total_non_admin_players(db)
-    unlock_counts = _get_unlock_counts(db)
+    total_players = _get_total_non_admin_players(db, entorno.id)
+    unlock_counts = _get_unlock_counts(db, entorno.id)
 
     output = io.StringIO()
-    writer = csv.writer(output)
+    writer = SafeWriter(output)
     writer.writerow([
         "ID", "Nombre", "Descripción", "Condición de Desbloqueo", "Categoría",
         "Medalla", "Tier", "Descripción Medalla", "Jugadores Desbloqueados",
@@ -714,6 +705,7 @@ def export_achievements_excel(
     category: Optional[str] = Query(None),
     tier: Optional[str] = Query(None),
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Exporta todos los logros y medallas en formato Excel (.xlsx)."""
@@ -733,8 +725,8 @@ def export_achievements_excel(
         query = query.filter(AchievementCatalog.medal_tier == tier)
 
     achievements = query.order_by(AchievementCatalog.display_order).all()
-    total_players = _get_total_non_admin_players(db)
-    unlock_counts = _get_unlock_counts(db)
+    total_players = _get_total_non_admin_players(db, entorno.id)
+    unlock_counts = _get_unlock_counts(db, entorno.id)
 
     wb = Workbook()
     ws = wb.active
@@ -786,7 +778,7 @@ def export_achievements_excel(
         ws.column_dimensions[col[0].column_letter].width = min(max_len + 4, 50)
 
     output = io.BytesIO()
-    wb.save(output)
+    secure_workbook(wb).save(output)
     output.seek(0)
 
     return StreamingResponse(
@@ -802,6 +794,7 @@ def export_achievements_excel(
 def export_achievement_players_csv(
     achievement_id: str,
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Exporta la lista de jugadores que poseen un logro en formato CSV."""
@@ -813,13 +806,13 @@ def export_achievement_players_csv(
         db.query(PlayerAchievement, User, PlayerSlot)
         .join(User, PlayerAchievement.user_id == User.id)
         .join(PlayerSlot, PlayerAchievement.slot_id == PlayerSlot.id)
-        .filter(PlayerAchievement.achievement_id == achievement_id)
+        .filter(PlayerAchievement.achievement_id == achievement_id, User.workspace_id == entorno.id)
         .order_by(PlayerAchievement.unlocked_at.desc())
         .all()
     )
 
     output = io.StringIO()
-    writer = csv.writer(output)
+    writer = SafeWriter(output)
     writer.writerow(["Jugador", "Email", "Personaje", "Slot", "Fecha Desbloqueo"])
 
     seen = set()
@@ -845,6 +838,7 @@ def export_achievement_players_csv(
 def export_achievement_players_excel(
     achievement_id: str,
     admin: User = Depends(get_current_admin),
+    entorno: Workspace = Depends(get_viewed_workspace),
     db: Session = Depends(get_db),
 ):
     """Exporta la lista de jugadores que poseen un logro en formato Excel."""
@@ -862,7 +856,7 @@ def export_achievement_players_excel(
         db.query(PlayerAchievement, User, PlayerSlot)
         .join(User, PlayerAchievement.user_id == User.id)
         .join(PlayerSlot, PlayerAchievement.slot_id == PlayerSlot.id)
-        .filter(PlayerAchievement.achievement_id == achievement_id)
+        .filter(PlayerAchievement.achievement_id == achievement_id, User.workspace_id == entorno.id)
         .order_by(PlayerAchievement.unlocked_at.desc())
         .all()
     )
@@ -905,7 +899,7 @@ def export_achievement_players_excel(
         ws.column_dimensions[col[0].column_letter].width = min(max_len + 4, 40)
 
     output = io.BytesIO()
-    wb.save(output)
+    secure_workbook(wb).save(output)
     output.seek(0)
 
     safe_name = achievement_id.replace(" ", "_")

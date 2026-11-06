@@ -1,4 +1,4 @@
-"""Las bases creadas con sql/create_active_readings.sql tienen reading_start_time
+"""Las bases creadas con sql/009_create_active_readings.sql tienen reading_start_time
 como FLOAT, pero el modelo y la respuesta lo declaran texto: guardar o leer la
 lectura en curso respondía 500. La migración 010 lo convierte a texto."""
 import pytest

@@ -3,8 +3,10 @@ schemas.py — Schemas Pydantic para validación de request/response
 Incluye schemas de lecturas, autenticación, progreso y administración.
 """
 from datetime import datetime
-from typing import Dict, List, Optional
-from pydantic import BaseModel, Field, EmailStr
+from typing import Dict, List, Optional, Literal
+from pydantic import BaseModel, Field, EmailStr, field_validator
+
+from workspaces import PALETA
 
 
 # ── Tipologías válidas ───────────────────────────────────────────────────────
@@ -62,7 +64,6 @@ class ReadingResponse(BaseModel):
     title: str
     typology: str
     type: Optional[str] = None
-    is_practice: bool = False
     content: str
     created_at: datetime
     updated_at: datetime
@@ -97,8 +98,6 @@ class QuestionResponse(BaseModel):
     question_number: int
     comprehension_level: str
     question_text: str
-    correct_answer: str
-    justification: Optional[str] = None
     answers: List[AnswerResponse]
 
     class Config:
@@ -106,12 +105,12 @@ class QuestionResponse(BaseModel):
 
 
 class ReadingFullResponse(BaseModel):
+    attempt_id: Optional[str] = None
     """Lectura completa con todas sus preguntas y respuestas (para caché local)."""
     id: int
     title: str
     typology: str
     type: Optional[str] = None
-    is_practice: bool = False
     content: str
     created_at: datetime
     updated_at: datetime
@@ -144,7 +143,7 @@ class UserRegister(BaseModel):
 class UserLogin(BaseModel):
     """Schema para iniciar sesión."""
     email: EmailStr
-    password: str = Field(..., min_length=1)
+    password: str = Field(..., min_length=1, max_length=128)
 
 
 class UserResponse(BaseModel):
@@ -198,6 +197,7 @@ class PlayerSlotCreate(BaseModel):
 
 
 class ChangePasswordRequest(BaseModel):
+    current_password: str = Field(..., min_length=1, max_length=128)
     """Schema para cambiar la contraseña del jugador."""
     new_password: str = Field(..., min_length=8, max_length=128)
 
@@ -253,26 +253,39 @@ class SessionToolCreate(BaseModel):
     """Schema para registrar uso de herramienta."""
     tool_name: str = Field(..., max_length=30)
     was_used: bool
-    usage_count: int = 0
-    duration_seconds: Optional[int] = None
+    usage_count: int = Field(0, ge=0, le=10000)
+    duration_seconds: Optional[int] = Field(None, ge=0, le=86400)
+
+
+class ReadingAnswerSubmit(BaseModel):
+    reading_id: int = Field(gt=0)
+    question_id: int = Field(gt=0)
+    selected_answer: Literal["A", "B", "C", "D"]
+    attempt_id: Optional[str] = Field(None, max_length=36)
 
 
 class SessionCreate(BaseModel):
+    attempt_id: Optional[str] = Field(None, max_length=36)
     """Schema para registrar una sesión completada desde Godot."""
     reading_id: int
     typology: str
     session_score: int
-    reading_time_seconds: Optional[int] = None
-    total_time_seconds: Optional[int] = None
+    reading_time_seconds: Optional[int] = Field(None, ge=0, le=86400)
+    total_time_seconds: Optional[int] = Field(None, ge=0, le=86400)
     is_perfect: bool = False
     correct_count: int = 0
     incorrect_count: int = 0
     tool_bonus: int = 0
-    # Sesión de la zona de práctica: se guarda, pero no toca el progreso.
-    # Los clientes antiguos no lo mandan y valen como progresión.
-    is_practice: bool = False
-    answers: List[PlayerAnswerCreate] = []
-    tools: List[SessionToolCreate] = []
+    answers: List[PlayerAnswerCreate] = Field(default_factory=list, max_length=6)
+    tools: List[SessionToolCreate] = Field(default_factory=list, max_length=3)
+
+    @field_validator("tools")
+    @classmethod
+    def valid_tools(cls, values):
+        names = [t.tool_name for t in values]
+        if len(set(names)) != len(names) or not set(names).issubset({"highlight", "underline", "notes"}):
+            raise ValueError("Herramientas desconocidas o repetidas")
+        return values
 
     class Config:
         json_schema_extra = {
@@ -362,7 +375,6 @@ class SessionResponse(BaseModel):
     correct_count: int
     incorrect_count: int
     tool_bonus: int
-    is_practice: bool = False
     started_at: datetime
     completed_at: datetime
     answers: List[PlayerAnswerResponse] = []
@@ -439,9 +451,6 @@ class PlayerProgressResponse(BaseModel):
     user: UserResponse
     active_slot_id: Optional[int] = None
     total_score: int
-    # Sesiones de práctica del slot. No cuentan para nada, pero el juego las usa
-    # para saber que el alumno ya ha jugado y no pedirle otra vez el personaje.
-    practice_sessions: int = 0
     # Intentos por tipología y si ya se agotaron en alguna sin aprobarla: con el
     # juego terminado el alumno sigue entrando, pero no puede avanzar.
     max_attempts: int = 5
@@ -449,7 +458,7 @@ class PlayerProgressResponse(BaseModel):
     typology_progress: List[TypologyProgressResponse]
     achievements: List[AchievementResponse]
     recent_sessions: List[SessionResponse] = []
-    # Respuestas correctas acumuladas por nivel (sin la práctica). El juego las
+    # Respuestas correctas acumuladas por nivel. El juego las
     # restaura al iniciar sesión: sin ellas, los logros de las Estrellas solo
     # contaban los aciertos de una misma partida.
     correct_by_level: Dict[str, int] = {}
@@ -466,7 +475,6 @@ class PlayerSummary(BaseModel):
     is_active: bool
     total_score: int = 0
     total_sessions: int = 0
-    practice_sessions: int = 0
     total_achievements: int = 0
     last_played_at: Optional[datetime] = None
     created_at: datetime
@@ -482,7 +490,6 @@ class AdminStatsResponse(BaseModel):
     total_players: int
     active_players: int
     total_sessions: int
-    total_practice_sessions: int = 0
     total_points: int
     total_achievements: int
     average_accuracy: float
@@ -612,6 +619,9 @@ class NpcInteractionCreate(BaseModel):
     npc_type: str = Field(..., max_length=30, description="Tipo de NPC: 'robot' o 'sabio'")
     session_id: Optional[int] = None
     reading_id: Optional[int] = None
+    # Texto de la conversación. Opcionales: un juego viejo no los manda.
+    user_message: Optional[str] = Field(None, max_length=4000)
+    assistant_reply: Optional[str] = Field(None, max_length=8000)
 
 
 class NpcInteractionResponse(BaseModel):
@@ -626,6 +636,31 @@ class NpcInteractionResponse(BaseModel):
 
 # ── Schemas de Leaderboard ───────────────────────────────────────────────────
 
+class VitrinaSeleccion(BaseModel):
+    tipo: Literal["logro", "medalla"]
+    id: str
+
+
+class PerfilJugador(BaseModel):
+    alias: Optional[str] = None
+    vitrina: List[VitrinaSeleccion] = Field(default_factory=list, max_length=3)
+
+    @field_validator("vitrina")
+    @classmethod
+    def sin_repetidos(cls, elementos):
+        claves = [(elemento.tipo, elemento.id) for elemento in elementos]
+        if len(claves) != len(set(claves)):
+            raise ValueError("La vitrina no permite elementos repetidos")
+        return elementos
+
+
+class VitrinaItem(VitrinaSeleccion):
+    nombre: str
+    emoji: str
+    tier: Optional[str] = None
+    imagen: Optional[str] = None
+
+
 class LeaderboardEntry(BaseModel):
     """Entrada individual del leaderboard."""
     rank: int
@@ -633,6 +668,8 @@ class LeaderboardEntry(BaseModel):
     character: str
     total_score: int
     total_achievements: int
+    alias: Optional[str] = None
+    vitrina: List[VitrinaItem] = Field(default_factory=list)
 
 
 class LeaderboardResponse(BaseModel):
@@ -731,6 +768,32 @@ class MetricsNpcInteractionsResponse(BaseModel):
     by_player: List[MetricNpcPlayer]
 
 
+class NpcConversationMessage(BaseModel):
+    """Una pregunta del jugador al asistente IA y la respuesta que recibió."""
+    id: int
+    npc_type: str
+    reading_id: Optional[int] = None
+    reading_title: Optional[str] = None
+    typology: Optional[str] = None
+    user_message: Optional[str] = None
+    assistant_reply: Optional[str] = None
+    created_at: Optional[datetime] = None
+
+
+class MedalResponse(BaseModel):
+    """Medalla por desempeño (medallas.py). tier es None mientras está bloqueada."""
+    id: str
+    name: str
+    description: str
+    how_to_unlock: str
+    emoji: str
+    imagen: Optional[str] = None
+    typology: Optional[str] = None
+    is_unlocked: bool
+    tier: Optional[str] = None
+    attempts: Optional[int] = None
+
+
 class MetricToolUsage(BaseModel):
     """Uso de una herramienta."""
     tool_name: str
@@ -755,9 +818,9 @@ class ActiveReadingSave(BaseModel):
     current_question_index: int = 0
     reading_completed: bool = False
     session_score: int = 0
-    results_json: str = "[]"
-    tools_used_json: str = '{"highlight":false,"underline":false,"notes":false}'
-    reading_start_time: str = "0"
+    results_json: str = Field("[]", max_length=25000)
+    tools_used_json: str = Field('{"highlight":false,"underline":false,"notes":false}', max_length=512)
+    reading_start_time: str = Field("0", max_length=50)
     # Segundos acumulados hasta este guardado (los clientes antiguos no los mandan).
     reading_seconds: int = Field(0, ge=0)
     total_seconds: int = Field(0, ge=0)
@@ -779,6 +842,7 @@ class ActiveReadingSave(BaseModel):
 
 
 class ActiveReadingResponse(BaseModel):
+    attempt_id: Optional[str] = None
     """Schema de respuesta para la lectura activa del jugador."""
     id: int
     reading_id: int
@@ -800,4 +864,204 @@ class ActiveReadingResponse(BaseModel):
         from_attributes = True
 
 
+# ── Entornos de trabajo ──────────────────────────────────────────────────────
 
+def _nombre_de_entorno(valor: str) -> str:
+    valor = valor.strip()
+    if not 1 <= len(valor) <= 40:
+        raise ValueError("El nombre debe tener entre 1 y 40 caracteres")
+    return valor
+
+
+def _color_de_entorno(valor: str) -> str:
+    if valor not in PALETA:
+        raise ValueError(f"El color debe ser uno de {list(PALETA)}")
+    return valor
+
+
+class WorkspaceCreate(BaseModel):
+    """Entorno nuevo: nace inactivo."""
+    name: str
+    color: str
+
+    @field_validator("name")
+    @classmethod
+    def _nombre(cls, valor: str) -> str:
+        return _nombre_de_entorno(valor)
+
+    @field_validator("color")
+    @classmethod
+    def _color(cls, valor: str) -> str:
+        return _color_de_entorno(valor)
+
+
+class WorkspaceUpdate(BaseModel):
+    """Cambios de un entorno: nombre, color o los dos."""
+    name: Optional[str] = None
+    color: Optional[str] = None
+
+    @field_validator("name")
+    @classmethod
+    def _nombre(cls, valor: Optional[str]) -> Optional[str]:
+        return None if valor is None else _nombre_de_entorno(valor)
+
+    @field_validator("color")
+    @classmethod
+    def _color(cls, valor: Optional[str]) -> Optional[str]:
+        return None if valor is None else _color_de_entorno(valor)
+
+
+class WorkspaceResponse(BaseModel):
+    """Un entorno con cuántas cuentas de jugador tiene."""
+    id: int
+    name: str
+    color: str
+    is_active: bool
+    player_count: int = 0
+    created_at: Optional[datetime] = None
+
+
+class PlayerToAdd(BaseModel):
+    """Un jugador que el admin agrega: el correo se valida uno a uno en el
+    endpoint, para decir cuál falló sin rechazar la lista entera."""
+    email: str
+    display_name: Optional[str] = None
+
+
+class PlayersAddRequest(BaseModel):
+    players: List[PlayerToAdd] = Field(..., min_length=1, max_length=200)
+
+
+class PlayerAdded(BaseModel):
+    id: int
+    email: str
+    display_name: str
+    # Solo viaja en esta respuesta: no se guarda en claro en ningún sitio.
+    temp_password: str
+
+
+class PlayerSkipped(BaseModel):
+    email: str
+    reason: str
+
+
+class PlayersAddResult(BaseModel):
+    created: List[PlayerAdded]
+    skipped: List[PlayerSkipped]
+
+
+# ── Schemas de la zona de cómics (jugador) ───────────────────────────────────
+
+class ComicProgressSave(BaseModel):
+    """Schema para guardar la página en la que va el jugador en un episodio."""
+    last_page: int = Field(..., ge=0)
+    finished: bool = False
+
+
+class ComicProgressResponse(BaseModel):
+    """Progreso del jugador en un episodio."""
+    episode_id: str
+    last_page: int
+    finished: bool
+    updated_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class ComicProgressList(BaseModel):
+    """Progreso de todos los episodios del slot activo y visitas a la sala."""
+    episodios: List[ComicProgressResponse]
+    visitas: int
+
+
+class ComicVisitResponse(BaseModel):
+    """Total de visitas del slot activo a la sala de cómics."""
+    visitas: int
+
+
+# ── Schemas de la zona de cómics (dashboard) ─────────────────────────────────
+
+class ComicEpisodioTop(BaseModel):
+    """Episodio y cuántos alumnos del entorno lo han abierto."""
+    episode_id: str
+    lecturas: int
+
+
+class ComicResumenResponse(BaseModel):
+    """Embudo de la recompensa: desbloquearon, entraron a la sala, leyeron."""
+    desbloquearon: int
+    entraron: int
+    lectores: int
+    episodios_top: List[ComicEpisodioTop]
+
+
+class ComicJugadorResponse(BaseModel):
+    """Lectura de un alumno en la zona de cómics."""
+    player_id: int
+    display_name: str
+    email: str
+    episodios_terminados: int
+    paginas_leidas: int
+    ultima_visita: Optional[datetime] = None
+
+
+# ── Encuesta obligatoria SUS + TAM ───────────────────────────────────────────
+
+class TechnologySurveySubmit(BaseModel):
+    """Los 22 valores crudos del instrumento, sin preguntas opcionales."""
+    sus: List[int] = Field(..., min_length=10, max_length=10)
+    tam_usefulness: List[int] = Field(..., min_length=6, max_length=6)
+    tam_ease: List[int] = Field(..., min_length=6, max_length=6)
+
+    @field_validator("sus")
+    @classmethod
+    def validar_sus(cls, valores):
+        if any(v < 1 or v > 5 for v in valores):
+            raise ValueError("Cada respuesta SUS debe estar entre 1 y 5")
+        return valores
+
+    @field_validator("tam_usefulness", "tam_ease")
+    @classmethod
+    def validar_tam(cls, valores):
+        if any(v < 1 or v > 7 for v in valores):
+            raise ValueError("Cada respuesta TAM debe estar entre 1 y 7")
+        return valores
+
+
+class TechnologySurveyStatus(BaseModel):
+    completed: bool
+    submitted_at: Optional[datetime] = None
+
+
+class TechnologySurveyResult(TechnologySurveyStatus):
+    instrument_version: str = "sus10_tam12_v1"
+    sus_score: Optional[float] = None
+    tam_usefulness_score: Optional[float] = None
+    tam_ease_score: Optional[float] = None
+
+
+class TechnologySurveyAdminRow(BaseModel):
+    player_id: int
+    display_name: str
+    email: str
+    slot_number: int
+    slot_label: str
+    instrument_version: str
+    sus: List[int]
+    tam_usefulness: List[int]
+    tam_ease: List[int]
+    sus_score: float
+    tam_usefulness_score: float
+    tam_ease_score: float
+    submitted_at: datetime
+
+
+class TechnologySurveyAdminSummary(BaseModel):
+    eligible_slots: int
+    responses: int
+    response_rate: float
+    sus_average: Optional[float] = None
+    tam_usefulness_average: Optional[float] = None
+    tam_ease_average: Optional[float] = None
+    item_distributions: Dict[str, List[int]]

@@ -6,8 +6,9 @@ WORKDIR /app
 # en vez de intentar compilar desde fuente (ver checkpoint de bcrypt).
 #
 # Se instala desde requirements.lock.txt, NO desde requirements.txt. El lock
-# fija las 36 versiones que se resolvieron en aarch64 el 18-ago-2026, que son
-# exactamente las que corren en produccion. Instalando desde requirements.txt
+# fija las 36 versiones, con actualizaciones de seguridad del 5-nov-2026.
+# La imagen se verifica localmente; el servidor remoto requiere despliegue.
+# Instalando desde requirements.txt
 # (sin pines) cada rebuild resolvia versiones frescas de PyPI: la imagen no
 # era reproducible y un redespliegue podia traer una FastAPI o una SQLAlchemy
 # distinta sin que nadie lo pidiera.
@@ -21,6 +22,9 @@ COPY api/requirements.lock.txt .
 RUN pip install --no-cache-dir --only-binary=:all: -r requirements.lock.txt
 
 COPY api/ .
+
+RUN useradd --uid 10001 --create-home appuser && chown -R appuser:appuser /app/static
+USER 10001:10001
 
 EXPOSE 8000
 

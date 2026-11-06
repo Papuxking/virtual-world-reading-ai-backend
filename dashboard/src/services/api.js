@@ -6,31 +6,50 @@
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
 /** Token JWT almacenado en memoria */
-let authToken = localStorage.getItem('vw_admin_token') || '';
+let authenticatedUser = null;
+// Retirar credenciales persistidas por versiones anteriores.
+localStorage.removeItem('vw_admin_token');
+localStorage.removeItem('vw_admin_user');
 
-/** Configurar token */
-export function setToken(token) {
-  authToken = token;
-  localStorage.setItem('vw_admin_token', token);
-}
+/** Entorno visto actualmente en el dashboard */
+let viewedWorkspaceId = localStorage.getItem('vw_admin_workspace')
+  ? Number(localStorage.getItem('vw_admin_workspace'))
+  : null;
 
 /** Limpiar token */
 export function clearToken() {
-  authToken = '';
+  authenticatedUser = null;
   localStorage.removeItem('vw_admin_token');
   localStorage.removeItem('vw_admin_user');
 }
 
 /** Obtener token actual */
 export function getToken() {
-  return authToken;
+  return authenticatedUser ? 'cookie-session' : '';
 }
 
-/** Headers con autenticación */
+/** Configurar entorno que se está viendo */
+export function setViewedWorkspace(id) {
+  if (id !== null && id !== undefined && id !== '') {
+    viewedWorkspaceId = Number(id);
+    localStorage.setItem('vw_admin_workspace', String(id));
+  } else {
+    viewedWorkspaceId = null;
+    localStorage.removeItem('vw_admin_workspace');
+  }
+}
+
+/** Obtener id del entorno que se está viendo */
+export function getViewedWorkspace() {
+  return viewedWorkspaceId;
+}
+
+/** Headers con autenticación y entorno visto */
 function authHeaders() {
   return {
     'Content-Type': 'application/json',
-    ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+
+    ...(viewedWorkspaceId !== null ? { 'X-Workspace-Id': String(viewedWorkspaceId) } : {}),
   };
 }
 
@@ -38,11 +57,12 @@ function authHeaders() {
 async function apiFetch(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
   const response = await fetch(url, {
+    credentials: 'include',
     headers: authHeaders(),
     ...options,
   });
 
-  if (response.status === 401) {
+  if (endpoint !== '/auth/admin/login' && (response.status === 401 || (response.status === 409 && (await response.clone().json().catch(() => ({}))).detail === 'SESSION_INVALIDATED'))) {
     clearToken();
     window.location.href = '/dashboard/login';
     throw new Error('Sesión expirada');
@@ -50,34 +70,48 @@ async function apiFetch(endpoint, options = {}) {
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: 'Error desconocido' }));
+    if (response.status === 404 && error.detail === 'WORKSPACE_NOT_FOUND') {
+      window.dispatchEvent(new Event('vw:workspace-missing'));
+    }
     throw new Error(error.detail || `HTTP ${response.status}`);
   }
 
+  // 204 (p. ej. al eliminar un entorno) no trae cuerpo.
+  if (response.status === 204) return null;
   return response.json();
 }
 
 // ── Autenticación ───────────────────────────────────────────────────────────
 
 export async function login(email, password) {
-  const data = await apiFetch('/auth/login', {
+  const user = await apiFetch('/auth/admin/login', {
     method: 'POST',
     body: JSON.stringify({ email, password }),
   });
-  setToken(data.access_token);
-  localStorage.setItem('vw_admin_user', JSON.stringify(data.user));
-  return data;
+  authenticatedUser = user;
+  return { user };
 }
 
 export async function getMe() {
-  return apiFetch('/auth/me');
+  const response = await fetch(`${API_BASE}/auth/me`, { credentials: 'include' });
+  if (!response.ok) {
+    clearToken();
+    throw new Error('Sesión no disponible');
+  }
+  authenticatedUser = await response.json();
+  return authenticatedUser;
+}
+
+export async function logout() {
+  try {
+    await apiFetch('/auth/logout', { method: 'POST' });
+  } finally {
+    clearToken();
+  }
 }
 
 export function getStoredUser() {
-  try {
-    return JSON.parse(localStorage.getItem('vw_admin_user'));
-  } catch {
-    return null;
-  }
+  return authenticatedUser;
 }
 
 // ── Dashboard Admin ─────────────────────────────────────────────────────────
@@ -161,12 +195,10 @@ export async function updateCatalogAchievement(achievementId, data) {
 export async function uploadMedalImage(achievementId, file) {
   const formData = new FormData();
   formData.append('file', file);
-  
+
   const response = await fetch(`${API_BASE}/achievements/admin/${achievementId}/medal-image`, {
+    credentials: 'include',
     method: 'PUT',
-    headers: {
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-    },
     body: formData,
   });
 
@@ -215,6 +247,26 @@ export async function getAchievementsStats() {
   return apiFetch('/admin/achievements/stats');
 }
 
+export async function getComicsResumen() {
+  return apiFetch('/comics/admin/resumen');
+}
+
+export async function getComicsJugadores() {
+  return apiFetch('/comics/admin/jugadores');
+}
+
+export async function getEvaluationSummary() {
+  return apiFetch('/evaluation/admin/summary');
+}
+
+export async function getEvaluationResponses() {
+  return apiFetch('/evaluation/admin/responses');
+}
+
+export function downloadEvaluationCSV() {
+  return _downloadFile('/evaluation/admin/export.csv', 'encuesta_sus_tam.csv');
+}
+
 export async function getAchievementDetail(achievementId) {
   return apiFetch(`/admin/achievements/${achievementId}`);
 }
@@ -233,9 +285,10 @@ export async function uploadMedalImageAdmin(achievementId, file) {
   formData.append('file', file);
 
   const response = await fetch(`${API_BASE}/admin/achievements/${achievementId}/medal-image`, {
+    credentials: 'include',
     method: 'PUT',
     headers: {
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+
     },
     body: formData,
   });
@@ -299,8 +352,10 @@ export function downloadAchievementPlayersExcel(achievementId) {
 async function _downloadFile(endpoint, defaultFilename) {
   const url = `${API_BASE}${endpoint}`;
   const response = await fetch(url, {
+    credentials: 'include',
     headers: {
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+
+      ...(viewedWorkspaceId !== null ? { 'X-Workspace-Id': String(viewedWorkspaceId) } : {}),
     },
   });
 
@@ -354,6 +409,11 @@ export async function getMetricsQuestionAttempts(filters = {}) {
   return apiFetch(`/admin/metrics/question-attempts${qs ? '?' + qs : ''}`);
 }
 
+/** Lo que un jugador habló con el asistente IA (pregunta y respuesta). */
+export async function getNpcConversations(playerId) {
+  return apiFetch(`/admin/metrics/npc-conversations?player_id=${playerId}`);
+}
+
 export async function getMetricsNpcInteractions(filters = {}) {
   const params = _buildMetricParams(filters);
   if (filters.npc_type) params.set('npc_type', filters.npc_type);
@@ -387,4 +447,48 @@ export async function getLeaderboard(limit = 5) {
   return apiFetch(`/leaderboard/top?limit=${limit}`);
 }
 
+// ── Entornos (Workspaces) ───────────────────────────────────────────────────
+
+export async function getWorkspaces() {
+  return apiFetch('/admin/workspaces');
+}
+
+export async function createWorkspace(name, color) {
+  return apiFetch('/admin/workspaces', {
+    method: 'POST',
+    body: JSON.stringify({ name, color }),
+  });
+}
+
+export async function updateWorkspace(id, data) {
+  return apiFetch(`/admin/workspaces/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function activateWorkspace(id) {
+  return apiFetch(`/admin/workspaces/${id}/activate`, {
+    method: 'POST',
+  });
+}
+
+export async function deactivateWorkspace(id) {
+  return apiFetch(`/admin/workspaces/${id}/deactivate`, {
+    method: 'POST',
+  });
+}
+
+export async function deleteWorkspace(id, confirmName) {
+  return apiFetch(`/admin/workspaces/${id}?confirm_name=${encodeURIComponent(confirmName)}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function addPlayers(workspaceId, players) {
+  return apiFetch(`/admin/workspaces/${workspaceId}/players`, {
+    method: 'POST',
+    body: JSON.stringify({ players }),
+  });
+}
 

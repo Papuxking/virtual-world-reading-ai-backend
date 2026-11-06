@@ -24,10 +24,7 @@ from sqlalchemy.orm import sessionmaker
 
 # ── Configuración por defecto ────────────────────────────────────────────────
 
-DEFAULT_DB_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://DB-virtual-world-reading-ai:GodotWorldAdmin@db:5432/godot_readings"
-)
+DEFAULT_DB_URL = os.environ.get("DATABASE_URL", "")
 
 # Rutas por defecto para los JSON (dentro del contenedor, montados en /data)
 DEFAULT_JSON_FILES = [
@@ -61,9 +58,8 @@ def normalize_level(level: str) -> str:
 
 # ── Importación ──────────────────────────────────────────────────────────────
 
-def import_json_file(session, filepath: str, stats: dict, is_practice: bool = False):
-    """Importa un archivo JSON completo a la base de datos.
-    Con is_practice=True las lecturas quedan como exclusivas de la zona de práctica."""
+def import_json_file(session, filepath: str, stats: dict):
+    """Importa un archivo JSON completo a la base de datos."""
     print(f"\n📖 Procesando: {filepath}")
 
     with open(filepath, "r", encoding="utf-8") as f:
@@ -100,8 +96,8 @@ def import_json_file(session, filepath: str, stats: dict, is_practice: bool = Fa
         # Insertar lectura
         result = session.execute(
             text("""
-                INSERT INTO readings (title, typology, type, content, is_practice)
-                VALUES (:title, :typology, :type, :content, :is_practice)
+                INSERT INTO readings (title, typology, type, content)
+                VALUES (:title, :typology, :type, :content)
                 RETURNING id
             """),
             {
@@ -109,7 +105,6 @@ def import_json_file(session, filepath: str, stats: dict, is_practice: bool = Fa
                 "typology": typology,
                 "type": reading_type,
                 "content": content,
-                "is_practice": is_practice,
             }
         )
         reading_id = result.fetchone()[0]
@@ -180,11 +175,6 @@ def main():
         default=DEFAULT_JSON_FILES,
         help="Rutas a los archivos JSON a importar"
     )
-    parser.add_argument(
-        "--practice",
-        action="store_true",
-        help="Importa las lecturas como exclusivas de la zona de práctica"
-    )
     args = parser.parse_args()
 
     # Verificar que los archivos existen
@@ -219,7 +209,7 @@ def main():
 
     try:
         for filepath in valid_files:
-            import_json_file(session, filepath, stats, is_practice=args.practice)
+            import_json_file(session, filepath, stats)
 
         print("\n" + "=" * 60)
         print("📊 Resumen de importación:")

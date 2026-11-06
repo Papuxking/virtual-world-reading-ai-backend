@@ -3,12 +3,14 @@
 Resetea el progreso de jugadores dejandolos como cuentas nuevas.
 
     docker exec vw-api-1 python reset_players.py --students 50 --demo --apply
+    docker exec vw-api-1 python reset_players.py --entorno "Pruebas" --students 50 --apply
 
-Reutiliza la misma limpieza que clean_50_students.py (sesiones, respuestas,
-herramientas, notas, logros, interacciones con el NPC, lecturas activas, slots
-extra y progreso de tipologias), pero:
+Trabaja dentro de un entorno: --entorno NOMBRE o, sin el, el activo. Solo busca
+los correos en ese entorno (el mismo correo puede tener cuenta en otros).
+Borra sesiones, respuestas, herramientas, notas, logros, interacciones con el
+NPC, lecturas activas, slots extra y progreso de tipologias, y:
 
-  - Acepta ademas la cuenta de demostracion, que clean_50_students.py no cubre.
+  - Acepta ademas la cuenta de demostracion (--demo).
   - NO trae un DATABASE_URL por defecto. Los scripts antiguos caian a
     localhost:5433, que hoy es el Postgres de LecturaIA: ejecutarlos fuera del
     contenedor sin la variable puesta habria escrito en la base de otro autor.
@@ -22,7 +24,7 @@ import argparse
 import os
 import sys
 
-from sqlalchemy import inspect
+from sqlalchemy import func, inspect
 
 from database import SessionLocal, engine
 from models import (
@@ -120,6 +122,7 @@ def resetear_usuario(db, user: User) -> None:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--entorno", default="", help="Nombre del entorno donde resetear (por defecto, el activo)")
     ap.add_argument("--students", type=int, default=0, help="Resetea alumno1@test.com .. alumnoN@test.com")
     ap.add_argument("--demo", action="store_true", help="Incluye demo@demo.com")
     ap.add_argument("--emails", default="", help="Lista extra de correos separados por coma")
@@ -145,9 +148,26 @@ def main() -> int:
 
     db = SessionLocal()
     try:
+        from models import Workspace
+        from workspaces import entorno_activo
+
+        if args.entorno:
+            # Los nombres de entorno son únicos sin distinguir mayúsculas.
+            entorno = db.query(Workspace).filter(func.lower(Workspace.name) == args.entorno.strip().lower()).first()
+            if not entorno:
+                print(f"ERROR: No se encontró el entorno '{args.entorno}'.", file=sys.stderr)
+                return 2
+        else:
+            entorno = entorno_activo(db)
+            if not entorno:
+                print("ERROR: No hay ningún entorno activo. Pasa --entorno NOMBRE.", file=sys.stderr)
+                return 2
+
+        print(f"Entorno objetivo: {entorno.name} (ID: {entorno.id})")
+
         encontrados, ausentes = [], []
         for email in objetivos:
-            user = db.query(User).filter(User.email == email).first()
+            user = db.query(User).filter(User.email == email, User.workspace_id == entorno.id).first()
             (encontrados if user else ausentes).append(email)
 
         print(f"  encontradas: {len(encontrados)}")
@@ -157,7 +177,7 @@ def main() -> int:
 
         # Cuanto progreso se va a borrar, para que el simulacro sea util.
         if encontrados:
-            ids = [db.query(User).filter(User.email == e).first().id for e in encontrados]
+            ids = [db.query(User).filter(User.email == e, User.workspace_id == entorno.id).first().id for e in encontrados]
             n_ses = db.query(PlayerSession).filter(PlayerSession.user_id.in_(ids)).count()
             n_log = db.query(PlayerAchievement).filter(PlayerAchievement.user_id.in_(ids)).count()
             print(f"  sesiones que se borran: {n_ses}")
@@ -169,7 +189,7 @@ def main() -> int:
 
         print("\nAplicando...")
         for email in encontrados:
-            user = db.query(User).filter(User.email == email).first()
+            user = db.query(User).filter(User.email == email, User.workspace_id == entorno.id).first()
             resetear_usuario(db, user)
         db.commit()
         print(f"Hecho: {len(encontrados)} cuentas reseteadas a estado inicial "

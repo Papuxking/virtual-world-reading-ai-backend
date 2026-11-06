@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { getToken, getStoredUser } from './services/api';
+import { useEffect, useState } from 'react';
+import { getToken, getStoredUser, getMe } from './services/api';
+import { WorkspaceProvider } from './context/WorkspaceContext';
 import LoginPage from './pages/LoginPage';
 import DashboardLayout from './components/DashboardLayout';
 import OverviewPage from './pages/OverviewPage';
@@ -7,8 +9,17 @@ import PlayerDetailPage from './pages/PlayerDetailPage';
 import AchievementsPage from './pages/AchievementsPage';
 import AchievementDetailPage from './pages/AchievementDetailPage';
 import MetricsPage from './pages/MetricsPage';
+import ComicsPage from './pages/ComicsPage';
+import EvaluationPage from './pages/EvaluationPage';
 
 function ProtectedRoute({ children }) {
+  const [loading, setLoading] = useState(!getStoredUser());
+  useEffect(() => {
+    let active = true;
+    getMe().catch(() => {}).finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
+  if (loading) return <p className="p-6">Cargando sesión...</p>;
   const token = getToken();
   const user = getStoredUser();
   if (!token || !user?.is_admin) {
@@ -26,7 +37,9 @@ export default function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <DashboardLayout />
+              <WorkspaceProvider>
+                <DashboardLayout />
+              </WorkspaceProvider>
             </ProtectedRoute>
           }
         >
@@ -35,6 +48,8 @@ export default function App() {
           <Route path="achievements" element={<AchievementsPage />} />
           <Route path="achievements/:achievementId" element={<AchievementDetailPage />} />
           <Route path="metrics" element={<MetricsPage />} />
+          <Route path="comics" element={<ComicsPage />} />
+          <Route path="evaluation" element={<EvaluationPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

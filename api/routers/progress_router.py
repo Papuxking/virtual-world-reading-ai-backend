@@ -5,6 +5,7 @@ Todos los endpoints requieren autenticación JWT y se segmentan por el slot acti
 """
 from datetime import datetime, timezone
 from typing import List, Optional
+import json
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session, joinedload
@@ -17,7 +18,8 @@ from models import (
     PlayerSlot, AchievementCatalog, NpcInteraction, ActiveReading,
 )
 from schemas import (
-    SessionCreate, SessionResponse, NoteCreate, NoteResponse,
+    MedalResponse, PerfilJugador,
+    SessionCreate, SessionResponse, NoteCreate, NoteResponse, PlayerAnswerCreate, ReadingAnswerSubmit,
     AchievementCreate, AchievementResponse, TypologyProgressResponse,
     PlayerProgressResponse, UserResponse,
     AchievementFullResponse, NpcInteractionCreate, NpcInteractionResponse,
@@ -26,6 +28,12 @@ from schemas import (
 from game_rules import DIFFICULTY_ORDER, MAX_INTENTOS_POR_TIPOLOGIA
 from progression import agotada, ensure_typology_rows, juego_terminado, reevaluate_unlocks
 from auth import get_current_user
+from grading import active_slot_locked, latest_attempt, assigned_payload, grade_answer, score_results, start_attempt
+from achievements import eligible_achievements, grant_achievements, NAMES
+from conversation_crypto import encrypt_message
+from medallas import medallas_del_jugador
+from alias import ALIAS_POR_ID
+from perfiles import progreso_del_slot, elementos_desbloqueados
 
 router = APIRouter(prefix="/progress", tags=["Progreso del Jugador"])
 
@@ -79,8 +87,16 @@ def _validate_slot_header(request: Request, active_slot: PlayerSlot, user: User)
             )
 
 
+def _owned_session(db, session_id, user_id, slot_id, reading_id=None):
+    if session_id is None:
+        return
+    session = db.query(PlayerSession).filter_by(id=session_id, user_id=user_id, slot_id=slot_id).first()
+    if session is None or (reading_id is not None and session.reading_id != reading_id):
+        raise HTTPException(404, 'Sesión no encontrada')
+
+
 def _aciertos_por_nivel(db: Session, user_id: int, slot_id: int) -> dict:
-    """Respuestas correctas del slot por nivel de comprensión, sin la práctica.
+    """Respuestas correctas del slot por nivel de comprensión.
     Siempre con los 3 niveles del juego; un nivel desconocido no cuenta."""
     aciertos = {"Literal": 0, "Inferencial": 0, "Critico": 0}
     filas = (
@@ -89,7 +105,6 @@ def _aciertos_por_nivel(db: Session, user_id: int, slot_id: int) -> dict:
         .filter(
             PlayerSession.user_id == user_id,
             PlayerSession.slot_id == slot_id,
-            PlayerSession.is_practice == False,
             PlayerAnswer.is_correct == True,
         )
         .group_by(PlayerAnswer.comprehension_level)
@@ -141,28 +156,16 @@ def get_my_progress(
         .filter(
             PlayerSession.user_id == current_user.id,
             PlayerSession.slot_id == active_slot.id,
-            PlayerSession.is_practice == False,
         )
         .order_by(PlayerSession.completed_at.desc())
         .limit(10)
         .all()
     )
 
-    practice_sessions = (
-        db.query(sqlfunc.count(PlayerSession.id))
-        .filter(
-            PlayerSession.user_id == current_user.id,
-            PlayerSession.slot_id == active_slot.id,
-            PlayerSession.is_practice == True,
-        )
-        .scalar()
-    )
-
     return PlayerProgressResponse(
         user=UserResponse.model_validate(current_user),
         active_slot_id=active_slot.id,
         total_score=total_score,
-        practice_sessions=practice_sessions or 0,
         max_attempts=MAX_INTENTOS_POR_TIPOLOGIA,
         game_over=juego_terminado(typology_rows),
         correct_by_level=_aciertos_por_nivel(db, current_user.id, active_slot.id),
@@ -189,7 +192,7 @@ def _elegir_lectura(db: Session, user_id: int, slot_id: int, typology: str) -> O
         .filter(ActiveReading.user_id == user_id, ActiveReading.slot_id == slot_id)
         .scalar()
     )
-    candidatas = db.query(Reading.id).filter(Reading.typology == typology, Reading.is_practice == False)
+    candidatas = db.query(Reading.id).filter(Reading.typology == typology)
     if activa is not None:
         candidatas = candidatas.filter(Reading.id != activa)
 
@@ -203,7 +206,6 @@ def _elegir_lectura(db: Session, user_id: int, slot_id: int, typology: str) -> O
             PlayerSession.user_id == user_id,
             PlayerSession.slot_id == slot_id,
             PlayerSession.typology == typology,
-            PlayerSession.is_practice == False,
         )
         .group_by(PlayerSession.reading_id)
         .subquery()
@@ -237,8 +239,7 @@ def get_next_reading(
 ):
     """Lectura de progresión que toca en una tipología: sin repetir las que el
     alumno ya terminó y nunca si se quedó sin intentos (403 SIN_INTENTOS, no
-    409: el juego trata el 409 como sesión invalidada). La práctica sigue con
-    /readings/random/full."""
+    409: el juego trata el 409 como sesión invalidada)."""
     if typology not in DIFFICULTY_ORDER:
         raise HTTPException(status_code=400, detail=f"Tipología fuera de la progresión: {typology}")
 
@@ -254,12 +255,20 @@ def get_next_reading(
     if reading_id is None:
         raise HTTPException(status_code=404, detail="No hay lecturas de esta tipología")
 
-    return (
+    reading = (
         db.query(Reading)
         .options(joinedload(Reading.questions).joinedload(Question.answers))
         .filter(Reading.id == reading_id)
         .first()
     )
+    return assigned_payload(db, current_user.id, reading)
+
+
+@router.post("/answers")
+def submit_answer(data: ReadingAnswerSubmit, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    result = grade_answer(db, current_user.id, data.reading_id, data.question_id, data.selected_answer, data.attempt_id)
+    db.commit()
+    return result
 
 
 # ── Sesiones ─────────────────────────────────────────────────────────────────
@@ -271,9 +280,41 @@ def create_session(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Registra una sesión completada desde Godot en el slot activo (práctica incluida)."""
+    """Registra una sesión completada desde Godot en el slot activo."""
     active_slot = _get_active_slot(db, current_user.id)
     _validate_slot_header(request, active_slot, current_user)
+
+    # Un juego viejo puede mandar la sesión de una lectura que ya no existe
+    # (las de la práctica se borraron): sin esto la base la rechaza con un 500.
+    reading = db.get(Reading, data.reading_id)
+    if reading is None:
+        raise HTTPException(status_code=404, detail="Lectura no encontrada")
+
+    active_slot = active_slot_locked(db, current_user.id)
+    attempt = latest_attempt(db, current_user.id, active_slot.id, reading.id, data.attempt_id)
+    if attempt is None:
+        raise HTTPException(409, "Inicia la lectura antes de guardar resultados")
+    if attempt.finalized:
+        previous = db.query(PlayerSession).options(joinedload(PlayerSession.answers), joinedload(PlayerSession.tools)).filter_by(id=attempt.session_id).first()
+        if previous is None:
+            raise HTTPException(409, "El intento ya fue finalizado")
+        return previous
+    if len(attempt.results) != len(attempt.question_ids):
+        raise HTTPException(409, "Responde todas las preguntas antes de finalizar")
+    progress = db.query(PlayerTypologyProgress).filter_by(user_id=current_user.id, slot_id=active_slot.id, typology=reading.typology).one()
+    if not progress.is_unlocked or progress.attempts_used >= MAX_INTENTOS_POR_TIPOLOGIA:
+        raise HTTPException(403, "SIN_INTENTOS")
+    used = [t.tool_name for t in data.tools if t.was_used]
+    score, bonus = score_results(attempt.results, used)
+    official = [PlayerAnswerCreate(question_id=r['question_id'], comprehension_level=r['level'],
+                                   selected_answer=r['letter_selected'], correct_answer=r['correct_answer'],
+                                   is_correct=r['correct'], points_earned=r['points_earned'], penalty_applied=r['penalty'])
+                for r in attempt.results]
+    correct = sum(r['correct'] for r in attempt.results)
+    data = data.model_copy(update={'typology': reading.typology, 'session_score': score,
+                                  'tool_bonus': bonus, 'correct_count': correct,
+                                  'incorrect_count': len(official) - correct,
+                                  'is_perfect': correct == len(official), 'answers': official})
 
     # Crear la sesión vinculada al slot activo
     session = PlayerSession(
@@ -288,10 +329,11 @@ def create_session(
         correct_count=data.correct_count,
         incorrect_count=data.incorrect_count,
         tool_bonus=data.tool_bonus,
-        is_practice=data.is_practice,
     )
     db.add(session)
     db.flush()  # Para obtener session.id
+    attempt.session_id = session.id
+    attempt.finalized = True
 
     # Registrar respuestas
     for answer_data in data.answers:
@@ -319,12 +361,12 @@ def create_session(
         )
         db.add(tool)
 
-    # La práctica se guarda para el docente pero no toca el progreso. Tampoco lo
-    # toca una tipología que ya no es del juego, que solo puede llegar de un
-    # cliente antiguo.
-    if not data.is_practice and data.typology in DIFFICULTY_ORDER:
+    # Una tipología que ya no es del juego (solo puede llegar de un cliente
+    # antiguo) se guarda, pero no toca el progreso.
+    if data.typology in DIFFICULTY_ORDER:
         _registrar_progreso(db, current_user.id, active_slot.id, data)
 
+    grant_achievements(db, current_user.id, active_slot.id)
     db.commit()
     db.refresh(session)
 
@@ -388,7 +430,6 @@ def list_sessions(
         .filter(
             PlayerSession.user_id == current_user.id,
             PlayerSession.slot_id == active_slot.id,
-            PlayerSession.is_practice == False,
         )
     )
     if typology:
@@ -419,7 +460,7 @@ def register_achievement(
     db: Session = Depends(get_db),
 ):
     """Registra un logro desbloqueado en el slot activo (idempotente)."""
-    active_slot = _get_active_slot(db, current_user.id)
+    active_slot = active_slot_locked(db, current_user.id)
     _validate_slot_header(request, active_slot, current_user)
 
     existing = (
@@ -434,11 +475,16 @@ def register_achievement(
     if existing:
         return existing
 
+    if data.achievement_id not in eligible_achievements(db, current_user.id, active_slot.id):
+        raise HTTPException(403, "El logro todavía no está desbloqueado")
+    catalog = db.get(AchievementCatalog, data.achievement_id)
+    if catalog is not None and not catalog.is_active:
+        raise HTTPException(403, "El logro no está activo")
     achievement = PlayerAchievement(
         user_id=current_user.id,
         slot_id=active_slot.id,
         achievement_id=data.achievement_id,
-        achievement_name=data.achievement_name,
+        achievement_name=catalog.name if catalog else NAMES[data.achievement_id],
     )
     db.add(achievement)
     db.commit()
@@ -480,6 +526,7 @@ def create_note(
     active_slot = _get_active_slot(db, current_user.id)
     _validate_slot_header(request, active_slot, current_user)
 
+    _owned_session(db, data.session_id, current_user.id, active_slot.id, data.reading_id)
     note = PlayerNote(
         user_id=current_user.id,
         slot_id=active_slot.id,
@@ -615,6 +662,20 @@ def get_achievements_full(
     return result
 
 
+# ── Medallas ─────────────────────────────────────────────────────────────────
+
+@router.get("/medals", response_model=List[MedalResponse])
+def get_my_medals(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Medallas por desempeño del slot activo (ver medallas.py)."""
+    active_slot = _get_active_slot(db, current_user.id)
+    filas = ensure_typology_rows(db, current_user.id, active_slot.id)
+    db.commit()
+    return medallas_del_jugador(filas)
+
+
 # ── Interacciones NPC ────────────────────────────────────────────────────────
 
 @router.post("/npc-interaction", response_model=NpcInteractionResponse, status_code=201)
@@ -630,6 +691,8 @@ def register_npc_interaction(
         raise HTTPException(status_code=400, detail="npc_type debe ser 'robot' o 'sabio'")
 
     active_slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, active_slot, current_user)
+    _owned_session(db, data.session_id, current_user.id, active_slot.id, data.reading_id)
 
     interaction = NpcInteraction(
         user_id=current_user.id,
@@ -637,8 +700,13 @@ def register_npc_interaction(
         npc_type=data.npc_type,
         session_id=data.session_id,
         reading_id=data.reading_id,
+        user_message=data.user_message,
+        assistant_reply=data.assistant_reply,
     )
     db.add(interaction)
+    db.flush()
+    interaction.user_message = encrypt_message(interaction.user_message, interaction)
+    interaction.assistant_reply = encrypt_message(interaction.assistant_reply, interaction)
     db.commit()
     db.refresh(interaction)
 
@@ -679,7 +747,17 @@ def get_active_reading(
         db.commit()
         raise HTTPException(status_code=204)
 
-    return record
+    attempt = latest_attempt(db, current_user.id, active_slot.id, record.reading_id)
+    if attempt is None:
+        attempt = start_attempt(db, current_user.id, reading_exists)
+    payload = {column.name: getattr(record, column.name) for column in ActiveReading.__table__.columns}
+    payload['attempt_id'] = attempt.id
+    payload['results_json'] = json.dumps(attempt.results, ensure_ascii=False)
+    payload['session_score'] = score_results(attempt.results, complete=False)[0]
+    payload['current_level_index'] = len(attempt.results) // 2
+    payload['current_question_index'] = len(attempt.results) % 2
+    db.commit()
+    return payload
 
 
 @router.put("/active-reading", response_model=ActiveReadingResponse)
@@ -781,3 +859,47 @@ def clear_active_reading(
         db.commit()
 
     return None
+
+
+@router.get("/profile", response_model=PerfilJugador)
+def obtener_perfil(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, slot, current_user)
+    return PerfilJugador(alias=slot.alias, vitrina=slot.vitrina)
+
+
+@router.put("/profile", response_model=PerfilJugador)
+def guardar_perfil(
+    data: PerfilJugador,
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    slot = _get_active_slot(db, current_user.id)
+    _validate_slot_header(request, slot, current_user)
+    filas = progreso_del_slot(db, slot)
+    if data.alias is not None:
+        elegido = ALIAS_POR_ID.get(data.alias)
+        if elegido is None:
+            raise HTTPException(status_code=422, detail="El alias no existe")
+        lecturas = sum(fila.total_sessions or 0 for fila in filas)
+        if lecturas < elegido["lecturas"]:
+            raise HTTPException(
+                status_code=422,
+                detail=f"El alias {elegido['nombre']} requiere {elegido['lecturas']} lecturas completadas",
+            )
+    desbloqueados = elementos_desbloqueados(db, slot, filas)
+    for item in data.vitrina:
+        if (item.tipo, item.id) not in desbloqueados:
+            raise HTTPException(
+                status_code=422, detail=f"No has desbloqueado {item.tipo}: {item.id} en esta partida",
+            )
+    slot.alias = data.alias
+    slot.vitrina = [item.model_dump() for item in data.vitrina]
+    db.commit()
+    db.refresh(slot)
+    return PerfilJugador(alias=slot.alias, vitrina=slot.vitrina)

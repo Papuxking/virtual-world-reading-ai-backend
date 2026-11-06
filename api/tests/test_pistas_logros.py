@@ -3,8 +3,8 @@ nuevas del juego (4 lecturas; 6 aciertos por nivel)."""
 import sys
 
 import actualizar_pistas_logros as pistas
+from catalogo_logros import seed_achievements_catalog
 from models import AchievementCatalog
-from seed_users import seed_achievements_catalog
 
 
 def _catalogo_antiguo(db):

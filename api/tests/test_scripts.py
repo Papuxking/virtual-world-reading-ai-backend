@@ -4,7 +4,7 @@ from pathlib import Path
 from sqlalchemy import func
 
 from game_rules import DIFFICULTY_ORDER, MAX_SESSION_SCORE
-from helpers import crear_lectura
+from helpers import crear_lectura, entorno_activo_de_prueba
 from models import AchievementCatalog, PlayerSession, PlayerTypologyProgress
 
 RAIZ_API = Path(__file__).resolve().parents[1]
@@ -21,6 +21,7 @@ def test_orden_de_tipologias_definido_en_un_solo_sitio():
 
 
 def test_registro_crea_las_cuatro_filas(client, db):
+    entorno_activo_de_prueba(db)  # el registro va al entorno activo
     r = client.post("/auth/register", json={
         "email": "nuevo@test.com", "password": "Test1234!",
         "display_name": "Nuevo", "character": "male",
@@ -31,9 +32,11 @@ def test_registro_crea_las_cuatro_filas(client, db):
 
 
 def test_seed_de_prueba_respeta_el_maximo(db):
-    crear_lectura(db, "Base", "Narrativo")
-    import seed_users
-    seed_users.seed()
+    for tipologia in DIFFICULTY_ORDER:
+        for i in range(5):
+            crear_lectura(db, f"{tipologia} {i}", tipologia)
+    import seed_entorno_prueba
+    seed_entorno_prueba.sembrar(db)
     db.expire_all()
     assert db.query(func.max(PlayerTypologyProgress.best_score)).scalar() <= MAX_SESSION_SCORE
     assert db.query(func.max(PlayerSession.session_score)).scalar() <= MAX_SESSION_SCORE

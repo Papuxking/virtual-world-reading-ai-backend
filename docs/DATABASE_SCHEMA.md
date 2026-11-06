@@ -36,18 +36,17 @@ user_readings (futura)
 | `typology`  | `VARCHAR(50)` | NOT NULL, CHECK IN (Descriptivo, Narrativo, Argumentativo, Expositivo, Instructivo) |
 | `type`      | `VARCHAR(100)` | NULL (subtipo textual opcional)                   |
 | `content`   | `TEXT`        | NOT NULL                                          |
-| `is_practice` | `BOOLEAN`   | NOT NULL DEFAULT false — lectura exclusiva de la zona de práctica |
 | `created_at`| `TIMESTAMPTZ` | DEFAULT NOW()                                     |
 | `updated_at`| `TIMESTAMPTZ` | DEFAULT NOW()                                     |
 
 El CHECK de `typology` conserva Instructivo por compatibilidad con la sincronización
 de LecturaIA; el juego ya no la usa (ver `game_rules.DIFFICULTY_ORDER`).
-`player_sessions` tiene también `is_practice`: las sesiones de la zona de práctica
-se guardan pero no cuentan en progreso, ranking ni métricas.
+La zona de práctica se retiró en la Beta 2.1: al arrancar, la API borra sus
+lecturas y sesiones y las columnas `is_practice` de `readings` y `player_sessions`
+(`esquema.quitar_practica`).
 
 **Índices:**
 - `idx_readings_typology` — B-tree sobre `typology`
-- `idx_readings_typology_practice` — B-tree sobre `(typology, is_practice)`
 - `idx_readings_title_fts` — GIN full-text español sobre `title`
 - `idx_readings_content_fts` — GIN full-text español sobre `content`
 
@@ -90,6 +89,30 @@ se guardan pero no cuentan en progreso, ranking ni métricas.
 
 **Restricción:** `UNIQUE(user_id, reading_id)`
 
+## Tabla `workspaces` (entornos de trabajo)
+
+| Columna      | Tipo          | Restricciones                                     |
+|-------------|---------------|---------------------------------------------------|
+| `id`        | `SERIAL`      | PRIMARY KEY                                       |
+| `name`      | `VARCHAR(40)` | NOT NULL, único sin distinguir mayúsculas (`ux_workspaces_nombre`) |
+| `color`     | `VARCHAR(7)`  | NOT NULL (uno de la paleta del dashboard)         |
+| `is_active` | `BOOLEAN`     | NOT NULL DEFAULT false; como mucho uno activo (`ux_workspaces_un_activo`) |
+| `created_at`| `TIMESTAMPTZ` | DEFAULT NOW()                                     |
+
+Cada cuenta de jugador es de un entorno: `users.workspace_id` → `workspaces(id)`
+`ON DELETE CASCADE` (borrar un entorno borra sus cuentas y, en cascada, todo lo
+suyo). Los administradores no tienen entorno, y tampoco las cuentas de antes de
+los entornos (no se migraron: no entran al juego ni salen en el dashboard).
+
+El correo es único dentro de cada entorno y entre las cuentas sin entorno:
+`ux_users_workspace_email` sobre `(workspace_id, email) NULLS NOT DISTINCT`. Lo
+crea la migración `011_entornos.sql`, que quita la unicidad vieja
+(`ix_users_email` o `users_email_key`).
+
+Al arrancar, cada proceso de la API prepara la base (`esquema.preparar_base`:
+`create_all` y las migraciones) con un candado de Postgres
+(`pg_advisory_xact_lock`), un proceso detrás de otro.
+
 ## Niveles de comprensión lectora
 
 | Nivel          | Descripción                                    |
@@ -98,6 +121,23 @@ se guardan pero no cuentan en progreso, ranking ni métricas.
 | `Inferencial` | Deducciones a partir del texto                 |
 | `Critico`     | Análisis, evaluación y juicio del lector       |
 
+## Tabla `technology_survey_responses`
+
+Una respuesta inmutable por jugador y slot, recogida después de aprobar las
+cuatro tipologías y antes de desbloquear la zona de cómics.
+
+| Grupo | Columnas | Rango |
+|---|---|---|
+| Identidad | `user_id`, `slot_id`, `instrument_version`, `submitted_at` | `UNIQUE(user_id, slot_id)` |
+| SUS | `sus_1` … `sus_10` | enteros 1–5 |
+| TAM utilidad | `tam_pu_1` … `tam_pu_6` | enteros 1–7 |
+| TAM facilidad | `tam_peou_1` … `tam_peou_6` | enteros 1–7 |
+| Derivados | `sus_score`, `tam_usefulness_score`, `tam_ease_score` | SUS 0–100; TAM 1–7 |
+
+Las claves foráneas a `users` y `player_slots` usan `ON DELETE CASCADE`. Los
+valores crudos se conservan junto a los puntajes para auditar y volver a
+analizar el instrumento. La versión inicial es `sus10_tam12_v1`.
+
 ## Archivos SQL
 
 | Archivo | Descripción |
@@ -105,7 +145,10 @@ se guardan pero no cuentan en progreso, ranking ni métricas.
 | `001_schema.sql` | DDL base: readings, user_readings, índices FTS |
 | `002_questions_schema.sql` | DDL: questions, answers, ALTER readings ADD type |
 | `002_seed.sql` | Seed: lectura Baños de Agua Santa + 12 preguntas |
-| `009_practice_mode.sql` | Columnas `is_practice` en `readings` y `player_sessions` |
+| `011_entornos.sql` | Tabla `workspaces`, `users.workspace_id` y correo único por entorno |
+| `012_conversaciones_asistente.sql` | `npc_interactions.user_message` y `assistant_reply`: lo que el jugador habla con el asistente IA |
+| `015_comics.sql` | Progreso por episodio y visitas a la zona de cómics |
+| `016_encuesta_sus_tam.sql` | Respuestas SUS/TAM obligatorias por jugador y slot |
 
 ## Resetear la base de datos
 
